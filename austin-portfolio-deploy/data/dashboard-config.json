@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-08-28T07:40:38.739Z",
+  "cardinals_readiness": {
+    "overall_score": 87.405,
+    "trend": "strong",
+    "momentum": {
+      "score": 51,
+      "category": "stable",
+      "description": "Consistent performance with steady momentum"
+    },
+    "component_breakdown": {
+      "offense": 86,
+      "defense": 89.2,
+      "pitching": 87.7,
+      "baserunning": 84.5
+    },
+    "key_metrics": {
+      "leverage_factor": 2.52,
+      "leverage_category": "high",
+      "strategic_outlook": "Strong position for confident decision-making and calculated risks"
+    }
+  },
+  "dashboard_widgets": {
+    "readiness_gauge": {
+      "value": 87,
+      "color": "#90EE90",
+      "status": "strong"
+    },
+    "leverage_indicator": {
+      "value": 2.52,
+      "category": "high",
+      "trend": "stable",
+      "color": "#90EE90"
+    },
+    "momentum_arrow": {
+      "direction": "right",
+      "strength": 51,
+      "description": "Consistent performance with steady momentum"
+    }
+  },
+  "alerts": [],
+  "recommendations": [
+    {
+      "category": "performance",
+      "priority": "medium",
+      "action": "Focus on baserunning development",
+      "expected_impact": "medium"
+    },
+    {
+      "category": "strategy",
+      "priority": "medium",
+      "action": "Consider aggressive strategic initiatives",
+      "expected_impact": "high"
+    }
+  ]
+}
