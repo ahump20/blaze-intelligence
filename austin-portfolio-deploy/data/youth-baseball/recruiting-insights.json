@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-28T07:59:56.451Z",
+  "timestamp": "2025-08-28T08:20:18.507Z",
   "market_trends": {
     "commitment_age_trend": "younger",
     "velocity_requirements_trend": "increasing",
@@ -31,7 +31,7 @@
   "geographic_hotspots": {
     "southwest": {
       "heat_level": "hot",
-      "prospects_per_state": 723,
+      "prospects_per_state": 586,
       "d1_concentration": 15,
       "key_factors": [
         "Year-round playing weather",
@@ -41,7 +41,7 @@
     },
     "southeast": {
       "heat_level": "moderate",
-      "prospects_per_state": 419,
+      "prospects_per_state": 380,
       "d1_concentration": 15,
       "key_factors": [
         "Deep talent pool",
@@ -50,8 +50,8 @@
       ]
     },
     "west": {
-      "heat_level": "hot",
-      "prospects_per_state": 542,
+      "heat_level": "extremely_hot",
+      "prospects_per_state": 752,
       "d1_concentration": 15,
       "key_factors": [
         "Advanced training facilities",
@@ -60,8 +60,8 @@
       ]
     },
     "midwest": {
-      "heat_level": "hot",
-      "prospects_per_state": 596,
+      "heat_level": "moderate",
+      "prospects_per_state": 488,
       "d1_concentration": 15,
       "key_factors": [
         "Strong fundamentals",
@@ -71,7 +71,7 @@
     },
     "northeast": {
       "heat_level": "hot",
-      "prospects_per_state": 519,
+      "prospects_per_state": 514,
       "d1_concentration": 15,
       "key_factors": [
         "Academic rigor",

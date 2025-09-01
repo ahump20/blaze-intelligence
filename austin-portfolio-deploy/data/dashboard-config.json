@@ -1,21 +1,21 @@
 {
-  "timestamp": "2025-08-28T08:00:00.568Z",
+  "timestamp": "2025-09-01T10:00:01.079Z",
   "cardinals_readiness": {
-    "overall_score": 87.405,
+    "overall_score": 86.64500000000001,
     "trend": "strong",
     "momentum": {
-      "score": 51,
-      "category": "stable",
-      "description": "Consistent performance with steady momentum"
+      "score": 70,
+      "category": "positive",
+      "description": "Strong positive momentum across multiple areas"
     },
     "component_breakdown": {
-      "offense": 86,
-      "defense": 89.2,
-      "pitching": 87.7,
-      "baserunning": 84.5
+      "offense": 87.1,
+      "defense": 88.5,
+      "pitching": 85.4,
+      "baserunning": 84.3
     },
     "key_metrics": {
-      "leverage_factor": 2.52,
+      "leverage_factor": 2.85,
       "leverage_category": "high",
       "strategic_outlook": "Strong position for confident decision-making and calculated risks"
     }
@@ -27,18 +27,24 @@
       "status": "strong"
     },
     "leverage_indicator": {
-      "value": 2.52,
+      "value": 2.85,
       "category": "high",
-      "trend": "stable",
+      "trend": "increasing",
       "color": "#90EE90"
     },
     "momentum_arrow": {
-      "direction": "right",
-      "strength": 51,
-      "description": "Consistent performance with steady momentum"
+      "direction": "up",
+      "strength": 70,
+      "description": "Strong positive momentum across multiple areas"
     }
   },
-  "alerts": [],
+  "alerts": [
+    {
+      "type": "info",
+      "message": "Exceptional leverage opportunity window",
+      "priority": "medium"
+    }
+  ],
   "recommendations": [
     {
       "category": "performance",

@@ -70,6 +70,12 @@
     <!-- Blaze Real-Time Data System -->
     <script src="js/blaze-real-time-data.js" defer></script>
     
+    <!-- R2 Storage Integration -->
+    <script src="js/r2-integration.js" defer></script>
+    
+    <!-- Cardinals Readiness Board -->
+    <script src="js/cardinals-readiness-board.js" defer></script>
+    
     <!-- Interactive Calculator -->
     <script src="js/interactive-calculator.js" defer></script>
     
@@ -253,12 +259,11 @@
             </div>
             
             <ul class="hidden lg:flex items-center space-x-8">
-                <li><a href="#services" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">Services</a></li>
-                <li><a href="/performance-demo.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">⚡ Performance Demo</a></li>
-                <li><a href="/savings-calculator.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">💰 Cost Calculator</a></li>
-                <li><a href="/mlb-intelligence-showcase.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">⚾ MLB Intelligence</a></li>
-                <li><a href="/methods-definitions.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">📊 Methods & Definitions</a></li>
-                <li><a href="/investor-deck.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">💼 Investors</a></li>
+                <li><a href="/sports" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">🏆 Sports</a></li>
+                <li><a href="/analytics-dashboard" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">📊 Analytics</a></li>
+                <li><a href="/blog/" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">📝 Insights</a></li>
+                <li><a href="/data" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">💾 Data</a></li>
+                <li><a href="/savings-calculator.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">💰 Pricing</a></li>
                 <li><a href="#contact" class="enhanced-btn text-white font-semibold px-6 py-3 rounded-full transition-all duration-300">START PROJECT</a></li>
             </ul>
 
@@ -295,14 +300,19 @@
                 <div class="mt-8 animate-fade-in" style="animation-delay: 0.5s;">
                     <p class="text-xl md:text-3xl text-slate-300 tracking-tight mb-4 font-semibold">WHERE COGNITIVE PERFORMANCE MEETS QUARTERLY PERFORMANCE</p>
                     <p class="text-lg md:text-xl text-burnt-orange-300 italic mb-2">Sports Intelligence • Operations • Analytics Consulting</p>
+                    <div class="mt-4 p-3 bg-amber-900/20 border border-amber-500/30 rounded-lg max-w-2xl mx-auto">
+                        <p class="text-sm text-amber-300">
+                            <strong>Development Phase:</strong> Platform under active development. All metrics shown are projections or development targets, not verified client results.
+                        </p>
+                    </div>
                     <div class="flex items-center justify-center gap-6 text-sm text-slate-400 mt-4">
                         <span class="flex items-center gap-2">
                             <i data-lucide="database" class="w-4 h-4"></i>
-                            <span id="data-points-hero">2.8M+</span> Data Points
+                            <span id="data-points-hero">Growing</span> Dataset
                         </span>
                         <span class="flex items-center gap-2">
                             <i data-lucide="target" class="w-4 h-4"></i>
-                            <span id="accuracy-hero">74.6%</span> Accuracy
+                            <span id="accuracy-hero">Validated</span> Models
                         </span>
                         <span class="flex items-center gap-2">
                             <i data-lucide="clock" class="w-4 h-4"></i>
@@ -340,14 +350,14 @@
                 <!-- Centralized Metrics Display -->
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
                     <div class="metric-card p-8 text-center reveal">
-                        <div class="metric-value" id="data-points-metric">2.8M+</div>
-                        <p class="text-slate-400 font-medium mt-2">DATA POINTS</p>
-                        <div class="text-xs text-neon-green mt-1">+15K daily intake</div>
+                        <div class="metric-value" id="data-points-metric">Growing</div>
+                        <p class="text-slate-400 font-medium mt-2">DATA SOURCES</p>
+                        <div class="text-xs text-neon-green mt-1">MLB, NFL, CFB pipelines</div>
                     </div>
                     <div class="metric-card p-8 text-center reveal" style="transition-delay: 100ms;">
-                        <div class="metric-value" id="accuracy-metric">74.6%</div>
-                        <p class="text-slate-400 font-medium mt-2">PREDICTION ACCURACY</p>
-                        <div class="text-xs text-neon-green mt-1">Top 10% of Industry | <a href="/methods-definitions.html" class="text-neon-blue underline">Verified</a></div>
+                        <div class="metric-value" id="accuracy-metric">Beta</div>
+                        <p class="text-slate-400 font-medium mt-2">SYSTEM STATUS</p>
+                        <div class="text-xs text-neon-green mt-1">Development Phase | <a href="/status.html" class="text-neon-blue underline">Status</a></div>
                     </div>
                     <div class="metric-card p-8 text-center reveal" style="transition-delay: 200ms;">
                         <div class="metric-value" id="availability-metric">99.9%</div>
@@ -355,9 +365,9 @@
                         <div class="text-xs text-neon-green mt-1">24/7 monitoring</div>
                     </div>
                     <div class="metric-card p-8 text-center reveal" style="transition-delay: 300ms;">
-                        <div class="metric-value" id="savings-metric">37%</div>
-                        <p class="text-slate-400 font-medium mt-2">AVG CLIENT SAVINGS</p>
-                        <div class="text-xs text-neon-orange mt-1">Range: 25-50% | <a href="/sources-methods.html" class="text-neon-blue underline">Verified</a></div>
+                        <div class="metric-value" id="savings-metric">TBD</div>
+                        <p class="text-slate-400 font-medium mt-2">CLIENT RESULTS</p>
+                        <div class="text-xs text-neon-orange mt-1">Contact for case studies | <a href="/contact.html" class="text-neon-blue underline">Contact</a></div>
                     </div>
                 </div>
 
@@ -385,6 +395,60 @@
                             <div class="text-slate-400">Confidence Level</div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- This Week Section -->
+        <section id="this-week" class="py-20 lg:py-32 bg-black/20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-4xl mx-auto mb-12">
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gradient reveal">THIS WEEK IN SPORTS</h2>
+                    <p class="mt-6 text-xl md:text-2xl text-slate-400 reveal" style="transition-delay: 100ms;">Latest analytics insights and predictions across all major sports</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- CFB Card -->
+                    <div class="glass-card p-8 reveal">
+                        <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mb-6">
+                            <span class="text-2xl font-bold text-white">CFB</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">College Football Week 1</h3>
+                        <p class="text-slate-300 mb-6">Ohio State's stunning 14-7 victory over Texas shakes up the playoff picture. Full analysis of upsets and top 25 implications.</p>
+                        <a href="/blog/cfb/" class="enhanced-btn text-white font-semibold px-6 py-3 rounded-full inline-block">
+                            View CFB Analysis →
+                        </a>
+                    </div>
+                    
+                    <!-- MLB Card -->
+                    <div class="glass-card p-8 reveal" style="transition-delay: 100ms;">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mb-6">
+                            <span class="text-2xl font-bold text-white">MLB</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">September Playoff Push</h3>
+                        <p class="text-slate-300 mb-6">Cardinals leverage analytics for wild card surge. Pattern recognition models show 87.2% readiness for September baseball.</p>
+                        <a href="/blog/mlb/" class="enhanced-btn text-white font-semibold px-6 py-3 rounded-full inline-block">
+                            View MLB Analysis →
+                        </a>
+                    </div>
+                    
+                    <!-- NFL Card -->
+                    <div class="glass-card p-8 reveal" style="transition-delay: 200ms;">
+                        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mb-6">
+                            <span class="text-2xl font-bold text-white">NFL</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">NFL Season Kickoff</h3>
+                        <p class="text-slate-300 mb-6">Titans vs Bears deep dive shows Tennessee at 58.3% win probability. Advanced metrics breakdown for Week 1 matchups.</p>
+                        <a href="/blog/nfl/" class="enhanced-btn text-white font-semibold px-6 py-3 rounded-full inline-block">
+                            View NFL Analysis →
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-12">
+                    <a href="/blog/" class="text-orange-400 hover:text-orange-300 font-medium text-lg">
+                        View All Blog Posts →
+                    </a>
                 </div>
             </div>
         </section>
@@ -540,11 +604,12 @@
                     <div class="text-slate-400">Where cognitive performance meets quarterly performance.</div>
                 </div>
                 <div class="flex flex-col md:flex-row items-center gap-6">
-                    <div class="flex items-center gap-6">
-                        <a href="/sources-methods.html" class="text-slate-400 hover:text-white transition-colors text-sm">📊 Sources & Methods</a>
-                        <a href="/performance-demo.html" class="text-slate-400 hover:text-white transition-colors text-sm">⚡ Performance Demo</a>
-                        <a href="/savings-calculator.html" class="text-slate-400 hover:text-white transition-colors text-sm">💰 Cost Calculator</a>
-                        <a href="/savings-calculator.html" class="text-slate-400 hover:text-white transition-colors text-sm">ROI Calculator</a>
+                    <div class="flex items-center gap-6 flex-wrap justify-center">
+                        <a href="/blog/" class="text-slate-400 hover:text-white transition-colors text-sm">📝 Blog</a>
+                        <a href="/status.html" class="text-slate-400 hover:text-white transition-colors text-sm">🟢 Status</a>
+                        <a href="/sources-methods.html" class="text-slate-400 hover:text-white transition-colors text-sm">📊 Methods</a>
+                        <a href="/privacy.html" class="text-slate-400 hover:text-white transition-colors text-sm">Privacy</a>
+                        <a href="/terms.html" class="text-slate-400 hover:text-white transition-colors text-sm">Terms</a>
                     </div>
                     <div class="flex items-center gap-4">
                         <a href="https://x.com/BISportsIntel" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-neon-orange transition-all duration-300 transform hover:scale-110" title="Follow @BISportsIntel on X">

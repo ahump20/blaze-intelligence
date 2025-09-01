@@ -97,6 +97,11 @@
             border: none;
         }
     </style>
+    
+    <!-- Analytics & Testing -->
+    <script src="js/analytics-config.js"></script>
+    <script src="js/ab-testing.js" defer></script>
+    <script src="js/sentry-config.js"></script>
 </head>
 <body class="bg-gray-900">
     <nav class="bg-black/95 backdrop-blur-xl border-b border-gray-800 px-4 py-4">
@@ -431,7 +436,7 @@
                 savings += (currentConfig.sports - 3) * 200;
             }
             
-            // Ensure savings stay within 67-80% range
+            // Ensure savings stay within 25-50% range
             if (savingsPercentage > 80) savingsPercentage = 80;
             if (savingsPercentage < 67 && competitor.cost > BLAZE_COST) savingsPercentage = 67;
             

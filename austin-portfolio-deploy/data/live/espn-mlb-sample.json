@@ -2260,46 +2260,6 @@
                       }
                     }
                   ]
-                },
-                {
-                  "name": "MLBRating",
-                  "displayName": "MLB Rating",
-                  "shortDisplayName": "MLB",
-                  "abbreviation": "MLB",
-                  "leaders": [
-                    {
-                      "displayValue": "2-3, 2B, RBI",
-                      "value": 64.75,
-                      "athlete": {
-                        "id": "33721",
-                        "fullName": "Derek Hill",
-                        "displayName": "Derek Hill",
-                        "shortName": "D. Hill",
-                        "links": [
-                          {
-                            "rel": [
-                              "playercard",
-                              "desktop",
-                              "athlete"
-                            ],
-                            "href": "https://www.espn.com/mlb/player/_/id/33721"
-                          }
-                        ],
-                        "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/33721.png",
-                        "jersey": "3",
-                        "position": {
-                          "abbreviation": "CF"
-                        },
-                        "team": {
-                          "id": "28"
-                        },
-                        "active": true
-                      },
-                      "team": {
-                        "id": "28"
-                      }
-                    }
-                  ]
                 }
               ],
               "probables": [
@@ -15619,6 +15579,46 @@
                       }
                     }
                   ]
+                },
+                {
+                  "name": "MLBRating",
+                  "displayName": "MLB Rating",
+                  "shortDisplayName": "MLB",
+                  "abbreviation": "MLB",
+                  "leaders": [
+                    {
+                      "displayValue": "2-5, HR, 2B, 3 RBI, 3 R, BB, K",
+                      "value": 72.25,
+                      "athlete": {
+                        "id": "33341",
+                        "fullName": "Mike Yastrzemski",
+                        "displayName": "Mike Yastrzemski",
+                        "shortName": "M. Yastrzemski",
+                        "links": [
+                          {
+                            "rel": [
+                              "playercard",
+                              "desktop",
+                              "athlete"
+                            ],
+                            "href": "https://www.espn.com/mlb/player/_/id/33341"
+                          }
+                        ],
+                        "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/33341.png",
+                        "jersey": "18",
+                        "position": {
+                          "abbreviation": "RF"
+                        },
+                        "team": {
+                          "id": "7"
+                        },
+                        "active": true
+                      },
+                      "team": {
+                        "id": "7"
+                      }
+                    }
+                  ]
                 }
               ],
               "probables": [
@@ -18705,6 +18705,46 @@
                       }
                     }
                   ]
+                },
+                {
+                  "name": "MLBRating",
+                  "displayName": "MLB Rating",
+                  "shortDisplayName": "MLB",
+                  "abbreviation": "MLB",
+                  "leaders": [
+                    {
+                      "displayValue": "4-6, HR, 2 2B, 5 RBI, 3 R",
+                      "value": 79.5,
+                      "athlete": {
+                        "id": "35537",
+                        "fullName": "Adolis Garcia",
+                        "displayName": "Adolis Garcia",
+                        "shortName": "A. Garcia",
+                        "links": [
+                          {
+                            "rel": [
+                              "playercard",
+                              "desktop",
+                              "athlete"
+                            ],
+                            "href": "https://www.espn.com/mlb/player/_/id/35537"
+                          }
+                        ],
+                        "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/35537.png",
+                        "jersey": "53",
+                        "position": {
+                          "abbreviation": "RF"
+                        },
+                        "team": {
+                          "id": "13"
+                        },
+                        "active": true
+                      },
+                      "team": {
+                        "id": "13"
+                      }
+                    }
+                  ]
                 }
               ],
               "probables": [
@@ -20382,6 +20422,46 @@
                         "jersey": "59",
                         "position": {
                           "abbreviation": "SP"
+                        },
+                        "team": {
+                          "id": "18"
+                        },
+                        "active": true
+                      },
+                      "team": {
+                        "id": "18"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "MLBRating",
+                  "displayName": "MLB Rating",
+                  "shortDisplayName": "MLB",
+                  "abbreviation": "MLB",
+                  "leaders": [
+                    {
+                      "displayValue": "1-2, HR, 2 RBI, 2 R, 2 BB",
+                      "value": 68.25,
+                      "athlete": {
+                        "id": "36018",
+                        "fullName": "Yordan Alvarez",
+                        "displayName": "Yordan Alvarez",
+                        "shortName": "Y. Alvarez",
+                        "links": [
+                          {
+                            "rel": [
+                              "playercard",
+                              "desktop",
+                              "athlete"
+                            ],
+                            "href": "https://www.espn.com/mlb/player/_/id/36018"
+                          }
+                        ],
+                        "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/36018.png",
+                        "jersey": "44",
+                        "position": {
+                          "abbreviation": "LF"
                         },
                         "team": {
                           "id": "18"
@@ -22971,6 +23051,228 @@
               "region": "us"
             }
           ],
+          "headlines": [
+            {
+              "type": "Recap",
+              "description": "— Shohei Ohtani struck out a season-high nine in five innings for his first victory with the Dodgers as Los Angeles beat Cincinnati 5-1 on...",
+              "shortLinkText": "Shohei Ohtani gets first victory with Dodgers, striking out season-high 9 against Reds",
+              "video": [
+                {
+                  "id": 46092329,
+                  "source": "espn",
+                  "headline": "Cincinnati Reds vs. Los Angeles Dodgers: Game Highlights",
+                  "thumbnail": "https://a.espncdn.com/media/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5.jpg",
+                  "duration": 65,
+                  "tracking": {
+                    "sportName": "mlb",
+                    "leagueName": "No League",
+                    "coverageType": "Final Game Highlight",
+                    "trackingName": "MLB_One-Play (Cincinnati Reds vs. Los Angeles Dodgers: Game Highlights) 2025/08/28 ESHEET",
+                    "trackingId": "dm_20250828_MLB_cincinnati_reds_vs_los_angeles_dodgers_game_highlights"
+                  },
+                  "deviceRestrictions": {
+                    "type": "whitelist",
+                    "devices": [
+                      "desktop",
+                      "ipad",
+                      "settop",
+                      "handset",
+                      "tablet"
+                    ]
+                  },
+                  "geoRestrictions": {
+                    "type": "whitelist",
+                    "countries": [
+                      "SO",
+                      "FK",
+                      "BO",
+                      "AI",
+                      "ST",
+                      "PW",
+                      "CR",
+                      "PE",
+                      "MR",
+                      "AR",
+                      "BB",
+                      "LC",
+                      "MS",
+                      "ML",
+                      "TD",
+                      "BZ",
+                      "NE",
+                      "SZ",
+                      "GP",
+                      "VC",
+                      "CM",
+                      "TG",
+                      "MG",
+                      "CO",
+                      "VE",
+                      "BS",
+                      "GM",
+                      "BW",
+                      "KM",
+                      "KE",
+                      "RW",
+                      "FM",
+                      "JM",
+                      "MV",
+                      "VG",
+                      "DJ",
+                      "GT",
+                      "GW",
+                      "HN",
+                      "SN",
+                      "LS",
+                      "SL",
+                      "MP",
+                      "AU",
+                      "BF",
+                      "BJ",
+                      "PY",
+                      "HT",
+                      "CG",
+                      "KN",
+                      "FJ",
+                      "GB",
+                      "UK",
+                      "CU",
+                      "PR",
+                      "MU",
+                      "CI",
+                      "GQ",
+                      "ZA",
+                      "GD",
+                      "DO",
+                      "NI",
+                      "SV",
+                      "NZ",
+                      "AO",
+                      "NA",
+                      "UG",
+                      "GA",
+                      "BM",
+                      "NL",
+                      "MF",
+                      "MW",
+                      "CF",
+                      "US",
+                      "AS",
+                      "GU",
+                      "VI",
+                      "UM",
+                      "AW",
+                      "MH",
+                      "GN",
+                      "TC",
+                      "SD",
+                      "EC",
+                      "ER",
+                      "NG",
+                      "PA",
+                      "GY",
+                      "MX",
+                      "AG",
+                      "SC",
+                      "SX",
+                      "TZ",
+                      "KY",
+                      "LR",
+                      "ZM",
+                      "BI",
+                      "CD",
+                      "SS",
+                      "TT",
+                      "CL",
+                      "MZ",
+                      "RE",
+                      "UY",
+                      "BQ",
+                      "BL",
+                      "CV",
+                      "MQ",
+                      "GH"
+                    ]
+                  },
+                  "links": {
+                    "web": {
+                      "href": "https://www.espn.com/video/clip?id=46092329",
+                      "self": {
+                        "href": "https://www.espn.com/video/clip?id=46092329",
+                        "dsi": {
+                          "href": "https://www.espn.com/video/clip?id=b104012b6c3ef"
+                        }
+                      },
+                      "seo": {
+                        "href": "https://www.espn.com/video/clip/_/id/46092329"
+                      }
+                    },
+                    "mobile": {
+                      "source": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5.mp4"
+                      },
+                      "alert": {
+                        "href": "https://m.espn.com/general/video/videoAlert?vid=46092329"
+                      },
+                      "streaming": {
+                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/d3ed43ae-056e-4b61-ba77-8cfe88de40ce/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092329"
+                      },
+                      "progressiveDownload": {
+                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/d3ed43ae-056e-4b61-ba77-8cfe88de40ce/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092329"
+                      }
+                    },
+                    "api": {
+                      "self": {
+                        "href": "https://content.core.api.espn.com/v1/video/clips/46092329"
+                      },
+                      "artwork": {
+                        "href": "https://artwork.api.espn.com/artwork/collections/media/d3ed43ae-056e-4b61-ba77-8cfe88de40ce"
+                      }
+                    },
+                    "source": {
+                      "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5_360p30_1464k.mp4",
+                      "mezzanine": {
+                        "href": "https://media.video-origin.espn.com/espnvideo/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5.mp4"
+                      },
+                      "flash": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5.smil"
+                      },
+                      "hds": {
+                        "href": "https://hds.video-cdn.espn.com/z/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5_rel.smil/manifest.f4m"
+                      },
+                      "HLS": {
+                        "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8",
+                        "HD": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8"
+                        },
+                        "cmaf": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8",
+                          "9x16": {
+                            "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/9x16/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8"
+                          }
+                        },
+                        "9x16": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/9x16/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8"
+                        },
+                        "shield": {
+                          "href": "https://watch.auth.api.espn.com/video/auth/media/d3ed43ae-056e-4b61-ba77-8cfe88de40ce/asset"
+                        }
+                      },
+                      "HD": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5_720p30_2896k.mp4"
+                      },
+                      "full": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5_360p30_1464k.mp4"
+                      }
+                    },
+                    "sportscenter": {
+                      "href": "sportscenter://x-callback-url/showVideo?videoID=46092329&videoDSI=b104012b6c3ef"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
           "highlights": [
             {
               "id": 46092329,
@@ -23196,228 +23498,6 @@
                 "trackingName": "MLB_One-Play (Cincinnati Reds vs. Los Angeles Dodgers: Game Highlights) 2025/08/28 ESHEET",
                 "trackingId": "dm_20250828_MLB_cincinnati_reds_vs_los_angeles_dodgers_game_highlights"
               }
-            }
-          ],
-          "headlines": [
-            {
-              "type": "Recap",
-              "description": "— Shohei Ohtani struck out a season-high nine in five innings for his first victory with the Dodgers as Los Angeles beat Cincinnati 5-1 on...",
-              "shortLinkText": "Shohei Ohtani gets first victory with Dodgers, striking out season-high 9 against Reds",
-              "video": [
-                {
-                  "id": 46092329,
-                  "source": "espn",
-                  "headline": "Cincinnati Reds vs. Los Angeles Dodgers: Game Highlights",
-                  "thumbnail": "https://a.espncdn.com/media/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5.jpg",
-                  "duration": 65,
-                  "tracking": {
-                    "sportName": "mlb",
-                    "leagueName": "No League",
-                    "coverageType": "Final Game Highlight",
-                    "trackingName": "MLB_One-Play (Cincinnati Reds vs. Los Angeles Dodgers: Game Highlights) 2025/08/28 ESHEET",
-                    "trackingId": "dm_20250828_MLB_cincinnati_reds_vs_los_angeles_dodgers_game_highlights"
-                  },
-                  "deviceRestrictions": {
-                    "type": "whitelist",
-                    "devices": [
-                      "desktop",
-                      "ipad",
-                      "settop",
-                      "handset",
-                      "tablet"
-                    ]
-                  },
-                  "geoRestrictions": {
-                    "type": "whitelist",
-                    "countries": [
-                      "SO",
-                      "FK",
-                      "BO",
-                      "AI",
-                      "ST",
-                      "PW",
-                      "CR",
-                      "PE",
-                      "MR",
-                      "AR",
-                      "BB",
-                      "LC",
-                      "MS",
-                      "ML",
-                      "TD",
-                      "BZ",
-                      "NE",
-                      "SZ",
-                      "GP",
-                      "VC",
-                      "CM",
-                      "TG",
-                      "MG",
-                      "CO",
-                      "VE",
-                      "BS",
-                      "GM",
-                      "BW",
-                      "KM",
-                      "KE",
-                      "RW",
-                      "FM",
-                      "JM",
-                      "MV",
-                      "VG",
-                      "DJ",
-                      "GT",
-                      "GW",
-                      "HN",
-                      "SN",
-                      "LS",
-                      "SL",
-                      "MP",
-                      "AU",
-                      "BF",
-                      "BJ",
-                      "PY",
-                      "HT",
-                      "CG",
-                      "KN",
-                      "FJ",
-                      "GB",
-                      "UK",
-                      "CU",
-                      "PR",
-                      "MU",
-                      "CI",
-                      "GQ",
-                      "ZA",
-                      "GD",
-                      "DO",
-                      "NI",
-                      "SV",
-                      "NZ",
-                      "AO",
-                      "NA",
-                      "UG",
-                      "GA",
-                      "BM",
-                      "NL",
-                      "MF",
-                      "MW",
-                      "CF",
-                      "US",
-                      "AS",
-                      "GU",
-                      "VI",
-                      "UM",
-                      "AW",
-                      "MH",
-                      "GN",
-                      "TC",
-                      "SD",
-                      "EC",
-                      "ER",
-                      "NG",
-                      "PA",
-                      "GY",
-                      "MX",
-                      "AG",
-                      "SC",
-                      "SX",
-                      "TZ",
-                      "KY",
-                      "LR",
-                      "ZM",
-                      "BI",
-                      "CD",
-                      "SS",
-                      "TT",
-                      "CL",
-                      "MZ",
-                      "RE",
-                      "UY",
-                      "BQ",
-                      "BL",
-                      "CV",
-                      "MQ",
-                      "GH"
-                    ]
-                  },
-                  "links": {
-                    "web": {
-                      "href": "https://www.espn.com/video/clip?id=46092329",
-                      "self": {
-                        "href": "https://www.espn.com/video/clip?id=46092329",
-                        "dsi": {
-                          "href": "https://www.espn.com/video/clip?id=b104012b6c3ef"
-                        }
-                      },
-                      "seo": {
-                        "href": "https://www.espn.com/video/clip/_/id/46092329"
-                      }
-                    },
-                    "mobile": {
-                      "source": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5.mp4"
-                      },
-                      "alert": {
-                        "href": "https://m.espn.com/general/video/videoAlert?vid=46092329"
-                      },
-                      "streaming": {
-                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/d3ed43ae-056e-4b61-ba77-8cfe88de40ce/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092329"
-                      },
-                      "progressiveDownload": {
-                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/d3ed43ae-056e-4b61-ba77-8cfe88de40ce/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092329"
-                      }
-                    },
-                    "api": {
-                      "self": {
-                        "href": "https://content.core.api.espn.com/v1/video/clips/46092329"
-                      },
-                      "artwork": {
-                        "href": "https://artwork.api.espn.com/artwork/collections/media/d3ed43ae-056e-4b61-ba77-8cfe88de40ce"
-                      }
-                    },
-                    "source": {
-                      "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5_360p30_1464k.mp4",
-                      "mezzanine": {
-                        "href": "https://media.video-origin.espn.com/espnvideo/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5.mp4"
-                      },
-                      "flash": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5.smil"
-                      },
-                      "hds": {
-                        "href": "https://hds.video-cdn.espn.com/z/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5_rel.smil/manifest.f4m"
-                      },
-                      "HLS": {
-                        "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8",
-                        "HD": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8"
-                        },
-                        "cmaf": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8",
-                          "9x16": {
-                            "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/9x16/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8"
-                          }
-                        },
-                        "9x16": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/9x16/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/playlist.m3u8"
-                        },
-                        "shield": {
-                          "href": "https://watch.auth.api.espn.com/video/auth/media/d3ed43ae-056e-4b61-ba77-8cfe88de40ce/asset"
-                        }
-                      },
-                      "HD": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5_720p30_2896k.mp4"
-                      },
-                      "full": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5/6085dbd3-4bc5-4a9e-94af-4f469cbe06b5_360p30_1464k.mp4"
-                      }
-                    },
-                    "sportscenter": {
-                      "href": "sportscenter://x-callback-url/showVideo?videoID=46092329&videoDSI=b104012b6c3ef"
-                    }
-                  }
-                }
-              ]
             }
           ]
         }
@@ -24700,6 +24780,228 @@
               "region": "us"
             }
           ],
+          "headlines": [
+            {
+              "type": "Recap",
+              "description": "— Rafael Devers homered twice and doubled in a run on the way to five RBI, Matt Chapman hit his 200th career home run, and the San Francisco Giants beat the Chicago Cubs 12-3 on Wednesday night for their fourth straight win.",
+              "shortLinkText": "Rafael Devers hits two of San Francisco's four home runs, Giants power past Cubs 12-3",
+              "video": [
+                {
+                  "id": 46092469,
+                  "source": "espn",
+                  "headline": "Chicago Cubs vs. San Francisco Giants: Game Highlights",
+                  "thumbnail": "https://a.espncdn.com/media/motion/2025/0828/886e6f5c03f4488d910a361469e0cd6f59/886e6f5c03f4488d910a361469e0cd6f59.jpg",
+                  "duration": 75,
+                  "tracking": {
+                    "sportName": "mlb",
+                    "leagueName": "No League",
+                    "coverageType": "Final Game Highlight",
+                    "trackingName": "MLB_One-Play (Chicago Cubs vs. San Francisco Giants: Game Highlights) 2025/08/28 ESHEET",
+                    "trackingId": "dm_20250828_MLB_chicago_cubs_vs_san_francisco_giants_game_highlights"
+                  },
+                  "deviceRestrictions": {
+                    "type": "whitelist",
+                    "devices": [
+                      "desktop",
+                      "ipad",
+                      "settop",
+                      "handset",
+                      "tablet"
+                    ]
+                  },
+                  "geoRestrictions": {
+                    "type": "whitelist",
+                    "countries": [
+                      "AS",
+                      "GP",
+                      "SS",
+                      "MH",
+                      "GH",
+                      "BW",
+                      "FM",
+                      "GA",
+                      "VI",
+                      "MZ",
+                      "MW",
+                      "BF",
+                      "GY",
+                      "GM",
+                      "GT",
+                      "PW",
+                      "DJ",
+                      "BM",
+                      "ER",
+                      "TT",
+                      "CI",
+                      "CF",
+                      "UG",
+                      "PR",
+                      "MR",
+                      "CO",
+                      "CD",
+                      "GD",
+                      "MU",
+                      "VC",
+                      "NA",
+                      "AR",
+                      "AO",
+                      "GU",
+                      "NE",
+                      "SZ",
+                      "PY",
+                      "SO",
+                      "TD",
+                      "BB",
+                      "SN",
+                      "MS",
+                      "ST",
+                      "NI",
+                      "TG",
+                      "BJ",
+                      "DO",
+                      "UY",
+                      "EC",
+                      "SX",
+                      "KY",
+                      "MG",
+                      "AW",
+                      "CR",
+                      "MV",
+                      "SC",
+                      "BI",
+                      "LS",
+                      "US",
+                      "MP",
+                      "UM",
+                      "TZ",
+                      "HN",
+                      "AU",
+                      "PA",
+                      "MF",
+                      "BO",
+                      "SL",
+                      "FK",
+                      "BZ",
+                      "AI",
+                      "KE",
+                      "ZM",
+                      "GQ",
+                      "NZ",
+                      "CU",
+                      "VG",
+                      "CM",
+                      "GW",
+                      "CG",
+                      "BL",
+                      "JM",
+                      "ML",
+                      "RW",
+                      "GB",
+                      "UK",
+                      "PE",
+                      "BQ",
+                      "ZA",
+                      "BS",
+                      "HT",
+                      "NG",
+                      "FJ",
+                      "NL",
+                      "SD",
+                      "KN",
+                      "SV",
+                      "TC",
+                      "AG",
+                      "MQ",
+                      "LR",
+                      "CL",
+                      "CV",
+                      "RE",
+                      "VE",
+                      "GN",
+                      "MX",
+                      "LC",
+                      "KM"
+                    ]
+                  },
+                  "links": {
+                    "web": {
+                      "href": "https://www.espn.com/video/clip?id=46092469",
+                      "self": {
+                        "href": "https://www.espn.com/video/clip?id=46092469",
+                        "dsi": {
+                          "href": "https://www.espn.com/video/clip?id=08e5aadb0ddab"
+                        }
+                      },
+                      "seo": {
+                        "href": "https://www.espn.com/video/clip/_/id/46092469"
+                      }
+                    },
+                    "mobile": {
+                      "source": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f.mp4"
+                      },
+                      "alert": {
+                        "href": "https://m.espn.com/general/video/videoAlert?vid=46092469"
+                      },
+                      "streaming": {
+                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/49625756-4c0a-4538-ba8b-f399fa2d77e0/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092469"
+                      },
+                      "progressiveDownload": {
+                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/49625756-4c0a-4538-ba8b-f399fa2d77e0/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092469"
+                      }
+                    },
+                    "api": {
+                      "self": {
+                        "href": "https://content.core.api.espn.com/v1/video/clips/46092469"
+                      },
+                      "artwork": {
+                        "href": "https://artwork.api.espn.com/artwork/collections/media/49625756-4c0a-4538-ba8b-f399fa2d77e0"
+                      }
+                    },
+                    "source": {
+                      "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f_360p30_1464k.mp4",
+                      "mezzanine": {
+                        "href": "https://media.video-origin.espn.com/espnvideo/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f.mp4"
+                      },
+                      "flash": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f.smil"
+                      },
+                      "hds": {
+                        "href": "https://hds.video-cdn.espn.com/z/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f_rel.smil/manifest.f4m"
+                      },
+                      "HLS": {
+                        "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8",
+                        "HD": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8"
+                        },
+                        "cmaf": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8",
+                          "9x16": {
+                            "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/9x16/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8"
+                          }
+                        },
+                        "9x16": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/9x16/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8"
+                        },
+                        "shield": {
+                          "href": "https://watch.auth.api.espn.com/video/auth/media/49625756-4c0a-4538-ba8b-f399fa2d77e0/asset"
+                        }
+                      },
+                      "HD": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f_720p30_2896k.mp4"
+                      },
+                      "full": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f_360p30_1464k.mp4"
+                      }
+                    },
+                    "sportscenter": {
+                      "href": "sportscenter://x-callback-url/showVideo?videoID=46092469&videoDSI=08e5aadb0ddab"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
           "highlights": [
             {
               "id": 46092469,
@@ -24925,228 +25227,6 @@
                 "trackingName": "MLB_One-Play (Chicago Cubs vs. San Francisco Giants: Game Highlights) 2025/08/28 ESHEET",
                 "trackingId": "dm_20250828_MLB_chicago_cubs_vs_san_francisco_giants_game_highlights"
               }
-            }
-          ],
-          "headlines": [
-            {
-              "type": "Recap",
-              "description": "— Rafael Devers homered twice and doubled in a run on the way to five RBI, Matt Chapman hit his 200th career home run, and the San Francisco Giants beat the Chicago Cubs 12-3 on Wednesday night for their fourth straight win.",
-              "shortLinkText": "Rafael Devers hits two of San Francisco's four home runs, Giants power past Cubs 12-3",
-              "video": [
-                {
-                  "id": 46092469,
-                  "source": "espn",
-                  "headline": "Chicago Cubs vs. San Francisco Giants: Game Highlights",
-                  "thumbnail": "https://a.espncdn.com/media/motion/2025/0828/886e6f5c03f4488d910a361469e0cd6f59/886e6f5c03f4488d910a361469e0cd6f59.jpg",
-                  "duration": 75,
-                  "tracking": {
-                    "sportName": "mlb",
-                    "leagueName": "No League",
-                    "coverageType": "Final Game Highlight",
-                    "trackingName": "MLB_One-Play (Chicago Cubs vs. San Francisco Giants: Game Highlights) 2025/08/28 ESHEET",
-                    "trackingId": "dm_20250828_MLB_chicago_cubs_vs_san_francisco_giants_game_highlights"
-                  },
-                  "deviceRestrictions": {
-                    "type": "whitelist",
-                    "devices": [
-                      "desktop",
-                      "ipad",
-                      "settop",
-                      "handset",
-                      "tablet"
-                    ]
-                  },
-                  "geoRestrictions": {
-                    "type": "whitelist",
-                    "countries": [
-                      "AS",
-                      "GP",
-                      "SS",
-                      "MH",
-                      "GH",
-                      "BW",
-                      "FM",
-                      "GA",
-                      "VI",
-                      "MZ",
-                      "MW",
-                      "BF",
-                      "GY",
-                      "GM",
-                      "GT",
-                      "PW",
-                      "DJ",
-                      "BM",
-                      "ER",
-                      "TT",
-                      "CI",
-                      "CF",
-                      "UG",
-                      "PR",
-                      "MR",
-                      "CO",
-                      "CD",
-                      "GD",
-                      "MU",
-                      "VC",
-                      "NA",
-                      "AR",
-                      "AO",
-                      "GU",
-                      "NE",
-                      "SZ",
-                      "PY",
-                      "SO",
-                      "TD",
-                      "BB",
-                      "SN",
-                      "MS",
-                      "ST",
-                      "NI",
-                      "TG",
-                      "BJ",
-                      "DO",
-                      "UY",
-                      "EC",
-                      "SX",
-                      "KY",
-                      "MG",
-                      "AW",
-                      "CR",
-                      "MV",
-                      "SC",
-                      "BI",
-                      "LS",
-                      "US",
-                      "MP",
-                      "UM",
-                      "TZ",
-                      "HN",
-                      "AU",
-                      "PA",
-                      "MF",
-                      "BO",
-                      "SL",
-                      "FK",
-                      "BZ",
-                      "AI",
-                      "KE",
-                      "ZM",
-                      "GQ",
-                      "NZ",
-                      "CU",
-                      "VG",
-                      "CM",
-                      "GW",
-                      "CG",
-                      "BL",
-                      "JM",
-                      "ML",
-                      "RW",
-                      "GB",
-                      "UK",
-                      "PE",
-                      "BQ",
-                      "ZA",
-                      "BS",
-                      "HT",
-                      "NG",
-                      "FJ",
-                      "NL",
-                      "SD",
-                      "KN",
-                      "SV",
-                      "TC",
-                      "AG",
-                      "MQ",
-                      "LR",
-                      "CL",
-                      "CV",
-                      "RE",
-                      "VE",
-                      "GN",
-                      "MX",
-                      "LC",
-                      "KM"
-                    ]
-                  },
-                  "links": {
-                    "web": {
-                      "href": "https://www.espn.com/video/clip?id=46092469",
-                      "self": {
-                        "href": "https://www.espn.com/video/clip?id=46092469",
-                        "dsi": {
-                          "href": "https://www.espn.com/video/clip?id=08e5aadb0ddab"
-                        }
-                      },
-                      "seo": {
-                        "href": "https://www.espn.com/video/clip/_/id/46092469"
-                      }
-                    },
-                    "mobile": {
-                      "source": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f.mp4"
-                      },
-                      "alert": {
-                        "href": "https://m.espn.com/general/video/videoAlert?vid=46092469"
-                      },
-                      "streaming": {
-                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/49625756-4c0a-4538-ba8b-f399fa2d77e0/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092469"
-                      },
-                      "progressiveDownload": {
-                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/49625756-4c0a-4538-ba8b-f399fa2d77e0/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092469"
-                      }
-                    },
-                    "api": {
-                      "self": {
-                        "href": "https://content.core.api.espn.com/v1/video/clips/46092469"
-                      },
-                      "artwork": {
-                        "href": "https://artwork.api.espn.com/artwork/collections/media/49625756-4c0a-4538-ba8b-f399fa2d77e0"
-                      }
-                    },
-                    "source": {
-                      "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f_360p30_1464k.mp4",
-                      "mezzanine": {
-                        "href": "https://media.video-origin.espn.com/espnvideo/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f.mp4"
-                      },
-                      "flash": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f.smil"
-                      },
-                      "hds": {
-                        "href": "https://hds.video-cdn.espn.com/z/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f_rel.smil/manifest.f4m"
-                      },
-                      "HLS": {
-                        "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8",
-                        "HD": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8"
-                        },
-                        "cmaf": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8",
-                          "9x16": {
-                            "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/9x16/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8"
-                          }
-                        },
-                        "9x16": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/9x16/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f/playlist.m3u8"
-                        },
-                        "shield": {
-                          "href": "https://watch.auth.api.espn.com/video/auth/media/49625756-4c0a-4538-ba8b-f399fa2d77e0/asset"
-                        }
-                      },
-                      "HD": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f_720p30_2896k.mp4"
-                      },
-                      "full": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/886e6f5c-03f4-488d-910a-361469e0cd6f/886e6f5c-03f4-488d-910a-361469e0cd6f_360p30_1464k.mp4"
-                      }
-                    },
-                    "sportscenter": {
-                      "href": "sportscenter://x-callback-url/showVideo?videoID=46092469&videoDSI=08e5aadb0ddab"
-                    }
-                  }
-                }
-              ]
             }
           ]
         }
@@ -26408,228 +26488,6 @@
               "region": "us"
             }
           ],
-          "headlines": [
-            {
-              "type": "Recap",
-              "description": "— Luis Morales pitched seven sparkling innings, Zack Gelof homered, doubled and drove in four runs, and the Athletics beat the Detroit Tigers 7-0 on Wednesday night to sweep their three-game series.",
-              "shortLinkText": "Morales pitches 7 sharp innings and Gelof powers A's past Tigers 7-0 for 3-game sweep",
-              "video": [
-                {
-                  "id": 46092409,
-                  "source": "espn",
-                  "headline": "Detroit Tigers vs. Athletics: Game Highlights",
-                  "thumbnail": "https://a.espncdn.com/media/motion/2025/0828/0fd175f7517f47b1a587499351ef8daa42/0fd175f7517f47b1a587499351ef8daa42.jpg",
-                  "duration": 66,
-                  "tracking": {
-                    "sportName": "mlb",
-                    "leagueName": "No League",
-                    "coverageType": "Final Game Highlight",
-                    "trackingName": "MLB_One-Play (Detroit Tigers vs. Athletics: Game Highlights) 2025/08/28 ESHEET",
-                    "trackingId": "dm_20250828_MLB_detroit_tigers_vs_athletics_game_highlights"
-                  },
-                  "deviceRestrictions": {
-                    "type": "whitelist",
-                    "devices": [
-                      "desktop",
-                      "ipad",
-                      "settop",
-                      "handset",
-                      "tablet"
-                    ]
-                  },
-                  "geoRestrictions": {
-                    "type": "whitelist",
-                    "countries": [
-                      "TC",
-                      "CD",
-                      "GU",
-                      "MX",
-                      "BQ",
-                      "GT",
-                      "MP",
-                      "GY",
-                      "CR",
-                      "PR",
-                      "PE",
-                      "SS",
-                      "GB",
-                      "UK",
-                      "NA",
-                      "LC",
-                      "SL",
-                      "CF",
-                      "ML",
-                      "CG",
-                      "KE",
-                      "UG",
-                      "AG",
-                      "KY",
-                      "SO",
-                      "ZM",
-                      "CU",
-                      "GA",
-                      "CV",
-                      "BS",
-                      "SC",
-                      "BZ",
-                      "PW",
-                      "CL",
-                      "GD",
-                      "RW",
-                      "JM",
-                      "PY",
-                      "MV",
-                      "SV",
-                      "BJ",
-                      "VC",
-                      "AU",
-                      "VG",
-                      "TZ",
-                      "BO",
-                      "KN",
-                      "NI",
-                      "DO",
-                      "NL",
-                      "RE",
-                      "ST",
-                      "MQ",
-                      "TT",
-                      "MG",
-                      "HN",
-                      "BL",
-                      "MR",
-                      "NZ",
-                      "MF",
-                      "GN",
-                      "SZ",
-                      "GP",
-                      "FM",
-                      "TD",
-                      "LS",
-                      "UY",
-                      "VI",
-                      "AO",
-                      "BF",
-                      "GW",
-                      "GH",
-                      "BM",
-                      "MZ",
-                      "SN",
-                      "FJ",
-                      "LR",
-                      "CO",
-                      "HT",
-                      "MW",
-                      "GM",
-                      "NG",
-                      "FK",
-                      "AS",
-                      "KM",
-                      "AW",
-                      "EC",
-                      "BB",
-                      "ZA",
-                      "BI",
-                      "US",
-                      "UM",
-                      "SX",
-                      "PA",
-                      "DJ",
-                      "ER",
-                      "GQ",
-                      "AR",
-                      "VE",
-                      "BW",
-                      "MU",
-                      "AI",
-                      "NE",
-                      "MS",
-                      "SD",
-                      "MH",
-                      "CI",
-                      "TG",
-                      "CM"
-                    ]
-                  },
-                  "links": {
-                    "web": {
-                      "href": "https://www.espn.com/video/clip?id=46092409",
-                      "self": {
-                        "href": "https://www.espn.com/video/clip?id=46092409",
-                        "dsi": {
-                          "href": "https://www.espn.com/video/clip?id=827a021b4700f"
-                        }
-                      },
-                      "seo": {
-                        "href": "https://www.espn.com/video/clip/_/id/46092409"
-                      }
-                    },
-                    "mobile": {
-                      "source": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa.mp4"
-                      },
-                      "alert": {
-                        "href": "https://m.espn.com/general/video/videoAlert?vid=46092409"
-                      },
-                      "streaming": {
-                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/8a5ed645-59a6-4cd1-b8f6-f6fe416153e9/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092409"
-                      },
-                      "progressiveDownload": {
-                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/8a5ed645-59a6-4cd1-b8f6-f6fe416153e9/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092409"
-                      }
-                    },
-                    "api": {
-                      "self": {
-                        "href": "https://content.core.api.espn.com/v1/video/clips/46092409"
-                      },
-                      "artwork": {
-                        "href": "https://artwork.api.espn.com/artwork/collections/media/8a5ed645-59a6-4cd1-b8f6-f6fe416153e9"
-                      }
-                    },
-                    "source": {
-                      "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa_360p30_1464k.mp4",
-                      "mezzanine": {
-                        "href": "https://media.video-origin.espn.com/espnvideo/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa.mp4"
-                      },
-                      "flash": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa.smil"
-                      },
-                      "hds": {
-                        "href": "https://hds.video-cdn.espn.com/z/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa_rel.smil/manifest.f4m"
-                      },
-                      "HLS": {
-                        "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8",
-                        "HD": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8"
-                        },
-                        "cmaf": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8",
-                          "9x16": {
-                            "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/9x16/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8"
-                          }
-                        },
-                        "9x16": {
-                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/9x16/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8"
-                        },
-                        "shield": {
-                          "href": "https://watch.auth.api.espn.com/video/auth/media/8a5ed645-59a6-4cd1-b8f6-f6fe416153e9/asset"
-                        }
-                      },
-                      "HD": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa_720p30_2896k.mp4"
-                      },
-                      "full": {
-                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa_360p30_1464k.mp4"
-                      }
-                    },
-                    "sportscenter": {
-                      "href": "sportscenter://x-callback-url/showVideo?videoID=46092409&videoDSI=827a021b4700f"
-                    }
-                  }
-                }
-              ]
-            }
-          ],
           "highlights": [
             {
               "id": 46092409,
@@ -26855,6 +26713,228 @@
                 "trackingName": "MLB_One-Play (Detroit Tigers vs. Athletics: Game Highlights) 2025/08/28 ESHEET",
                 "trackingId": "dm_20250828_MLB_detroit_tigers_vs_athletics_game_highlights"
               }
+            }
+          ],
+          "headlines": [
+            {
+              "type": "Recap",
+              "description": "— Luis Morales pitched seven sparkling innings, Zack Gelof homered, doubled and drove in four runs, and the Athletics beat the Detroit Tigers 7-0 on Wednesday night to sweep their three-game series.",
+              "shortLinkText": "Morales pitches 7 sharp innings and Gelof powers A's past Tigers 7-0 for 3-game sweep",
+              "video": [
+                {
+                  "id": 46092409,
+                  "source": "espn",
+                  "headline": "Detroit Tigers vs. Athletics: Game Highlights",
+                  "thumbnail": "https://a.espncdn.com/media/motion/2025/0828/0fd175f7517f47b1a587499351ef8daa42/0fd175f7517f47b1a587499351ef8daa42.jpg",
+                  "duration": 66,
+                  "tracking": {
+                    "sportName": "mlb",
+                    "leagueName": "No League",
+                    "coverageType": "Final Game Highlight",
+                    "trackingName": "MLB_One-Play (Detroit Tigers vs. Athletics: Game Highlights) 2025/08/28 ESHEET",
+                    "trackingId": "dm_20250828_MLB_detroit_tigers_vs_athletics_game_highlights"
+                  },
+                  "deviceRestrictions": {
+                    "type": "whitelist",
+                    "devices": [
+                      "desktop",
+                      "ipad",
+                      "settop",
+                      "handset",
+                      "tablet"
+                    ]
+                  },
+                  "geoRestrictions": {
+                    "type": "whitelist",
+                    "countries": [
+                      "TC",
+                      "CD",
+                      "GU",
+                      "MX",
+                      "BQ",
+                      "GT",
+                      "MP",
+                      "GY",
+                      "CR",
+                      "PR",
+                      "PE",
+                      "SS",
+                      "GB",
+                      "UK",
+                      "NA",
+                      "LC",
+                      "SL",
+                      "CF",
+                      "ML",
+                      "CG",
+                      "KE",
+                      "UG",
+                      "AG",
+                      "KY",
+                      "SO",
+                      "ZM",
+                      "CU",
+                      "GA",
+                      "CV",
+                      "BS",
+                      "SC",
+                      "BZ",
+                      "PW",
+                      "CL",
+                      "GD",
+                      "RW",
+                      "JM",
+                      "PY",
+                      "MV",
+                      "SV",
+                      "BJ",
+                      "VC",
+                      "AU",
+                      "VG",
+                      "TZ",
+                      "BO",
+                      "KN",
+                      "NI",
+                      "DO",
+                      "NL",
+                      "RE",
+                      "ST",
+                      "MQ",
+                      "TT",
+                      "MG",
+                      "HN",
+                      "BL",
+                      "MR",
+                      "NZ",
+                      "MF",
+                      "GN",
+                      "SZ",
+                      "GP",
+                      "FM",
+                      "TD",
+                      "LS",
+                      "UY",
+                      "VI",
+                      "AO",
+                      "BF",
+                      "GW",
+                      "GH",
+                      "BM",
+                      "MZ",
+                      "SN",
+                      "FJ",
+                      "LR",
+                      "CO",
+                      "HT",
+                      "MW",
+                      "GM",
+                      "NG",
+                      "FK",
+                      "AS",
+                      "KM",
+                      "AW",
+                      "EC",
+                      "BB",
+                      "ZA",
+                      "BI",
+                      "US",
+                      "UM",
+                      "SX",
+                      "PA",
+                      "DJ",
+                      "ER",
+                      "GQ",
+                      "AR",
+                      "VE",
+                      "BW",
+                      "MU",
+                      "AI",
+                      "NE",
+                      "MS",
+                      "SD",
+                      "MH",
+                      "CI",
+                      "TG",
+                      "CM"
+                    ]
+                  },
+                  "links": {
+                    "web": {
+                      "href": "https://www.espn.com/video/clip?id=46092409",
+                      "self": {
+                        "href": "https://www.espn.com/video/clip?id=46092409",
+                        "dsi": {
+                          "href": "https://www.espn.com/video/clip?id=827a021b4700f"
+                        }
+                      },
+                      "seo": {
+                        "href": "https://www.espn.com/video/clip/_/id/46092409"
+                      }
+                    },
+                    "mobile": {
+                      "source": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa.mp4"
+                      },
+                      "alert": {
+                        "href": "https://m.espn.com/general/video/videoAlert?vid=46092409"
+                      },
+                      "streaming": {
+                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/8a5ed645-59a6-4cd1-b8f6-f6fe416153e9/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092409"
+                      },
+                      "progressiveDownload": {
+                        "href": "https://watch.auth.api.espn.com/video/auth/brightcove/8a5ed645-59a6-4cd1-b8f6-f6fe416153e9/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=46092409"
+                      }
+                    },
+                    "api": {
+                      "self": {
+                        "href": "https://content.core.api.espn.com/v1/video/clips/46092409"
+                      },
+                      "artwork": {
+                        "href": "https://artwork.api.espn.com/artwork/collections/media/8a5ed645-59a6-4cd1-b8f6-f6fe416153e9"
+                      }
+                    },
+                    "source": {
+                      "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa_360p30_1464k.mp4",
+                      "mezzanine": {
+                        "href": "https://media.video-origin.espn.com/espnvideo/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa.mp4"
+                      },
+                      "flash": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa.smil"
+                      },
+                      "hds": {
+                        "href": "https://hds.video-cdn.espn.com/z/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa_rel.smil/manifest.f4m"
+                      },
+                      "HLS": {
+                        "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8",
+                        "HD": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8"
+                        },
+                        "cmaf": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8",
+                          "9x16": {
+                            "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/9x16/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8"
+                          }
+                        },
+                        "9x16": {
+                          "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/9x16/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa/playlist.m3u8"
+                        },
+                        "shield": {
+                          "href": "https://watch.auth.api.espn.com/video/auth/media/8a5ed645-59a6-4cd1-b8f6-f6fe416153e9/asset"
+                        }
+                      },
+                      "HD": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa_720p30_2896k.mp4"
+                      },
+                      "full": {
+                        "href": "https://media.video-cdn.espn.com/motion/wsc/2025/0828/0fd175f7-517f-47b1-a587-499351ef8daa/0fd175f7-517f-47b1-a587-499351ef8daa_360p30_1464k.mp4"
+                      }
+                    },
+                    "sportscenter": {
+                      "href": "sportscenter://x-callback-url/showVideo?videoID=46092409&videoDSI=827a021b4700f"
+                    }
+                  }
+                }
+              ]
             }
           ]
         }

@@ -1,0 +1,39 @@
+name = "blaze-intelligence-lsl"
+compatibility_date = "2024-09-01"
+pages_build_output_dir = "."
+
+[env.production]
+name = "blaze-intelligence-production"
+
+# R2 Storage bindings
+[[r2_buckets]]
+binding = "BLAZE_STORAGE"
+bucket_name = "blaze-intelligence-data"
+
+# Worker functions
+[[pages_functions]]
+route = "/api/*"
+script = "worker-api.js"
+
+# Environment variables for production
+[env.production.vars]
+API_VERSION = "1.0.0"
+CACHE_TTL = "300"
+
+# Custom domains configuration
+[[pages_routes]]
+pattern = "blaze-intelligence.com/*"
+custom_domain = true
+
+[[pages_routes]]
+pattern = "www.blaze-intelligence.com/*" 
+custom_domain = true
+
+# Cron triggers for agents
+[[pages_crons]]
+cron = "0 6 * * *"
+script = "agents/content-catalog-agent.js"
+
+[[pages_crons]]
+cron = "0 * * * *" 
+script = "agents/dataset-versioner-agent.js"

@@ -3775,8 +3775,8 @@
       ],
       "weather": {
         "displayValue": "Partly sunny",
-        "temperature": 72,
-        "highTemperature": 72,
+        "temperature": 76,
+        "highTemperature": 76,
         "conditionId": "3",
         "link": {
           "language": "en-US",
@@ -4776,7 +4776,7 @@
           "tickets": [
             {
               "summary": "Tickets as low as $14",
-              "numberAvailable": 3042,
+              "numberAvailable": 2982,
               "links": [
                 {
                   "href": "https://www.vividseats.com/penn-state-nittany-lions-football-tickets-beaver-stadium-8-30-2025--sports-ncaa-football/production/5417903?wsUser=717"
@@ -5416,7 +5416,7 @@
           "tickets": [
             {
               "summary": "Tickets as low as $30",
-              "numberAvailable": 2512,
+              "numberAvailable": 2507,
               "links": [
                 {
                   "href": "https://www.vividseats.com/georgia-bulldogs-football-tickets-sanford-stadium-8-30-2025--sports-ncaa-football/production/5419117?wsUser=717"
@@ -6043,7 +6043,7 @@
           "tickets": [
             {
               "summary": "Tickets as low as $207",
-              "numberAvailable": 2074,
+              "numberAvailable": 2072,
               "links": [
                 {
                   "href": "https://www.vividseats.com/florida-state-seminoles-football-tickets-doak-campbell-stadium-8-30-2025--sports-ncaa-football/production/5331799?wsUser=717"
@@ -7635,7 +7635,7 @@
           "tickets": [
             {
               "summary": "Tickets as low as $20",
-              "numberAvailable": 1211,
+              "numberAvailable": 1215,
               "links": [
                 {
                   "href": "https://www.vividseats.com/oregon-ducks-football-tickets-autzen-stadium-8-30-2024--sports-ncaa-football/production/5331702?wsUser=717"
@@ -8013,7 +8013,7 @@
           "tickets": [
             {
               "summary": "Tickets as low as $36",
-              "numberAvailable": 1872,
+              "numberAvailable": 1882,
               "links": [
                 {
                   "href": "https://www.vividseats.com/oklahoma-sooners-football-tickets-oklahoma-memorial-stadium-8-30-2025--sports-ncaa-football/production/5202110?wsUser=717"
@@ -10449,10 +10449,10 @@
         }
       ],
       "weather": {
-        "displayValue": "Partly sunny",
-        "temperature": 73,
-        "highTemperature": 73,
-        "conditionId": "3",
+        "displayValue": "Mostly sunny",
+        "temperature": 74,
+        "highTemperature": 74,
+        "conditionId": "2",
         "link": {
           "language": "en-US",
           "rel": [
@@ -10778,7 +10778,7 @@
           "tickets": [
             {
               "summary": "Tickets as low as $68",
-              "numberAvailable": 2180,
+              "numberAvailable": 2177,
               "links": [
                 {
                   "href": "https://www.vividseats.com/michigan-wolverines-football-tickets-michigan-stadium-8-30-2025--sports-ncaa-football/production/5417575?wsUser=717"
@@ -11470,8 +11470,8 @@
       ],
       "weather": {
         "displayValue": "Cloudy",
-        "temperature": 80,
-        "highTemperature": 80,
+        "temperature": 75,
+        "highTemperature": 75,
         "conditionId": "7",
         "link": {
           "language": "en-US",
@@ -11797,7 +11797,7 @@
           "tickets": [
             {
               "summary": "Tickets as low as $21",
-              "numberAvailable": 2468,
+              "numberAvailable": 2466,
               "links": [
                 {
                   "href": "https://www.vividseats.com/ole-miss-rebels-football-tickets-vaught-hemingway-stadium-8-30-2025--sports-ncaa-football/production/5419142?wsUser=717"
@@ -12802,7 +12802,7 @@
           "tickets": [
             {
               "summary": "Tickets as low as $26",
-              "numberAvailable": 1552,
+              "numberAvailable": 1553,
               "links": [
                 {
                   "href": "https://www.vividseats.com/arizona-state-sun-devils-football-tickets-mountain-america-stadium-8-30-2025--sports-ncaa-football/production/5425471?wsUser=717"
@@ -13548,10 +13548,10 @@
         }
       ],
       "weather": {
-        "displayValue": "Showers",
-        "temperature": 80,
-        "highTemperature": 80,
-        "conditionId": "12",
+        "displayValue": "Cloudy",
+        "temperature": 79,
+        "highTemperature": 79,
+        "conditionId": "7",
         "link": {
           "language": "en-US",
           "rel": [

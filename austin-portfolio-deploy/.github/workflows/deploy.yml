@@ -1,0 +1,65 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Run daily at 8 AM CST for content updates
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm install -g wrangler
+          npm install
+      
+      - name: Build blog content
+        run: |
+          node scripts/build-blog-index.cjs
+          node scripts/build-posts.cjs
+          node scripts/build-rss.cjs
+      
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          wrangler pages deploy . \
+            --project-name=blaze-intelligence-lsl \
+            --branch=main \
+            --commit-dirty=true
+      
+      - name: Verify deployment
+        run: |
+          sleep 10
+          curl -f https://blaze-intelligence-lsl.pages.dev || exit 1
+      
+      - name: Update sitemap
+        run: |
+          echo "Sitemap updated at $(date)" >> deployment.log
+      
+      - name: Notify success
+        if: success()
+        run: |
+          echo "✅ Deployment successful!"
+          echo "View at: https://blaze-intelligence-lsl.pages.dev"
+      
+      - name: Notify failure
+        if: failure()
+        run: |
+          echo "❌ Deployment failed!"
+          echo "Check logs for details"
