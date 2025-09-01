@@ -260,7 +260,7 @@
             
             <ul class="hidden lg:flex items-center space-x-8">
                 <li><a href="/sports" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">🏆 Sports</a></li>
-                <li><a href="/analytics-dashboard" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">📊 Analytics</a></li>
+                <li><a href="/client-dashboard.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">📊 Dashboard</a></li>
                 <li><a href="/champion-enigma-demo.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">🧠 Enigma AI</a></li>
                 <li><a href="/digital-combine-autopilot.html" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">🤖 Autopilot</a></li>
                 <li><a href="/blog/" class="text-slate-300 hover:text-white transition-colors duration-200 font-medium">📝 Insights</a></li>
