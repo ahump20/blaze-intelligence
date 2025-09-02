@@ -11,7 +11,7 @@ bucket_name = "blaze-youth-data"
 
 [[kv_namespaces]]
 binding = "KV"
-id = "YOUTH_TXHS_CACHE_ID"
+id = "b884d8eb60454eed879d36c8863cf513"
 
 [triggers]
 crons = [
