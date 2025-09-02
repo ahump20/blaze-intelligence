@@ -1,6 +1,7 @@
 # Championship Intelligence Routes - Baltimore Priority
-/orioles        /project-blackbird-live-demo.html    301
-/baltimore      /project-blackbird-live-demo.html    301
+/orioles        /baltimore-intelligence.html    301
+/baltimore      /baltimore-intelligence.html    301
+/moneyball      /baltimore-intelligence.html    301
 /blackbird      /project-blackbird-live-demo.html    301
 /chad-tatum     /orioles-chad-tatum-live-demo.html   301
 /executive      /orioles-executive-presentation.html  301
