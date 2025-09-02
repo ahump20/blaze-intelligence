@@ -42,6 +42,7 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     
     <!-- Blaze Modules -->
+    <script src="js/live-data-engine.js" defer></script>
     <script src="js/live-sports-connector.js" defer></script>
     <script src="js/data-refresh-pipeline.js" defer></script>
     <script src="js/blaze-three-visuals.js" defer></script>
@@ -451,10 +452,10 @@
 
                 <!-- Key Metrics -->
                 <div class="flex flex-wrap justify-center gap-4 mb-12">
-                    <div class="status-indicator">94.6% Accuracy</div>
-                    <div class="status-indicator">&lt;100ms Latency</div>
-                    <div class="status-indicator">2.8M+ Data Points</div>
-                    <div class="status-indicator">24/7 Analytics</div>
+                    <div class="status-indicator" id="live-accuracy">94.6% Accuracy</div>
+                    <div class="status-indicator" id="live-latency">&lt;100ms Latency</div>
+                    <div class="status-indicator" id="live-datapoints">2.8M+ Data Points</div>
+                    <div class="status-indicator" id="live-uptime">99.9% Uptime</div>
                     <div class="status-indicator">Enterprise Ready</div>
                 </div>
                 
@@ -818,6 +819,38 @@
 
     <script>
         // Initialize everything when DOM is loaded
+        // Update live metrics display
+        function updateLiveMetrics(data) {
+            if (!data || !data.systemMetrics) return;
+            
+            const metrics = data.systemMetrics;
+            
+            // Update accuracy
+            const accuracyEl = document.getElementById('live-accuracy');
+            if (accuracyEl && metrics.accuracy) {
+                accuracyEl.innerHTML = `<span class="live-indicator"></span>${metrics.accuracy}% Accuracy`;
+            }
+            
+            // Update latency
+            const latencyEl = document.getElementById('live-latency');
+            if (latencyEl && metrics.latency) {
+                latencyEl.innerHTML = `<span class="live-indicator"></span>&lt;${metrics.latency}ms Latency`;
+            }
+            
+            // Update data points
+            const datapointsEl = document.getElementById('live-datapoints');
+            if (datapointsEl && metrics.dataPoints) {
+                const formatted = (metrics.dataPoints / 1000000).toFixed(1) + 'M+';
+                datapointsEl.innerHTML = `<span class="live-indicator"></span>${formatted} Data Points`;
+            }
+            
+            // Update uptime
+            const uptimeEl = document.getElementById('live-uptime');
+            if (uptimeEl && metrics.uptime) {
+                uptimeEl.innerHTML = `<span class="live-indicator"></span>${metrics.uptime}% Uptime`;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             initializePage();
         });
@@ -825,6 +858,14 @@
         function initializePage() {
             // Initialize icons
             lucide.createIcons();
+            
+            // Initialize live data engine
+            if (typeof BlazeEngine !== 'undefined') {
+                // Subscribe to real-time metrics updates
+                BlazeEngine.subscribe('metrics', function(data) {
+                    updateLiveMetrics(data);
+                });
+            }
             
             // Initialize 3D visualizations
             if (typeof blazeVisuals !== 'undefined') {
