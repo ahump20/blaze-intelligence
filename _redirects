@@ -1,0 +1,53 @@
+# Blaze Intelligence - Cloudflare Pages Redirects Configuration
+# Pattern Recognition Weaponized™
+
+# Fix integrated platform redirect issue
+/integrated-platform.html /integrated-platform/ 200
+/integrated-platform /integrated-platform.html 200
+
+# Standard redirects for clean URLs
+/intelligence-os.html /intelligence-os 301
+/championship-os.html /championship-os 301
+
+# Root domain redirects
+/index /index.html 200
+/ /index.html 200
+
+# API and documentation redirects  
+/api /api-docs.html 301
+/docs /api-docs.html 301
+
+# Contact form redirects
+/contact /contact.html 200
+/get-started /contact.html 301
+
+# Enterprise solutions redirects
+/solutions /enterprise.html 301
+/business /enterprise.html 301
+
+# Pricing and analysis redirects
+/price /pricing 200
+/competitive /competitive-analysis.html 301
+/analysis /competitive-analysis.html 301
+
+# Command center and integration redirects
+/command /apex-command-center.html 301
+/center /apex-command-center.html 301
+/integrations /integration-hub.html 301
+/hub /integration-hub.html 301
+
+# Sports-specific redirects
+/baseball /swing-engine.html 301
+/swing /swing-engine.html 301
+/canvas /canvas-landing.html 301
+
+# Fallback for old URLs
+/home /index.html 301
+/dashboard /index.html 301
+
+# Security headers and optimizations
+/*    X-Frame-Options: DENY
+/*    X-Content-Type-Options: nosniff  
+/*    X-XSS-Protection: 1; mode=block
+/*    Referrer-Policy: strict-origin-when-cross-origin
+/*    Cache-Control: public, max-age=300

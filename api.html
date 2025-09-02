@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence API - Live</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a0a0a 100%); color: #ffffff; padding: 2rem; min-height: 100vh; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .title { font-size: 3rem; color: #c41e3a; font-weight: 900; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin-bottom: 1rem; }
+        .tagline { font-size: 1.2rem; color: #ffd700; font-style: italic; margin-bottom: 0.5rem; }
+        .subtitle { color: #cccccc; font-size: 1rem; }
+        .endpoint-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .endpoint { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 2rem; backdrop-filter: blur(10px); border: 1px solid rgba(196,30,58,0.3); transition: all 0.3s ease; }
+        .endpoint:hover { transform: translateY(-5px); border-color: rgba(196,30,58,0.6); box-shadow: 0 10px 30px rgba(196,30,58,0.2); }
+        .method { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.8rem; margin-bottom: 1rem; }
+        .get { background: #28a745; }
+        .post { background: #007bff; }
+        .endpoint-url { color: #c41e3a; font-family: monospace; font-size: 1.1rem; margin-bottom: 1rem; word-break: break-all; }
+        .endpoint-desc { color: #cccccc; line-height: 1.6; margin-bottom: 1rem; }
+        .sample-response { background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: #ffd700; margin-top: 1rem; }
+        .live-demo { background: rgba(255,215,0,0.1); border-radius: 15px; padding: 2rem; margin: 3rem 0; text-align: center; }
+        .demo-button { display: inline-block; padding: 1rem 2rem; background: #c41e3a; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 0.5rem; transition: background 0.3s; }
+        .demo-button:hover { background: #a01729; }
+        .contact-section { background: rgba(196,30,58,0.1); border-radius: 15px; padding: 2rem; margin-top: 3rem; text-align: center; }
+        .frameworks-section { background: rgba(255,215,0,0.05); border-radius: 15px; padding: 2rem; margin: 2rem 0; }
+        .framework-item { background: rgba(0,0,0,0.3); padding: 1rem; margin: 1rem 0; border-radius: 8px; border-left: 4px solid #ffd700; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🔥 BLAZE INTELLIGENCE API</h1>
+            <p class="tagline">"Every stat tells a story, every game builds a legacy"</p>
+            <p class="subtitle">Live Production API • Pattern Recognition Weaponized™</p>
+        </div>
+
+        <div class="live-demo">
+            <h2 style="color: #c41e3a; margin-bottom: 1rem;">🎯 Live Demo Links</h2>
+            <p style="margin-bottom: 2rem; color: #cccccc;">Experience Blaze Intelligence in action with these live demonstrations:</p>
+            <a href="./cardinals.html" class="demo-button">🏆 Cardinals Analysis Dashboard</a>
+            <a href="./cardinals-data.json" class="demo-button">📊 Live JSON API Data</a>
+            <a href="./" class="demo-button">🌐 Main Dashboard</a>
+        </div>
+
+        <div class="frameworks-section">
+            <h2 style="color: #ffd700; margin-bottom: 1.5rem; text-align: center;">🧠 Blaze Intelligence Frameworks</h2>
+            <div class="framework-item">
+                <h3 style="color: #ffd700;">Decision Velocity Model™</h3>
+                <p>Measures organizational decision-making speed and efficiency. Cardinals score: <strong style="color: #c41e3a;">8.2/10</strong></p>
+            </div>
+            <div class="framework-item">
+                <h3 style="color: #ffd700;">Pattern Recognition Hierarchy™</h3>
+                <p>Identifies championship patterns and competitive cycles. Key insight: <strong style="color: #c41e3a;">Championship clustering behavior detected</strong></p>
+            </div>
+            <div class="framework-item">
+                <h3 style="color: #ffd700;">Cognitive Load Distribution™</h3>
+                <p>Optimizes resource allocation and strategic focus. Assessment: <strong style="color: #c41e3a;">Optimal organizational balance</strong></p>
+            </div>
+        </div>
+
+        <h2 style="color: #c41e3a; text-align: center; margin: 3rem 0 2rem;">📡 Live API Endpoints</h2>
+
+        <div class="endpoint-grid">
+            <div class="endpoint">
+                <div class="method get">GET</div>
+                <div class="endpoint-url">./cardinals-data.json</div>
+                <div class="endpoint-desc">Complete Cardinals team analysis with Blaze Intelligence proprietary frameworks including championship probability, organizational health scoring, and strategic insights.</div>
+                <div class="sample-response">
+{
+  "championshipProbability2025": 12.8,
+  "organizationalHealth": 87.5,
+  "blazeFrameworks": {
+    "decisionVelocity": 8.2,
+    "patternRecognition": "Championship clustering identified"
+  },
+  "contact": "Austin Humphrey - ahump20@outlook.com"
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="method get">GET</div>
+                <div class="endpoint-url">./cardinals.html</div>
+                <div class="endpoint-desc">Interactive Cardinals analysis dashboard featuring Three.js animations, championship timeline visualization, and real-time metrics display.</div>
+                <div class="sample-response">Features:
+• Championship probability: 12.8%
+• Playoff probability: 42.5%  
+• Organizational health: 87.5%
+• Pattern recognition analytics
+• Interactive visualizations
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="method get">GET</div>
+                <div class="endpoint-url">./frameworks.json</div>
+                <div class="endpoint-desc">Detailed breakdown of Blaze Intelligence proprietary frameworks with methodologies, scoring criteria, and competitive applications.</div>
+                <div class="sample-response">
+{
+  "decisionVelocityModel": {
+    "description": "Cognitive processing speed optimization",
+    "applications": ["Team management", "Player development"]
+  },
+  "patternRecognition": {
+    "methodology": "Historical analysis + predictive modeling"
+  }
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="method get">GET</div>
+                <div class="endpoint-url">./team-metrics.json</div>
+                <div class="endpoint-desc">Real-time team performance metrics, competitive positioning, and strategic recommendations across MLB, NFL, NBA, and NCAA.</div>
+                <div class="sample-response">
+{
+  "cardinals": { "blazeScore": 84.2, "tier": "competitive" },
+  "titans": { "blazeScore": 76.8, "tier": "rebuilding" },
+  "longhorns": { "blazeScore": 89.1, "tier": "championship" },
+  "grizzlies": { "blazeScore": 82.5, "tier": "playoff" }
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h2 style="color: #c41e3a; margin-bottom: 1.5rem;">📞 Contact & Consultation</h2>
+            <div style="font-size: 1.1rem; margin-bottom: 1rem;">
+                <strong>Austin Humphrey</strong> - Founder & Chief Intelligence Officer
+            </div>
+            <div style="margin-bottom: 0.5rem;">📧 <strong>ahump20@outlook.com</strong></div>
+            <div style="margin-bottom: 1.5rem;">📱 <strong>(210) 273-5538</strong></div>
+            <div style="font-size: 1.1rem; color: #ffd700; font-weight: bold;">
+                🌐 Blaze Intelligence
+            </div>
+            <div style="color: #cccccc; margin-top: 0.5rem; font-style: italic;">
+                Where Cognitive Performance Meets Quarterly Performance
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+                "Every stat tells a story, every game builds a legacy"
+            </p>
+            <p style="color: #c41e3a; font-weight: bold;">
+                ⚡ Pattern Recognition Weaponized™
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const endpoints = document.querySelectorAll('.endpoint');
+            endpoints.forEach(endpoint => {
+                endpoint.addEventListener('click', function() {
+                    const url = this.querySelector('.endpoint-url').textContent;
+                    if (url.startsWith('./') && (url.endsWith('.json') || url.endsWith('.html'))) {
+                        window.open(url, '_blank');
+                    }
+                });
+            });
+
+            // Add timestamp
+            const now = new Date().toLocaleString();
+            const timestampElement = document.createElement('div');
+            timestampElement.style.textAlign = 'center';
+            timestampElement.style.color = '#666';
+            timestampElement.style.fontSize = '0.8rem';
+            timestampElement.style.marginTop = '1rem';
+            timestampElement.textContent = `Last updated: ${now}`;
+            document.body.appendChild(timestampElement);
+        });
+    </script>
+</body>
+</html>
