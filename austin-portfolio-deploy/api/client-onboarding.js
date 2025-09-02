@@ -1,9 +1,7 @@
-#!/usr/bin/env node
-// Blaze Intelligence Client Onboarding System
-// Comprehensive onboarding workflow for new clients with automated setup
-
-import fs from 'fs/promises';
-import path from 'path';
+/**
+ * Blaze Intelligence Client Onboarding Automation
+ * Handles automated client onboarding and service activation workflows
+ */
 
 const ONBOARDING_CONFIG = {
   client_tiers: {
