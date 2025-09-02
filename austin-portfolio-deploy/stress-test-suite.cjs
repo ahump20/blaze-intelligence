@@ -8,7 +8,7 @@
 const https = require('https');
 const { performance } = require('perf_hooks');
 
-const BASE_URL = 'https://409c1526.blaze-intelligence-production.pages.dev';
+const BASE_URL = 'https://fdd9e34f.blaze-intelligence-production.pages.dev';
 const CONCURRENT_USERS = 50;
 const TEST_DURATION_MS = 30000; // 30 seconds
 const REQUEST_INTERVAL_MS = 100; // 10 requests per second per user

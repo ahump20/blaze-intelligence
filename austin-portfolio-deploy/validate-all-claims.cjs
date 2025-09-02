@@ -8,7 +8,7 @@
 const https = require('https');
 const fs = require('fs');
 
-const BASE_URL = 'https://409c1526.blaze-intelligence-production.pages.dev';
+const BASE_URL = 'https://5fe1f668.blaze-intelligence-production.pages.dev';
 
 const CLAIMS_TO_VALIDATE = {
   performance: {

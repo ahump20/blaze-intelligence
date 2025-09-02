@@ -22,6 +22,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
     
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ff6b35">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    
     <!-- Enhanced Font Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,10 +42,18 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     
     <!-- Blaze Modules -->
+    <script src="js/live-sports-connector.js" defer></script>
+    <script src="js/data-refresh-pipeline.js" defer></script>
     <script src="js/blaze-three-visuals.js" defer></script>
     <script src="js/blaze-real-time-data.js" defer></script>
     <script src="js/cardinals-readiness-board.js" defer></script>
+    <script src="js/blaze-websocket-client.js" defer></script>
+    <script src="js/blaze-live-chat.js" defer></script>
     <script src="js/data-sync.js" defer></script>
+    <script src="js/mlb-live-integration.js" defer></script>
+    <script src="js/perfect-game-integration.js" defer></script>
+    <script src="js/international-pipeline.js" defer></script>
+    <script src="js/lead-capture.js" defer></script>
     
     <!-- Tailwind Config -->
     <script>
@@ -376,10 +389,10 @@
                 <li><a href="#analytics" class="nav-link text-slate-300 hover:text-white font-medium">Analytics</a></li>
                 <li><a href="/vision-ai-demo.html" class="nav-link text-slate-300 hover:text-white font-medium">Vision AI</a></li>
                 <li><a href="/dashboard.html" class="nav-link text-slate-300 hover:text-white font-medium">Dashboard</a></li>
-                <li><a href="/data" class="nav-link text-slate-300 hover:text-white font-medium">Data</a></li>
+                <li><a href="/testimonials.html" class="nav-link text-slate-300 hover:text-white font-medium">Success Stories</a></li>
                 <li><a href="/blog/" class="nav-link text-slate-300 hover:text-white font-medium">Insights</a></li>
                 <li><a href="#pricing" class="nav-link text-slate-300 hover:text-white font-medium">Pricing</a></li>
-                <li><a href="#contact" class="cta-button text-white font-semibold px-6 py-3 rounded-full">
+                <li><a href="/contact.html" class="cta-button text-white font-semibold px-6 py-3 rounded-full">
                     Get Started
                 </a></li>
             </ul>
@@ -765,7 +778,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-6 justify-center reveal">
-                    <a href="mailto:austin@blaze-intelligence.pages.dev" class="cta-button text-white font-bold px-10 py-5 rounded-full flex items-center justify-center gap-3 text-lg">
+                    <a href="/contact.html" class="cta-button text-white font-bold px-10 py-5 rounded-full flex items-center justify-center gap-3 text-lg">
                         <i data-lucide="mail" class="w-6 h-6"></i>
                         Schedule Demo
                     </a>
@@ -1051,6 +1064,34 @@
 
         // Initialize charts after page load
         setTimeout(initializeMetricCharts, 1000);
+        
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered:', registration);
+                        
+                        // Check for updates periodically
+                        setInterval(() => {
+                            registration.update();
+                        }, 60000); // Check every minute
+                    })
+                    .catch(error => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+            
+            // Handle service worker updates
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                window.location.reload();
+            });
+        }
+        
+        // Initialize WebSocket if available
+        if (window.initializeBlazeWebSocket) {
+            window.initializeBlazeWebSocket();
+        }
     </script>
 </body>
 </html>

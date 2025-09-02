@@ -27,7 +27,22 @@ window.BLAZE_ANALYTICS = {
         calculator_complete: { value: 25, currency: 'USD' },
         trial_signup: { value: 200, currency: 'USD' },
         api_key_request: { value: 150, currency: 'USD' },
-        blog_subscribe: { value: 10, currency: 'USD' }
+        blog_subscribe: { value: 10, currency: 'USD' },
+        video_view: { value: 5, currency: 'USD' },
+        video_complete: { value: 15, currency: 'USD' },
+        transcript_view: { value: 3, currency: 'USD' }
+    },
+    
+    // Video tracking events
+    VIDEO_EVENTS: {
+        video_page_view: 'video_page_view',
+        video_card_click: 'video_card_click',
+        watch_strip_impression: 'watch_strip_impression',
+        transcript_click: 'transcript_click',
+        video_25_percent: 'video_25_percent',
+        video_50_percent: 'video_50_percent',
+        video_75_percent: 'video_75_percent',
+        video_complete: 'video_complete'
     },
     
     // Enhanced ecommerce settings

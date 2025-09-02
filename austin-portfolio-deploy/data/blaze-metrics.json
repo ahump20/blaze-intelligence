@@ -1,39 +1,55 @@
 {
-  "ts": "2025-09-01T23:45:00Z",
+  "ts": "2025-09-02T00:36:06.268Z",
+  "lastUpdate": "2025-09-02T00:36:06.268Z",
+  "updateDuration": 331,
   "cardinals": {
-    "readiness": 87.2,
-    "leverage": 2.35,
+    "readiness": 90,
+    "leverage": 2.2,
     "trend": "up",
     "lastGame": {
-      "opponent": "Cubs",
-      "result": "W 8-5",
-      "date": "2025-08-31"
-    }
+      "opponent": "Athletics",
+      "result": "L 11-3",
+      "date": "2025-09-01"
+    },
+    "confidence": 91.27589786229552,
+    "liveGame": false,
+    "timestamp": "2025-09-02T00:36:06.170Z"
   },
   "titans": {
-    "performance": 78.4,
-    "offenseRating": 82.1,
-    "defenseRating": 74.7,
-    "trend": "stable"
-  },
-  "longhorns": {
-    "recruiting": 52,
-    "class2026": {
-      "commits": 18,
-      "nationalRank": 3,
-      "conferenceRank": 1
-    }
+    "performance": 81.2,
+    "offenseRating": 82.9,
+    "defenseRating": 72.9,
+    "trend": "up",
+    "liveGame": false,
+    "confidence": 86.4,
+    "timestamp": "2025-09-02T00:36:06.186Z"
   },
   "grizzlies": {
-    "gritIndex": 94.6,
-    "characterScore": 91.2,
-    "teamChemistry": 97.8,
-    "trend": "up"
+    "gritIndex": 95.1,
+    "characterScore": 90,
+    "teamChemistry": 97.9,
+    "trend": "up",
+    "confidence": 93.1,
+    "timestamp": "2025-09-02T00:36:06.190Z"
+  },
+  "longhorns": {
+    "recruiting": 54,
+    "class2026": {
+      "commits": 17,
+      "nationalRank": 2,
+      "conferenceRank": 1
+    },
+    "liveGame": false,
+    "confidence": 87.2,
+    "timestamp": "2025-09-02T00:36:06.268Z"
   },
   "systemMetrics": {
     "accuracy": 94.6,
-    "latency": 87,
-    "dataPoints": 2800000,
-    "uptime": 99.98
+    "latency": 66,
+    "dataPoints": 2889446,
+    "uptime": 99.97,
+    "apisActive": 4,
+    "lastUpdate": "2025-09-02T00:36:06.268Z",
+    "timestamp": "2025-09-02T00:36:06.268Z"
   }
 }
