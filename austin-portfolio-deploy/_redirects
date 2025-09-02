@@ -1,10 +1,18 @@
-# Championship Intelligence Routes - Baltimore Priority
-/orioles        /baltimore-intelligence.html    301
+# Championship Intelligence Routes - All Teams
+/orioles        /orioles-executive-championship.html    301
 /baltimore      /baltimore-intelligence.html    301
 /moneyball      /baltimore-intelligence.html    301
 /blackbird      /project-blackbird-live-demo.html    301
 /chad-tatum     /orioles-chad-tatum-live-demo.html   301
-/executive      /orioles-executive-presentation.html  301
+/executive      /orioles-executive-championship.html  301
+/cardinals      /cardinals-intelligence.html    301
+/stl            /cardinals-intelligence.html    301
+/titans         /titans-intelligence.html    301
+/nashville      /titans-intelligence.html    301
+/grizzlies      /grizzlies-intelligence.html    301
+/memphis        /grizzlies-intelligence.html    301
+/longhorns      /longhorns-intelligence.html    301
+/texas          /longhorns-intelligence.html    301
 
 # Legacy Platform Routes
 /os     https://a4dc795e.blaze-intelligence.pages.dev/   302
