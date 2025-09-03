@@ -9,9 +9,14 @@
       "Bash(find:*)",
       "Bash(npm cache clean:*)",
       "Bash(npx tsc:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Read(/Users/AustinHumphrey/**)",
+      "Read(/Users/AustinHumphrey/.claude/**)",
+      "Read(/Users/AustinHumphrey/.claude/**)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "outputStyle": "genuine-assistant"
 }
