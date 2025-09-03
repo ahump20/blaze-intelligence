@@ -16,7 +16,11 @@
       "Read(/Users/AustinHumphrey/.claude/**)",
       "Bash(npm run build:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "Bash(timeout:*)",
+      "Bash(wrangler whoami:*)",
+      "Bash(chmod:*)",
+      "Bash(npx wrangler pages deploy:*)"
     ],
     "deny": [],
     "ask": []
