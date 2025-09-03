@@ -20,7 +20,12 @@
       "Bash(timeout:*)",
       "Bash(wrangler whoami:*)",
       "Bash(chmod:*)",
-      "Bash(npx wrangler pages deploy:*)"
+      "Bash(npx wrangler pages deploy:*)",
+      "Bash(./quick-deploy.sh)",
+      "Read(/Users/AustinHumphrey/austin-portfolio-deploy/**)",
+      "Bash(npm run start:*)",
+      "Bash(python:*)",
+      "Bash(./launch-ultimate-platform.sh:*)"
     ],
     "deny": [],
     "ask": []
