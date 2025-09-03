@@ -55,6 +55,17 @@ multipy/
 *.temp
 tmp.json
 *.log
+*.swp
+*.swo
+*~
+*_backup.*
+*_old.*
+*.backup
+ARCHIVED_*/
+BACKUP_*/
+OLD_*/
+*cleanup*.log
+*cleanup*.md
 
 # Compressed files
 *.tar.gz
