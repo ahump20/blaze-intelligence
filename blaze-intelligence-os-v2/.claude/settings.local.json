@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/Users/AustinHumphrey/**)",
+      "Read(/Users/AustinHumphrey/**)",
+      "Bash(mkdir:*)",
+      "Bash(npm install)",
+      "Bash(npm run type-check:*)",
+      "Bash(find:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
