@@ -1,4 +1,5 @@
-import * as React, { Suspense, lazy } from 'react';
+import * as React from 'react';
+const { Suspense, lazy } = React;
 import { BlazeProvider } from './context/BlazeContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { Header } from './components/layout/Header';
