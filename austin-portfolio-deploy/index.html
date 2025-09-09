@@ -23,15 +23,15 @@
     <!-- CRITICAL FIX: Load stats fix immediately -->
     <script>
     // IMMEDIATE STATS FIX - Runs before page loads
-    const realStatsData = {
-        'Players Analyzed': '2,847',
-        'Prediction Accuracy %': '94.6',
-        'Live Games Tracked': '156', 
-        'Million Data Points/Day': '2.8',
-        'Games Analyzed': '2,847',
-        'Predictions Made': '12,453',
-        'Accuracy Rate': '94.6%',
-        'Active Users': '247'
+    const devStatsData = {
+        'Players Analyzed': 'Dev',
+        'Prediction Accuracy %': 'TBD',
+        'Live Games Tracked': 'Beta', 
+        'Million Data Points/Day': 'Dev',
+        'Games Analyzed': 'Demo',
+        'Predictions Made': 'Beta',
+        'Accuracy Rate': 'TBD',
+        'Active Users': 'Dev'
     };
     
     function immediateStatsFix() {
@@ -736,8 +736,8 @@
         </div>
     </section>
     
-    <!-- Testimonials Section -->
-    <section class="testimonials-section" style="
+    <!-- Platform Development Section -->
+    <section class="development-section" style="
         padding: 80px 20px;
         background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
         position: relative;
@@ -751,21 +751,21 @@
                 background: linear-gradient(135deg, #BF5700 0%, #FF8C00 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-            ">Trusted by Championship Organizations</h2>
+            ">Platform in Development</h2>
             <p style="
                 text-align: center;
                 color: #999;
                 margin-bottom: 60px;
                 font-size: 1.1rem;
-            ">Real results from real teams using Blaze Intelligence</p>
+            ">Building the future of sports analytics with cutting-edge AI technology</p>
             
-            <div class="testimonials-grid" style="
+            <div class="development-grid" style="
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
                 gap: 30px;
                 margin-bottom: 40px;
             ">
-                <div class="testimonial-card" style="
+                <div class="development-card" style="
                     background: rgba(255, 255, 255, 0.05);
                     border: 1px solid rgba(191, 87, 0, 0.3);
                     border-radius: 12px;
@@ -774,21 +774,16 @@
                     transition: all 0.3s ease;
                 " onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#BF5700';" 
                    onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(191, 87, 0, 0.3)';">
-                    <div style="font-size: 3rem; margin-bottom: 20px;">⚾</div>
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🔬</div>
+                    <h3 style="color: #BF5700; font-weight: 600; margin-bottom: 15px;">Advanced Analytics Engine</h3>
                     <p style="
                         color: #ddd;
-                        font-size: 1.1rem;
+                        font-size: 1rem;
                         line-height: 1.6;
-                        margin-bottom: 20px;
-                        font-style: italic;
-                    ">"Blaze Intelligence transforms raw data into championship decisions. Their pattern recognition capabilities are unlike anything we've seen in sports analytics."</p>
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px;">
-                        <p style="color: #BF5700; font-weight: 600; margin: 0;">Mike Carter</p>
-                        <p style="color: #999; font-size: 0.9rem; margin: 5px 0 0 0;">Director of Player Development, St. Louis Cardinals</p>
-                    </div>
+                    ">Developing proprietary algorithms for pattern recognition and predictive modeling in sports performance analysis.</p>
                 </div>
                 
-                <div class="testimonial-card" style="
+                <div class="development-card" style="
                     background: rgba(255, 255, 255, 0.05);
                     border: 1px solid rgba(191, 87, 0, 0.3);
                     border-radius: 12px;
@@ -797,21 +792,16 @@
                     transition: all 0.3s ease;
                 " onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#BF5700';" 
                    onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(191, 87, 0, 0.3)';">
-                    <div style="font-size: 3rem; margin-bottom: 20px;">🏈</div>
+                    <div style="font-size: 3rem; margin-bottom: 20px;">📊</div>
+                    <h3 style="color: #BF5700; font-weight: 600; margin-bottom: 15px;">Real-Time Data Integration</h3>
                     <p style="
                         color: #ddd;
-                        font-size: 1.1rem;
+                        font-size: 1rem;
                         line-height: 1.6;
-                        margin-bottom: 20px;
-                        font-style: italic;
-                    ">"The 94.6% accuracy rate isn't just a number—it's proven results in our draft decisions and game-day strategies. ROI was visible within weeks."</p>
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px;">
-                        <p style="color: #BF5700; font-weight: 600; margin: 0;">Sarah Rodriguez</p>
-                        <p style="color: #999; font-size: 0.9rem; margin: 5px 0 0 0;">Performance Analytics Manager, Tennessee Titans</p>
-                    </div>
+                    ">Building connections to official league data sources for comprehensive sports intelligence across multiple leagues.</p>
                 </div>
                 
-                <div class="testimonial-card" style="
+                <div class="development-card" style="
                     background: rgba(255, 255, 255, 0.05);
                     border: 1px solid rgba(191, 87, 0, 0.3);
                     border-radius: 12px;
@@ -820,18 +810,13 @@
                     transition: all 0.3s ease;
                 " onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='#BF5700';" 
                    onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(191, 87, 0, 0.3)';">
-                    <div style="font-size: 3rem; margin-bottom: 20px;">🤘</div>
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🎯</div>
+                    <h3 style="color: #BF5700; font-weight: 600; margin-bottom: 15px;">Texas-Inspired Innovation</h3>
                     <p style="
                         color: #ddd;
-                        font-size: 1.1rem;
+                        font-size: 1rem;
                         line-height: 1.6;
-                        margin-bottom: 20px;
-                        font-style: italic;
-                    ">"We've reduced scouting costs by 67% while improving talent identification accuracy. The system pays for itself in better recruiting decisions."</p>
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px;">
-                        <p style="color: #BF5700; font-weight: 600; margin: 0;">Coach Tom Johnson</p>
-                        <p style="color: #999; font-size: 0.9rem; margin: 5px 0 0 0;">Head Coach, University of Texas Longhorns</p>
-                    </div>
+                    ">Combining Texas heritage with modern technology to create unique competitive advantages in sports analytics.</p>
                 </div>
             </div>
             
@@ -844,19 +829,18 @@
                 border: 1px solid rgba(191, 87, 0, 0.3);
             ">
                 <p style="color: #BF5700; font-weight: 600; margin-bottom: 15px; font-size: 1.2rem;">
-                    Join 200+ Teams Already Using Blaze Intelligence
+                    Platform Currently in Development
                 </p>
                 <p style="color: #ddd; font-size: 1rem; margin-bottom: 20px;">
-                    Professional organizations across MLB, NFL, NCAA, and high school levels
+                    Building advanced sports analytics capabilities for professional and collegiate organizations
                 </p>
                 <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px;">
-                    <span style="color: #999; font-size: 0.9rem;">Annual Savings: <strong style="color: #BF5700;">$1,188</strong> (67% vs competitors)</span>
+                    <span style="color: #999; font-size: 0.9rem;">Target Launch: <strong style="color: #BF5700;">Q2 2025</strong></span>
                     <span style="color: #999; font-size: 0.9rem;">|</span>
-                    <span style="color: #999; font-size: 0.9rem;">Response Time: <strong style="color: #BF5700;">&lt;100ms</strong></span>
+                    <span style="color: #999; font-size: 0.9rem;">Initial Focus: <strong style="color: #BF5700;">MLB & NCAA</strong></span>
                 </div>
                 <p style="color: #999; font-size: 0.85rem; margin: 0;">
-                    * Results based on 2024 client performance data across 2,847 games analyzed. 
-                    <a href="#methods-definitions" onclick="showMethodsModal(event)" style="color: #BF5700; text-decoration: underline; cursor: pointer;">Methods & Definitions ℹ️</a>
+                    * Platform specifications and capabilities subject to development progress.
                 </p>
             </div>
         </div>
@@ -1450,13 +1434,13 @@
             });
         });
         
-        // Critical Issues Fix - Apply real statistics
+        // Development Status Fix - Apply development labels
         document.addEventListener('DOMContentLoaded', function() {
-            const realStats = {
-                gamesAnalyzed: '2,847',
-                predictionsMade: '12,453', 
-                accuracyRate: '94.6%',
-                activeUsers: '247'
+            const devStats = {
+                gamesAnalyzed: 'Demo',
+                predictionsMade: 'Beta', 
+                accuracyRate: 'TBD',
+                activeUsers: 'Dev'
             };
             
             // Update any zero values with real data
@@ -1470,13 +1454,13 @@
                             if (label) {
                                 const labelText = label.textContent.toLowerCase();
                                 if (labelText.includes('games') || labelText.includes('analyzed')) {
-                                    element.textContent = realStats.gamesAnalyzed;
+                                    element.textContent = devStats.gamesAnalyzed;
                                 } else if (labelText.includes('predictions') || labelText.includes('made')) {
-                                    element.textContent = realStats.predictionsMade;
+                                    element.textContent = devStats.predictionsMade;
                                 } else if (labelText.includes('accuracy') || labelText.includes('rate')) {
-                                    element.textContent = realStats.accuracyRate;
+                                    element.textContent = devStats.accuracyRate;
                                 } else if (labelText.includes('users') || labelText.includes('active')) {
-                                    element.textContent = realStats.activeUsers;
+                                    element.textContent = devStats.activeUsers;
                                 }
                             }
                         }
@@ -1559,36 +1543,28 @@
                     <h2 style="color: #BF5700; margin-bottom: 30px;">Methods & Definitions</h2>
                     
                     <div style="line-height: 1.6;">
-                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">📊 94.6% Prediction Accuracy</h3>
+                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">🔬 Development Methodology</h3>
                         <p style="color: #ddd; margin-bottom: 15px;">
-                            Based on 12,453 predictions across MLB, NFL, and NCAA games during the 2024 season. 
-                            Accuracy calculated as correct predictions divided by total predictions, with 
-                            confidence intervals and statistical significance testing applied.
+                            Platform is currently in development phase. All performance metrics and capabilities 
+                            are developmental targets based on research and prototype testing.
                         </p>
                         
-                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">⚡ &lt;100ms Response Time</h3>
+                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">📊 Data Integration Plans</h3>
                         <p style="color: #ddd; margin-bottom: 15px;">
-                            95th percentile response time for API queries under standard load conditions. 
-                            Measured from request initiation to complete data delivery across global CDN network.
+                            Working to establish connections with official league data sources including 
+                            MLB Statcast, NFL Next Gen Stats, and NCAA sports databases when available.
                         </p>
                         
-                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">📈 2.8M+ Data Points</h3>
+                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">🎯 Target Specifications</h3>
                         <p style="color: #ddd; margin-bottom: 15px;">
-                            Aggregated from official league APIs, player tracking systems, and verified 
-                            performance databases. Includes real-time game data, historical statistics, 
-                            and advanced biomechanical metrics.
+                            Aiming for high-performance analytics capabilities with rapid response times 
+                            and comprehensive data processing when platform launches.
                         </p>
                         
-                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">💰 67% Cost Savings</h3>
+                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">💼 Pricing Strategy</h3>
                         <p style="color: #ddd; margin-bottom: 15px;">
-                            Compared to Hudl Assist ($299/month) and Hudl Pro ($499/month) pricing tiers. 
-                            Based on annual subscription costs and feature-per-dollar analysis as of 2024.
-                        </p>
-                        
-                        <h3 style="color: #BF5700; margin-top: 25px; margin-bottom: 15px;">🏟️ 2,847 Games Analyzed</h3>
-                        <p style="color: #ddd; margin-bottom: 15px;">
-                            Includes regular season and playoff games across all supported leagues. 
-                            Data validated against official league statistics and third-party verification systems.
+                            Developing competitive pricing model based on market research of existing 
+                            sports analytics solutions. Final pricing to be determined upon launch.
                         </p>
                         
                         <div style="
@@ -1598,10 +1574,10 @@
                             padding: 20px;
                             margin-top: 30px;
                         ">
-                            <p style="color: #BF5700; font-weight: 600; margin-bottom: 10px;">Data Sources & Verification</p>
+                            <p style="color: #BF5700; font-weight: 600; margin-bottom: 10px;">Development Status</p>
                             <p style="color: #ddd; font-size: 0.9rem; margin: 0;">
-                                All metrics are independently auditable and based on publicly verifiable data sources. 
-                                Methodology documentation available for enterprise clients upon request.
+                                This platform is currently under development. All specifications, features, 
+                                and performance claims are preliminary and subject to change.
                             </p>
                         </div>
                     </div>

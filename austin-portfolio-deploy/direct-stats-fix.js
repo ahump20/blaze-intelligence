@@ -6,19 +6,19 @@
     
     console.log('🔧 DIRECT STATS FIX: Loading...');
     
-    const realStats = {
-        'Players Analyzed': '2,847',
-        'Prediction Accuracy %': '94.6',
-        'Live Games Tracked': '156',
-        'Million Data Points/Day': '2.8',
-        'Games Analyzed': '2,847',
-        'Predictions Made': '12,453',
-        'Accuracy Rate': '94.6%',
-        'Active Users': '247',
-        'Teams Tracked': '246',
-        'Response Time': '<100ms',
-        'Data Points': '2.8M+',
-        'Uptime': '99.9%'
+    const devStats = {
+        'Players Analyzed': 'Demo',
+        'Prediction Accuracy %': 'TBD',
+        'Live Games Tracked': 'Beta',
+        'Million Data Points/Day': 'Dev',
+        'Games Analyzed': 'Demo',
+        'Predictions Made': 'Beta',
+        'Accuracy Rate': 'TBD',
+        'Active Users': 'Dev',
+        'Teams Tracked': 'Beta',
+        'Response Time': 'TBD',
+        'Data Points': 'Dev',
+        'Uptime': 'TBD'
     };
     
     function fixStatsDisplay() {
@@ -50,8 +50,8 @@
                         const labelText = label.textContent.trim();
                         console.log(`Found label: "${labelText}" with value: "${currentValue}"`);
                         
-                        // Find matching real stat
-                        for (const [statName, statValue] of Object.entries(realStats)) {
+                        // Find matching dev stat
+                        for (const [statName, statValue] of Object.entries(devStats)) {
                             if (labelText.includes(statName) || 
                                 labelText.toLowerCase().includes(statName.toLowerCase()) ||
                                 (statName === 'Players Analyzed' && labelText.includes('Players')) ||
@@ -153,7 +153,7 @@
     
     // Export for manual use
     window.fixStats = fixStatsDisplay;
-    window.realStats = realStats;
+    window.devStats = devStats;
     
     // Add indicator that fix is active
     const indicator = document.createElement('div');
