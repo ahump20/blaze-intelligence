@@ -5,7 +5,7 @@ Disallow: /api/
 Disallow: /admin/
 Disallow: /.git/
 
-Sitemap: https://blaze-intelligence.com/sitemap.xml
+Sitemap: https://blaze-intelligence.pages.dev/sitemap.xml
 
 # Crawl-delay for respectful crawling
 User-agent: *

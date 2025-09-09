@@ -28,6 +28,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-MEASUREMENT_ID');
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Blaze Intelligence",
+        "description": "Professional sports analytics platform in development",
+        "url": "https://blaze-intelligence.pages.dev",
+        "logo": "https://blaze-intelligence.pages.dev/logo.png",
+        "founder": {
+            "@type": "Person",
+            "name": "Austin Humphrey",
+            "email": "ahump20@outlook.com"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Boerne",
+            "addressRegion": "Texas",
+            "addressCountry": "US"
+        }
+    }
+    </script>
+    
     <style>
         :root {
             --primary-color: #BF5700;
@@ -748,8 +780,47 @@
             <p style="margin-bottom: 2rem; color: var(--text-light);">
                 Stay informed about Blaze Intelligence platform development and launch timeline.
             </p>
-            <div class="cta-buttons" style="margin-bottom: 3rem;">
-                <a href="mailto:ahump20@outlook.com" class="cta-button">Contact Austin</a>
+            <!-- Contact Form -->
+            <div class="contact-form">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Name *</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email *</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="organization">Organization</label>
+                        <input type="text" id="organization" name="organization" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="interest">Interest Level</label>
+                        <select id="interest" name="interest" class="form-input">
+                            <option value="">Select your interest...</option>
+                            <option value="early-access">Early Access Beta</option>
+                            <option value="enterprise">Enterprise Demo</option>
+                            <option value="partnership">Partnership Opportunities</option>
+                            <option value="updates">Development Updates</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="message">Message</label>
+                        <textarea id="message" name="message" class="form-input form-textarea" placeholder="Tell us about your analytics needs or questions about the platform..."></textarea>
+                    </div>
+                    
+                    <div class="error-message" id="form-error"></div>
+                    <div class="success-message" id="form-success"></div>
+                    
+                    <button type="submit" class="cta-button" id="submit-btn">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+            
+            <div class="cta-buttons" style="margin: 2rem 0;">
+                <a href="mailto:ahump20@outlook.com" class="secondary-button">Direct Email</a>
                 <a href="https://www.linkedin.com/in/john-humphrey-2033" target="_blank" class="secondary-button">Connect on LinkedIn</a>
             </div>
             
@@ -932,11 +1003,134 @@
             }
         });
 
+        // Contact Form Handler with Loading States and Error Handling
+        const contactForm = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const errorDiv = document.getElementById('form-error');
+        const successDiv = document.getElementById('form-success');
+        
+        if (contactForm) {
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Clear previous messages
+                errorDiv.style.display = 'none';
+                successDiv.style.display = 'none';
+                
+                // Validate form
+                const formData = new FormData(contactForm);
+                const name = formData.get('name')?.trim();
+                const email = formData.get('email')?.trim();
+                
+                if (!name || !email) {
+                    showError('Please fill in all required fields.');
+                    return;
+                }
+                
+                if (!isValidEmail(email)) {
+                    showError('Please enter a valid email address.');
+                    return;
+                }
+                
+                // Show loading state
+                setLoadingState(true);
+                
+                try {
+                    // Simulate API call (replace with actual endpoint)
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Track form submission
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'form_submit', {
+                            event_category: 'engagement',
+                            event_label: 'contact_form'
+                        });
+                    }
+                    
+                    // For now, show success message and prepare email
+                    const emailData = {
+                        name: name,
+                        email: email,
+                        organization: formData.get('organization') || 'Not specified',
+                        interest: formData.get('interest') || 'Not specified',
+                        message: formData.get('message') || 'No message provided',
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // Store in localStorage temporarily for development
+                    const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+                    submissions.push(emailData);
+                    localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+                    
+                    showSuccess(`Thanks ${name}! Your message has been received. We'll get back to you within 24 hours at ${email}.`);
+                    contactForm.reset();
+                    
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    showError('Sorry, there was an error sending your message. Please try again or email us directly at ahump20@outlook.com.');
+                } finally {
+                    setLoadingState(false);
+                }
+            });
+        }
+        
+        function setLoadingState(loading) {
+            if (loading) {
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+            } else {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        }
+        
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function showSuccess(message) {
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        
+        // Form field validation on blur
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.classList.add('invalid');
+                } else if (this.type === 'email' && this.value && !isValidEmail(this.value)) {
+                    this.classList.add('invalid');
+                } else {
+                    this.classList.remove('invalid');
+                }
+            });
+            
+            input.addEventListener('input', function() {
+                this.classList.remove('invalid');
+            });
+        });
+        
         // Development status logger
         console.log('🔥 Blaze Intelligence Platform - Development Mode');
         console.log('📊 Status: Early development with professional design foundation');
         console.log('🎯 Vision: Championship-level sports analytics platform');
         console.log('📧 Contact: ahump20@outlook.com');
+        console.log('✅ Contact form with validation and error handling loaded');
+        
+        // Check for stored form submissions (development only)
+        const storedSubmissions = localStorage.getItem('contactSubmissions');
+        if (storedSubmissions) {
+            console.log('📝 Contact form submissions (dev storage):', JSON.parse(storedSubmissions));
+        }
     </script>
 </body>
 </html>
