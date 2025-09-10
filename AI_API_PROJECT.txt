@@ -1,0 +1,29 @@
+import torch
+import uvicorn
+from fastapi import FastAPI
+from pydantic import BaseModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# === Create the API === #
+app = FastAPI(title="SYNTHOS-Ω PRIME X API", version="1.0")
+
+# === Load the AI Model === #
+model_name = "meta-llama/Llama-2-13b-chat-hf"
+model = AutoModelForCausalLM.from_pretrained(model_name).to("cuda")
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+# === Define Input Format === #
+class QueryRequest(BaseModel):
+    query: str  # The user's text input
+
+# === Define API Endpoint === #
+@app.post("/generate")
+async def generate_response(request: QueryRequest):
+    """Generate a response to the user's query."""
+    inputs = tokenizer(request.query, return_tensors="pt").to("cuda")
+    response = model.generate(**inputs, max_length=768)
+    return {"response": tokenizer.decode(response[0], skip_special_tokens=True)}
+
+# === Run the API === #
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
