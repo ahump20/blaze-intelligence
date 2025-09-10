@@ -1,39 +1,42 @@
-name = "blaze-connector-api"
-main = "functions/worker.js"
-compatibility_date = "2025-08-20"
-workers_dev = true
-
-[triggers]
-crons = ["0 3 * * 1"]
-
-[[r2_buckets]]
-binding = "R2"
-bucket_name = "blaze-sports-data-lake"
-
-[vars]
-NOTION_DATABASE_ID = "2556c055-8681-816c-97ad-d86fa4d0fa7a"
-GITHUB_REPO_OWNER = "blaze-intelligence"
-GITHUB_REPO_NAME = "sports-data-2025"
-
-[ai]
-binding = "AI"
-
-[placement]
-mode = "smart"
+name = "blaze-ranch-analytics"
+main = "src/index.js"
+compatibility_date = "2024-09-02"
+compatibility_flags = ["nodejs_compat"]
 
 [env.production]
-name = "blaze-sports-data-production"
-route = { pattern = "api.blaze-intelligence.com/*", zone_name = "blaze-intelligence.com" }
+name = "blaze-ranch-analytics"
+route = "blaze-intelligence-platform.pages.dev/*"
 
-[env.production.vars]
+[site]
+bucket = "./dist"
+entry-point = "workers-site"
+
+[[kv_namespaces]]
+binding = "BLAZE_CACHE"
+id = "blaze_analytics_cache_prod"
+preview_id = "blaze_analytics_cache_dev"
+
+[[r2_buckets]]
+binding = "SPORTS_DATA"
+bucket_name = "blaze-sports-data"
+
+[vars]
+API_BASE_URL = "https://blaze-intelligence-platform.pages.dev"
 ENVIRONMENT = "production"
+CACHE_TTL = "300"
+MAX_API_CALLS = "1000"
 
-# KV and D1 bindings commented out - need to be created first
-# [[kv_namespaces]]
-# binding = "CACHE"
-# id = "blaze-sports-cache"
+[build]
+command = "npm run build"
+publish = "dist"
 
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "blaze-sports-metrics"
-# database_id = "blaze-sports-metrics-id"
+[build.environment_variables]
+NODE_VERSION = "18"
+
+[[rules]]
+type = "ESModules"
+globs = ["**/*.js"]
+
+[[rules]]
+type = "Text"
+globs = ["**/*.html", "**/*.css"]

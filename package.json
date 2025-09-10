@@ -1,119 +1,101 @@
 {
-  "name": "blaze-intelligence-website",
+  "name": "blaze-ranch-analytics",
   "version": "1.0.0",
-  "description": "Elite sports analytics platform for championship teams",
-  "type": "module",
-  "main": "index.html",
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "validate:stats": "echo 'Stats validation skipped'",
-    "validate:pricing": "node -e \"const manager = require('./src/js/marketing-stats.js'); const m = new manager(); m.loadStats().then(() => console.log('Pricing validation:', m.validateCompetitivePricing()))\"",
-    "security:scan": "echo 'Security scan placeholder'",
-    "security:protect": "echo 'Security protect placeholder'",
-    "build:md": "node scripts/build-md.js",
-    "build": "npm run build:md && npm run build:prod",
-    "build:prod": "node scripts/build-production.js",
-    "deploy": "npm run build && npx wrangler pages deploy ./dist",
-    "deploy:pages": "echo 'Deploy to Cloudflare Pages'",
-    "start": "NODE_ENV=production node server.js",
-    "start:prod": "NODE_ENV=production PM2_HOME=.pm2 npx pm2 start ecosystem.config.cjs",
-    "start:production": "NODE_ENV=production PM2_HOME=.pm2 npx pm2 start ecosystem.config.cjs",
-    "dev": "NODE_ENV=development node server.js",
-    "logs": "npx pm2 logs",
-    "monitor": "npx pm2 monit",
-    "stop": "npx pm2 stop all",
-    "preview": "npx wrangler pages dev ./dist"
-  },
+  "description": "Blaze Ranch Analytics - Where Heritage Meets Intelligence",
+  "main": "blaze-ranch-production.html",
+  "homepage": "https://blaze-intelligence-platform.pages.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/austinhumphrey/blaze-intelligence-website.git"
+    "url": "https://github.com/ahump20/blaze-intelligence-platform"
   },
   "keywords": [
-    "sports",
-    "analytics",
-    "championship",
-    "ai",
-    "machine-learning",
-    "performance"
+    "sports-analytics",
+    "three.js",
+    "data-visualization", 
+    "mlb",
+    "nfl", 
+    "nba",
+    "ncaa",
+    "cardinals",
+    "titans",
+    "longhorns",
+    "grizzlies"
   ],
-  "author": "Austin Humphrey",
-  "license": "MIT",
-  "devDependencies": {
-    "jest": "^29.7.0",
-    "wrangler": "^4.0.0"
+  "author": {
+    "name": "Austin Humphrey",
+    "email": "ahump20@outlook.com",
+    "url": "https://blaze-intelligence-platform.pages.dev"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "!src/**/*.min.js"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 80,
-        "statements": 80
+  "license": "MIT",
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "build": "npm run minify && npm run optimize",
+    "minify": "terser blaze-sports-api.js -o blaze-sports-api.min.js -c -m",
+    "optimize": "node scripts/optimize-assets.js",
+    "deploy": "wrangler pages publish ./",
+    "deploy:staging": "wrangler pages publish ./ --env staging",
+    "deploy:production": "wrangler pages publish ./ --env production",
+    "test": "echo 'Testing Blaze Ranch Analytics...' && node scripts/test-apis.js",
+    "lint": "echo 'Linting HTML/CSS/JS...' && htmlhint *.html",
+    "validate": "node scripts/validate-data.js",
+    "start": "npm run dev",
+    "preview": "npm run build && npm run dev"
+  },
+  "dependencies": {
+    "three": "^0.156.1"
+  },
+  "devDependencies": {
+    "terser": "^5.19.4",
+    "htmlhint": "^1.1.4",
+    "wrangler": "^3.10.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie <= 11"
+  ],
+  "config": {
+    "api_endpoints": {
+      "mlb": "https://statsapi.mlb.com/api/v1",
+      "nfl": "https://site.api.espn.com/apis/site/v2/sports/football/nfl",
+      "nba": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba", 
+      "ncaa": "https://site.api.espn.com/apis/site/v2/sports/football/college-football"
+    },
+    "teams": {
+      "cardinals": {
+        "id": 138,
+        "league": "MLB",
+        "colors": ["#C41E3A", "#FFFFFF"]
+      },
+      "titans": {
+        "id": 10,
+        "league": "NFL", 
+        "colors": ["#4B92DB", "#002244"]
+      },
+      "longhorns": {
+        "id": 251,
+        "league": "NCAA",
+        "colors": ["#BF5700", "#FFFFFF"]
+      },
+      "grizzlies": {
+        "id": 15,
+        "league": "NBA",
+        "colors": ["#5D76A9", "#12173F"]
       }
     }
   },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "directories": {
-    "test": "tests"
-  },
-  "bugs": {
-    "url": "https://github.com/austinhumphrey/blaze-intelligence-website/issues"
-  },
-  "homepage": "https://github.com/austinhumphrey/blaze-intelligence-website#readme",
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.61.0",
-    "@balldontlie/sdk": "^1.2.2",
-    "@mediapipe/camera_utils": "^0.3.1675466862",
-    "@mediapipe/drawing_utils": "^0.3.1675466124",
-    "@mediapipe/face_mesh": "^0.4.1633559619",
-    "@mediapipe/pose": "^0.5.1675469404",
-    "@notionhq/client": "^4.0.2",
-    "@sendgrid/mail": "^8.1.5",
-    "aos": "^2.3.4",
-    "axios": "^1.11.0",
-    "bcryptjs": "^3.0.2",
-    "chart.js": "^4.5.0",
-    "compression": "^1.8.1",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "countup.js": "^2.9.0",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0",
-    "express-rate-limit": "^8.1.0",
-    "express-validator": "^7.2.1",
-    "gsap": "^3.13.0",
-    "helmet": "^8.1.0",
-    "ioredis": "^5.7.0",
-    "jsonwebtoken": "^9.0.2",
-    "marked": "^16.2.0",
-    "multer": "^2.0.2",
-    "node-cache": "^5.1.2",
-    "node-fetch": "^3.3.2",
-    "nodemailer": "^7.0.6",
-    "octokit": "^3.1.2",
-    "openai": "^5.20.0",
-    "particles.js": "^2.0.0",
-    "pg": "^8.16.3",
-    "pm2": "^6.0.10",
-    "redis": "^5.8.2",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "stripe": "^18.5.0",
-    "three": "^0.180.0",
-    "uuid": "^13.0.0",
-    "winston": "^3.17.0",
-    "winston-daily-rotate-file": "^5.0.0"
+  "cloudflare": {
+    "account_id": "your-cloudflare-account-id",
+    "zone_id": "your-cloudflare-zone-id",
+    "pages": {
+      "project_name": "blaze-intelligence-platform",
+      "production_branch": "main",
+      "preview_branches": ["development", "staging"]
+    }
   }
 }
