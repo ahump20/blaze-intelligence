@@ -1,0 +1,328 @@
+{
+  "summary": {
+    "totalBrowsers": 7,
+    "passedBrowsers": 0,
+    "failedBrowsers": 7
+  },
+  "compatibilityRate": "0.0%",
+  "assessment": "POOR",
+  "browsers": {
+    "Chrome Desktop": {
+      "browser": "Chrome Desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "tests": [
+        {
+          "page": "Homepage",
+          "path": "/",
+          "status": "FAIL",
+          "statusCode": 200,
+          "responseTime": 464,
+          "contentLength": 7951,
+          "hasTitle": false,
+          "hasViewport": false,
+          "hasCSS": false,
+          "hasJS": false
+        },
+        {
+          "page": "Dashboard",
+          "path": "/dashboard",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 117,
+          "contentLength": 8230
+        },
+        {
+          "page": "Pricing",
+          "path": "/pricing",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 140,
+          "contentLength": 3742
+        },
+        {
+          "page": "Health API",
+          "path": "/.netlify/functions/health",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 278,
+          "contentLength": 583
+        }
+      ],
+      "overallStatus": "FAIL",
+      "responseTime": 250
+    },
+    "Firefox Desktop": {
+      "browser": "Firefox Desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+      "tests": [
+        {
+          "page": "Homepage",
+          "path": "/",
+          "status": "FAIL",
+          "statusCode": 200,
+          "responseTime": 102,
+          "contentLength": 7951,
+          "hasTitle": false,
+          "hasViewport": false,
+          "hasCSS": false,
+          "hasJS": false
+        },
+        {
+          "page": "Dashboard",
+          "path": "/dashboard",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 93,
+          "contentLength": 8230
+        },
+        {
+          "page": "Pricing",
+          "path": "/pricing",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 91,
+          "contentLength": 3742
+        },
+        {
+          "page": "Health API",
+          "path": "/.netlify/functions/health",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 199,
+          "contentLength": 580
+        }
+      ],
+      "overallStatus": "FAIL",
+      "responseTime": 121
+    },
+    "Safari Desktop": {
+      "browser": "Safari Desktop",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
+      "tests": [
+        {
+          "page": "Homepage",
+          "path": "/",
+          "status": "FAIL",
+          "statusCode": 200,
+          "responseTime": 132,
+          "contentLength": 7951,
+          "hasTitle": false,
+          "hasViewport": false,
+          "hasCSS": false,
+          "hasJS": false
+        },
+        {
+          "page": "Dashboard",
+          "path": "/dashboard",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 233,
+          "contentLength": 8230
+        },
+        {
+          "page": "Pricing",
+          "path": "/pricing",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 137,
+          "contentLength": 3742
+        },
+        {
+          "page": "Health API",
+          "path": "/.netlify/functions/health",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 174,
+          "contentLength": 585
+        }
+      ],
+      "overallStatus": "FAIL",
+      "responseTime": 169
+    },
+    "Edge Desktop": {
+      "browser": "Edge Desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
+      "tests": [
+        {
+          "page": "Homepage",
+          "path": "/",
+          "status": "FAIL",
+          "statusCode": 200,
+          "responseTime": 112,
+          "contentLength": 7951,
+          "hasTitle": false,
+          "hasViewport": false,
+          "hasCSS": false,
+          "hasJS": false
+        },
+        {
+          "page": "Dashboard",
+          "path": "/dashboard",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 116,
+          "contentLength": 8230
+        },
+        {
+          "page": "Pricing",
+          "path": "/pricing",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 133,
+          "contentLength": 3742
+        },
+        {
+          "page": "Health API",
+          "path": "/.netlify/functions/health",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 188,
+          "contentLength": 580
+        }
+      ],
+      "overallStatus": "FAIL",
+      "responseTime": 137
+    },
+    "Chrome Mobile": {
+      "browser": "Chrome Mobile",
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+      "tests": [
+        {
+          "page": "Homepage",
+          "path": "/",
+          "status": "FAIL",
+          "statusCode": 200,
+          "responseTime": 125,
+          "contentLength": 7951,
+          "hasTitle": false,
+          "hasViewport": false,
+          "hasCSS": false,
+          "hasJS": false
+        },
+        {
+          "page": "Dashboard",
+          "path": "/dashboard",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 139,
+          "contentLength": 8230
+        },
+        {
+          "page": "Pricing",
+          "path": "/pricing",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 105,
+          "contentLength": 3742
+        },
+        {
+          "page": "Health API",
+          "path": "/.netlify/functions/health",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 189,
+          "contentLength": 569
+        }
+      ],
+      "overallStatus": "FAIL",
+      "responseTime": 140
+    },
+    "Safari Mobile": {
+      "browser": "Safari Mobile",
+      "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1",
+      "tests": [
+        {
+          "page": "Homepage",
+          "path": "/",
+          "status": "FAIL",
+          "statusCode": 200,
+          "responseTime": 117,
+          "contentLength": 7951,
+          "hasTitle": false,
+          "hasViewport": false,
+          "hasCSS": false,
+          "hasJS": false
+        },
+        {
+          "page": "Dashboard",
+          "path": "/dashboard",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 184,
+          "contentLength": 8230
+        },
+        {
+          "page": "Pricing",
+          "path": "/pricing",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 101,
+          "contentLength": 3742
+        },
+        {
+          "page": "Health API",
+          "path": "/.netlify/functions/health",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 189,
+          "contentLength": 584
+        }
+      ],
+      "overallStatus": "FAIL",
+      "responseTime": 148
+    },
+    "Samsung Internet": {
+      "browser": "Samsung Internet",
+      "userAgent": "Mozilla/5.0 (Linux; Android 12; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/19.0 Chrome/102.0.5005.125 Mobile Safari/537.36",
+      "tests": [
+        {
+          "page": "Homepage",
+          "path": "/",
+          "status": "FAIL",
+          "statusCode": 200,
+          "responseTime": 220,
+          "contentLength": 7951,
+          "hasTitle": false,
+          "hasViewport": false,
+          "hasCSS": false,
+          "hasJS": false
+        },
+        {
+          "page": "Dashboard",
+          "path": "/dashboard",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 113,
+          "contentLength": 8230
+        },
+        {
+          "page": "Pricing",
+          "path": "/pricing",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 153,
+          "contentLength": 3742
+        },
+        {
+          "page": "Health API",
+          "path": "/.netlify/functions/health",
+          "status": "PASS",
+          "statusCode": 200,
+          "responseTime": 187,
+          "contentLength": 569
+        }
+      ],
+      "overallStatus": "FAIL",
+      "responseTime": 168
+    }
+  },
+  "recommendations": [
+    "Browser compatibility below 90% - investigate failing browsers",
+    "Some browsers failed - check console for specific issues"
+  ],
+  "timestamp": "2025-09-10T00:46:51.403Z",
+  "testConfiguration": {
+    "baseUrl": "https://68c0c84048700d2e27810fa7--blaze-intelligence.netlify.app",
+    "browsersTest": 7
+  }
+}

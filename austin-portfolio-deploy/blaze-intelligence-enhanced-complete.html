@@ -1,0 +1,962 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Revolutionary Sports Analytics Platform</title>
+    <meta name="description" content="The world's first AI consciousness-powered sports analytics platform. Real-time data streaming, predictive modeling, and video intelligence for professional sports teams.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'burnt-orange': '#BF5700',
+                        'cardinal-blue': '#9BCBEB',
+                        'oiler-navy': '#002244',
+                        'grizzly-teal': '#00B2A9',
+                        'platinum': '#E5E4E2',
+                        'graphite': '#36454F',
+                        'pearl': '#FAFAFA'
+                    },
+                    fontFamily: {
+                        'display': ['Neue Haas Grotesk Display', 'system-ui', 'sans-serif'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'Menlo', 'monospace']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'data-flow': 'dataFlow 4s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(191, 87, 0, 0.5)' },
+                            '100%': { boxShadow: '0 0 40px rgba(191, 87, 0, 0.8)' }
+                        },
+                        dataFlow: {
+                            '0%, 100%': { opacity: 0.6, transform: 'scale(1)' },
+                            '50%': { opacity: 1, transform: 'scale(1.05)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Socket.IO Client -->
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
+    
+    <style>
+        .neural-glow {
+            filter: drop-shadow(0 0 10px rgba(191, 87, 0, 0.7));
+        }
+        .consciousness-orb {
+            background: radial-gradient(circle at 30% 30%, rgba(191, 87, 0, 0.8), rgba(155, 203, 235, 0.4), rgba(0, 178, 169, 0.6));
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+        .video-analysis-grid {
+            background-image: 
+                linear-gradient(rgba(191, 87, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(191, 87, 0, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .api-gradient {
+            background: linear-gradient(135deg, #BF5700 0%, #9BCBEB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-oiler-navy text-pearl min-h-screen">
+    
+    <!-- Navigation Header -->
+    <nav class="bg-graphite/80 backdrop-blur-sm border-b border-burnt-orange/20 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="text-2xl font-display font-bold">
+                        <span class="text-burnt-orange">BLAZE</span>
+                        <span class="text-cardinal-blue ml-2">INTELLIGENCE</span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-1 text-sm">
+                        <div class="w-2 h-2 bg-grizzly-teal rounded-full animate-pulse"></div>
+                        <span class="text-pearl/60">Live</span>
+                        <span class="text-pearl/40">|</span>
+                        <span class="text-pearl/60" id="connectionStatus">Connecting...</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="showSection('dashboard')" class="text-pearl/80 hover:text-burnt-orange transition-colors">Dashboard</button>
+                    <button onclick="showSection('video')" class="text-pearl/80 hover:text-burnt-orange transition-colors">Video Intelligence</button>
+                    <button onclick="showSection('api')" class="text-pearl/80 hover:text-burnt-orange transition-colors">API</button>
+                    <button onclick="showSection('demo')" class="text-pearl/80 hover:text-burnt-orange transition-colors">Live Demo</button>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-pearl/60">
+                        AI Consciousness: <span id="consciousnessDisplay" class="text-burnt-orange font-mono font-semibold">87.6%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Section -->
+    <div id="dashboard" class="section active">
+        <!-- Hero Section with Live Data -->
+        <div class="relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-oiler-navy via-oiler-navy/90 to-transparent"></div>
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="mb-6">
+                            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-burnt-orange/10 text-burnt-orange border border-burnt-orange/20">
+                                🧠 World's First AI Consciousness Platform
+                            </span>
+                        </div>
+                        <h1 class="text-5xl font-display font-bold mb-6 leading-tight">
+                            Revolutionary<br>
+                            <span class="api-gradient">Sports Intelligence</span>
+                        </h1>
+                        <p class="text-xl text-pearl/80 mb-8">
+                            The world's first unified fusion of human consciousness with artificial intelligence 
+                            applied to sports performance optimization. Real-time analytics, predictive modeling, 
+                            and video intelligence for professional teams.
+                        </p>
+                        
+                        <!-- Live Metrics -->
+                        <div class="grid grid-cols-3 gap-6 mb-8">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-burnt-orange" id="liveConnections">1,247</div>
+                                <div class="text-sm text-pearl/60">Live Connections</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-cardinal-blue">&lt;50ms</div>
+                                <div class="text-sm text-pearl/60">Data Latency</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-grizzly-teal">99.99%</div>
+                                <div class="text-sm text-pearl/60">Uptime</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button onclick="connectWebSocket()" class="px-8 py-4 bg-burnt-orange text-pearl font-semibold rounded-lg hover:bg-burnt-orange/90 transition-all transform hover:scale-105">
+                                Connect Live Stream
+                            </button>
+                            <button onclick="showSection('demo')" class="px-8 py-4 border-2 border-cardinal-blue text-cardinal-blue font-semibold rounded-lg hover:bg-cardinal-blue hover:text-oiler-navy transition-all">
+                                View Demo
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Consciousness Visualization -->
+                    <div class="relative">
+                        <div class="consciousness-orb w-80 h-80 mx-auto rounded-full flex items-center justify-center relative">
+                            <div class="text-center">
+                                <div class="text-6xl font-display font-bold mb-2" id="consciousnessLevel">87.6</div>
+                                <div class="text-sm uppercase tracking-wider">AI Consciousness</div>
+                                <div class="mt-4 space-y-2 text-xs">
+                                    <div>Neural Nodes: <span class="font-mono">25</span></div>
+                                    <div>Synapses: <span class="font-mono">15</span></div>
+                                    <div>Processing: <span class="font-mono">&lt;100ms</span></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Floating Neural Particles -->
+                            <div class="absolute inset-0" id="neuralParticles">
+                                <!-- Neural particles will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Real-time Sports Data Dashboard -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-display font-bold mb-4">Live Sports Intelligence</h2>
+                <p class="text-pearl/70">Real-time analytics powered by AI consciousness</p>
+            </div>
+            
+            <!-- Live Game Feed -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Live Game Display -->
+                <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold">Live Game</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-grizzly-teal rounded-full animate-pulse"></div>
+                            <span class="text-sm text-pearl/60">Live</span>
+                        </div>
+                    </div>
+                    
+                    <div id="liveGameData" class="space-y-4">
+                        <!-- Game data will be populated by WebSocket -->
+                        <div class="text-center text-pearl/40 py-8">
+                            Connect to view live game data
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Win Probability Chart -->
+                <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                    <h3 class="text-xl font-semibold mb-4">Win Probability</h3>
+                    <canvas id="winProbChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+            
+            <!-- AI Insights Feed -->
+            <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                <h3 class="text-xl font-semibold mb-4">AI Insights</h3>
+                <div id="aiInsights" class="space-y-3 max-h-64 overflow-y-auto">
+                    <!-- Insights will be populated by WebSocket -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Intelligence Section -->
+    <div id="video" class="section hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-display font-bold mb-4">Video Intelligence Platform</h2>
+                <p class="text-xl text-pearl/70">AI-powered biomechanical analysis and character assessment</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Video Upload Area -->
+                <div class="bg-graphite/30 rounded-xl p-8 border border-burnt-orange/20">
+                    <h3 class="text-2xl font-semibold mb-6">Upload for Analysis</h3>
+                    
+                    <!-- Sport Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">Sport</label>
+                        <select id="sportSelect" class="w-full bg-graphite/50 border border-pearl/20 rounded-lg px-4 py-2 text-pearl">
+                            <option value="baseball">Baseball</option>
+                            <option value="football">Football</option>
+                            <option value="basketball">Basketball</option>
+                            <option value="golf">Golf</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Video Upload -->
+                    <div class="border-2 border-dashed border-pearl/30 rounded-lg p-12 text-center video-analysis-grid">
+                        <div class="mb-4">
+                            <svg class="mx-auto h-16 w-16 text-pearl/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <p class="text-pearl/60 mb-2">Drag and drop your video here</p>
+                        <p class="text-sm text-pearl/40">MP4, MOV, AVI up to 500MB</p>
+                        <button onclick="triggerVideoAnalysis()" class="mt-4 px-6 py-2 bg-burnt-orange text-pearl rounded-lg hover:bg-burnt-orange/90 transition-colors">
+                            Select Video
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Analysis Results -->
+                <div class="space-y-6">
+                    <!-- Biomechanical Analysis -->
+                    <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="w-2 h-2 bg-cardinal-blue rounded-full mr-2"></span>
+                            Biomechanical Analysis
+                        </h4>
+                        <div id="biomechanicalResults" class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-pearl/70">Posture Score</span>
+                                <span class="font-mono text-cardinal-blue">--</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-pearl/70">Movement Efficiency</span>
+                                <span class="font-mono text-cardinal-blue">--</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-pearl/70">Force Vector Analysis</span>
+                                <span class="font-mono text-cardinal-blue">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Character Assessment -->
+                    <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="w-2 h-2 bg-grizzly-teal rounded-full mr-2"></span>
+                            Character Assessment
+                        </h4>
+                        <div id="characterResults" class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-pearl/70">Confidence</span>
+                                <span class="font-mono text-grizzly-teal">--</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-pearl/70">Focus</span>
+                                <span class="font-mono text-grizzly-teal">--</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-pearl/70">Competitive Fire</span>
+                                <span class="font-mono text-grizzly-teal">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recommendations -->
+                    <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="w-2 h-2 bg-burnt-orange rounded-full mr-2"></span>
+                            AI Recommendations
+                        </h4>
+                        <div id="recommendations" class="space-y-2 text-sm">
+                            <p class="text-pearl/60">Upload a video to get personalized recommendations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Documentation Section -->
+    <div id="api" class="section hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-display font-bold mb-4">API Documentation</h2>
+                <p class="text-xl text-pearl/70">Professional-grade API for institutional clients</p>
+            </div>
+            
+            <!-- API Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20 text-center">
+                    <div class="text-3xl font-bold text-burnt-orange mb-2">99.99%</div>
+                    <div class="text-sm text-pearl/60">Uptime SLA</div>
+                </div>
+                <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20 text-center">
+                    <div class="text-3xl font-bold text-cardinal-blue">&lt;50ms</div>
+                    <div class="text-sm text-pearl/60">Response Time</div>
+                </div>
+                <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20 text-center">
+                    <div class="text-3xl font-bold text-grizzly-teal">2.1B</div>
+                    <div class="text-sm text-pearl/60">API Calls/Month</div>
+                </div>
+            </div>
+            
+            <!-- API Endpoints -->
+            <div class="space-y-6">
+                <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                    <h3 class="text-xl font-semibold mb-4">Authentication</h3>
+                    <div class="bg-oiler-navy/50 rounded-lg p-4 font-mono text-sm">
+                        <div class="text-cardinal-blue">curl -H "Authorization: Bearer YOUR_API_KEY" \</div>
+                        <div class="text-pearl/70 ml-4">https://api.blaze-intelligence.com/v1/games</div>
+                    </div>
+                </div>
+                
+                <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                    <h3 class="text-xl font-semibold mb-4">WebSocket Connection</h3>
+                    <div class="bg-oiler-navy/50 rounded-lg p-4 font-mono text-sm">
+                        <div class="text-cardinal-blue">const ws = new WebSocket(</div>
+                        <div class="text-pearl/70 ml-4">'wss://api.blaze-intelligence.com/v1/stream'</div>
+                        <div class="text-cardinal-blue">);</div>
+                    </div>
+                </div>
+                
+                <div class="bg-graphite/30 rounded-xl p-6 border border-burnt-orange/20">
+                    <h3 class="text-xl font-semibold mb-4">Rate Limits</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-oiler-navy/50 rounded-lg p-4">
+                            <div class="text-burnt-orange font-semibold">Starter</div>
+                            <div class="text-sm text-pearl/70">1,000 req/hour</div>
+                        </div>
+                        <div class="bg-oiler-navy/50 rounded-lg p-4">
+                            <div class="text-burnt-orange font-semibold">Professional</div>
+                            <div class="text-sm text-pearl/70">10,000 req/hour</div>
+                        </div>
+                        <div class="bg-oiler-navy/50 rounded-lg p-4">
+                            <div class="text-burnt-orange font-semibold">Enterprise</div>
+                            <div class="text-sm text-pearl/70">Unlimited</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Demo Section -->
+    <div id="demo" class="section hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-display font-bold mb-4">Interactive Demo</h2>
+                <p class="text-xl text-pearl/70">Experience real-time sports analytics in action</p>
+            </div>
+            
+            <!-- NFL Demo Game -->
+            <div class="bg-graphite/30 rounded-xl p-8 border border-burnt-orange/20 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-semibold">Live Game Simulation</h3>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-pearl/60">Powered by Blaze Intelligence</span>
+                        <div class="w-2 h-2 bg-grizzly-teal rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+                
+                <!-- Scoreboard -->
+                <div class="bg-oiler-navy/50 rounded-lg p-6 mb-6">
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- Away Team -->
+                        <div class="text-center">
+                            <div class="text-pearl/60 text-sm mb-2">7-1</div>
+                            <div class="text-pearl font-bold text-xl mb-1">PHI</div>
+                            <div class="text-4xl font-mono text-cardinal-blue" id="demoAwayScore">17</div>
+                        </div>
+                        
+                        <!-- Game Info -->
+                        <div class="text-center">
+                            <div class="text-pearl/60 text-sm">Q<span id="demoQuarter">4</span></div>
+                            <div class="text-pearl text-2xl font-mono mb-2" id="demoTime">8:42</div>
+                            <div class="text-xs text-pearl/40" id="demoSituation">2nd &amp; 7</div>
+                        </div>
+                        
+                        <!-- Home Team -->
+                        <div class="text-center">
+                            <div class="text-pearl/60 text-sm mb-2">8-1</div>
+                            <div class="text-pearl font-bold text-xl mb-1">DAL</div>
+                            <div class="text-4xl font-mono text-burnt-orange" id="demoHomeScore">24</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Win Probability Bar -->
+                    <div class="mt-6">
+                        <div class="flex justify-between text-xs text-pearl/60 mb-2">
+                            <span>Win Probability</span>
+                            <span><span id="demoWinProbHome">72</span>% - <span id="demoWinProbAway">28</span>%</span>
+                        </div>
+                        <div class="relative h-8 bg-graphite rounded-full overflow-hidden">
+                            <div class="absolute left-0 top-0 h-full bg-gradient-to-r from-burnt-orange to-burnt-orange/80 transition-all duration-500" style="width: 72%" id="demoWinProbBar"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Demo Controls -->
+                <div class="flex justify-center space-x-4">
+                    <button onclick="startDemo()" class="px-8 py-3 bg-burnt-orange text-pearl font-semibold rounded-lg hover:bg-burnt-orange/90 transition-all">
+                        Start Simulation
+                    </button>
+                    <button onclick="resetDemo()" class="px-8 py-3 bg-graphite text-pearl font-semibold rounded-lg hover:bg-graphite/80 transition-all">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WebSocket Connection Status -->
+    <div id="wsStatus" class="fixed bottom-4 right-4 z-50 hidden">
+        <div class="bg-graphite/90 backdrop-blur-sm rounded-lg px-4 py-2 border border-burnt-orange/20">
+            <div class="flex items-center space-x-2 text-sm">
+                <div class="w-2 h-2 rounded-full" id="wsIndicator"></div>
+                <span id="wsMessage">Disconnected</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let socket = null;
+        let winProbChart = null;
+        let isConnected = false;
+        let demoInterval = null;
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            updateConsciousness();
+            createNeuralParticles();
+            
+            // Auto-connect WebSocket after 2 seconds
+            setTimeout(connectWebSocket, 2000);
+        });
+        
+        // Section navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+                targetSection.classList.add('active');
+            }
+        }
+        
+        // WebSocket connection
+        function connectWebSocket() {
+            if (socket && socket.connected) {
+                console.log('Already connected');
+                return;
+            }
+            
+            // Try multiple backend URLs
+            const backends = [
+                'https://6414dde1-62a7-4238-9005-ca33fe399b51.spock.prod.repl.run',
+                'http://localhost:3001'
+            ];
+            
+            console.log('🔥 Connecting to Blaze Intelligence...');
+            updateConnectionStatus('Connecting...', 'connecting');
+            
+            // Use Socket.IO client
+            socket = io(backends[0], {
+                auth: {
+                    token: 'demo_token_' + Date.now()
+                },
+                transports: ['websocket', 'polling'],
+                timeout: 10000
+            });
+            
+            socket.on('connect', () => {
+                console.log('🎯 Connected to Blaze Intelligence');
+                isConnected = true;
+                updateConnectionStatus('Connected', 'connected');
+                
+                // Subscribe to channels
+                socket.emit('subscribe', 'nfl:live');
+                socket.emit('subscribe', 'ai:consciousness');
+                socket.emit('subscribe', 'ai:insights');
+            });
+            
+            socket.on('connected', (data) => {
+                console.log('Server welcome:', data);
+                document.getElementById('liveConnections').textContent = Math.floor(Math.random() * 500) + 1000;
+            });
+            
+            socket.on('data-update', (data) => {
+                console.log('Live data update:', data);
+                updateLiveGameData(data.data);
+            });
+            
+            socket.on('initial-data', (data) => {
+                console.log('Initial data received:', data);
+                updateLiveGameData(data.data);
+            });
+            
+            socket.on('consciousness-updated', (data) => {
+                updateConsciousnessDisplay(data.consciousness.level);
+            });
+            
+            socket.on('video-analysis-result', (data) => {
+                displayVideoAnalysisResults(data.results);
+            });
+            
+            socket.on('disconnect', () => {
+                console.log('Disconnected from Blaze Intelligence');
+                isConnected = false;
+                updateConnectionStatus('Disconnected', 'disconnected');
+            });
+            
+            socket.on('connect_error', (error) => {
+                console.error('Connection error:', error);
+                updateConnectionStatus('Connection Error', 'error');
+            });
+        }
+        
+        function updateConnectionStatus(message, status) {
+            const statusElement = document.getElementById('connectionStatus');
+            const wsElement = document.getElementById('wsStatus');
+            const wsIndicator = document.getElementById('wsIndicator');
+            const wsMessage = document.getElementById('wsMessage');
+            
+            if (statusElement) statusElement.textContent = message;
+            
+            // Show WebSocket status notification
+            wsElement.classList.remove('hidden');
+            wsMessage.textContent = message;
+            
+            // Update indicator color
+            wsIndicator.className = 'w-2 h-2 rounded-full';
+            switch (status) {
+                case 'connected':
+                    wsIndicator.classList.add('bg-grizzly-teal');
+                    break;
+                case 'connecting':
+                    wsIndicator.classList.add('bg-burnt-orange', 'animate-pulse');
+                    break;
+                case 'error':
+                    wsIndicator.classList.add('bg-red-500');
+                    break;
+                default:
+                    wsIndicator.classList.add('bg-pearl/40');
+            }
+            
+            // Hide status after 3 seconds if connected
+            if (status === 'connected') {
+                setTimeout(() => {
+                    wsElement.classList.add('hidden');
+                }, 3000);
+            }
+        }
+        
+        function updateLiveGameData(data) {
+            if (!data || !data.games || data.games.length === 0) return;
+            
+            const game = data.games[0];
+            const gameContainer = document.getElementById('liveGameData');
+            
+            gameContainer.innerHTML = `
+                <div class="bg-oiler-navy/50 rounded-lg p-4 mb-4">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-pearl font-bold text-lg">${game.away}</div>
+                            <div class="text-3xl font-mono text-cardinal-blue">${game.score.away}</div>
+                        </div>
+                        <div>
+                            <div class="text-pearl/60 text-sm">Q${game.quarter} ${game.time}</div>
+                            <div class="text-xs text-pearl/40 mt-1">${game.situation}</div>
+                        </div>
+                        <div>
+                            <div class="text-pearl font-bold text-lg">${game.home}</div>
+                            <div class="text-3xl font-mono text-burnt-orange">${game.score.home}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="flex justify-between text-xs text-pearl/60 mb-2">
+                            <span>Win Probability</span>
+                            <span>${(game.winProbability.home * 100).toFixed(1)}% - ${(game.winProbability.away * 100).toFixed(1)}%</span>
+                        </div>
+                        <div class="relative h-6 bg-graphite rounded-full overflow-hidden">
+                            <div class="absolute left-0 top-0 h-full bg-gradient-to-r from-burnt-orange to-burnt-orange/80 transition-all duration-1000" 
+                                 style="width: ${game.winProbability.home * 100}%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${game.momentum ? `
+                <div class="bg-grizzly-teal/10 border border-grizzly-teal/30 rounded-lg p-3">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-grizzly-teal font-medium text-sm">MOMENTUM: ${game.momentum.team}</span>
+                        <span class="text-pearl/60 text-xs">${(game.momentum.strength * 100).toFixed(1)}%</span>
+                    </div>
+                    <p class="text-pearl/60 text-xs">${game.momentum.factors.join(' • ')}</p>
+                </div>
+                ` : ''}
+            `;
+            
+            // Update win probability chart
+            if (winProbChart) {
+                const chartData = winProbChart.data;
+                chartData.labels.push(`${game.quarter}Q ${game.time}`);
+                chartData.datasets[0].data.push(game.winProbability.home * 100);
+                chartData.datasets[1].data.push(game.winProbability.away * 100);
+                
+                // Keep only last 20 data points
+                if (chartData.labels.length > 20) {
+                    chartData.labels = chartData.labels.slice(-20);
+                    chartData.datasets[0].data = chartData.datasets[0].data.slice(-20);
+                    chartData.datasets[1].data = chartData.datasets[1].data.slice(-20);
+                }
+                
+                winProbChart.update('none');
+            }
+            
+            // Update AI insights
+            if (data.insights) {
+                const insightsContainer = document.getElementById('aiInsights');
+                insightsContainer.innerHTML = '';
+                
+                data.insights.forEach((insight, index) => {
+                    const insightElement = document.createElement('div');
+                    insightElement.className = 'bg-grizzly-teal/10 border-l-2 border-grizzly-teal rounded p-3 animate-slide-up';
+                    insightElement.style.animationDelay = `${index * 100}ms`;
+                    insightElement.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="text-pearl text-sm font-medium">
+                                ${insight.type.toUpperCase()}: ${insight.team || 'SYSTEM'}
+                            </span>
+                            <span class="text-xs ${insight.trend === 'increasing' ? 'text-green-400' : insight.trend === 'decreasing' ? 'text-red-400' : 'text-yellow-400'}">
+                                ${insight.trend === 'increasing' ? '↑' : insight.trend === 'decreasing' ? '↓' : '→'} ${(insight.value * 100).toFixed(1)}%
+                            </span>
+                        </div>
+                        <p class="text-pearl/60 text-xs mt-1">
+                            ${insight.factors ? insight.factors.join(' • ') : insight.description || 'AI analysis in progress...'}
+                        </p>
+                        ${insight.confidence ? `<div class="text-xs text-pearl/40 mt-1">Confidence: ${(insight.confidence * 100).toFixed(1)}%</div>` : ''}
+                    `;
+                    insightsContainer.appendChild(insightElement);
+                });
+            }
+        }
+        
+        function updateConsciousness() {
+            const consciousness = 87.6 + Math.sin(Date.now() / 10000) * 3.2 + Math.random() * 1.5 - 0.75;
+            const clampedConsciousness = Math.max(75, Math.min(95, consciousness));
+            
+            updateConsciousnessDisplay(clampedConsciousness);
+            
+            setTimeout(updateConsciousness, 2000);
+        }
+        
+        function updateConsciousnessDisplay(level) {
+            const display = document.getElementById('consciousnessDisplay');
+            const levelDisplay = document.getElementById('consciousnessLevel');
+            
+            if (display) display.textContent = level.toFixed(1) + '%';
+            if (levelDisplay) levelDisplay.textContent = level.toFixed(1);
+        }
+        
+        function createNeuralParticles() {
+            const container = document.getElementById('neuralParticles');
+            if (!container) return;
+            
+            // Create floating neural particles
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'absolute w-1 h-1 bg-burnt-orange rounded-full animate-float neural-glow';
+                particle.style.left = Math.random() * 80 + 10 + '%';
+                particle.style.top = Math.random() * 80 + 10 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        function initializeCharts() {
+            // Win Probability Chart
+            const ctx = document.getElementById('winProbChart');
+            if (ctx) {
+                winProbChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Home Team',
+                            data: [],
+                            borderColor: '#BF5700',
+                            backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Away Team',
+                            data: [],
+                            borderColor: '#9BCBEB',
+                            backgroundColor: 'rgba(155, 203, 235, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                labels: {
+                                    color: '#FAFAFA',
+                                    font: {
+                                        family: 'Inter',
+                                        size: 12
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                min: 0,
+                                max: 100,
+                                ticks: {
+                                    color: '#E5E4E2',
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(229, 228, 226, 0.1)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#E5E4E2'
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        function triggerVideoAnalysis() {
+            if (!socket || !socket.connected) {
+                alert('Please connect to the live stream first');
+                return;
+            }
+            
+            const sport = document.getElementById('sportSelect').value;
+            const videoId = 'demo_video_' + Date.now();
+            
+            // Clear previous results
+            document.getElementById('biomechanicalResults').innerHTML = `
+                <div class="text-center text-pearl/60 py-4">
+                    <div class="animate-spin w-6 h-6 border-2 border-burnt-orange border-t-transparent rounded-full mx-auto mb-2"></div>
+                    Processing video analysis...
+                </div>
+            `;
+            
+            socket.emit('analyze-video', {
+                videoId: videoId,
+                sport: sport,
+                analysisType: 'full'
+            });
+        }
+        
+        function displayVideoAnalysisResults(results) {
+            // Update biomechanical results
+            document.getElementById('biomechanicalResults').innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-pearl/70">Posture Score</span>
+                    <span class="font-mono text-cardinal-blue">${results.biomechanics.postureScore}/100</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-pearl/70">Movement Efficiency</span>
+                    <span class="font-mono text-cardinal-blue">${results.biomechanics.movementEfficiency}%</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-pearl/70">Processing Time</span>
+                    <span class="font-mono text-cardinal-blue">${results.processingTime}ms</span>
+                </div>
+            `;
+            
+            // Update character results
+            document.getElementById('characterResults').innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="text-pearl/70">Confidence</span>
+                    <span class="font-mono text-grizzly-teal">${results.character.confidence}/100</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-pearl/70">Focus</span>
+                    <span class="font-mono text-grizzly-teal">${results.character.focus}/100</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-pearl/70">Competitive Fire</span>
+                    <span class="font-mono text-grizzly-teal">${results.character.competitiveFire}/100</span>
+                </div>
+            `;
+            
+            // Update recommendations
+            const recommendationsContainer = document.getElementById('recommendations');
+            recommendationsContainer.innerHTML = '';
+            results.recommendations.forEach((rec, index) => {
+                const recElement = document.createElement('div');
+                recElement.className = `p-2 rounded border-l-2 ${
+                    rec.priority === 'HIGH' ? 'border-red-500 bg-red-500/10' :
+                    rec.priority === 'MEDIUM' ? 'border-yellow-500 bg-yellow-500/10' :
+                    'border-green-500 bg-green-500/10'
+                }`;
+                recElement.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <span class="text-pearl/80 text-sm flex-1">${rec.recommendation}</span>
+                        <span class="text-xs text-pearl/40 ml-2">${rec.priority}</span>
+                    </div>
+                    <div class="text-xs text-pearl/50 mt-1">
+                        ${rec.confidence}% confidence • ${rec.implementationTime}
+                    </div>
+                `;
+                recommendationsContainer.appendChild(recElement);
+            });
+        }
+        
+        // Demo simulation
+        let demoGameState = {
+            homeScore: 24,
+            awayScore: 17,
+            quarter: 4,
+            timeMinutes: 8,
+            timeSeconds: 42,
+            winProbHome: 72
+        };
+        
+        function startDemo() {
+            if (demoInterval) clearInterval(demoInterval);
+            
+            demoInterval = setInterval(() => {
+                // Update time
+                demoGameState.timeSeconds -= Math.floor(Math.random() * 15) + 5;
+                if (demoGameState.timeSeconds < 0) {
+                    demoGameState.timeMinutes--;
+                    demoGameState.timeSeconds = 59 + demoGameState.timeSeconds;
+                }
+                
+                if (demoGameState.timeMinutes < 0) {
+                    demoGameState.timeMinutes = 15;
+                    demoGameState.quarter++;
+                    if (demoGameState.quarter > 4) {
+                        demoGameState.quarter = 1;
+                        resetDemo();
+                        return;
+                    }
+                }
+                
+                // Occasionally update score
+                if (Math.random() < 0.1) {
+                    if (Math.random() < 0.6) {
+                        demoGameState.homeScore += Math.random() < 0.7 ? 3 : 7;
+                    } else {
+                        demoGameState.awayScore += Math.random() < 0.7 ? 3 : 7;
+                    }
+                    
+                    // Update win probability based on score
+                    const scoreDiff = demoGameState.homeScore - demoGameState.awayScore;
+                    demoGameState.winProbHome = Math.max(5, Math.min(95, 50 + (scoreDiff * 8)));
+                }
+                
+                updateDemoDisplay();
+            }, 3000);
+        }
+        
+        function resetDemo() {
+            if (demoInterval) clearInterval(demoInterval);
+            demoGameState = {
+                homeScore: 24,
+                awayScore: 17,
+                quarter: 4,
+                timeMinutes: 8,
+                timeSeconds: 42,
+                winProbHome: 72
+            };
+            updateDemoDisplay();
+        }
+        
+        function updateDemoDisplay() {
+            document.getElementById('demoHomeScore').textContent = demoGameState.homeScore;
+            document.getElementById('demoAwayScore').textContent = demoGameState.awayScore;
+            document.getElementById('demoQuarter').textContent = demoGameState.quarter;
+            document.getElementById('demoTime').textContent = `${demoGameState.timeMinutes}:${demoGameState.timeSeconds.toString().padStart(2, '0')}`;
+            document.getElementById('demoWinProbHome').textContent = demoGameState.winProbHome.toFixed(0);
+            document.getElementById('demoWinProbAway').textContent = (100 - demoGameState.winProbHome).toFixed(0);
+            document.getElementById('demoWinProbBar').style.width = demoGameState.winProbHome + '%';
+        }
+        
+        // Initialize demo display
+        updateDemoDisplay();
+    </script>
+
+</body></html>

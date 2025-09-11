@@ -1,0 +1,13 @@
+# Blaze Intelligence Backup & Recovery Cron Jobs
+# 
+# Daily backup at 2 AM UTC
+0 2 * * * cd /Users/AustinHumphrey/austin-portfolio-deploy && ./tools/daily-backup.sh >> logs/backup.log 2>&1
+
+# Backup monitoring every 15 minutes  
+*/15 * * * * cd /Users/AustinHumphrey/austin-portfolio-deploy && ./tools/backup-monitoring.sh >> logs/monitoring.log 2>&1
+
+# Recovery testing on 1st of each month at 3 AM
+0 3 1 * * cd /Users/AustinHumphrey/austin-portfolio-deploy && ./tools/recovery-testing.sh >> logs/recovery-test.log 2>&1
+
+# Cleanup old logs weekly
+0 1 * * 0 find /Users/AustinHumphrey/austin-portfolio-deploy/logs -name "*.log" -mtime +30 -delete

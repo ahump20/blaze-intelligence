@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact | Blaze Intelligence</title>
     <meta name="description" content="Get in touch with Blaze Intelligence for championship-level sports analytics">
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/controls/OrbitControls.js"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="js/blaze-three-visuals.js" defer></script>
+    <script src="js/blaze-three-visuals.js" defer=""></script>
     
     <style>
         body { background: #0a0a0a; color: #e2e8f0; font-family: 'Inter', sans-serif; }
@@ -27,8 +25,9 @@
     
     <!-- Analytics & Testing -->
     <script src="js/analytics-config.js"></script>
-    <script src="js/ab-testing.js" defer></script>
+    <script src="js/ab-testing.js" defer=""></script>
     <script src="js/sentry-config.js"></script>
+    <script src="js/enhanced-contact-engagement.js" defer=""></script>
 </head>
 <body>
     <nav class="glass-nav fixed top-0 left-0 right-0 z-50 px-4 py-4">
@@ -63,41 +62,41 @@
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">First Name</label>
-                                <input type="text" class="input-field" required>
+                                <input type="text" name="firstName" class="input-field" required="">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-300 mb-2">Last Name</label>
-                                <input type="text" class="input-field" required>
+                                <input type="text" name="lastName" class="input-field" required="">
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Email</label>
-                            <input type="email" class="input-field" required>
+                            <input type="email" name="email" class="input-field" required="">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Organization</label>
-                            <input type="text" class="input-field">
+                            <input type="text" name="organization" class="input-field">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Team/Sport</label>
-                            <select class="input-field">
-                                <option>Select your focus</option>
-                                <option>MLB</option>
-                                <option>NFL</option>
-                                <option>NBA</option>
-                                <option>NCAA Football</option>
-                                <option>NCAA Baseball</option>
-                                <option>High School Sports</option>
-                                <option>Youth/Perfect Game Baseball</option>
+                            <select name="sport" class="input-field">
+                                <option value="">Select your focus</option>
+                                <option value="MLB">MLB</option>
+                                <option value="NFL">NFL</option>
+                                <option value="NBA">NBA</option>
+                                <option value="NCAA Football">NCAA Football</option>
+                                <option value="NCAA Baseball">NCAA Baseball</option>
+                                <option value="High School Sports">High School Sports</option>
+                                <option value="Youth/Perfect Game Baseball">Youth/Perfect Game Baseball</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Message</label>
-                            <textarea class="input-field" rows="4" required></textarea>
+                            <textarea name="message" class="input-field" rows="4" required=""></textarea>
                         </div>
 
                         <button type="submit" class="submit-btn">
@@ -258,5 +257,5 @@
             }
         });
     </script>
-</body>
-</html>
+
+</body></html>

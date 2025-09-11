@@ -1,0 +1,598 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence Developer Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #bf5700;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            color: #bf5700;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: #9bcbeb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #bf5700;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #bf5700, #9bcbeb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: #9bcbeb;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #bf5700;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #9bcbeb;
+            border: 2px solid #9bcbeb;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(191, 87, 0, 0.3);
+        }
+        
+        /* Main Content */
+        .main-content {
+            background: white;
+            margin-top: -2rem;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .content-section {
+            padding: 3rem 0;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #0a192f;
+            text-align: center;
+        }
+        
+        /* API Endpoints Grid */
+        .endpoints-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .endpoint-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            border-left: 4px solid #bf5700;
+            transition: transform 0.3s;
+        }
+        
+        .endpoint-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .method-badge {
+            background: #bf5700;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .endpoint-path {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            color: #4a5568;
+            font-size: 0.875rem;
+        }
+        
+        .endpoint-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .endpoint-desc {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+        
+        .endpoint-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .feature-tag {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        
+        /* SDK Section */
+        .sdk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .sdk-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .sdk-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .sdk-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .sdk-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .sdk-features li {
+            padding: 0.25rem 0;
+            opacity: 0.9;
+        }
+        
+        .sdk-features li::before {
+            content: "✓ ";
+            color: #9bcbeb;
+            font-weight: bold;
+        }
+        
+        .install-command {
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            text-align: left;
+        }
+        
+        /* Code Examples */
+        .code-example {
+            background: #1a202c;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        
+        .code-header {
+            background: #2d3748;
+            color: #9bcbeb;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background: #bf5700;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #0a192f;
+            color: #9bcbeb;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-link {
+            color: #9bcbeb;
+            text-decoration: none;
+        }
+        
+        .footer-link:hover {
+            color: #bf5700;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .cta-buttons { flex-direction: column; }
+            .nav { display: none; }
+            .endpoints-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">🔥 Blaze Intelligence</a>
+                <nav class="nav">
+                    <a href="#api" class="nav-link">API Reference</a>
+                    <a href="#sdks" class="nav-link">SDKs</a>
+                    <a href="#guides" class="nav-link">Guides</a>
+                    <a href="#examples" class="nav-link">Examples</a>
+                    <a href="https://blaze-intelligence.netlify.app/contact" class="nav-link">Support</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Developer Portal</h1>
+            <p>Build powerful sports analytics applications with our comprehensive API suite. Get Cardinals analytics, NIL valuations, and multi-sport insights.</p>
+            <div class="cta-buttons">
+                <a href="#quick-start" class="btn btn-primary">Quick Start</a>
+                <a href="/docs/openapi-spec.json" class="btn btn-secondary" target="_blank">OpenAPI Spec</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <section id="quick-start" class="content-section">
+                <h2 class="section-title">Quick Start</h2>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span>Get Cardinals Analytics</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-javascript">
+// Install the SDK
+npm install @blaze-intelligence/sdk
+
+// Get Cardinals analytics
+import { BlazeIntelligence } from '@blaze-intelligence/sdk';
+
+const blaze = new BlazeIntelligence({ apiKey: 'your-api-key' });
+
+const cardinals = await blaze.cardinals.getAnalytics();
+console.log(`Cardinals readiness: ${cardinals.readiness}%`);
+console.log(`Trend: ${cardinals.trend}`);
+                    </code></pre>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-header">
+                        <span>Calculate NIL Value</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-javascript">
+// Calculate NIL for a college athlete
+const nilValue = await blaze.nil.calculate({
+  sport: 'baseball',
+  position: 'pitcher',
+  stats: { era: 2.45, strikeouts: 95 },
+  socialMedia: { followers: 5000, engagementRate: 0.035 }
+});
+
+console.log(`NIL Value: $${nilValue.data.nilValue.toLocaleString()}`);
+console.log(`Hudl Savings: ${nilValue.data.comparisons.hudlSavings}%`);
+                    </code></pre>
+                </div>
+            </section>
+
+            <section id="api" class="content-section">
+                <h2 class="section-title">API Endpoints</h2>
+                
+                <div class="endpoints-grid">
+                    <div class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method-badge">GET</span>
+                            <span class="endpoint-path">/api/enhanced-gateway?endpoint=cardinals-analytics</span>
+                        </div>
+                        <h3 class="endpoint-title">Cardinals Analytics</h3>
+                        <p class="endpoint-desc">Get comprehensive Cardinals team analytics with 94.6% accuracy benchmark.</p>
+                        <div class="endpoint-features">
+                            <span class="feature-tag">Real-time</span>
+                            <span class="feature-tag">Cached 10 min</span>
+                            <span class="feature-tag">Rate: 50/min</span>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method-badge">POST</span>
+                            <span class="endpoint-path">/api/nil-calculator</span>
+                        </div>
+                        <h3 class="endpoint-title">NIL Calculator</h3>
+                        <p class="endpoint-desc">Calculate Name, Image, Likeness valuations with 67-80% Hudl savings.</p>
+                        <div class="endpoint-features">
+                            <span class="feature-tag">COPPA Compliant</span>
+                            <span class="feature-tag">Multi-sport</span>
+                            <span class="feature-tag">Rate: 10/min</span>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method-badge">GET</span>
+                            <span class="endpoint-path">/api/enhanced-live-metrics</span>
+                        </div>
+                        <h3 class="endpoint-title">Live Metrics</h3>
+                        <p class="endpoint-desc">Real-time game data and live performance metrics during games.</p>
+                        <div class="endpoint-features">
+                            <span class="feature-tag">WebSocket</span>
+                            <span class="feature-tag">Live Updates</span>
+                            <span class="feature-tag">Rate: 30/min</span>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method-badge">GET</span>
+                            <span class="endpoint-path">/api/enhanced-gateway?endpoint=multi-sport-dashboard</span>
+                        </div>
+                        <h3 class="endpoint-title">Multi-Sport Dashboard</h3>
+                        <p class="endpoint-desc">Cardinals, Titans, Longhorns, and Grizzlies analytics in one endpoint.</p>
+                        <div class="endpoint-features">
+                            <span class="feature-tag">4 Sports</span>
+                            <span class="feature-tag">Trending Insights</span>
+                            <span class="feature-tag">Rate: 25/min</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sdks" class="content-section">
+                <h2 class="section-title">SDKs &amp; Libraries</h2>
+                
+                <div class="sdk-grid">
+                    <div class="sdk-card">
+                        <div class="sdk-icon">⚡</div>
+                        <h3 class="sdk-title">JavaScript/TypeScript</h3>
+                        <ul class="sdk-features">
+                            <li>TypeScript definitions included</li>
+                            <li>Built-in error handling</li>
+                            <li>Automatic retries</li>
+                            <li>Request caching</li>
+                        </ul>
+                        <div class="install-command">npm install @blaze-intelligence/sdk</div>
+                    </div>
+
+                    <div class="sdk-card">
+                        <div class="sdk-icon">🐍</div>
+                        <h3 class="sdk-title">Python</h3>
+                        <ul class="sdk-features">
+                            <li>Async/await support</li>
+                            <li>Pandas DataFrame integration</li>
+                            <li>Jupyter notebook ready</li>
+                            <li>Data science utilities</li>
+                        </ul>
+                        <div class="install-command">pip install blaze-intelligence</div>
+                    </div>
+
+                    <div class="sdk-card">
+                        <div class="sdk-icon">📱</div>
+                        <h3 class="sdk-title">React Native</h3>
+                        <ul class="sdk-features">
+                            <li>iOS &amp; Android support</li>
+                            <li>Offline caching</li>
+                            <li>Push notifications</li>
+                            <li>React hooks included</li>
+                        </ul>
+                        <div class="install-command">npm install @blaze-intelligence/react-native</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="guides" class="content-section">
+                <h2 class="section-title">Developer Guides</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <a href="/docs/guides/getting-started" class="endpoint-card" style="text-decoration: none; color: inherit;">
+                        <h3 class="endpoint-title">🚀 Getting Started</h3>
+                        <p class="endpoint-desc">Authentication, rate limits, error handling, and basic concepts.</p>
+                    </a>
+
+                    <a href="/docs/guides/cardinals-integration" class="endpoint-card" style="text-decoration: none; color: inherit;">
+                        <h3 class="endpoint-title">⚾ Cardinals Analytics</h3>
+                        <p class="endpoint-desc">Deep dive into Cardinals baseball analytics integration.</p>
+                    </a>
+
+                    <a href="/docs/guides/nil-calculator" class="endpoint-card" style="text-decoration: none; color: inherit;">
+                        <h3 class="endpoint-title">💰 NIL Calculator</h3>
+                        <p class="endpoint-desc">Complete guide to NIL valuations and compliance.</p>
+                    </a>
+
+                    <a href="/docs/methods-definitions" class="endpoint-card" style="text-decoration: none; color: inherit;">
+                        <h3 class="endpoint-title">📊 Methods &amp; Definitions</h3>
+                        <p class="endpoint-desc">Methodology behind our 94.6% accuracy and benchmarks.</p>
+                    </a>
+                </div>
+            </section>
+
+            <section id="examples" class="content-section">
+                <h2 class="section-title">Code Examples</h2>
+                <p style="text-align: center; margin-bottom: 2rem; color: #4a5568;">
+                    Complete working examples for common integration patterns.
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <a href="/docs/examples/cardinals-widget" class="endpoint-card" style="text-decoration: none; color: inherit;">
+                        <h3 class="endpoint-title">Cardinals Analytics Widget</h3>
+                        <p class="endpoint-desc">Complete dashboard widget with real-time updates.</p>
+                        <div class="endpoint-features">
+                            <span class="feature-tag">JavaScript</span>
+                            <span class="feature-tag">WebSocket</span>
+                            <span class="feature-tag">Caching</span>
+                        </div>
+                    </a>
+
+                    <a href="/docs/examples/nil-calculator" class="endpoint-card" style="text-decoration: none; color: inherit;">
+                        <h3 class="endpoint-title">NIL Calculator Form</h3>
+                        <p class="endpoint-desc">Full NIL calculator with validation and recommendations.</p>
+                        <div class="endpoint-features">
+                            <span class="feature-tag">JavaScript</span>
+                            <span class="feature-tag">Validation</span>
+                            <span class="feature-tag">COPPA</span>
+                        </div>
+                    </a>
+
+                    <a href="/docs/examples/multi-sport-dashboard" class="endpoint-card" style="text-decoration: none; color: inherit;">
+                        <h3 class="endpoint-title">Multi-Sport Dashboard</h3>
+                        <p class="endpoint-desc">React component for all four supported sports.</p>
+                        <div class="endpoint-features">
+                            <span class="feature-tag">React</span>
+                            <span class="feature-tag">JSX</span>
+                            <span class="feature-tag">Responsive</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://blaze-intelligence.netlify.app" class="footer-link">Home</a>
+                <a href="https://blaze-intelligence.netlify.app/contact" class="footer-link">Support</a>
+                <a href="/docs/openapi-spec.json" class="footer-link" target="_blank">OpenAPI</a>
+                <a href="https://github.com/ahump20/BI" class="footer-link" target="_blank">GitHub</a>
+            </div>
+            <p>© 2025 Blaze Intelligence. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;">
+                🔥 Generated with <a href="https://claude.ai/code" style="color: #bf5700;">Claude Code</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-example').querySelector('code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#48bb78';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#bf5700';
+                }, 2000);
+            });
+        }
+    </script>
+
+
+</body></html>

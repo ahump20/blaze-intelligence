@@ -1,0 +1,424 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Blaze Intelligence API",
+    "description": "# Blaze Intelligence Sports Analytics API\n\nInstitutional-grade sports intelligence platform providing real-time analytics, predictive modeling, and comprehensive data insights for professional sports teams, betting syndicates, and media organizations.\n\n## Authentication\nAll API requests require authentication using Bearer tokens. Include your API key in the Authorization header:\n\n```\nAuthorization: Bearer YOUR_API_KEY\n```\n\n## Rate Limiting\n- **Starter**: 1,000 requests/hour\n- **Professional**: 10,000 requests/hour  \n- **Enterprise**: Unlimited\n\n## WebSocket Connections\nReal-time data streaming available at `wss://api.blaze-intelligence.com/v1/stream`\n",
+    "version": "1.0.0",
+    "termsOfService": "https://blaze-intelligence.com/terms",
+    "contact": {
+      "name": "Blaze Intelligence Support",
+      "email": "support@blaze-intelligence.com",
+      "url": "https://blaze-intelligence.com/support"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "https://blaze-intelligence.com/license"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://9a74e471.blaze-intelligence.pages.dev/api",
+      "description": "Production API"
+    },
+    {
+      "url": "https://6414dde1-62a7-4238-9005-ca33fe399b51.spock.prod.repl.run/api",
+      "description": "Enhanced Backend API"
+    },
+    {
+      "url": "http://localhost:3001/api",
+      "description": "Development server"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Games",
+      "description": "Live game data and historical game information"
+    },
+    {
+      "name": "Teams",
+      "description": "Team statistics, rosters, and performance metrics"
+    },
+    {
+      "name": "Players",
+      "description": "Individual player statistics and performance analysis"
+    },
+    {
+      "name": "Predictions",
+      "description": "AI-powered predictions and probability modeling"
+    },
+    {
+      "name": "Betting",
+      "description": "Betting lines, odds movements, and arbitrage opportunities"
+    },
+    {
+      "name": "Analytics",
+      "description": "Advanced analytics and custom metrics"
+    },
+    {
+      "name": "Consciousness",
+      "description": "AI consciousness control and neural network management"
+    },
+    {
+      "name": "Video Analysis",
+      "description": "Video intelligence and biomechanical analysis"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Health check",
+        "description": "Get system health status and metrics",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "System is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "healthy"
+                    },
+                    "uptime": {
+                      "type": "number",
+                      "example": 86400
+                    },
+                    "connections": {
+                      "type": "integer",
+                      "example": 1247
+                    },
+                    "aiConsciousness": {
+                      "type": "number",
+                      "example": 87.6
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "1.0.0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/consciousness": {
+      "get": {
+        "tags": ["Consciousness"],
+        "summary": "Get AI consciousness state",
+        "description": "Retrieve current AI consciousness level and neural network status",
+        "operationId": "getConsciousness",
+        "responses": {
+          "200": {
+            "description": "Current consciousness state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsciousnessState"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analyze": {
+      "post": {
+        "tags": ["Analytics"],
+        "summary": "Analyze sports data",
+        "description": "Perform AI-powered analysis on sports data or scenarios",
+        "operationId": "analyzeData",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "prompt": {
+                    "type": "string",
+                    "description": "Analysis prompt or question"
+                  },
+                  "context": {
+                    "type": "string",
+                    "description": "Context for analysis (sports, team, player)"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Additional data for analysis"
+                  }
+                },
+                "required": ["prompt", "context"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Analysis completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games/live": {
+      "get": {
+        "tags": ["Games"],
+        "summary": "Get live game data",
+        "description": "Retrieve real-time data for currently active games",
+        "operationId": "getLiveGames",
+        "parameters": [
+          {
+            "name": "sport",
+            "in": "query",
+            "description": "Filter by sport",
+            "schema": {
+              "type": "string",
+              "enum": ["MLB", "NFL", "NBA", "NCAA"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Live game data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveGameData"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    },
+    "schemas": {
+      "ConsciousnessState": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Current AI consciousness level percentage"
+          },
+          "fluctuation": {
+            "type": "number",
+            "description": "Natural consciousness fluctuation value"
+          },
+          "neuralNodes": {
+            "type": "integer",
+            "description": "Number of active neural nodes"
+          },
+          "synapses": {
+            "type": "integer",
+            "description": "Number of active synapses"
+          },
+          "processingSpeed": {
+            "type": "string",
+            "description": "Current processing speed metric"
+          }
+        }
+      },
+      "AnalysisResult": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "Analysis result summary"
+          },
+          "insights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Key insights from analysis"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence score for analysis"
+          },
+          "processingTime": {
+            "type": "number",
+            "description": "Processing time in milliseconds"
+          },
+          "timestamp": {
+            "type": "integer",
+            "description": "Unix timestamp of analysis"
+          }
+        }
+      },
+      "LiveGameData": {
+        "type": "object",
+        "properties": {
+          "games": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Game"
+            }
+          },
+          "insights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameInsight"
+            }
+          },
+          "consciousness": {
+            "$ref": "#/components/schemas/ConsciousnessState"
+          }
+        }
+      },
+      "Game": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique game identifier"
+          },
+          "sport": {
+            "type": "string",
+            "enum": ["MLB", "NFL", "NBA", "NCAA"]
+          },
+          "home": {
+            "type": "string",
+            "description": "Home team abbreviation"
+          },
+          "away": {
+            "type": "string",
+            "description": "Away team abbreviation"
+          },
+          "score": {
+            "type": "object",
+            "properties": {
+              "home": {
+                "type": "integer"
+              },
+              "away": {
+                "type": "integer"
+              }
+            }
+          },
+          "quarter": {
+            "type": "integer",
+            "description": "Current quarter/period"
+          },
+          "time": {
+            "type": "string",
+            "description": "Time remaining in period"
+          },
+          "possession": {
+            "type": "string",
+            "description": "Team with current possession"
+          },
+          "situation": {
+            "type": "string",
+            "description": "Current down and distance (NFL)"
+          },
+          "winProbability": {
+            "type": "object",
+            "properties": {
+              "home": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "away": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "lastUpdate": {
+            "type": "integer",
+            "description": "Last update timestamp"
+          }
+        }
+      },
+      "GameInsight": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of insight"
+          },
+          "team": {
+            "type": "string",
+            "description": "Related team"
+          },
+          "value": {
+            "type": "number",
+            "description": "Numeric value for insight"
+          },
+          "trend": {
+            "type": "string",
+            "enum": ["increasing", "decreasing", "stable"],
+            "description": "Trend direction"
+          },
+          "factors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Contributing factors"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence in insight"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

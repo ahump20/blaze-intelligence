@@ -1,26 +1,31 @@
-export default {
-  testEnvironment: 'node',
-  extensionsToTreatAsEsm: ['.js'],
-  globals: {
-    'ts-jest': {
-      useESM: true
+module.exports = {
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "roots": [
+    "<rootDir>/src",
+    "<rootDir>/api",
+    "<rootDir>/tests"
+  ],
+  "testMatch": [
+    "**/__tests__/**/*.test.(js|jsx|ts|tsx)",
+    "**/*.test.(js|jsx|ts|tsx)"
+  ],
+  "collectCoverageFrom": [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "api/**/*.{js,jsx,ts,tsx}",
+    "!src/**/*.d.ts",
+    "!src/**/index.{js,ts}"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 80,
+      "functions": 80,
+      "lines": 80,
+      "statements": 80
     }
   },
-  moduleNameMapping: {
-    '^@/(.*)$': '<rootDir>/src/$1'
-  },
-  testMatch: [
-    '<rootDir>/tests/unit/**/*.test.js',
-    '<rootDir>/tests/integration/**/*.test.js'
+  "setupFilesAfterEnv": [
+    "<rootDir>/tests/setup.js"
   ],
-  collectCoverageFrom: [
-    'src/**/*.{js,ts}',
-    '!src/**/*.d.ts',
-    '!src/**/*.test.{js,ts}',
-    '!src/worker/**/*'
-  ],
-  coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov', 'html'],
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
-  transform: {}
+  "testTimeout": 30000
 };

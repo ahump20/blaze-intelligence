@@ -1,11 +1,11 @@
 {
   "name": "Blaze Intelligence - Championship Sports Analytics",
-  "short_name": "Blaze Intel",
-  "description": "Professional sports analytics platform with AI-powered insights for MLB, NFL, NBA, and NCAA",
+  "short_name": "Blaze Intelligence",
+  "description": "Championship-level sports analytics platform with real-time Cardinals intelligence, video AI coaching, and advanced performance metrics",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#ff6b35",
+  "background_color": "#0A0A0B",
+  "theme_color": "#BF5700",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -74,23 +74,30 @@
   "categories": ["sports", "analytics", "business", "productivity"],
   "shortcuts": [
     {
-      "name": "Dashboard",
-      "short_name": "Dashboard",
-      "description": "View live analytics dashboard",
-      "url": "/dashboard.html",
-      "icons": [{ "src": "/icons/dashboard.png", "sizes": "96x96" }]
+      "name": "Cardinals Analytics",
+      "short_name": "Cardinals",
+      "description": "Real-time Cardinals readiness metrics",
+      "url": "/cardinals-intelligence.html",
+      "icons": [{ "src": "/icons/cardinals.png", "sizes": "96x96" }]
     },
     {
-      "name": "Vision AI",
-      "short_name": "Vision AI",
-      "description": "Experience Vision AI demo",
-      "url": "/vision-ai-demo.html",
-      "icons": [{ "src": "/icons/vision.png", "sizes": "96x96" }]
+      "name": "Video AI Coaching",
+      "short_name": "Video AI",
+      "description": "Advanced video analysis and coaching",
+      "url": "/blaze-vision-ai-scouting.html",
+      "icons": [{ "src": "/icons/video-ai.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "NIL Calculator",
+      "short_name": "NIL",
+      "description": "Calculate athlete NIL valuations",
+      "url": "/nil-calculator.html",
+      "icons": [{ "src": "/icons/nil.png", "sizes": "96x96" }]
     },
     {
       "name": "Contact",
       "short_name": "Contact",
-      "description": "Get in touch",
+      "description": "Enhanced lead capture with analytics preview",
       "url": "/contact.html",
       "icons": [{ "src": "/icons/contact.png", "sizes": "96x96" }]
     }
