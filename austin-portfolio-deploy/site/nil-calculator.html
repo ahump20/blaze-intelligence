@@ -1,30 +1,212 @@
 <!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NIL Engine — Blaze Intelligence</title>
 <link rel="stylesheet" href="/assets/brand.css">
-<div class="nav"><div class="brand">🔥 Blaze Intelligence</div><a class="badge" href="/get-started.html">Get Started</a></div>
-<div class="container">
-  <div class="h1">NIL Engine</div>
-  <form class="card" id="f" novalidate>
-    <label> Athlete Name <input name="name" required style="width:100%;margin-top:6px;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)"></label><br><br>
-    <label> Sport
-      <select name="sport" required style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)">
-        <option value="">Select…</option><option>Baseball</option><option>Football</option>
-      </select>
-    </label><br><br>
-    <label> Social Reach (est.) <input name="reach" type="number" min="0" step="100" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)"></label><br><br>
-    <button class="cta" type="submit">Estimate NIL Value</button>
-  </form>
-  <div class="card" id="out" style="margin-top:14px;display:none"></div>
+<div class="nav">
+  <div class="brand">🔥 Blaze Intelligence</div>
+  <a href="/dashboard" class="badge">Dashboard</a>
+  <a href="/live-demo" class="badge">Live Demo</a>
+  <a href="/nil-calculator" class="badge">NIL Engine</a>
+  <a href="/quantum-platform" class="badge">Quantum</a>
+  <a href="/status" class="badge">Status</a>
+  <a href="/get-started" class="badge">Get Started</a>
 </div>
+<div class="container">
+  <div class="h1">Championship NIL Engine</div>
+  <p class="p">Professional-grade NIL valuation for Deep South/SEC & Texas athletics</p>
+  
+  <div class="grid cols-2" style="gap:20px;margin-bottom:30px">
+    <form class="card" id="f" novalidate>
+      <div class="h2" style="color:var(--accent);margin-bottom:20px">Athlete Profile</div>
+      
+      <label> Athlete Name <input name="name" required style="width:100%;margin-top:6px;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)" placeholder="Enter full name"></label><br><br>
+      
+      <label> Primary Sport
+        <select name="sport" required style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)">
+          <option value="">Select Primary Sport…</option>
+          <option value="Football">🏈 Football</option>
+          <option value="Baseball">⚾ Baseball</option>
+          <option value="Basketball">🏀 Basketball</option>
+          <option value="Track">🏃 Track & Field</option>
+          <option value="Soccer">⚽ Soccer</option>
+          <option value="Softball">🥎 Softball</option>
+          <option value="Volleyball">🏐 Volleyball</option>
+          <option value="Tennis">🎾 Tennis</option>
+          <option value="Golf">⛳ Golf</option>
+          <option value="Swimming">🏊 Swimming</option>
+        </select>
+      </label><br><br>
+      
+      <label> Competition Level
+        <select name="level" required style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)">
+          <option value="">Select Level…</option>
+          <option value="D1">NCAA Division I</option>
+          <option value="D2">NCAA Division II</option>
+          <option value="D3">NCAA Division III</option>
+          <option value="NAIA">NAIA</option>
+          <option value="JUCO">Junior College</option>
+        </select>
+      </label><br><br>
+      
+      <div class="grid cols-2" style="gap:10px">
+        <label> Social Followers <input name="reach" type="number" min="0" step="100" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)" placeholder="Instagram + TikTok"></label>
+        <label> GPA (Optional) <input name="gpa" type="number" min="0" max="4" step="0.1" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)" placeholder="3.5"></label>
+      </div><br>
+      
+      <label> Market Size
+        <select name="market" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1c3a;color:var(--text)">
+          <option value="small">Small Market (< 500k)</option>
+          <option value="medium" selected>Medium Market (500k - 2M)</option>
+          <option value="large">Large Market (2M+)</option>
+          <option value="sec">SEC Market Premium</option>
+        </select>
+      </label><br><br>
+      
+      <div style="margin-bottom:15px">
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <input type="checkbox" name="star" style="margin:0"> ⭐ All-Conference/All-State Recognition
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <input type="checkbox" name="media" style="margin:0"> 📺 Regular Media Coverage
+        </label>
+        <label style="display:flex;align-items:center;gap:8px">
+          <input type="checkbox" name="pro" style="margin:0"> 🏆 Professional Prospects
+        </label>
+      </div>
+      
+      <button class="cta" type="submit" style="width:100%">Calculate NIL Value</button>
+    </form>
+    
+    <div class="card" id="out" style="display:none">
+      <div class="h2" style="color:var(--accent)">NIL Valuation Report</div>
+      <div id="results"></div>
+      <hr style="margin:20px 0">
+      <div style="font-size:12px;color:var(--muted)">
+        <strong>Disclaimer:</strong> This is an educational estimate only. Actual NIL values depend on numerous factors including performance, marketability, brand partnerships, and market conditions. Consult with certified NIL professionals for official valuations.
+      </div>
+    </div>
+  </div>
+  
+  <!-- NIL Education Cards -->
+  <div class="grid cols-3" style="margin-top:40px">
+    <div class="card">
+      <div class="h2" style="font-size:20px">NIL Basics</div>
+      <p class="p" style="font-size:14px">Name, Image, Likeness rights allow college athletes to profit from endorsements, social media, and personal appearances while maintaining eligibility.</p>
+    </div>
+    <div class="card">
+      <div class="h2" style="font-size:20px">SEC Advantage</div>
+      <p class="p" style="font-size:14px">SEC and Texas markets command premium NIL values due to passionate fan bases, media coverage, and strong alumni networks.</p>
+    </div>
+    <div class="card">
+      <div class="h2" style="font-size:20px">Compliance</div>
+      <p class="p" style="font-size:14px">All NIL activities must comply with NCAA, conference, and state regulations. Work with certified professionals for compliance guidance.</p>
+    </div>
+  </div>
+</div>
+
 <script>
-f.addEventListener('submit', e=>{
+const sportMultipliers = {
+  'Football': { base: 2500, premium: 1.8 },
+  'Basketball': { base: 2000, premium: 1.6 },
+  'Baseball': { base: 1200, premium: 1.4 },
+  'Track': { base: 800, premium: 1.2 },
+  'Soccer': { base: 900, premium: 1.1 },
+  'Softball': { base: 700, premium: 1.3 },
+  'Volleyball': { base: 650, premium: 1.2 },
+  'Tennis': { base: 850, premium: 1.1 },
+  'Golf': { base: 950, premium: 1.3 },
+  'Swimming': { base: 600, premium: 1.1 }
+};
+
+const levelMultipliers = {
+  'D1': 1.0,
+  'D2': 0.6,
+  'D3': 0.3,
+  'NAIA': 0.5,
+  'JUCO': 0.4
+};
+
+const marketMultipliers = {
+  'small': 0.8,
+  'medium': 1.0,
+  'large': 1.3,
+  'sec': 1.8
+};
+
+f.addEventListener('submit', e => {
   e.preventDefault();
-  const d=new FormData(f), name=d.get('name')?.trim(), sport=d.get('sport');
-  if(!name || !sport){ alert('Please complete all required fields.'); return; }
-  const reach=+d.get('reach')||0; const base = sport==='Baseball'? 800 : 1200;
-  const mult = Math.min(5, 1 + reach/50000);
-  const est = Math.round(base * mult);
-  out.style.display='block';
-  out.innerHTML = `<div class="h2">Estimate</div><p class="p">${name} — ~${est.toLocaleString()} / season (non-binding)</p>`;
+  const d = new FormData(f);
+  const name = d.get('name')?.trim();
+  const sport = d.get('sport');
+  const level = d.get('level');
+  
+  if (!name || !sport || !level) {
+    alert('Please complete all required fields (Name, Sport, Level).');
+    return;
+  }
+  
+  const reach = +d.get('reach') || 0;
+  const gpa = +d.get('gpa') || 0;
+  const market = d.get('market') || 'medium';
+  const star = d.has('star');
+  const media = d.has('media');
+  const pro = d.has('pro');
+  
+  // Base calculation
+  const sportData = sportMultipliers[sport];
+  let baseValue = sportData.base * levelMultipliers[level];
+  
+  // Social media multiplier (logarithmic scale)
+  const socialMultiplier = reach > 0 ? Math.min(3, 1 + Math.log10(reach + 1) / 2) : 1;
+  
+  // Market adjustment
+  baseValue *= marketMultipliers[market];
+  
+  // Performance bonuses
+  let bonusMultiplier = 1;
+  if (star) bonusMultiplier += 0.4;
+  if (media) bonusMultiplier += 0.3;
+  if (pro) bonusMultiplier += 0.6;
+  
+  // GPA bonus (academic achievement adds marketability)
+  if (gpa >= 3.5) bonusMultiplier += 0.2;
+  if (gpa >= 3.8) bonusMultiplier += 0.1;
+  
+  // Final calculation
+  const estimatedValue = Math.round(baseValue * socialMultiplier * bonusMultiplier);
+  const yearlyRange = {
+    low: Math.round(estimatedValue * 0.7),
+    high: Math.round(estimatedValue * 1.4)
+  };
+  
+  // Display results
+  out.style.display = 'block';
+  
+  let breakdown = '<div style="margin-bottom:20px">';
+  breakdown += `<div style="font-size:24px;font-weight:bold;color:var(--accent);margin-bottom:10px">${name}</div>`;
+  breakdown += `<div style="font-size:18px;margin-bottom:15px">Estimated Annual NIL Value: <strong>$${yearlyRange.low.toLocaleString()} - $${yearlyRange.high.toLocaleString()}</strong></div>`;
+  breakdown += '</div>';
+  
+  breakdown += '<div class="grid cols-2" style="gap:15px">';
+  breakdown += `<div><strong>Primary Value:</strong><br>$${Math.round(baseValue).toLocaleString()}</div>`;
+  breakdown += `<div><strong>Social Multiplier:</strong><br>${socialMultiplier.toFixed(2)}x</div>`;
+  breakdown += `<div><strong>Performance Bonus:</strong><br>+${Math.round((bonusMultiplier - 1) * 100)}%</div>`;
+  breakdown += `<div><strong>Market Factor:</strong><br>${market.toUpperCase()}</div>`;
+  breakdown += '</div>';
+  
+  if (reach > 10000) {
+    breakdown += '<div style="margin-top:15px;padding:10px;background:rgba(255,122,26,0.1);border-radius:8px;">';
+    breakdown += '<strong>📈 High Social Value:</strong> Strong social media presence significantly increases NIL potential.';
+    breakdown += '</div>';
+  }
+  
+  if (market === 'sec') {
+    breakdown += '<div style="margin-top:15px;padding:10px;background:rgba(191,87,0,0.1);border-radius:8px;">';
+    breakdown += '<strong>🏈 SEC Premium:</strong> SEC market commands top NIL valuations in college sports.';
+    breakdown += '</div>';
+  }
+  
+  results.innerHTML = breakdown;
+  out.scrollIntoView({ behavior: 'smooth' });
 });
 </script>
+<script src="/assets/router.js"></script>
