@@ -1,0 +1,616 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SEC Football Week 3 — Enhanced Visual Intelligence | Blaze Intelligence</title>
+    <link rel="stylesheet" href="/assets/brand.css">
+    <style>
+        body { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%); overflow-x: hidden; }
+        
+        /* Enhanced Visual Containers */
+        .visual-section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.05) 0%, rgba(0, 34, 68, 0.05) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .visual-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #BF5700, #9BCBEB, #00B2A9);
+        }
+        
+        /* Three.js Canvas Containers */
+        .threejs-container {
+            width: 100%;
+            height: 400px;
+            margin: 2rem 0;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .map-container {
+            height: 500px;
+            margin: 2rem 0;
+        }
+        
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .chart-container {
+            height: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(191, 87, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Interactive Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid #BF5700;
+            color: #BF5700;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        
+        .control-btn:hover, .control-btn.active {
+            background: #BF5700;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Enhanced Team Cards */
+        .enhanced-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(191, 87, 0, 0.05) 100%);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .enhanced-card:hover {
+            transform: translateY(-5px);
+            border-color: #BF5700;
+            box-shadow: 0 15px 35px rgba(191, 87, 0, 0.2);
+        }
+        
+        .team-performance-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #BF5700, #9BCBEB);
+            transition: width 0.3s ease;
+        }
+        
+        /* Data Visualization Labels */
+        .viz-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #BF5700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .viz-subtitle {
+            color: #9BCBEB;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Loading Animation */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(191, 87, 0, 0.3);
+            border-top: 3px solid #BF5700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            .controls {
+                justify-content: center;
+            }
+            .threejs-container, .map-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="brand">🔥 Blaze Intelligence</div>
+        <a href="/dashboard.html" class="badge">Dashboard</a>
+        <a href="/get-started.html" class="badge">Get Started</a>
+    </div>
+    
+    <!-- Enhanced Hero with Particle System -->
+    <canvas id="hero" style="width:100%;height:32vh;display:block"></canvas>
+    
+    <div class="container">
+        <div class="h1">SEC Football — Enhanced Visual Intelligence</div>
+        <p class="p">Experience SEC Week 3 data through cutting-edge 3D visualizations, interactive maps, and real-time analytics. Our enhanced visual intelligence platform brings data to life with stunning clarity.</p>
+        
+        <!-- Interactive SEC Map -->
+        <div class="visual-section">
+            <div class="viz-title">Interactive SEC Geographic Map</div>
+            <div class="viz-subtitle">Explore team locations, performance metrics, and conference dynamics</div>
+            <div class="controls">
+                <button class="control-btn active" data-view="performance">Performance View</button>
+                <button class="control-btn" data-view="rankings">Rankings View</button>
+                <button class="control-btn" data-view="matchups">Matchups View</button>
+            </div>
+            <div class="map-container threejs-container" id="secMap">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 3D Performance Analytics -->
+        <div class="visual-section">
+            <div class="viz-title">3D Performance Analytics</div>
+            <div class="viz-subtitle">Offense vs Defense visualization with interactive team exploration</div>
+            <div class="controls">
+                <button class="control-btn active" data-metric="ppg">Points Per Game</button>
+                <button class="control-btn" data-metric="defense">Defensive Stats</button>
+                <button class="control-btn" data-metric="efficiency">Efficiency</button>
+            </div>
+            <div class="threejs-container" id="performanceViz">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dynamic Charts Grid -->
+        <div class="visual-section">
+            <div class="viz-title">Real-Time SEC Analytics Dashboard</div>
+            <div class="chart-grid">
+                <div class="chart-container" id="offenseChart">
+                    <canvas id="offenseCanvas"></canvas>
+                </div>
+                <div class="chart-container" id="defenseChart">
+                    <canvas id="defenseCanvas"></canvas>
+                </div>
+                <div class="chart-container" id="standingsChart">
+                    <canvas id="standingsCanvas"></canvas>
+                </div>
+                <div class="chart-container" id="momentumChart">
+                    <canvas id="momentumCanvas"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Enhanced Team Data with Visualizations -->
+        <div class="visual-section">
+            <div class="viz-title">Interactive Team Intelligence</div>
+            <div class="viz-subtitle">Click any team to explore detailed 3D performance analysis</div>
+            
+            <div class="enhanced-card" data-team="tennessee" data-ppg="58.5">
+                <div class="h2">🏈 Tennessee Volunteers (2-0)</div>
+                <p class="p">Conference leader in total offense | PF: 117, PA: 43 | Next: @ Georgia</p>
+                <div class="team-performance-bar" style="width: 95%"></div>
+            </div>
+            
+            <div class="enhanced-card" data-team="arkansas" data-ppg="54.0">
+                <div class="h2">🐗 Arkansas Razorbacks (2-0)</div>
+                <p class="p">Explosive ground game averaging 54.0 PPG | Next: @ Ole Miss</p>
+                <div class="team-performance-bar" style="width: 90%"></div>
+            </div>
+            
+            <div class="enhanced-card" data-team="missouri" data-ppg="51.5">
+                <div class="h2">🐅 Missouri Tigers (2-0)</div>
+                <p class="p">High-powered passing attack | 51.5 PPG | Next: vs Louisiana Lafayette</p>
+                <div class="team-performance-bar" style="width: 87%"></div>
+            </div>
+            
+            <div class="enhanced-card" data-team="olemiss" data-ppg="46.5">
+                <div class="h2">⚡ Ole Miss Rebels (2-0)</div>
+                <p class="p">Only team with SEC conference win (1-0) | Next: vs Arkansas</p>
+                <div class="team-performance-bar" style="width: 85%"></div>
+            </div>
+            
+            <div class="enhanced-card" data-team="alabama" data-ppg="45.0">
+                <div class="h2">🔴 Alabama Crimson Tide (1-1)</div>
+                <p class="p">Bounced back with 73-0 shutout | Next: vs Wisconsin</p>
+                <div class="team-performance-bar" style="width: 78%"></div>
+            </div>
+            
+            <div class="enhanced-card" data-team="georgia" data-ppg="36.5">
+                <div class="h2">🐕 Georgia Bulldogs (2-0)</div>
+                <p class="p">Elite defense allowing just 6.5 PPG | Next: vs Tennessee</p>
+                <div class="team-performance-bar" style="width: 82%"></div>
+            </div>
+        </div>
+        
+        <!-- Key Storylines with Visual Elements -->
+        <div class="visual-section">
+            <div class="viz-title">Week 3 Championship Intelligence</div>
+            <div class="threejs-container" id="storylineViz">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+            <p class="p">Interactive analysis of championship implications, upset potential, and conference race dynamics. Georgia vs Tennessee represents the first major SEC clash with College GameDay implications.</p>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script>
+        // Enhanced Three.js Implementation
+        class SECVisualizer {
+            constructor() {
+                this.scenes = {};
+                this.renderers = {};
+                this.cameras = {};
+                this.controls = {};
+                this.init();
+            }
+            
+            init() {
+                this.createEnhancedHero();
+                this.createSECMap();
+                this.create3DPerformanceViz();
+                this.createStorylineViz();
+                this.setupInteractivity();
+                this.startAnimationLoop();
+            }
+            
+            createEnhancedHero() {
+                const canvas = document.getElementById('hero');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+                
+                renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+                renderer.setClearColor(0x000000, 0);
+                
+                // Create particle system representing SEC teams
+                const particleCount = 1000;
+                const particles = new THREE.BufferGeometry();
+                const positions = [];
+                const colors = [];
+                
+                for (let i = 0; i < particleCount; i++) {
+                    positions.push((Math.random() - 0.5) * 10);
+                    positions.push((Math.random() - 0.5) * 10);
+                    positions.push((Math.random() - 0.5) * 10);
+                    
+                    colors.push(0.75, 0.34, 0); // Burnt Orange
+                }
+                
+                particles.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+                particles.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+                
+                const particleMaterial = new THREE.PointsMaterial({
+                    size: 0.05,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const particleSystem = new THREE.Points(particles, particleMaterial);
+                scene.add(particleSystem);
+                
+                camera.position.z = 5;
+                
+                this.scenes.hero = { scene, camera, renderer, particleSystem };
+            }
+            
+            createSECMap() {
+                const container = document.getElementById('secMap');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                
+                renderer.setSize(container.offsetWidth, container.offsetHeight);
+                renderer.setClearColor(0x0a0a0a, 1);
+                container.appendChild(renderer.domElement);
+                
+                // Create SEC region geometry
+                const geometry = new THREE.PlaneGeometry(8, 6, 32, 24);
+                const material = new THREE.MeshLambertMaterial({
+                    color: 0x1a1a2e,
+                    transparent: true,
+                    opacity: 0.7,
+                    wireframe: true
+                });
+                
+                const mapPlane = new THREE.Mesh(geometry, material);
+                scene.add(mapPlane);
+                
+                // Add team markers with performance-based heights
+                const teamData = [
+                    { name: 'Tennessee', pos: [1, 2, 0.8], ppg: 58.5 },
+                    { name: 'Arkansas', pos: [-1, 0, 0.7], ppg: 54.0 },
+                    { name: 'Missouri', pos: [-0.5, 1.5, 0.6], ppg: 51.5 },
+                    { name: 'Ole Miss', pos: [0, -1, 0.65], ppg: 46.5 },
+                    { name: 'Alabama', pos: [0.5, -1.5, 0.6], ppg: 45.0 },
+                    { name: 'Georgia', pos: [2, -0.5, 0.5], ppg: 36.5 }
+                ];
+                
+                teamData.forEach(team => {
+                    const height = (team.ppg / 60) * 2; // Scale height by PPG
+                    const geometry = new THREE.CylinderGeometry(0.1, 0.1, height, 8);
+                    const material = new THREE.MeshLambertMaterial({
+                        color: new THREE.Color().setHSL((team.ppg / 60) * 0.3, 1, 0.5)
+                    });
+                    
+                    const marker = new THREE.Mesh(geometry, material);
+                    marker.position.set(...team.pos);
+                    marker.userData = team;
+                    scene.add(marker);
+                });
+                
+                // Add lighting
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+                const directionalLight = new THREE.DirectionalLight(0xBF5700, 0.6);
+                directionalLight.position.set(5, 5, 5);
+                scene.add(ambientLight);
+                scene.add(directionalLight);
+                
+                camera.position.set(0, 0, 6);
+                
+                this.scenes.map = { scene, camera, renderer, container };
+                
+                // Hide loading overlay
+                setTimeout(() => {
+                    container.querySelector('.loading-overlay').style.opacity = '0';
+                }, 1000);
+            }
+            
+            create3DPerformanceViz() {
+                const container = document.getElementById('performanceViz');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ antialias: true });
+                
+                renderer.setSize(container.offsetWidth, container.offsetHeight);
+                renderer.setClearColor(0x0a0a0a, 1);
+                container.appendChild(renderer.domElement);
+                
+                // Create 3D scatter plot for offense vs defense
+                const teams = [
+                    { name: 'Tennessee', offense: 58.5, defense: 21.5, color: 0xff6600 },
+                    { name: 'Arkansas', offense: 54.0, defense: 10.5, color: 0xcc0000 },
+                    { name: 'Missouri', offense: 51.5, defense: 18.5, color: 0xffd700 },
+                    { name: 'Ole Miss', offense: 46.5, defense: 15.0, color: 0x0066cc },
+                    { name: 'Alabama', offense: 45.0, defense: 15.5, color: 0x990000 },
+                    { name: 'Georgia', offense: 36.5, defense: 6.5, color: 0xff0000 }
+                ];
+                
+                teams.forEach(team => {
+                    const geometry = new THREE.SphereGeometry(0.2, 16, 16);
+                    const material = new THREE.MeshLambertMaterial({ color: team.color });
+                    const sphere = new THREE.Mesh(geometry, material);
+                    
+                    // Position based on offensive and defensive performance
+                    sphere.position.x = (team.offense - 40) / 10; // Scale offense
+                    sphere.position.y = (30 - team.defense) / 10; // Inverse defense (lower is better)
+                    sphere.position.z = Math.random() * 0.5;
+                    
+                    sphere.userData = team;
+                    scene.add(sphere);
+                });
+                
+                // Add grid helper
+                const gridHelper = new THREE.GridHelper(6, 10, 0xBF5700, 0x444444);
+                scene.add(gridHelper);
+                
+                // Add lighting
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+                const directionalLight = new THREE.DirectionalLight(0x9BCBEB, 0.8);
+                directionalLight.position.set(5, 5, 5);
+                scene.add(ambientLight);
+                scene.add(directionalLight);
+                
+                camera.position.set(3, 3, 5);
+                camera.lookAt(0, 0, 0);
+                
+                this.scenes.performance = { scene, camera, renderer, container };
+                
+                // Hide loading overlay
+                setTimeout(() => {
+                    container.querySelector('.loading-overlay').style.opacity = '0';
+                }, 1200);
+            }
+            
+            createStorylineViz() {
+                const container = document.getElementById('storylineViz');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                
+                renderer.setSize(container.offsetWidth, container.offsetHeight);
+                renderer.setClearColor(0x0a0a0a, 1);
+                container.appendChild(renderer.domElement);
+                
+                // Create championship probability visualization
+                const geometries = [];
+                const materials = [];
+                const meshes = [];
+                
+                // Championship contenders with probability heights
+                const contenders = [
+                    { name: 'Tennessee', probability: 0.25, color: 0xff6600 },
+                    { name: 'Georgia', probability: 0.28, color: 0xff0000 },
+                    { name: 'Arkansas', probability: 0.18, color: 0xcc0000 },
+                    { name: 'Ole Miss', probability: 0.15, color: 0x0066cc },
+                    { name: 'Alabama', probability: 0.14, color: 0x990000 }
+                ];
+                
+                contenders.forEach((team, index) => {
+                    const height = team.probability * 8;
+                    const geometry = new THREE.BoxGeometry(0.5, height, 0.5);
+                    const material = new THREE.MeshLambertMaterial({ color: team.color });
+                    const mesh = new THREE.Mesh(geometry, material);
+                    
+                    mesh.position.x = (index - 2) * 1.2;
+                    mesh.position.y = height / 2;
+                    mesh.userData = team;
+                    
+                    scene.add(mesh);
+                    meshes.push(mesh);
+                });
+                
+                // Add lighting
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+                const directionalLight = new THREE.DirectionalLight(0xBF5700, 0.8);
+                directionalLight.position.set(0, 5, 5);
+                scene.add(ambientLight);
+                scene.add(directionalLight);
+                
+                camera.position.set(0, 3, 8);
+                camera.lookAt(0, 0, 0);
+                
+                this.scenes.storyline = { scene, camera, renderer, container, meshes };
+                
+                // Hide loading overlay
+                setTimeout(() => {
+                    container.querySelector('.loading-overlay').style.opacity = '0';
+                }, 1500);
+            }
+            
+            setupInteractivity() {
+                // Team card click handlers
+                document.querySelectorAll('.enhanced-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const team = card.dataset.team;
+                        this.highlightTeam(team);
+                    });
+                });
+                
+                // Control button handlers
+                document.querySelectorAll('.control-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const parent = btn.closest('.controls');
+                        parent.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        const view = btn.dataset.view || btn.dataset.metric;
+                        this.updateVisualization(view);
+                    });
+                });
+            }
+            
+            highlightTeam(teamName) {
+                // Add team-specific visualization effects
+                console.log(`Highlighting ${teamName} with enhanced 3D analysis`);
+            }
+            
+            updateVisualization(view) {
+                // Update visualizations based on selected view
+                console.log(`Updating visualization to ${view} view`);
+            }
+            
+            startAnimationLoop() {
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    
+                    // Animate hero particles
+                    if (this.scenes.hero) {
+                        this.scenes.hero.particleSystem.rotation.y += 0.001;
+                        this.scenes.hero.renderer.render(this.scenes.hero.scene, this.scenes.hero.camera);
+                    }
+                    
+                    // Animate map
+                    if (this.scenes.map) {
+                        this.scenes.map.renderer.render(this.scenes.map.scene, this.scenes.map.camera);
+                    }
+                    
+                    // Animate performance visualization
+                    if (this.scenes.performance) {
+                        this.scenes.performance.camera.position.x = Math.sin(Date.now() * 0.001) * 0.5 + 3;
+                        this.scenes.performance.renderer.render(this.scenes.performance.scene, this.scenes.performance.camera);
+                    }
+                    
+                    // Animate storyline visualization
+                    if (this.scenes.storyline && this.scenes.storyline.meshes) {
+                        this.scenes.storyline.meshes.forEach((mesh, index) => {
+                            mesh.rotation.y = Date.now() * 0.001 + index * 0.5;
+                        });
+                        this.scenes.storyline.renderer.render(this.scenes.storyline.scene, this.scenes.storyline.camera);
+                    }
+                };
+                animate();
+            }
+        }
+        
+        // Initialize enhanced visualizations
+        document.addEventListener('DOMContentLoaded', () => {
+            new SECVisualizer();
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            // Resize all renderers and cameras
+            document.querySelectorAll('.threejs-container').forEach(container => {
+                const canvas = container.querySelector('canvas');
+                if (canvas) {
+                    // Update canvas size
+                    const rect = container.getBoundingClientRect();
+                    canvas.width = rect.width;
+                    canvas.height = rect.height;
+                }
+            });
+        });
+        
+        console.log('🔥 Enhanced SEC Visual Intelligence Initialized');
+    </script>
+</body>
+</html>
