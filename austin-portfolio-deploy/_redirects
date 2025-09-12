@@ -20,6 +20,27 @@
 /longhorns      /longhorns-intelligence.html    301
 /texas          /longhorns-intelligence.html    301
 
+# SPA Routing - Championship Navigation System
+/app/*                    /app.html                 200
+/site/*                   /site/:splat              200
+
+# Core championship page routes
+/live-demo                /site/live-demo.html      200
+/nil-calculator           /site/nil-calculator.html 200  
+/quantum-platform         /site/quantum-platform.html 200
+/get-started              /site/get-started.html    200
+
+# Sports-specific routes
+/mlb                      /site/index.html          200
+/nfl                      /site/index.html          200
+/cfb                      /site/index.html          200
+/college-football         /site/index.html          200
+/college-baseball         /site/index.html          200
+
+# API routes to Netlify Functions
+/api/*                    /.netlify/functions/:splat 200
+/health                   /.netlify/functions/health 200
+
 # Legacy Platform Routes
 /os     https://a4dc795e.blaze-intelligence.pages.dev/   302
 /platform  https://9fb73261.blaze-intelligence.pages.dev/ 302
