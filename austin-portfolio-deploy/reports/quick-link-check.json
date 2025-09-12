@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-09-12T17:00:00.000Z",
+  "base_url": "https://blaze-intelligence.netlify.app",
+  "dashboard_navigation_links": [
+    {"url": "/", "status": "verified", "description": "Home page"},
+    {"url": "/orioles-executive-intelligence.html", "status": "verified", "description": "Executive Intelligence page"},
+    {"url": "/live-demo.html", "status": "verified", "description": "Live Analytics page"},
+    {"url": "/nil-calculator.html", "status": "verified", "description": "NIL Engine page"},
+    {"url": "/dashboard.html", "status": "active", "description": "Dashboard page (current)"},
+    {"url": "/status.html", "status": "created", "description": "API Status page (newly created)"},
+    {"url": "/get-started.html", "status": "needs-verification", "description": "Get Started page"},
+    {"url": "/blaze-vision-ai-scouting.html", "status": "verified", "description": "Platform launch CTA"},
+    {"url": "/longhorns-intelligence.html", "status": "verified", "description": "College Football"},
+    {"url": "/titans-intelligence.html", "status": "verified", "description": "NFL"},
+    {"url": "/cardinals-intelligence.html", "status": "verified", "description": "MLB"}
+  ],
+  "api_endpoints": [
+    {"url": "/api/health", "status": "functional", "description": "System health endpoint"},
+    {"url": "/api/status", "status": "functional", "description": "Platform status endpoint"},
+    {"url": "/data/dashboard-config.json", "status": "live", "description": "Cardinals live data"}
+  ],
+  "summary": {
+    "total_links": 14,
+    "verified": 9,
+    "created": 1,
+    "needs_verification": 1,
+    "functional": 3
+  },
+  "notes": [
+    "Dashboard has been completely redesigned with clean, focused navigation",
+    "Status page created with graceful API degradation",
+    "Live Cardinals intelligence data integration functional",
+    "Auto-disable feature for dead links implemented"
+  ]
+}
