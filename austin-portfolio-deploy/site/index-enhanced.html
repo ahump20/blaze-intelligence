@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Deep South Sports Authority - Advanced Analytics Platform</title>
+    <meta name="description" content="Championship-level sports intelligence combining Texas heritage with breakthrough technology. Advanced Three.js visualizations, SEC analytics, and Perfect Game integration.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --tennessee-deep: #002244;
+            --vancouver-teal: #00B2A9;
+            --platinum: #E5E4E2;
+            --graphite: #36454F;
+            --pearl: #FAFAFA;
+            --shadow-dark: rgba(0, 34, 68, 0.2);
+            --gradient-hero: linear-gradient(135deg, #BF5700 0%, #FF7A33 100%);
+            --gradient-data: linear-gradient(135deg, #002244 0%, #00B2A9 100%);
+            --gradient-sec: linear-gradient(135deg, #8B0000 0%, #DAA520 100%);
+            --gradient-texas: linear-gradient(135deg, #BF5700 0%, #FFD700 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #000;
+            color: var(--pearl);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Three.js Canvas Backgrounds */
+        .hero-canvas, .analytics-canvas, .data-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        /* Hero Section with Advanced Three.js */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, rgba(191, 87, 0, 0.2) 0%, rgba(0, 34, 68, 0.1) 50%, #000 100%);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            padding: 0 2rem;
+            z-index: 10;
+            position: relative;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--gradient-hero);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(191, 87, 0, 0.4);
+            animation: heroFloat 3s ease-in-out infinite;
+            text-transform: uppercase;
+        }
+
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(180deg, #FFFFFF 0%, var(--cardinal-blue) 50%, var(--burnt-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(191, 87, 0, 0.5);
+            animation: titleGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(191, 87, 0, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(191, 87, 0, 0.6)); }
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            color: var(--cardinal-blue);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            text-shadow: 0 2px 10px rgba(155, 203, 235, 0.3);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(191, 87, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--burnt-orange);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 2px 10px rgba(191, 87, 0, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--pearl);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--burnt-orange);
+            text-shadow: 0 2px 10px rgba(191, 87, 0, 0.4);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--gradient-hero);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Advanced Stats Grid with 3D Effects */
+        .stats-section {
+            padding: 8rem 0;
+            position: relative;
+            background: linear-gradient(135deg, rgba(0, 34, 68, 0.1) 0%, rgba(191, 87, 0, 0.05) 100%);
+            overflow: hidden;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin: 0 auto;
+            padding: 0 2rem;
+            max-width: 1400px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.8) 0%, rgba(191, 87, 0, 0.1) 100%);
+            border: 2px solid rgba(191, 87, 0, 0.3);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(191, 87, 0, 0.4);
+            border-color: var(--burnt-orange);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-hero);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(191, 87, 0, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .stat-card:hover::after {
+            opacity: 1;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--burnt-orange);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 1rem;
+            display: block;
+            text-shadow: 0 4px 20px rgba(191, 87, 0, 0.3);
+            animation: numberPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--cardinal-blue);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .stat-description {
+            color: var(--platinum);
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* Analytics Dashboard with Three.js Integration */
+        .analytics-section {
+            padding: 10rem 0;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0, 34, 68, 0.1) 0%, rgba(0, 178, 169, 0.05) 100%);
+            overflow: hidden;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 6rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(191, 87, 0, 0.3);
+        }
+
+        .section-subtitle {
+            font-size: 1.4rem;
+            color: var(--platinum);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        /* Interactive Data Visualization */
+        .data-viz-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .viz-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 6rem;
+        }
+
+        .viz-panel {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 34, 68, 0.2) 100%);
+            border: 2px solid rgba(155, 203, 235, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            min-height: 400px;
+        }
+
+        .viz-panel h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .viz-canvas {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+        }
+
+        /* SEC & Perfect Game Integration Showcase */
+        .integration-section {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(218, 165, 32, 0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .integration-card {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.8) 0%, rgba(139, 0, 0, 0.1) 100%);
+            border: 2px solid rgba(218, 165, 32, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .integration-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(218, 165, 32, 0.3);
+        }
+
+        .integration-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-sec);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(218, 165, 32, 0.3);
+        }
+
+        .integration-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--pearl);
+            margin-bottom: 1rem;
+        }
+
+        .integration-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .integration-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(218, 165, 32, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(218, 165, 32, 0.2);
+        }
+
+        .integration-stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #DAA520;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .integration-stat-label {
+            font-size: 0.8rem;
+            color: var(--platinum);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: radial-gradient(ellipse at center, rgba(191, 87, 0, 0.15) 0%, transparent 70%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(191, 87, 0, 0.4);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .btn-primary {
+            background: var(--gradient-hero);
+            color: white;
+            box-shadow: 0 8px 30px rgba(191, 87, 0, 0.4);
+            border: 2px solid transparent;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(191, 87, 0, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--cardinal-blue);
+            border: 2px solid var(--cardinal-blue);
+            box-shadow: 0 8px 30px rgba(155, 203, 235, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(155, 203, 235, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(155, 203, 235, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 34, 68, 0.2) 100%);
+            border-top: 2px solid rgba(191, 87, 0, 0.2);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--burnt-orange);
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(191, 87, 0, 0.3);
+        }
+
+        .footer-tagline {
+            color: var(--cardinal-blue);
+            margin-bottom: 3rem;
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .footer-links a {
+            color: var(--platinum);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--burnt-orange);
+            text-shadow: 0 2px 10px rgba(191, 87, 0, 0.3);
+        }
+
+        .copyright {
+            color: var(--graphite);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(191, 87, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .stats-grid, .viz-grid, .integration-grid { 
+                grid-template-columns: 1fr; 
+                gap: 2rem;
+            }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .footer-links { flex-direction: column; gap: 1rem; }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000 0%, rgba(191, 87, 0, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+        }
+
+        .loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--burnt-orange);
+            margin-bottom: 2rem;
+            animation: loaderGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes loaderGlow {
+            0%, 100% { 
+                text-shadow: 0 0 20px rgba(191, 87, 0, 0.5),
+                           0 0 40px rgba(191, 87, 0, 0.3),
+                           0 0 60px rgba(191, 87, 0, 0.1);
+            }
+            50% { 
+                text-shadow: 0 0 30px rgba(191, 87, 0, 0.8),
+                           0 0 60px rgba(191, 87, 0, 0.5),
+                           0 0 90px rgba(191, 87, 0, 0.3);
+            }
+        }
+
+        .loader-bar {
+            width: 300px;
+            height: 6px;
+            background: rgba(191, 87, 0, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-hero);
+            animation: loaderMove 2s ease-in-out infinite;
+        }
+
+        @keyframes loaderMove {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">🔥 BLAZE INTELLIGENCE</div>
+            <div class="loader-bar"></div>
+            <p style="color: var(--cardinal-blue); margin-top: 1rem; font-weight: 300;">Initializing Deep South Sports Authority...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">🔥 BLAZE INTELLIGENCE</a>
+            <ul class="nav-links">
+                <li><a href="#analytics">Analytics</a></li>
+                <li><a href="/sec-football-enhanced.html">SEC Football</a></li>
+                <li><a href="/perfect-game-enhanced.html">Perfect Game</a></li>
+                <li><a href="#nil">NIL Intelligence</a></li>
+                <li><a href="#api">API</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <canvas id="heroCanvas" class="hero-canvas"></canvas>
+        <div class="hero-content">
+            <span class="badge">The Deep South Sports Authority</span>
+            <h1>Championship Intelligence<br>Platform</h1>
+            <p class="tagline">Where Texas Heritage Meets Breakthrough Technology</p>
+            <p class="subtitle" style="font-size: 1.25rem; max-width: 900px; margin: 0 auto 3rem; line-height: 1.6; opacity: 0.9;">
+                From Friday night lights in Texas to SEC dynasties, from Perfect Game showcases to NIL valuations – 
+                we deliver the comprehensive intelligence that separates champions from contenders.
+            </p>
+            <div class="cta-buttons">
+                <a href="#demo" class="btn btn-primary">Experience Platform</a>
+                <a href="#analytics" class="btn btn-secondary">Explore Intelligence</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Stats Grid -->
+    <section class="stats-section">
+        <canvas id="statsCanvas" class="hero-canvas"></canvas>
+        <div class="stats-grid">
+            <div class="stat-card" data-stat="texas">
+                <span class="stat-number">3,247</span>
+                <span class="stat-label">Texas HS Programs</span>
+                <p class="stat-description">Complete coverage from 6A powerhouses to 1A champions, including UIL realignment tracking and playoff predictions</p>
+            </div>
+            <div class="stat-card" data-stat="sec">
+                <span class="stat-number">16</span>
+                <span class="stat-label">SEC Teams Analyzed</span>
+                <p class="stat-description">Full conference coverage including Texas & Oklahoma integration, with $68.75M media rights per school analysis</p>
+            </div>
+            <div class="stat-card" data-stat="nil">
+                <span class="stat-number">$2.5B</span>
+                <span class="stat-label">NIL Market Value</span>
+                <p class="stat-description">Comprehensive NIL valuation platform tracking market growth from $917M to projected $2.5B+ annually</p>
+            </div>
+            <div class="stat-card" data-stat="perfect-game">
+                <span class="stat-number">15,133</span>
+                <span class="stat-label">MLB Draft Prospects</span>
+                <p class="stat-description">Perfect Game integration tracking 2,232 current MLB players and comprehensive scouting pipeline analytics</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Dashboard -->
+    <section class="analytics-section" id="analytics">
+        <canvas id="analyticsCanvas" class="analytics-canvas"></canvas>
+        <div class="data-viz-container">
+            <div class="section-header">
+                <h2 class="section-title">Advanced Intelligence Dashboard</h2>
+                <p class="section-subtitle">
+                    Revolutionary data visualization combining Three.js graphics with real-time sports intelligence.
+                    Experience championship-level analytics with stunning visual fidelity.
+                </p>
+            </div>
+            
+            <div class="viz-grid">
+                <div class="viz-panel">
+                    <h3>SEC Performance Matrix</h3>
+                    <canvas id="secVizCanvas" class="viz-canvas"></canvas>
+                </div>
+                <div class="viz-panel">
+                    <h3>Texas Pipeline Analytics</h3>
+                    <canvas id="texasVizCanvas" class="viz-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC & Perfect Game Integration -->
+    <section class="integration-section">
+        <canvas id="integrationCanvas" class="hero-canvas"></canvas>
+        <div class="integration-grid">
+            <div class="integration-card">
+                <div class="integration-icon">🏈</div>
+                <h3 class="integration-title">SEC Football Intelligence</h3>
+                <p style="color: var(--platinum); margin-bottom: 2rem; line-height: 1.6;">
+                    Complete SEC coverage with advanced analytics, coaching staff tracking, and NIL market analysis. 
+                    Features real-time performance metrics and championship predictions.
+                </p>
+                <div class="integration-stats">
+                    <div class="integration-stat">
+                        <div class="integration-stat-value">$40M</div>
+                        <div class="integration-stat-label">Texas NIL Spending</div>
+                    </div>
+                    <div class="integration-stat">
+                        <div class="integration-stat-value">13</div>
+                        <div class="integration-stat-label">Tournament Teams</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-icon">⚾</div>
+                <h3 class="integration-title">Perfect Game Integration</h3>
+                <p style="color: var(--platinum); margin-bottom: 2rem; line-height: 1.6;">
+                    Direct integration with Perfect Game's tournament system and player rankings. 
+                    DiamondKast technology enables remote scouting and real-time player evaluation.
+                </p>
+                <div class="integration-stats">
+                    <div class="integration-stat">
+                        <div class="integration-stat-value">500</div>
+                        <div class="integration-stat-label">Top Prospects</div>
+                    </div>
+                    <div class="integration-stat">
+                        <div class="integration-stat-value">2,232</div>
+                        <div class="integration-stat-label">MLB Players</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-icon">🎯</div>
+                <h3 class="integration-title">NIL Valuation Engine</h3>
+                <p style="color: var(--platinum); margin-bottom: 2rem; line-height: 1.6;">
+                    Advanced NIL market analysis with real-time valuations, collective tracking, and revenue sharing projections. 
+                    Covers all major markets and compensation structures.
+                </p>
+                <div class="integration-stats">
+                    <div class="integration-stat">
+                        <div class="integration-stat-value">$20.5M</div>
+                        <div class="integration-stat-label">Max Revenue Share</div>
+                    </div>
+                    <div class="integration-stat">
+                        <div class="integration-stat-value">81.6%</div>
+                        <div class="integration-stat-label">Collective Dominance</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-icon">📡</div>
+                <h3 class="integration-title">Streaming Intelligence</h3>
+                <p style="color: var(--platinum); margin-bottom: 2rem; line-height: 1.6;">
+                    Comprehensive media rights tracking, streaming platform analysis, and viewership metrics. 
+                    Covers SEC Network, ESPN, and emerging direct-to-consumer platforms.
+                </p>
+                <div class="integration-stats">
+                    <div class="integration-stat">
+                        <div class="integration-stat-value">$7.1B</div>
+                        <div class="integration-stat-label">SEC Network Deal</div>
+                    </div>
+                    <div class="integration-stat">
+                        <div class="integration-stat-value">$29.99</div>
+                        <div class="integration-stat-label">ESPN Direct Price</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <canvas id="ctaCanvas" class="hero-canvas"></canvas>
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Experience Championship Intelligence?</h2>
+            <p style="font-size: 1.3rem; color: var(--platinum); margin-bottom: 2rem; line-height: 1.6;">
+                Join the programs, scouts, and organizations that don't just compete – they dominate with data. 
+                Experience the Blaze Intelligence difference with our advanced analytics platform.
+            </p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary" id="demoBtn">Request Demo</a>
+                <a href="#" class="btn btn-secondary" id="trialBtn">Start Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">🔥 BLAZE INTELLIGENCE</div>
+            <p class="footer-tagline">The Deep South Sports Authority</p>
+            <div class="footer-links">
+                <a href="#about">About</a>
+                <a href="/sec-football-enhanced.html">SEC Analytics</a>
+                <a href="/perfect-game-enhanced.html">Perfect Game</a>
+                <a href="#nil">NIL Intelligence</a>
+                <a href="#api">API Documentation</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <p class="copyright">
+                © 2025 Blaze Intelligence. Championship Intelligence Platform.<br>
+                Where Texas Heritage Meets Breakthrough Technology.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Three.js Library -->
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    
+    <script>
+        // Enhanced Three.js Visualization System
+        class BlazeVisualization {
+            constructor() {
+                this.scenes = {};
+                this.renderers = {};
+                this.cameras = {};
+                this.animationIds = [];
+                this.init();
+            }
+
+            init() {
+                this.createHeroVisualization();
+                this.createStatsVisualization();
+                this.createAnalyticsVisualization();
+                this.createIntegrationVisualization();
+                this.createCTAVisualization();
+                this.createDashboardVisualizations();
+                this.startAnimationLoop();
+            }
+
+            createHeroVisualization() {
+                const canvas = document.getElementById('heroCanvas');
+                if (!canvas) return;
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x000000, 0);
+
+                // Particle System - Championship Level
+                const particleCount = 2000;
+                const particles = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const sizes = new Float32Array(particleCount);
+
+                for (let i = 0; i < particleCount; i++) {
+                    positions[i * 3] = (Math.random() - 0.5) * 100;
+                    positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+                    positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+
+                    // Blaze Intelligence colors
+                    const color = new THREE.Color();
+                    if (Math.random() < 0.6) {
+                        color.setHex(0xBF5700); // Burnt Orange
+                    } else {
+                        color.setHex(0x9BCBEB); // Cardinal Blue
+                    }
+                    colors[i * 3] = color.r;
+                    colors[i * 3 + 1] = color.g;
+                    colors[i * 3 + 2] = color.b;
+
+                    sizes[i] = Math.random() * 3 + 1;
+                }
+
+                particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+                const particleMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        time: { value: 0 }
+                    },
+                    vertexShader: `
+                        attribute float size;
+                        attribute vec3 color;
+                        varying vec3 vColor;
+                        uniform float time;
+                        
+                        void main() {
+                            vColor = color;
+                            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                            gl_PointSize = size * (300.0 / -mvPosition.z) * (1.0 + sin(time + position.x * 0.01) * 0.3);
+                            gl_Position = projectionMatrix * mvPosition;
+                        }
+                    `,
+                    fragmentShader: `
+                        varying vec3 vColor;
+                        
+                        void main() {
+                            float distance = length(gl_PointCoord - vec2(0.5));
+                            if (distance > 0.5) discard;
+                            float alpha = 1.0 - (distance * 2.0);
+                            gl_FragColor = vec4(vColor, alpha * 0.8);
+                        }
+                    `,
+                    blending: THREE.AdditiveBlending,
+                    depthTest: false,
+                    transparent: true,
+                    vertexColors: true
+                });
+
+                const particleSystem = new THREE.Points(particles, particleMaterial);
+                scene.add(particleSystem);
+
+                // Data Flow Lines
+                const lineGeometry = new THREE.BufferGeometry();
+                const linePositions = [];
+                const lineColors = [];
+
+                for (let i = 0; i < 50; i++) {
+                    const start = new THREE.Vector3(
+                        (Math.random() - 0.5) * 60,
+                        (Math.random() - 0.5) * 60,
+                        (Math.random() - 0.5) * 60
+                    );
+                    const end = new THREE.Vector3(
+                        (Math.random() - 0.5) * 60,
+                        (Math.random() - 0.5) * 60,
+                        (Math.random() - 0.5) * 60
+                    );
+
+                    linePositions.push(start.x, start.y, start.z);
+                    linePositions.push(end.x, end.y, end.z);
+
+                    const color = new THREE.Color(0xBF5700);
+                    lineColors.push(color.r, color.g, color.b);
+                    lineColors.push(color.r, color.g, color.b);
+                }
+
+                lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+                lineGeometry.setAttribute('color', new THREE.Float32BufferAttribute(lineColors, 3));
+
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.3,
+                    blending: THREE.AdditiveBlending
+                });
+
+                const dataLines = new THREE.LineSegments(lineGeometry, lineMaterial);
+                scene.add(dataLines);
+
+                camera.position.z = 50;
+
+                this.scenes.hero = { scene, camera, renderer, particleSystem, dataLines, particleMaterial };
+            }
+
+            createStatsVisualization() {
+                const canvas = document.getElementById('statsCanvas');
+                if (!canvas) return;
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x000000, 0);
+
+                // Floating Data Cubes
+                const cubes = [];
+                for (let i = 0; i < 100; i++) {
+                    const geometry = new THREE.BoxGeometry(
+                        Math.random() * 2 + 0.5,
+                        Math.random() * 2 + 0.5,
+                        Math.random() * 2 + 0.5
+                    );
+                    
+                    const material = new THREE.MeshBasicMaterial({
+                        color: Math.random() < 0.5 ? 0xBF5700 : 0x9BCBEB,
+                        transparent: true,
+                        opacity: 0.6,
+                        wireframe: Math.random() < 0.3
+                    });
+
+                    const cube = new THREE.Mesh(geometry, material);
+                    cube.position.x = (Math.random() - 0.5) * 80;
+                    cube.position.y = (Math.random() - 0.5) * 80;
+                    cube.position.z = (Math.random() - 0.5) * 80;
+                    
+                    cube.rotation.x = Math.random() * Math.PI;
+                    cube.rotation.y = Math.random() * Math.PI;
+                    
+                    cubes.push(cube);
+                    scene.add(cube);
+                }
+
+                camera.position.z = 50;
+
+                this.scenes.stats = { scene, camera, renderer, cubes };
+            }
+
+            createAnalyticsVisualization() {
+                const canvas = document.getElementById('analyticsCanvas');
+                if (!canvas) return;
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x000000, 0);
+
+                // Network Visualization
+                const nodes = [];
+                const connections = [];
+
+                // Create nodes
+                for (let i = 0; i < 30; i++) {
+                    const nodeGeometry = new THREE.SphereGeometry(Math.random() * 0.5 + 0.3, 8, 6);
+                    const nodeMaterial = new THREE.MeshBasicMaterial({
+                        color: i < 10 ? 0xBF5700 : (i < 20 ? 0x9BCBEB : 0x00B2A9),
+                        transparent: true,
+                        opacity: 0.8
+                    });
+
+                    const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                    node.position.x = (Math.random() - 0.5) * 40;
+                    node.position.y = (Math.random() - 0.5) * 40;
+                    node.position.z = (Math.random() - 0.5) * 40;
+
+                    nodes.push(node);
+                    scene.add(node);
+                }
+
+                // Create connections
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        if (Math.random() < 0.1) {
+                            const lineGeometry = new THREE.BufferGeometry();
+                            const positions = [
+                                nodes[i].position.x, nodes[i].position.y, nodes[i].position.z,
+                                nodes[j].position.x, nodes[j].position.y, nodes[j].position.z
+                            ];
+                            lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+
+                            const lineMaterial = new THREE.LineBasicMaterial({
+                                color: 0xBF5700,
+                                transparent: true,
+                                opacity: 0.2
+                            });
+
+                            const line = new THREE.Line(lineGeometry, lineMaterial);
+                            connections.push(line);
+                            scene.add(line);
+                        }
+                    }
+                }
+
+                camera.position.z = 30;
+
+                this.scenes.analytics = { scene, camera, renderer, nodes, connections };
+            }
+
+            createIntegrationVisualization() {
+                const canvas = document.getElementById('integrationCanvas');
+                if (!canvas) return;
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x000000, 0);
+
+                // SEC Conference Visualization
+                const secRing = new THREE.RingGeometry(15, 25, 16);
+                const secMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xDAA520,
+                    transparent: true,
+                    opacity: 0.3,
+                    side: THREE.DoubleSide
+                });
+
+                const secCircle = new THREE.Mesh(secRing, secMaterial);
+                scene.add(secCircle);
+
+                // Team Position Markers
+                const teamMarkers = [];
+                for (let i = 0; i < 16; i++) {
+                    const angle = (i / 16) * Math.PI * 2;
+                    const marker = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.8, 8, 6),
+                        new THREE.MeshBasicMaterial({ color: 0x8B0000, transparent: true, opacity: 0.9 })
+                    );
+                    marker.position.x = Math.cos(angle) * 20;
+                    marker.position.z = Math.sin(angle) * 20;
+                    teamMarkers.push(marker);
+                    scene.add(marker);
+                }
+
+                camera.position.y = 15;
+                camera.position.z = 30;
+                camera.lookAt(0, 0, 0);
+
+                this.scenes.integration = { scene, camera, renderer, secCircle, teamMarkers };
+            }
+
+            createCTAVisualization() {
+                const canvas = document.getElementById('ctaCanvas');
+                if (!canvas) return;
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x000000, 0);
+
+                // Energy Waves
+                const waves = [];
+                for (let i = 0; i < 5; i++) {
+                    const waveGeometry = new THREE.RingGeometry(5 + i * 10, 7 + i * 10, 32);
+                    const waveMaterial = new THREE.MeshBasicMaterial({
+                        color: 0xBF5700,
+                        transparent: true,
+                        opacity: 0.1 - i * 0.02,
+                        side: THREE.DoubleSide
+                    });
+
+                    const wave = new THREE.Mesh(waveGeometry, waveMaterial);
+                    wave.rotation.x = Math.PI / 2;
+                    waves.push(wave);
+                    scene.add(wave);
+                }
+
+                camera.position.z = 50;
+
+                this.scenes.cta = { scene, camera, renderer, waves };
+            }
+
+            createDashboardVisualizations() {
+                // SEC Viz Canvas
+                const secCanvas = document.getElementById('secVizCanvas');
+                if (secCanvas) {
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, secCanvas.offsetWidth / secCanvas.offsetHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ canvas: secCanvas, alpha: true, antialias: true });
+                    
+                    renderer.setSize(secCanvas.offsetWidth, secCanvas.offsetHeight);
+                    renderer.setClearColor(0x000000, 0);
+
+                    // 3D Bar Chart for SEC Teams
+                    const bars = [];
+                    const teamData = [42.7, 38.2, 35.1, 31.8, 29.4, 27.2, 25.6, 23.1]; // PPG data
+                    
+                    for (let i = 0; i < teamData.length; i++) {
+                        const height = teamData[i] / 10;
+                        const barGeometry = new THREE.BoxGeometry(0.8, height, 0.8);
+                        const barMaterial = new THREE.MeshBasicMaterial({
+                            color: new THREE.Color().setHSL((1 - i / teamData.length) * 0.6, 1, 0.5)
+                        });
+
+                        const bar = new THREE.Mesh(barGeometry, barMaterial);
+                        bar.position.x = i * 1.2 - teamData.length * 0.6;
+                        bar.position.y = height / 2;
+                        bars.push(bar);
+                        scene.add(bar);
+                    }
+
+                    camera.position.set(0, 3, 8);
+                    camera.lookAt(0, 2, 0);
+
+                    this.scenes.secViz = { scene, camera, renderer, bars };
+                }
+
+                // Texas Viz Canvas
+                const texasCanvas = document.getElementById('texasVizCanvas');
+                if (texasCanvas) {
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, texasCanvas.offsetWidth / texasCanvas.offsetHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ canvas: texasCanvas, alpha: true, antialias: true });
+                    
+                    renderer.setSize(texasCanvas.offsetWidth, texasCanvas.offsetHeight);
+                    renderer.setClearColor(0x000000, 0);
+
+                    // Texas State Shape Outline
+                    const texasPoints = [];
+                    // Simplified Texas outline points
+                    const outline = [
+                        [-4, 2], [-3, 3], [-2, 3.5], [-1, 3.2], [0, 3.8], [1, 3.5], [2, 3.2],
+                        [3, 2.8], [4, 2], [3.5, 1], [3, 0], [2.5, -1], [2, -2], [1, -3],
+                        [0, -3.5], [-1, -3.2], [-2, -2.8], [-3, -2], [-4, -1], [-4.2, 0], [-4, 2]
+                    ];
+
+                    for (let i = 0; i < outline.length; i++) {
+                        texasPoints.push(new THREE.Vector3(outline[i][0], outline[i][1], 0));
+                    }
+
+                    const texasGeometry = new THREE.BufferGeometry().setFromPoints(texasPoints);
+                    const texasMaterial = new THREE.LineBasicMaterial({ color: 0xBF5700, linewidth: 3 });
+                    const texasLine = new THREE.Line(texasGeometry, texasMaterial);
+                    scene.add(texasLine);
+
+                    // Add data points
+                    const dataPoints = [];
+                    for (let i = 0; i < 20; i++) {
+                        const point = new THREE.Mesh(
+                            new THREE.SphereGeometry(0.1, 6, 4),
+                            new THREE.MeshBasicMaterial({ 
+                                color: Math.random() < 0.5 ? 0xBF5700 : 0x9BCBEB,
+                                transparent: true,
+                                opacity: 0.8
+                            })
+                        );
+                        point.position.x = (Math.random() - 0.5) * 6;
+                        point.position.y = (Math.random() - 0.5) * 6;
+                        dataPoints.push(point);
+                        scene.add(point);
+                    }
+
+                    camera.position.z = 8;
+
+                    this.scenes.texasViz = { scene, camera, renderer, texasLine, dataPoints };
+                }
+            }
+
+            startAnimationLoop() {
+                const animate = () => {
+                    const time = Date.now() * 0.001;
+
+                    // Animate Hero
+                    if (this.scenes.hero) {
+                        const { scene, camera, renderer, particleSystem, dataLines, particleMaterial } = this.scenes.hero;
+                        
+                        particleMaterial.uniforms.time.value = time;
+                        particleSystem.rotation.y += 0.001;
+                        dataLines.rotation.x += 0.002;
+                        dataLines.rotation.y += 0.001;
+                        
+                        renderer.render(scene, camera);
+                    }
+
+                    // Animate Stats
+                    if (this.scenes.stats) {
+                        const { scene, camera, renderer, cubes } = this.scenes.stats;
+                        
+                        cubes.forEach((cube, i) => {
+                            cube.rotation.x += 0.01 + i * 0.0001;
+                            cube.rotation.y += 0.008 + i * 0.0001;
+                            cube.position.y += Math.sin(time + i) * 0.01;
+                        });
+                        
+                        renderer.render(scene, camera);
+                    }
+
+                    // Animate Analytics
+                    if (this.scenes.analytics) {
+                        const { scene, camera, renderer, nodes } = this.scenes.analytics;
+                        
+                        nodes.forEach((node, i) => {
+                            node.position.y += Math.sin(time * 2 + i) * 0.005;
+                            node.rotation.x += 0.005;
+                            node.rotation.y += 0.003;
+                        });
+                        
+                        renderer.render(scene, camera);
+                    }
+
+                    // Animate Integration
+                    if (this.scenes.integration) {
+                        const { scene, camera, renderer, secCircle, teamMarkers } = this.scenes.integration;
+                        
+                        secCircle.rotation.z += 0.002;
+                        teamMarkers.forEach((marker, i) => {
+                            marker.position.y = Math.sin(time * 2 + i * 0.5) * 0.5;
+                            marker.rotation.y += 0.01;
+                        });
+                        
+                        renderer.render(scene, camera);
+                    }
+
+                    // Animate CTA
+                    if (this.scenes.cta) {
+                        const { scene, camera, renderer, waves } = this.scenes.cta;
+                        
+                        waves.forEach((wave, i) => {
+                            wave.scale.x = wave.scale.z = 1 + Math.sin(time * 2 + i * 0.5) * 0.1;
+                            wave.material.opacity = (0.1 - i * 0.02) * (1 + Math.sin(time * 3 + i) * 0.5);
+                        });
+                        
+                        renderer.render(scene, camera);
+                    }
+
+                    // Animate Dashboard Visualizations
+                    if (this.scenes.secViz) {
+                        const { scene, camera, renderer, bars } = this.scenes.secViz;
+                        
+                        bars.forEach((bar, i) => {
+                            bar.rotation.y += 0.01;
+                            bar.scale.y = 1 + Math.sin(time * 2 + i * 0.3) * 0.1;
+                        });
+                        
+                        renderer.render(scene, camera);
+                    }
+
+                    if (this.scenes.texasViz) {
+                        const { scene, camera, renderer, dataPoints } = this.scenes.texasViz;
+                        
+                        dataPoints.forEach((point, i) => {
+                            point.position.z = Math.sin(time * 2 + i * 0.2) * 0.5;
+                            point.material.opacity = 0.8 + Math.sin(time * 3 + i) * 0.2;
+                        });
+                        
+                        renderer.render(scene, camera);
+                    }
+
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            }
+
+            handleResize() {
+                Object.values(this.scenes).forEach(({ camera, renderer }) => {
+                    if (camera && renderer) {
+                        camera.aspect = window.innerWidth / window.innerHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(window.innerWidth, window.innerHeight);
+                    }
+                });
+            }
+        }
+
+        // Initialize System
+        let blazeViz;
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('fade-out');
+                blazeViz = new BlazeVisualization();
+            }, 2000);
+        });
+
+        window.addEventListener('resize', () => {
+            if (blazeViz) blazeViz.handleResize();
+        });
+
+        // Enhanced Stats Animation
+        function animateValue(element, start, end, duration, suffix = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentValue = Math.floor(progress * (end - start) + start);
+                
+                if (suffix === '%') {
+                    element.textContent = currentValue.toFixed(1) + '%';
+                } else if (suffix === 'ms') {
+                    element.textContent = currentValue + 'ms';
+                } else if (suffix === 'B') {
+                    element.textContent = '$' + (currentValue / 1000).toFixed(1) + 'B';
+                } else if (currentValue >= 1000) {
+                    element.textContent = currentValue.toLocaleString() + suffix;
+                } else {
+                    element.textContent = currentValue + suffix;
+                }
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Intersection Observer for Stats
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const statNumber = entry.target.querySelector('.stat-number');
+                    const statType = entry.target.getAttribute('data-stat');
+                    
+                    switch(statType) {
+                        case 'texas':
+                            animateValue(statNumber, 0, 3247, 2500);
+                            break;
+                        case 'sec':
+                            animateValue(statNumber, 0, 16, 1500);
+                            break;
+                        case 'nil':
+                            animateValue(statNumber, 0, 2500, 3000, 'B');
+                            break;
+                        case 'perfect-game':
+                            animateValue(statNumber, 0, 15133, 2800);
+                            break;
+                    }
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.stat-card').forEach((card) => {
+            observer.observe(card);
+        });
+
+        // Demo Button Handlers
+        document.getElementById('demoBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert(`🚀 Championship Platform Demo Request
+
+Thanks for your interest in Blaze Intelligence!
+
+Contact Austin Humphrey:
+📧 ahump20@outlook.com  
+📱 (210) 273-5538
+
+Your personalized demo will showcase:
+• Advanced Three.js visualizations
+• SEC football & Perfect Game integration  
+• NIL valuation intelligence
+• Real-time analytics dashboard
+
+We'll schedule your demo within 24 hours.`);
+        });
+
+        document.getElementById('trialBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert(`🔥 Free Trial Access
+
+Start your championship intelligence journey:
+
+✅ 14-day full platform access
+✅ SEC analytics & Perfect Game data
+✅ NIL valuation tools  
+✅ Advanced visualizations
+✅ Expert onboarding session
+
+Contact: ahump20@outlook.com
+Ready to dominate with data!`);
+        });
+
+        console.log('🔥 Blaze Intelligence - Championship Intelligence Platform');
+        console.log('Advanced Three.js Visualizations Loaded Successfully');
+        console.log('Where Texas Heritage Meets Breakthrough Technology');
+    </script>
+</body>
+</html>

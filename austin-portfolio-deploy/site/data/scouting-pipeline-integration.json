@@ -1,0 +1,328 @@
+{
+  "lastUpdated": "2025-01-12T10:00:00Z",
+  "version": "1.0",
+  "metadata": {
+    "source": "Blaze Intelligence Deep Research Initiative",
+    "coverage": "SEC Football & Baseball, Perfect Game, Texas/Deep South Athletics",
+    "scope": "Youth through Professional Pipeline Analysis"
+  },
+  "nilMarket": {
+    "totalValue": 2500000000,
+    "growthProjection": {
+      "2021-22": 917000000,
+      "2024-25": 1670000000,
+      "2025-26": 2500000000
+    },
+    "collectiveDominance": 81.6,
+    "revenueSharing": {
+      "maxPerSchool": 20500000,
+      "startDate": "2025-26"
+    },
+    "topEarners": [
+      {
+        "name": "Bryce Underwood",
+        "position": "QB",
+        "school": "Michigan",
+        "value": 10500000,
+        "sport": "football"
+      },
+      {
+        "name": "Carson Beck", 
+        "position": "QB",
+        "school": "Georgia",
+        "valueRange": [3000000, 4000000],
+        "sport": "football"
+      },
+      {
+        "name": "Jeremiah Smith",
+        "position": "WR", 
+        "school": "Ohio State",
+        "value": 2500000,
+        "sport": "football"
+      }
+    ],
+    "secNilSpending": {
+      "texas": {
+        "amount": 40000000,
+        "rank": 1,
+        "notes": "Record-breaking NIL spending in football"
+      },
+      "texasTech": {
+        "investment": 10000000,
+        "transferClassRank": 2,
+        "notes": "Major NIL investment yielding top transfer class"
+      }
+    }
+  },
+  "secCoverage": {
+    "mediaRights": {
+      "totalDeal": 7100000000,
+      "perSchoolAnnual": 68750000,
+      "network": "SEC Network"
+    },
+    "footballPrograms": [
+      {
+        "school": "Texas",
+        "conference": "SEC",
+        "nilSpending": 40000000,
+        "rank": 1,
+        "keyMetrics": {
+          "recruitingRank": 3,
+          "transferPortalActivity": "High",
+          "facilityRating": "Elite"
+        }
+      },
+      {
+        "school": "Alabama", 
+        "conference": "SEC",
+        "nationalTitles": 18,
+        "winRate": 0.93,
+        "coachingStaff": {
+          "headCoach": "Kalen DeBoer",
+          "experience": "Elite",
+          "recruitingStrength": "National"
+        }
+      },
+      {
+        "school": "Georgia",
+        "conference": "SEC", 
+        "recruitingPipeline": "Elite",
+        "nilActivity": "High",
+        "keyPlayers": ["Carson Beck"]
+      },
+      {
+        "school": "LSU",
+        "conference": "SEC",
+        "baseballDominance": true,
+        "baseballTransfers": 9,
+        "baseballTop100Transfers": "Baseball America Top 100"
+      }
+    ],
+    "baseballPrograms": [
+      {
+        "school": "LSU",
+        "conference": "SEC",
+        "recruitingRank": 1,
+        "transferPortalDominance": {
+          "top100Transfers": 9,
+          "source": "Baseball America"
+        },
+        "ncaaTournamentProjection": "Lock"
+      },
+      {
+        "school": "Texas A&M",
+        "conference": "SEC",
+        "historicalStrength": "High",
+        "facilityRating": "Elite"
+      }
+    ],
+    "tournamentProjections": {
+      "baseball": {
+        "expectedTeams": 13,
+        "note": "Unprecedented SEC depth in baseball"
+      }
+    }
+  },
+  "perfectGameIntegration": {
+    "metrics": {
+      "currentMlbPlayers": 2232,
+      "mlbDraftSelections": 15133,
+      "activeProspects": 500
+    },
+    "technology": {
+      "diamondKast": {
+        "capability": "Remote college scouting",
+        "range": "Hundreds of miles",
+        "impact": "Revolutionary tournament coverage"
+      },
+      "liveTracking": {
+        "feature": "Pitch-by-pitch coverage",
+        "benefit": "Real-time college recruitment decisions"
+      }
+    },
+    "rankings": {
+      "class2025": {
+        "totalRanked": 500,
+        "impactLevel": "College recruitment decisions",
+        "updateFrequency": "Continuous"
+      }
+    },
+    "tournaments": {
+      "coverage": "National",
+      "scoutingIntegration": "DiamondKast enabled",
+      "collegeAccess": "Remote evaluation capability"
+    }
+  },
+  "texasDeepSouthPipeline": {
+    "youthLevel": {
+      "selectBaseball": {
+        "organizations": ["Perfect Game", "USSSA", "Triple Crown"],
+        "keyPrograms": ["Texas Twelve", "Canes Baseball", "Houston Heat"],
+        "ageRanges": [6, 14],
+        "developmentPath": "Select -> High School -> Perfect Game -> College"
+      },
+      "youthFootball": {
+        "organizations": ["Pop Warner", "AYF", "Little Scholars"],
+        "progressionPath": "Youth -> Middle School -> High School -> College"
+      }
+    },
+    "highSchoolLevel": {
+      "texas": {
+        "uilClassifications": ["6A", "5A", "4A", "3A", "2A", "1A"],
+        "realignment": {
+          "cycle": "2024-2026",
+          "schoolsDropping": 17,
+          "direction": "6A to 5A"
+        },
+        "powerPrograms": {
+          "football": ["Allen Eagles", "Southlake Carroll", "North Shore", "Duncanville", "Katy"],
+          "baseball": ["Tomball", "Grapevine", "Pearland"]
+        },
+        "coachingOrganization": {
+          "thsbca": {
+            "membership": 3700,
+            "influence": "High",
+            "certification": "Required"
+          }
+        }
+      },
+      "deepSouth": {
+        "alabama": ["Hoover", "Thompson", "Auburn"],
+        "louisiana": ["Archbishop Rummel", "Catholic-Baton Rouge"],
+        "mississippi": ["Brandon", "South Panola"],
+        "georgia": ["Colquitt County", "Lowndes"]
+      }
+    },
+    "collegeLevel": {
+      "big12": {
+        "competition": "Increasingly competitive in Texas recruiting",
+        "keyPrograms": ["Texas Tech", "Baylor", "TCU", "Texas"],
+        "nilImpact": "High"
+      },
+      "sec": {
+        "programs": 16,
+        "texasPresence": ["Texas", "Texas A&M"],
+        "recruitingFootprint": "National with regional strength"
+      },
+      "jucoPath": {
+        "importance": "Critical development pathway",
+        "transferPortal": "Increasing significance"
+      }
+    },
+    "professionalLevel": {
+      "mlbDraft": {
+        "deepSouthRepresentation": "High",
+        "perfectGameInfluence": "Critical scouting pathway",
+        "collegePipeline": "SEC dominant"
+      },
+      "nflDraft": {
+        "secDominance": "Continued strength",
+        "texasProduction": "Elite level",
+        "combineTesting": "Critical evaluation phase"
+      }
+    }
+  },
+  "streamingIntelligence": {
+    "secNetwork": {
+      "totalValue": 7100000000,
+      "perSchoolRevenue": 68750000,
+      "coverage": "Comprehensive SEC sports"
+    },
+    "espn": {
+      "directToConsumer": {
+        "price": 29.99,
+        "currency": "USD",
+        "frequency": "monthly"
+      }
+    },
+    "bundleOpportunities": {
+      "espnFoxPackage": {
+        "price": 39.99,
+        "currency": "USD", 
+        "frequency": "monthly"
+      }
+    },
+    "bigTenComparison": {
+      "totalDeal": 7000000000,
+      "partners": ["Fox", "CBS", "NBC"],
+      "espnExclusion": true,
+      "impact": "Reshaping media landscape"
+    }
+  },
+  "scoutingPipelines": {
+    "regionalCoverage": {
+      "texas": {
+        "regions": ["DFW", "Houston", "San Antonio", "Austin", "East Texas", "West Texas"],
+        "scoutDensity": "High",
+        "specialization": ["Football", "Baseball"]
+      },
+      "sec": {
+        "states": ["Alabama", "Georgia", "Florida", "Louisiana", "Mississippi", "Tennessee"],
+        "focus": ["College recruitment", "Professional scouting"]
+      }
+    },
+    "evaluationCriteria": {
+      "athletics": {
+        "measurables": ["Speed", "Strength", "Agility"],
+        "gamePerformance": ["Stats", "Competition level", "Clutch performance"],
+        "projectability": ["Growth potential", "Skill development", "Injury history"]
+      },
+      "character": {
+        "leadership": "Team captain experience",
+        "workEthic": "Training dedication",
+        "coachability": "Instruction reception",
+        "academics": "GPA and standardized test scores"
+      }
+    },
+    "technology": {
+      "videoAnalysis": "Automated highlight detection",
+      "dataCollection": "Real-time performance metrics",
+      "mlIntegration": "Pattern recognition for talent identification"
+    }
+  },
+  "competitiveIntelligence": {
+    "platforms": {
+      "rivals": {
+        "strength": "National recruiting coverage",
+        "weakness": "Limited youth integration"
+      },
+      "247sports": {
+        "strength": "College focus",
+        "weakness": "Shallow regional expertise"
+      },
+      "maxpreps": {
+        "strength": "High school stats",
+        "weakness": "Automated vs expert analysis"
+      }
+    },
+    "blazeAdvantages": {
+      "comprehensiveScope": "Youth through professional",
+      "regionalExpertise": "Deep South specialization", 
+      "technologyIntegration": "AI-enhanced scouting",
+      "nilIntelligence": "Market valuation expertise"
+    }
+  },
+  "integrationOpportunities": {
+    "apiEndpoints": [
+      "/api/nil-valuations",
+      "/api/sec-analytics", 
+      "/api/perfect-game-integration",
+      "/api/texas-pipeline",
+      "/api/streaming-data"
+    ],
+    "dashboardModules": [
+      "NIL Market Intelligence",
+      "SEC Performance Analytics",
+      "Perfect Game Tournament Tracker",
+      "Texas High School Rankings",
+      "Deep South Recruitment Pipeline"
+    ],
+    "alertSystems": [
+      "NIL Deal Notifications",
+      "Transfer Portal Movements", 
+      "Perfect Game Event Results",
+      "Commitment Tracking",
+      "Injury Reports"
+    ]
+  }
+}
