@@ -443,15 +443,15 @@
                     particles: []
                 };
 
-                // Character and horse mechanics
+                // Character and spacecraft mechanics
                 this.playerCharacter = null;
-                this.horse = null;
+                this.spacecraft = null;
                 this.isMounted = false;
                 this.isWalking = false;
                 this.walkAnimation = 0;
                 this.walkCycle = 0;
                 this.lastFootstepTime = 0;
-                this.horsePosition = new THREE.Vector3();
+                this.spacecraftPosition = new THREE.Vector3();
 
                 // Audio and storytelling system
                 this.audioContext = null;
@@ -566,7 +566,8 @@
                 
                 // Create player character and horse
                 this.createPlayerCharacter();
-                this.createHorse();
+                this.createSpacecraft();
+                this.createCosmicRadiationField();
             }
 
             setupLighting() {
@@ -957,6 +958,9 @@
             startCosmicSounds() {
                 if (!this.audioContext || !this.audioEnabled) return;
                 
+                // Start cosmic ambience immediately
+                this.playCosmicAmbience();
+                
                 // Start radio telescope signals
                 if (this.audioSources.radioTelescope) {
                     this.audioSources.radioTelescope.source.start();
@@ -967,10 +971,23 @@
                     this.audioSources.cosmicBackground.source.start();
                 }
                 
-                // Schedule random alien transmissions
+                // Schedule random alien transmissions and cosmic ambience
                 this.scheduleAlienTransmissions();
+                this.scheduleCosmicAmbience();
                 
                 console.log('🎵 Cosmic radio telescope ambience activated');
+            }
+
+            scheduleCosmicAmbience() {
+                if (!this.audioContext || !this.audioEnabled) return;
+                
+                // Play cosmic ambience every 8-12 seconds for continuous atmosphere
+                const nextAmbienceDelay = 8000 + Math.random() * 4000;
+                
+                setTimeout(() => {
+                    this.playCosmicAmbience();
+                    this.scheduleCosmicAmbience(); // Recursive scheduling
+                }, nextAmbienceDelay);
             }
 
             scheduleAlienTransmissions() {
@@ -1130,6 +1147,155 @@
                 beats.forEach(delay => {
                     setTimeout(() => this.playHoofbeatSound(), delay);
                 });
+            }
+
+            playThrusterAudio() {
+                if (!this.audioContext || !this.audioEnabled) return;
+                
+                // Generate quantum thruster activation sound
+                const thrusterGain = this.audioContext.createGain();
+                const osc = this.audioContext.createOscillator();
+                const osc2 = this.audioContext.createOscillator();
+                
+                osc.connect(thrusterGain);
+                osc2.connect(thrusterGain);
+                thrusterGain.connect(this.audioContext.destination);
+                
+                osc.type = 'sawtooth';
+                osc2.type = 'sine';
+                const currentTime = this.audioContext.currentTime;
+                
+                // Low frequency thruster hum
+                osc.frequency.setValueAtTime(80, currentTime);
+                osc.frequency.exponentialRampToValueAtTime(120, currentTime + 2);
+                
+                // High frequency quantum resonance
+                osc2.frequency.setValueAtTime(400, currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(600, currentTime + 2);
+                
+                thrusterGain.gain.setValueAtTime(0.1, currentTime);
+                thrusterGain.gain.linearRampToValueAtTime(0.25, currentTime + 0.5);
+                thrusterGain.gain.linearRampToValueAtTime(0.15, currentTime + 2);
+                
+                osc.start(currentTime);
+                osc2.start(currentTime);
+                osc.stop(currentTime + 2);
+                osc2.stop(currentTime + 2);
+            }
+
+            playThrusterHum() {
+                if (!this.audioContext || !this.audioEnabled) return;
+                
+                // Generate brief thruster pulse sound
+                const humGain = this.audioContext.createGain();
+                const osc = this.audioContext.createOscillator();
+                
+                osc.connect(humGain);
+                humGain.connect(this.audioContext.destination);
+                
+                osc.type = 'triangle';
+                const currentTime = this.audioContext.currentTime;
+                
+                osc.frequency.setValueAtTime(150, currentTime);
+                osc.frequency.linearRampToValueAtTime(180, currentTime + 0.2);
+                
+                humGain.gain.setValueAtTime(0.2, currentTime);
+                humGain.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.2);
+                
+                osc.start(currentTime);
+                osc.stop(currentTime + 0.2);
+            }
+
+            playThrusterSequence() {
+                // Play a sequence of thruster sounds for spacecraft hyperjump approach
+                const thrusterBeats = [0, 200, 400, 800, 1200, 1600, 2000];
+                thrusterBeats.forEach(delay => {
+                    setTimeout(() => this.playThrusterHum(), delay);
+                });
+                
+                // Play the main thruster activation after the sequence
+                setTimeout(() => this.playThrusterAudio(), 2200);
+            }
+
+            playRadioTelescopeSignal() {
+                if (!this.audioContext || !this.audioEnabled) return;
+                
+                // Generate radio telescope signal - mysterious cosmic transmission
+                const radioGain = this.audioContext.createGain();
+                const osc1 = this.audioContext.createOscillator();
+                const osc2 = this.audioContext.createOscillator();
+                const osc3 = this.audioContext.createOscillator();
+                
+                osc1.connect(radioGain);
+                osc2.connect(radioGain);
+                osc3.connect(radioGain);
+                radioGain.connect(this.audioContext.destination);
+                
+                const currentTime = this.audioContext.currentTime;
+                
+                // Deep space static base
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(55, currentTime);
+                osc1.frequency.linearRampToValueAtTime(45, currentTime + 3);
+                
+                // Pulsar beacon signal
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(1400, currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(1200, currentTime + 0.1);
+                
+                // Alien harmonic resonance
+                osc3.type = 'triangle';
+                osc3.frequency.setValueAtTime(280, currentTime);
+                osc3.frequency.linearRampToValueAtTime(320, currentTime + 2);
+                
+                radioGain.gain.setValueAtTime(0.05, currentTime);
+                radioGain.gain.linearRampToValueAtTime(0.15, currentTime + 0.5);
+                radioGain.gain.linearRampToValueAtTime(0.08, currentTime + 2);
+                radioGain.gain.exponentialRampToValueAtTime(0.001, currentTime + 3);
+                
+                osc1.start(currentTime);
+                osc2.start(currentTime);
+                osc3.start(currentTime + 0.3); // Delayed harmonic entry
+                
+                osc1.stop(currentTime + 3);
+                osc2.stop(currentTime + 0.15); // Brief pulsar burst
+                osc3.stop(currentTime + 3);
+                
+                console.log('📡 Radio telescope detecting deep space transmission...');
+            }
+
+            playCosmicAmbience() {
+                if (!this.audioContext || !this.audioEnabled) return;
+                
+                // Generate continuous cosmic background ambience
+                const ambienceGain = this.audioContext.createGain();
+                const osc = this.audioContext.createOscillator();
+                const filter = this.audioContext.createBiquadFilter();
+                
+                osc.connect(filter);
+                filter.connect(ambienceGain);
+                ambienceGain.connect(this.audioContext.destination);
+                
+                const currentTime = this.audioContext.currentTime;
+                
+                // Deep space humming
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(40, currentTime);
+                
+                // Low-pass filter for cosmic atmosphere
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(200, currentTime);
+                filter.Q.setValueAtTime(0.5, currentTime);
+                
+                ambienceGain.gain.setValueAtTime(0.08, currentTime);
+                
+                osc.start(currentTime);
+                
+                // Auto-stop after 5 seconds to prevent audio buildup
+                setTimeout(() => {
+                    ambienceGain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 1);
+                    osc.stop(this.audioContext.currentTime + 1.1);
+                }, 5000);
             }
 
             generateTerrain(chunkX, chunkZ) {
@@ -2348,207 +2514,263 @@
                 this.isRiding = false;
             }
 
-            createHorse() {
-                this.horse = new THREE.Group();
+            createSpacecraft() {
+                this.spacecraft = new THREE.Group();
                 
-                // Horse body
-                const bodyGeometry = new THREE.CylinderGeometry(1.5, 2, 6, 12);
-                const horseMaterial = new THREE.MeshLambertMaterial({ 
-                    color: 0x8B4513 // Chestnut brown
+                // Spacecraft Main Hull
+                const hullGeometry = new THREE.CylinderGeometry(1.8, 2.2, 8, 16);
+                const hullMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.light, // Pristine spacecraft white
+                    emissive: this.colors.primary,
+                    emissiveIntensity: 0.1
                 });
-                const body = new THREE.Mesh(bodyGeometry, horseMaterial);
-                body.position.y = 3;
-                body.rotation.z = Math.PI / 2;
-                body.castShadow = true;
-                this.horse.add(body);
+                const hull = new THREE.Mesh(hullGeometry, hullMaterial);
+                hull.position.y = 4;
+                hull.rotation.z = Math.PI / 2;
+                hull.castShadow = true;
+                this.spacecraft.add(hull);
                 
-                // Horse head
-                const headGeometry = new THREE.BoxGeometry(1.2, 1.5, 2.5);
-                const head = new THREE.Mesh(headGeometry, horseMaterial);
-                head.position.set(3, 4, 0);
-                head.castShadow = true;
-                this.horse.add(head);
+                // Spacecraft Cockpit
+                const cockpitGeometry = new THREE.SphereGeometry(1.5, 12, 8);
+                const cockpitMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.secondary,
+                    transparent: true,
+                    opacity: 0.4,
+                    emissive: this.colors.accent,
+                    emissiveIntensity: 0.2
+                });
+                const cockpit = new THREE.Mesh(cockpitGeometry, cockpitMaterial);
+                cockpit.position.set(3.5, 4.5, 0);
+                cockpit.castShadow = true;
+                this.spacecraft.add(cockpit);
                 
-                // Horse muzzle
-                const muzzleGeometry = new THREE.BoxGeometry(0.8, 0.8, 1.2);
-                const muzzle = new THREE.Mesh(muzzleGeometry, horseMaterial);
-                muzzle.position.set(4, 3.8, 0);
-                muzzle.castShadow = true;
-                this.horse.add(muzzle);
+                // Navigation Sensor Array
+                const sensorGeometry = new THREE.ConeGeometry(0.6, 1.5, 8);
+                const sensorMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.accent,
+                    emissive: this.colors.accent,
+                    emissiveIntensity: 0.4
+                });
+                const sensor = new THREE.Mesh(sensorGeometry, sensorMaterial);
+                sensor.position.set(5, 4.2, 0);
+                sensor.rotation.x = Math.PI / 2;
+                sensor.castShadow = true;
+                this.spacecraft.add(sensor);
                 
-                // Horse ears
-                const earGeometry = new THREE.ConeGeometry(0.2, 0.8, 6);
-                const leftEar = new THREE.Mesh(earGeometry, horseMaterial);
-                leftEar.position.set(3, 5, -0.5);
-                leftEar.castShadow = true;
-                this.horse.add(leftEar);
-                
-                const rightEar = new THREE.Mesh(earGeometry, horseMaterial);
-                rightEar.position.set(3, 5, 0.5);
-                rightEar.castShadow = true;
-                this.horse.add(rightEar);
-                
-                // Horse legs
-                const legGeometry = new THREE.CylinderGeometry(0.3, 0.4, 3, 8);
-                const legMaterial = new THREE.MeshLambertMaterial({ 
-                    color: 0x654321 // Darker brown for legs
+                // Quantum Thrusters (main propulsion)
+                const thrusterGeometry = new THREE.CylinderGeometry(0.8, 1.2, 2.5, 12);
+                const thrusterMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.secondary,
+                    emissive: this.colors.primary,
+                    emissiveIntensity: 0.3
                 });
                 
-                // Front legs
-                const frontLeftLeg = new THREE.Mesh(legGeometry, legMaterial);
-                frontLeftLeg.position.set(2, 1.5, -1.2);
-                frontLeftLeg.castShadow = true;
-                this.horse.add(frontLeftLeg);
+                // Port thruster
+                const portThruster = new THREE.Mesh(thrusterGeometry, thrusterMaterial);
+                portThruster.position.set(-2.5, 4, -2);
+                portThruster.rotation.z = Math.PI / 2;
+                portThruster.castShadow = true;
+                this.spacecraft.add(portThruster);
                 
-                const frontRightLeg = new THREE.Mesh(legGeometry, legMaterial);
-                frontRightLeg.position.set(2, 1.5, 1.2);
-                frontRightLeg.castShadow = true;
-                this.horse.add(frontRightLeg);
+                const starboardThruster = new THREE.Mesh(thrusterGeometry, thrusterMaterial);
+                starboardThruster.position.set(-2.5, 4, 2);
+                starboardThruster.rotation.z = Math.PI / 2;
+                starboardThruster.castShadow = true;
+                this.spacecraft.add(starboardThruster);
                 
-                // Back legs
-                const backLeftLeg = new THREE.Mesh(legGeometry, legMaterial);
-                backLeftLeg.position.set(-2, 1.5, -1.2);
-                backLeftLeg.castShadow = true;
-                this.horse.add(backLeftLeg);
-                
-                const backRightLeg = new THREE.Mesh(legGeometry, legMaterial);
-                backRightLeg.position.set(-2, 1.5, 1.2);
-                backRightLeg.castShadow = true;
-                this.horse.add(backRightLeg);
-                
-                // Horse tail
-                const tailGeometry = new THREE.CylinderGeometry(0.1, 0.3, 2, 6);
-                const tailMaterial = new THREE.MeshLambertMaterial({ 
-                    color: 0x2F1B14 // Dark brown
+                // Landing Stabilizers
+                const stabilizerGeometry = new THREE.BoxGeometry(0.4, 3, 0.4);
+                const stabilizerMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.graphite,
+                    emissive: this.colors.accent,
+                    emissiveIntensity: 0.1
                 });
-                const tail = new THREE.Mesh(tailGeometry, tailMaterial);
-                tail.position.set(-3.5, 3, 0);
-                tail.rotation.x = 0.5;
-                tail.castShadow = true;
-                this.horse.add(tail);
                 
-                // Horse mane
-                for (let i = 0; i < 5; i++) {
-                    const maneSegment = new THREE.CylinderGeometry(0.1, 0.2, 1, 6);
-                    const maneHair = new THREE.Mesh(maneSegment, tailMaterial);
-                    maneHair.position.set(2.5 - i * 0.8, 5 - i * 0.2, 0);
-                    maneHair.rotation.x = 0.3;
-                    maneHair.castShadow = true;
-                    this.horse.add(maneHair);
+                // Four landing stabilizers
+                const positions = [
+                    { x: 2, y: 2, z: -1.8 },
+                    { x: 2, y: 2, z: 1.8 },
+                    { x: -2, y: 2, z: -1.8 },
+                    { x: -2, y: 2, z: 1.8 }
+                ];
+                
+                positions.forEach(pos => {
+                    const stabilizer = new THREE.Mesh(stabilizerGeometry, stabilizerMaterial);
+                    stabilizer.position.set(pos.x, pos.y, pos.z);
+                    stabilizer.castShadow = true;
+                    this.spacecraft.add(stabilizer);
+                });
+                
+                // Plasma Energy Core (visible through transparent hull sections)
+                const coreGeometry = new THREE.SphereGeometry(0.8, 12, 8);
+                const coreMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.accent,
+                    emissive: this.colors.accent,
+                    emissiveIntensity: 0.8,
+                    transparent: true,
+                    opacity: 0.7
+                });
+                const energyCore = new THREE.Mesh(coreGeometry, coreMaterial);
+                energyCore.position.set(0, 4, 0);
+                energyCore.castShadow = true;
+                this.spacecraft.add(energyCore);
+                
+                // Wing Solar Arrays
+                for (let i = 0; i < 3; i++) {
+                    const wingGeometry = new THREE.BoxGeometry(0.1, 2.5, 1.2);
+                    const wingMaterial = new THREE.MeshLambertMaterial({ 
+                        color: this.colors.secondary,
+                        emissive: this.colors.primary,
+                        emissiveIntensity: 0.2,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
+                    leftWing.position.set(-0.5 + i * 1, 5.5 - i * 0.3, -3);
+                    leftWing.rotation.x = 0.2;
+                    leftWing.castShadow = true;
+                    this.spacecraft.add(leftWing);
+                    
+                    const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
+                    rightWing.position.set(-0.5 + i * 1, 5.5 - i * 0.3, 3);
+                    rightWing.rotation.x = -0.2;
+                    rightWing.castShadow = true;
+                    this.spacecraft.add(rightWing);
                 }
                 
-                // Saddle
-                const saddleGeometry = new THREE.BoxGeometry(1.8, 0.3, 2);
-                const saddleMaterial = new THREE.MeshLambertMaterial({ 
-                    color: 0x8B4513 // Leather brown
+                // Command Bridge
+                const bridgeGeometry = new THREE.BoxGeometry(2.5, 0.6, 3);
+                const bridgeMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.primary,
+                    emissive: this.colors.primary,
+                    emissiveIntensity: 0.2
                 });
-                const saddle = new THREE.Mesh(saddleGeometry, saddleMaterial);
-                saddle.position.set(0, 4.5, 0);
-                saddle.castShadow = true;
-                this.horse.add(saddle);
+                const bridge = new THREE.Mesh(bridgeGeometry, bridgeMaterial);
+                bridge.position.set(1, 5.5, 0);
+                bridge.castShadow = true;
+                this.spacecraft.add(bridge);
                 
-                // Reins
-                const reinGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.8, 6);
-                const reinMaterial = new THREE.MeshLambertMaterial({ 
-                    color: 0x654321 
+                // Communication Arrays
+                const commGeometry = new THREE.CylinderGeometry(0.08, 0.08, 1.2, 8);
+                const commMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.accent,
+                    emissive: this.colors.accent,
+                    emissiveIntensity: 0.5
                 });
-                const leftRein = new THREE.Mesh(reinGeometry, reinMaterial);
-                leftRein.position.set(3.5, 4.2, -0.3);
-                leftRein.rotation.z = 0.5;
-                leftRein.castShadow = true;
-                this.horse.add(leftRein);
+                const leftComm = new THREE.Mesh(commGeometry, commMaterial);
+                leftComm.position.set(1.5, 6.2, -0.8);
+                leftComm.rotation.z = 0.3;
+                leftComm.castShadow = true;
+                this.spacecraft.add(leftComm);
                 
-                const rightRein = new THREE.Mesh(reinGeometry, reinMaterial);
-                rightRein.position.set(3.5, 4.2, 0.3);
-                rightRein.rotation.z = -0.5;
-                rightRein.castShadow = true;
-                this.horse.add(rightRein);
+                const rightComm = new THREE.Mesh(commGeometry, commMaterial);
+                rightComm.position.set(1.5, 6.2, 0.8);
+                rightComm.rotation.z = -0.3;
+                rightComm.castShadow = true;
+                this.spacecraft.add(rightComm);
                 
-                // Position horse near player (initially not visible)
-                this.horse.position.copy(this.playerPosition);
-                this.horse.position.x += 10; // Off to the side
-                this.horse.position.y = this.getTerrainHeight(this.horse.position.x, this.horse.position.z);
-                this.horse.visible = false; // Hide until called
-                this.scene.add(this.horse);
+                // Position spacecraft near player (initially not visible)
+                this.spacecraft.position.copy(this.playerPosition);
+                this.spacecraft.position.x += 15; // Off to the side
+                this.spacecraft.position.y = this.getTerrainHeight(this.spacecraft.position.x, this.spacecraft.position.z) + 5; // Hovering
+                this.spacecraft.visible = false; // Hide until called
+                this.scene.add(this.spacecraft);
                 
-                // Horse animation properties
-                this.horseWalkCycle = 0;
-                this.horseGait = 'walk'; // walk, trot, gallop
+                // Spacecraft animation properties
+                this.spacecraftHoverCycle = 0;
+                this.thrusterMode = 'idle'; // idle, cruise, boost
+                this.energyCoreIntensity = 0.8;
             }
 
             toggleMount() {
                 if (!this.isRiding) {
-                    // Mount horse
-                    const distanceToHorse = this.playerPosition.distanceTo(this.horse.position);
-                    if (distanceToHorse < 8) {
+                    // Board spacecraft
+                    const distanceToSpacecraft = this.playerPosition.distanceTo(this.spacecraft.position);
+                    if (distanceToSpacecraft < 12) {
                         this.isRiding = true;
-                        this.horse.visible = true;
+                        this.spacecraft.visible = true;
                         this.playerCharacter.visible = false;
-                        this.horse.position.copy(this.playerPosition);
-                        this.horse.position.y = this.getTerrainHeight(this.horse.position.x, this.horse.position.z);
-                        this.speed = 150; // Faster on horse
-                        this.cameraOffset.set(0, 15, 25); // Adjust camera for horse
-                        console.log('🐎 Mounted horse!');
+                        this.spacecraft.position.copy(this.playerPosition);
+                        this.spacecraft.position.y = this.getTerrainHeight(this.spacecraft.position.x, this.spacecraft.position.z) + 8; // Hovering height
+                        this.speed = 200; // Faster in spacecraft
+                        this.cameraOffset.set(0, 18, 35); // Adjust camera for spacecraft flight
+                        this.thrusterMode = 'cruise';
+                        this.playThrusterAudio();
+                        console.log('🚀 Spacecraft boarded! Quantum thrusters online!');
                     } else {
-                        console.log('🐎 Horse too far away. Whistle to call your horse closer.');
-                        this.callHorse();
+                        console.log('🚀 Spacecraft too far away. Sending beacon to call your ship.');
+                        this.callSpacecraft();
                     }
                 } else {
-                    // Dismount horse
+                    // Disembark from spacecraft
                     this.isRiding = false;
+                    this.spacecraft.position.y = this.getTerrainHeight(this.spacecraft.position.x, this.spacecraft.position.z) + 2; // Land the ship
                     this.playerCharacter.visible = true;
-                    this.playerCharacter.position.copy(this.horse.position);
-                    this.playerCharacter.position.x += 3; // Dismount to the side
+                    this.playerCharacter.position.copy(this.spacecraft.position);
+                    this.playerCharacter.position.x += 4; // Disembark to the side
+                    this.playerCharacter.position.y = this.getTerrainHeight(this.playerCharacter.position.x, this.playerCharacter.position.z) + 1;
                     this.playerPosition.copy(this.playerCharacter.position);
                     this.speed = 75; // Normal walking speed
                     this.cameraOffset.set(0, 20, 30); // Reset camera
-                    console.log('🤠 Dismounted horse!');
+                    this.thrusterMode = 'idle';
+                    console.log('🧑‍🚀 Disembarked from spacecraft! Back on foot in the cosmic void.');
                 }
             }
 
-            callHorse() {
-                // Animate horse moving to player with audio and narrative
-                this.horse.visible = true;
+            callSpacecraft() {
+                // Animate spacecraft hyperjumping to player with cosmic audio and narrative
+                this.spacecraft.visible = true;
                 const targetPosition = this.playerPosition.clone();
-                targetPosition.x += 5;
-                targetPosition.z += 5;
-                targetPosition.y = this.getTerrainHeight(targetPosition.x, targetPosition.z);
+                targetPosition.x += 8;
+                targetPosition.z += 8;
+                targetPosition.y = this.getTerrainHeight(targetPosition.x, targetPosition.z) + 6; // Hovering arrival
                 
-                // Play multiple hoofbeat sounds during approach
-                this.playHoofbeatSequence();
+                // Play quantum thruster activation sequence
+                this.playThrusterSequence();
                 
-                // Display horse call narrative
+                // Display spacecraft call narrative
                 this.displayNarrative('spacecraft_call');
                 
-                // Simple animation - move horse to player over time
-                const startPosition = this.horse.position.clone();
-                const duration = 3000; // 3 seconds
+                // Hyperjump animation - spacecraft warps to player location
+                const startPosition = this.spacecraft.position.clone();
+                const duration = 2500; // 2.5 seconds for hyperjump
                 const startTime = Date.now();
                 
-                const animateHorse = () => {
+                const animateSpacecraft = () => {
                     const elapsed = Date.now() - startTime;
                     const progress = Math.min(elapsed / duration, 1);
                     
-                    this.horse.position.lerpVectors(startPosition, targetPosition, progress);
-                    this.horse.position.y = this.getTerrainHeight(this.horse.position.x, this.horse.position.z);
+                    // Create warp effect - rapid acceleration then deceleration
+                    const warpProgress = progress < 0.8 ? progress * 0.1 : (progress - 0.8) / 0.2;
                     
-                    // Play hoofbeats during movement
-                    if (progress > 0.1 && progress < 0.9 && elapsed % 400 < 50) {
-                        this.playHoofbeatSound();
+                    this.spacecraft.position.lerpVectors(startPosition, targetPosition, warpProgress);
+                    
+                    // Add quantum energy core pulsing during approach
+                    if (this.spacecraft.children[6]) { // Energy core
+                        this.spacecraft.children[6].material.emissiveIntensity = 0.8 + Math.sin(elapsed * 0.01) * 0.3;
+                    }
+                    
+                    // Play thruster hum during movement
+                    if (progress > 0.1 && progress < 0.9 && elapsed % 300 < 50) {
+                        this.playThrusterHum();
                     }
                     
                     if (progress < 1) {
-                        requestAnimationFrame(animateHorse);
+                        requestAnimationFrame(animateSpacecraft);
                     } else {
-                        console.log('🐎 Horse has arrived with authentic hill country atmosphere!');
+                        console.log('🚀 Spacecraft has arrived via quantum hyperjump! Ready for cosmic exploration!');
+                        // Reset energy core intensity
+                        if (this.spacecraft.children[6]) {
+                            this.spacecraft.children[6].material.emissiveIntensity = 0.8;
+                        }
                     }
                 };
                 
-                animateHorse();
+                animateSpacecraft();
             }
 
             animateCharacters(delta) {
-                if (!this.playerCharacter || !this.horse) return;
+                if (!this.playerCharacter || !this.spacecraft) return;
                 
                 // Walking animation for character with authentic hill country footsteps
                 if (this.isWalking && !this.isMounted) {
@@ -2564,6 +2786,11 @@
                         // Trigger exploration narrative occasionally
                         if (Math.random() < 0.03) {
                             this.displayNarrative('exploration');
+                        }
+                        
+                        // Trigger radio telescope signals occasionally during cosmic exploration
+                        if (Math.random() < 0.01) {
+                            this.playRadioTelescopeSignal();
                         }
                     }
                     
@@ -2596,22 +2823,34 @@
                     this.playerCharacter.position.y = this.playerPosition.y + 3;
                 }
                 
-                // Horse animation
+                // Spacecraft animation
                 if (this.isRiding) {
-                    this.horseWalkCycle += delta * 6;
+                    this.spacecraftHoverCycle += delta * 4;
                     
-                    // Animate horse body bobbing
-                    this.horse.position.y = this.getTerrainHeight(this.horse.position.x, this.horse.position.z) + 
-                                          Math.abs(Math.sin(this.horseWalkCycle * 2)) * 0.2;
+                    // Animate spacecraft hovering with quantum stabilizers
+                    this.spacecraft.position.y = this.getTerrainHeight(this.spacecraft.position.x, this.spacecraft.position.z) + 
+                                               8 + Math.sin(this.spacecraftHoverCycle) * 0.5;
                     
-                    // Animate horse head nodding
-                    if (this.horse.children[1]) { // Horse head
-                        this.horse.children[1].rotation.x = Math.sin(this.horseWalkCycle) * 0.1;
+                    // Animate energy core pulsing
+                    if (this.spacecraft.children[6]) { // Energy core
+                        this.spacecraft.children[6].material.emissiveIntensity = 0.8 + Math.sin(this.spacecraftHoverCycle * 2) * 0.2;
                     }
                     
-                    // Animate tail swishing
-                    if (this.horse.children[8]) { // Tail
-                        this.horse.children[8].rotation.y = Math.sin(this.horseWalkCycle * 0.5) * 0.2;
+                    // Animate communication arrays rotating
+                    if (this.spacecraft.children[15]) { // Left comm array
+                        this.spacecraft.children[15].rotation.y = Math.sin(this.spacecraftHoverCycle * 0.5) * 0.1;
+                    }
+                    if (this.spacecraft.children[16]) { // Right comm array
+                        this.spacecraft.children[16].rotation.y = -Math.sin(this.spacecraftHoverCycle * 0.5) * 0.1;
+                    }
+                    
+                    // Animate thruster glow based on movement
+                    const thrusterIntensity = this.thrusterMode === 'cruise' ? 0.3 : 0.1;
+                    if (this.spacecraft.children[2]) { // Port thruster
+                        this.spacecraft.children[2].material.emissiveIntensity = thrusterIntensity + Math.sin(this.spacecraftHoverCycle * 3) * 0.1;
+                    }
+                    if (this.spacecraft.children[3]) { // Starboard thruster
+                        this.spacecraft.children[3].material.emissiveIntensity = thrusterIntensity + Math.sin(this.spacecraftHoverCycle * 3) * 0.1;
                     }
                 }
             }
@@ -3245,6 +3484,83 @@
                 console.log('🌌 Created pulsating cosmic phenomena');
             }
 
+            createCosmicRadiationField() {
+                // Create cosmic background radiation particle field with quantum fluctuations
+                this.radiationField = new THREE.Group();
+                
+                // Cosmic microwave background particles
+                const radiationGeometry = new THREE.BufferGeometry();
+                const radiationCount = 2500;
+                const positions = new Float32Array(radiationCount * 3);
+                const colors = new Float32Array(radiationCount * 3);
+                const velocities = new Float32Array(radiationCount * 3);
+                const lifetimes = new Float32Array(radiationCount);
+                
+                // Quantum fluctuation color palette
+                const quantumColors = [
+                    new THREE.Color(0x4A90E2), // Quantum blue
+                    new THREE.Color(0x9B59B6), // Cosmic violet
+                    new THREE.Color(0x1ABC9C), // Teal energy
+                    new THREE.Color(0xE74C3C), // Red-shifted
+                    new THREE.Color(0xF39C12), // Amber radiation
+                    new THREE.Color(0x2ECC71), // Green quantum field
+                ];
+                
+                for (let i = 0; i < radiationCount; i++) {
+                    // Distribute particles in spherical volume around player
+                    const i3 = i * 3;
+                    const radius = 150 + Math.random() * 300; // 150-450 units radius
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos((Math.random() * 2) - 1);
+                    
+                    positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+                    positions[i3 + 1] = radius * Math.cos(phi) + (Math.random() - 0.5) * 100;
+                    positions[i3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
+                    
+                    // Assign random quantum color
+                    const color = quantumColors[Math.floor(Math.random() * quantumColors.length)];
+                    colors[i3] = color.r;
+                    colors[i3 + 1] = color.g;
+                    colors[i3 + 2] = color.b;
+                    
+                    // Random particle velocities for quantum fluctuation movement
+                    velocities[i3] = (Math.random() - 0.5) * 0.5;
+                    velocities[i3 + 1] = (Math.random() - 0.5) * 0.3;
+                    velocities[i3 + 2] = (Math.random() - 0.5) * 0.5;
+                    
+                    // Lifetime for particle cycling (quantum decay/creation)
+                    lifetimes[i] = Math.random() * 10000; // 0-10 second lifecycle
+                }
+                
+                radiationGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                radiationGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                
+                // Store custom attributes for animation
+                radiationGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+                radiationGeometry.setAttribute('lifetime', new THREE.BufferAttribute(lifetimes, 1));
+                
+                const radiationMaterial = new THREE.PointsMaterial({
+                    size: 2.0,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.6,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                
+                this.cosmicRadiation = new THREE.Points(radiationGeometry, radiationMaterial);
+                this.radiationField.add(this.cosmicRadiation);
+                
+                // Add radiation field to scene
+                this.scene.add(this.radiationField);
+                
+                // Store animation properties
+                this.radiationCycle = 0;
+                this.quantumFluctuationIntensity = 1.0;
+                
+                console.log('⚛️ Created cosmic background radiation field with quantum fluctuations');
+            }
+
             createBlackHoles() {
                 // Create gravitational black holes with event horizons and accretion disks
                 this.blackHoles = [];
@@ -3651,6 +3967,7 @@
                 this.animateCharacters(delta);
                 this.checkLandmarkDiscovery();
                 this.animatePulsatingPhenomena(delta);
+                this.animateCosmicRadiation(delta);
                 this.applyBlackHoleGravity(delta);
                 this.animateWormholePortals(delta);
                 this.animateAsteroidBelts(delta);
@@ -3682,6 +3999,88 @@
                 // Slowly rotate the star field for cosmic movement
                 if (this.starField) {
                     this.starField.rotation.y += delta * 0.02;
+                }
+            }
+
+            animateCosmicRadiation(delta) {
+                if (!this.cosmicRadiation) return;
+                
+                this.radiationCycle += delta * 2;
+                const time = this.clock.getElapsedTime();
+                
+                const positions = this.cosmicRadiation.geometry.attributes.position;
+                const velocities = this.cosmicRadiation.geometry.attributes.velocity;
+                const lifetimes = this.cosmicRadiation.geometry.attributes.lifetime;
+                const colors = this.cosmicRadiation.geometry.attributes.color;
+                
+                // Quantum fluctuation color palette
+                const quantumColors = [
+                    new THREE.Color(0x4A90E2), // Quantum blue
+                    new THREE.Color(0x9B59B6), // Cosmic violet
+                    new THREE.Color(0x1ABC9C), // Teal energy
+                    new THREE.Color(0xE74C3C), // Red-shifted
+                    new THREE.Color(0xF39C12), // Amber radiation
+                    new THREE.Color(0x2ECC71), // Green quantum field
+                ];
+                
+                for (let i = 0; i < positions.count; i++) {
+                    const i3 = i * 3;
+                    
+                    // Update particle positions based on quantum fluctuation
+                    positions.array[i3] += velocities.array[i3] * delta * 10;
+                    positions.array[i3 + 1] += velocities.array[i3 + 1] * delta * 10;
+                    positions.array[i3 + 2] += velocities.array[i3 + 2] * delta * 10;
+                    
+                    // Apply quantum field oscillations
+                    const quantum = Math.sin(time * 3 + i * 0.1) * 0.5;
+                    positions.array[i3] += quantum * 0.1;
+                    positions.array[i3 + 1] += Math.cos(time * 2 + i * 0.15) * 0.05;
+                    positions.array[i3 + 2] += quantum * 0.08;
+                    
+                    // Update particle lifetime (quantum decay/creation cycle)
+                    lifetimes.array[i] -= delta * 1000;
+                    
+                    // Regenerate particles that have reached end of lifecycle
+                    if (lifetimes.array[i] <= 0) {
+                        // Reset position in spherical distribution
+                        const radius = 150 + Math.random() * 300;
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos((Math.random() * 2) - 1);
+                        
+                        positions.array[i3] = radius * Math.sin(phi) * Math.cos(theta) + this.playerPosition.x;
+                        positions.array[i3 + 1] = radius * Math.cos(phi) + this.playerPosition.y + (Math.random() - 0.5) * 100;
+                        positions.array[i3 + 2] = radius * Math.sin(phi) * Math.sin(theta) + this.playerPosition.z;
+                        
+                        // New random velocity
+                        velocities.array[i3] = (Math.random() - 0.5) * 0.5;
+                        velocities.array[i3 + 1] = (Math.random() - 0.5) * 0.3;
+                        velocities.array[i3 + 2] = (Math.random() - 0.5) * 0.5;
+                        
+                        // Reset lifetime
+                        lifetimes.array[i] = Math.random() * 10000;
+                        
+                        // Change quantum color during regeneration
+                        const newColor = quantumColors[Math.floor(Math.random() * quantumColors.length)];
+                        colors.array[i3] = newColor.r;
+                        colors.array[i3 + 1] = newColor.g;
+                        colors.array[i3 + 2] = newColor.b;
+                    }
+                }
+                
+                // Mark attributes as needing update
+                positions.needsUpdate = true;
+                colors.needsUpdate = true;
+                
+                // Fluctuate overall opacity for cosmic breathing effect
+                this.quantumFluctuationIntensity = 0.6 + Math.sin(time * 1.5) * 0.2;
+                this.cosmicRadiation.material.opacity = this.quantumFluctuationIntensity;
+                
+                // Move radiation field center to follow player (maintain relative position)
+                if (this.radiationField) {
+                    const targetX = this.playerPosition.x * 0.1; // Slow parallax effect
+                    const targetZ = this.playerPosition.z * 0.1;
+                    this.radiationField.position.x += (targetX - this.radiationField.position.x) * delta * 0.5;
+                    this.radiationField.position.z += (targetZ - this.radiationField.position.z) * delta * 0.5;
                 }
             }
 
