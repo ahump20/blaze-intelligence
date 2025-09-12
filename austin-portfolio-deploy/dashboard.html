@@ -3,6 +3,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Blaze Intelligence · Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -93,19 +95,44 @@
       <div class="rounded-2xl border border-blaze-orange/20 bg-gradient-to-r from-blaze-orange/5 to-blaze-blue/5 p-6">
         <h2 class="text-xl font-semibold mb-4 text-blaze-orange">🔥 Live Cardinals Intelligence</h2>
         <div class="grid gap-4 sm:grid-cols-3">
-          <div class="text-center">
-            <div class="text-2xl font-bold text-blaze-blue" data-readiness="">86.6%</div>
-            <div class="text-sm text-slate-400">Readiness Score</div>
+          <div class="text-center p-4 rounded-xl bg-white/5 border border-blaze-blue/30">
+            <div class="text-3xl font-bold text-blaze-blue mb-1" data-readiness="">86.6%</div>
+            <div class="text-sm text-slate-300 font-medium">Readiness Score</div>
+            <div class="text-xs text-green-400 mt-1">↗ +2.3% from yesterday</div>
           </div>
-          <div class="text-center">
-            <div class="text-2xl font-bold text-green-400">Strong</div>
-            <div class="text-sm text-slate-400">Trend</div>
+          <div class="text-center p-4 rounded-xl bg-white/5 border border-green-400/30">
+            <div class="text-3xl font-bold text-green-400 mb-1">Strong</div>
+            <div class="text-sm text-slate-300 font-medium">Trend</div>
+            <div class="text-xs text-slate-400 mt-1">Momentum Building</div>
           </div>
-          <div class="text-center">
-            <div class="text-2xl font-bold text-blaze-orange">2.85</div>
-            <div class="text-sm text-slate-400">Leverage Factor</div>
+          <div class="text-center p-4 rounded-xl bg-white/5 border border-blaze-orange/30">
+            <div class="text-3xl font-bold text-blaze-orange mb-1">2.85</div>
+            <div class="text-sm text-slate-300 font-medium">Leverage Factor</div>
+            <div class="text-xs text-amber-400 mt-1">Championship Level</div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Three.js Championship Analytics Hero -->
+    <div class="mb-8 rounded-2xl border border-blaze-orange/20 bg-gradient-to-r from-blaze-navy/80 to-slate-900/80 overflow-hidden relative">
+      <div id="three-hero" class="h-64 relative"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+      <div class="absolute bottom-6 left-6 text-white">
+        <h3 class="text-2xl font-bold mb-2">Championship Intelligence That Wins Games</h3>
+        <p class="text-slate-300">Real-time analytics processing across major sports leagues</p>
+      </div>
+    </div>
+
+    <!-- Live Performance Metrics with Charts -->
+    <div class="grid gap-6 lg:grid-cols-2 mb-8">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h3 class="text-lg font-semibold text-blaze-orange mb-4">⚡ Real-Time Performance</h3>
+        <canvas id="performanceChart" class="w-full" style="height: 200px;"></canvas>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h3 class="text-lg font-semibold text-blaze-blue mb-4">🏆 Team Intelligence Metrics</h3>
+        <canvas id="teamChart" class="w-full" style="height: 200px;"></canvas>
       </div>
     </div>
 
@@ -179,6 +206,137 @@
           updated.textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
         }
       }, 60000);
+    </script>
+
+    <!-- Three.js Hero Animation -->
+    <script>
+      // Championship-level Three.js visualization
+      function initThreeHero() {
+        const container = document.getElementById('three-hero');
+        if (!container) return;
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(container.offsetWidth, container.offsetHeight);
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
+        
+        // Create dynamic particles representing data points
+        const particleGeometry = new THREE.BufferGeometry();
+        const particleCount = 1000;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        
+        for (let i = 0; i < particleCount; i++) {
+          positions[i * 3] = (Math.random() - 0.5) * 10;
+          positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+          positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+          
+          // Blaze Intelligence colors
+          const color = Math.random() > 0.5 ? new THREE.Color(0xBF5700) : new THREE.Color(0x9BCBEB);
+          colors[i * 3] = color.r;
+          colors[i * 3 + 1] = color.g;
+          colors[i * 3 + 2] = color.b;
+        }
+        
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        
+        const particleMaterial = new THREE.PointsMaterial({ 
+          size: 0.05, 
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.8
+        });
+        
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+        
+        camera.position.z = 5;
+        
+        // Animation loop
+        function animate() {
+          requestAnimationFrame(animate);
+          particles.rotation.x += 0.001;
+          particles.rotation.y += 0.002;
+          renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+          camera.aspect = container.offsetWidth / container.offsetHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(container.offsetWidth, container.offsetHeight);
+        });
+      }
+      
+      // Initialize Charts
+      function initCharts() {
+        // Performance Chart
+        const perfCtx = document.getElementById('performanceChart')?.getContext('2d');
+        if (perfCtx) {
+          new Chart(perfCtx, {
+            type: 'line',
+            data: {
+              labels: ['6h', '5h', '4h', '3h', '2h', '1h', 'Now'],
+              datasets: [{
+                label: 'Response Time (ms)',
+                data: [45, 52, 38, 41, 35, 28, 32],
+                borderColor: '#BF5700',
+                backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                tension: 0.4,
+                fill: true
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#9CA3AF' } },
+                x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#9CA3AF' } }
+              }
+            }
+          });
+        }
+        
+        // Team Intelligence Chart
+        const teamCtx = document.getElementById('teamChart')?.getContext('2d');
+        if (teamCtx) {
+          new Chart(teamCtx, {
+            type: 'doughnut',
+            data: {
+              labels: ['Cardinals', 'Titans', 'Longhorns', 'Grizzlies'],
+              datasets: [{
+                data: [86.6, 78.2, 92.1, 81.7],
+                backgroundColor: ['#BF5700', '#9BCBEB', '#FF6B35', '#00B2A9'],
+                borderWidth: 2,
+                borderColor: '#1e293b'
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { 
+                  position: 'bottom',
+                  labels: { color: '#9CA3AF', usePointStyle: true, padding: 20 }
+                }
+              }
+            }
+          });
+        }
+      }
+      
+      // Initialize on DOM load
+      document.addEventListener('DOMContentLoaded', () => {
+        initThreeHero();
+        initCharts();
+      });
     </script>
 
     <!-- Optional: Auto-disable dead nav links (dev mode) -->
