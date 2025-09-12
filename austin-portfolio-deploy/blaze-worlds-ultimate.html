@@ -281,6 +281,46 @@
     <div id="gameContainer">
         <canvas id="gameCanvas"></canvas>
         
+        <!-- Loading Screen -->
+        <div id="loadingScreen" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A2E 50%, #000000 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            color: #06B6D4;
+            font-family: 'JetBrains Mono', monospace;
+        ">
+            <div style="text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">🚀</div>
+                <h1 style="font-size: 2rem; margin: 20px 0; color: #6B46C1;">Blaze Worlds Ultimate</h1>
+                <p style="font-size: 1.2rem; margin: 10px 0; color: #3B82F6;">Initializing Cosmic Universe...</p>
+                <div id="loadingProgress" style="
+                    width: 300px;
+                    height: 4px;
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 2px;
+                    margin: 20px auto;
+                    overflow: hidden;
+                ">
+                    <div id="progressBar" style="
+                        width: 0%;
+                        height: 100%;
+                        background: linear-gradient(90deg, #6B46C1, #06B6D4);
+                        border-radius: 2px;
+                        transition: width 0.5s ease;
+                    "></div>
+                </div>
+                <p id="loadingText" style="font-size: 1rem; color: #F8FAFC; opacity: 0.8;">Loading Three.js...</p>
+            </div>
+        </div>
+        
         <div id="particles"></div>
         
         <div id="ui">
@@ -386,7 +426,16 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+    <script>
+        // Add error checking for Three.js
+        if (typeof THREE === 'undefined') {
+            console.error('Three.js failed to load! Trying alternative CDN...');
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"><\/script>');
+        } else {
+            console.log('Three.js loaded successfully:', THREE.REVISION);
+        }
+    </script>
     <script>
         class BlazeWorldsUltimate {
             constructor() {
@@ -475,6 +524,7 @@
                 this.setupAudioSystem();
                 this.setupNarrativeElements();
                 this.createCosmicStarField();
+                this.createAIDrivenUniverse();
                 this.createPulsatingPhenomena();
                 this.createBlackHoles();
                 this.createWormholePortals();
@@ -895,7 +945,8 @@
                             "Nebula portals shimmer with otherworldly possibilities...",
                             "Abandoned outposts whisper of civilizations long gone...",
                             "Cosmic crystals pulse with stellar radiation...",
-                            "Singularity remnants bend spacetime around them..."
+                            "Singularity remnants bend spacetime around them...",
+                            "Wormhole portal tears through reality itself, bridging distant galaxies..."
                         ]
                     },
                     {
@@ -1579,6 +1630,7 @@
                 const landmarkTypes = [
                     'spaceStation',
                     'alienMonolith',
+                    'wormholePortal',
                     'wreckedShip',
                     'quantumBeacon',
                     'nebulaPortal',
@@ -1608,6 +1660,8 @@
                         return this.createSpaceStation();
                     case 'alienMonolith':
                         return this.createAlienMonolith();
+                    case 'wormholePortal':
+                        return this.createWormholePortal();
                     case 'wreckedShip':
                         return this.createWreckedShip();
                     case 'quantumBeacon':
@@ -1934,6 +1988,169 @@
                 base.castShadow = true;
                 base.receiveShadow = true;
                 group.add(base);
+                
+                return group;
+            }
+
+            createWormholePortal() {
+                const group = new THREE.Group();
+                
+                // Central wormhole ring structure
+                const ringGeometry = new THREE.TorusGeometry(12, 2, 16, 100);
+                const ringMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.primary,
+                    emissive: this.colors.primary,
+                    emissiveIntensity: 0.8,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                const centralRing = new THREE.Mesh(ringGeometry, ringMaterial);
+                centralRing.position.y = 15;
+                centralRing.rotation.x = Math.PI / 2;
+                centralRing.castShadow = true;
+                group.add(centralRing);
+                
+                // Inner wormhole event horizon
+                const horizonGeometry = new THREE.CircleGeometry(10, 32);
+                const horizonMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.dark,
+                    emissive: this.colors.secondary,
+                    emissiveIntensity: 1.2,
+                    transparent: true,
+                    opacity: 0.4,
+                    side: THREE.DoubleSide
+                });
+                const eventHorizon = new THREE.Mesh(horizonGeometry, horizonMaterial);
+                eventHorizon.position.y = 15;
+                eventHorizon.rotation.x = Math.PI / 2;
+                group.add(eventHorizon);
+                
+                // Swirling energy field particles
+                const particleCount = 200;
+                const particleGeometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const sizes = new Float32Array(particleCount);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const radius = Math.random() * 12 + 2;
+                    const angle = Math.random() * Math.PI * 2;
+                    const height = (Math.random() - 0.5) * 4;
+                    
+                    positions[i * 3] = Math.cos(angle) * radius;
+                    positions[i * 3 + 1] = 15 + height;
+                    positions[i * 3 + 2] = Math.sin(angle) * radius;
+                    
+                    // Color particles based on distance from center
+                    const distanceRatio = radius / 14;
+                    const color = new THREE.Color();
+                    if (distanceRatio < 0.3) {
+                        color.setHex(this.colors.accent); // Stellar cyan center
+                    } else if (distanceRatio < 0.7) {
+                        color.setHex(this.colors.secondary); // Nebula blue middle
+                    } else {
+                        color.setHex(this.colors.primary); // Cosmic purple outer
+                    }
+                    
+                    colors[i * 3] = color.r;
+                    colors[i * 3 + 1] = color.g;
+                    colors[i * 3 + 2] = color.b;
+                    
+                    sizes[i] = Math.random() * 3 + 1;
+                }
+                
+                particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+                
+                const particleMaterial = new THREE.PointsMaterial({
+                    size: 2,
+                    sizeAttenuation: true,
+                    transparent: true,
+                    opacity: 0.8,
+                    vertexColors: true,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                const swirlingParticles = new THREE.Points(particleGeometry, particleMaterial);
+                group.add(swirlingParticles);
+                
+                // Store particle system for animation
+                group.userData.particleSystem = swirlingParticles;
+                group.userData.particleCount = particleCount;
+                group.userData.rotationSpeed = 0.02;
+                
+                // Outer stabilizing rings
+                for (let i = 0; i < 3; i++) {
+                    const outerRingGeometry = new THREE.TorusGeometry(16 + i * 3, 0.8, 8, 64);
+                    const outerRingMaterial = new THREE.MeshLambertMaterial({ 
+                        color: this.colors.accent,
+                        emissive: this.colors.accent,
+                        emissiveIntensity: 0.4 - i * 0.1,
+                        transparent: true,
+                        opacity: 0.6 - i * 0.1
+                    });
+                    const outerRing = new THREE.Mesh(outerRingGeometry, outerRingMaterial);
+                    outerRing.position.y = 15;
+                    outerRing.rotation.x = Math.PI / 2;
+                    outerRing.rotation.z = i * (Math.PI / 3);
+                    group.add(outerRing);
+                }
+                
+                // Quantum field distortion effect around base
+                const baseGeometry = new THREE.CylinderGeometry(18, 20, 3, 32);
+                const baseMaterial = new THREE.MeshLambertMaterial({ 
+                    color: this.colors.dark,
+                    emissive: this.colors.primary,
+                    emissiveIntensity: 0.2,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const quantumBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                quantumBase.position.y = 1.5;
+                quantumBase.castShadow = true;
+                quantumBase.receiveShadow = true;
+                group.add(quantumBase);
+                
+                // Energy pillars supporting the portal
+                for (let i = 0; i < 4; i++) {
+                    const pillarGeometry = new THREE.CylinderGeometry(1, 1.5, 12, 8);
+                    const pillarMaterial = new THREE.MeshLambertMaterial({ 
+                        color: this.colors.graphite,
+                        emissive: this.colors.secondary,
+                        emissiveIntensity: 0.5
+                    });
+                    const pillar = new THREE.Mesh(pillarGeometry, pillarMaterial);
+                    const angle = (i / 4) * Math.PI * 2;
+                    pillar.position.set(
+                        Math.cos(angle) * 22,
+                        6,
+                        Math.sin(angle) * 22
+                    );
+                    pillar.castShadow = true;
+                    group.add(pillar);
+                    
+                    // Energy beam from pillar to portal
+                    const beamGeometry = new THREE.CylinderGeometry(0.2, 0.2, 12, 6);
+                    const beamMaterial = new THREE.MeshLambertMaterial({ 
+                        color: this.colors.accent,
+                        emissive: this.colors.accent,
+                        emissiveIntensity: 1.0,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const energyBeam = new THREE.Mesh(beamGeometry, beamMaterial);
+                    energyBeam.position.set(
+                        Math.cos(angle) * 17,
+                        15,
+                        Math.sin(angle) * 17
+                    );
+                    
+                    // Point beam toward center
+                    energyBeam.lookAt(0, 15, 0);
+                    energyBeam.rotateX(Math.PI / 2);
+                    group.add(energyBeam);
+                }
                 
                 return group;
             }
@@ -3932,25 +4149,10 @@
             }
 
             hideLoadingScreen() {
-                let progress = 0;
-                const progressBar = document.getElementById('loadingProgress');
-                const loadingScreen = document.getElementById('loadingScreen');
-                
-                const updateProgress = () => {
-                    progress += Math.random() * 15 + 5;
-                    if (progress >= 100) {
-                        progress = 100;
-                        progressBar.style.width = '100%';
-                        setTimeout(() => {
-                            loadingScreen.classList.add('hidden');
-                        }, 800);
-                        return;
-                    }
-                    progressBar.style.width = progress + '%';
-                    setTimeout(updateProgress, 150 + Math.random() * 300);
-                };
-                
-                setTimeout(updateProgress, 1000);
+                // This method is called from init(), but loading screen is now managed 
+                // by the main window.addEventListener('load') handler
+                // So we don't need to do anything here
+                console.log('🎮 Game initialization complete - loading screen managed externally');
             }
 
             animate() {
@@ -4169,147 +4371,620 @@
             }
 
             animateWormholePortals(delta) {
-                if (!this.wormholes || this.wormholes.length === 0) return;
-                
-                const time = this.clock.getElapsedTime();
-                
-                this.wormholes.forEach((wormhole, index) => {
-                    const userData = wormhole.userData;
-                    
-                    // Rotate the main wormhole throat
-                    const throat = wormhole.children[0];
-                    if (throat) {
-                        throat.rotation.z += delta * userData.rotationSpeed;
-                    }
-                    
-                    // Counter-rotate the portal surface for space-time distortion
-                    const portal = wormhole.children[1];
-                    if (portal) {
-                        portal.rotation.z -= delta * userData.rotationSpeed * 0.7;
-                        
-                        // Pulse portal energy intensity
-                        const energyPulse = Math.sin(time * 2 + index * Math.PI) * 0.3 + 0.7;
-                        portal.material.emissiveIntensity = 0.6 * energyPulse;
-                    }
-                    
-                    // Animate exotic matter ring with complex rotation
-                    const exoticMatter = wormhole.children[2];
-                    if (exoticMatter) {
-                        exoticMatter.rotation.x += delta * userData.rotationSpeed * 0.3;
-                        exoticMatter.rotation.y += delta * userData.rotationSpeed * 0.5;
-                        exoticMatter.rotation.z += delta * userData.rotationSpeed * 0.4;
-                        
-                        // Fluctuate exotic matter intensity
-                        const exoticPulse = Math.cos(time * 1.5 + index * Math.PI / 2) * 0.4 + 0.8;
-                        exoticMatter.material.emissiveIntensity = 1.2 * exoticPulse;
-                    }
-                    
-                    // Animate gravitational lensing rings
-                    for (let i = 3; i < 6; i++) {
-                        const lensingRing = wormhole.children[i];
-                        if (lensingRing) {
-                            lensingRing.rotation.z += delta * userData.rotationSpeed * (0.2 + i * 0.1);
-                            
-                            // Create ripple effect
-                            const ripple = Math.sin(time * 3 + i + index * Math.PI) * 0.15 + 0.85;
-                            lensingRing.scale.setScalar(ripple);
-                        }
-                    }
-                    
-                    // Animate space-time vortex particles
-                    const vortexParticles = userData.vortexParticles;
-                    if (vortexParticles) {
-                        const positions = vortexParticles.geometry.attributes.position.array;
-                        const colors = vortexParticles.geometry.attributes.color.array;
-                        
-                        for (let i = 0; i < positions.length; i += 3) {
-                            const particleIndex = i / 3;
-                            
-                            // Create spiraling motion into wormhole
-                            const currentRadius = Math.sqrt(positions[i] * positions[i] + positions[i + 2] * positions[i + 2]);
-                            const currentAngle = Math.atan2(positions[i + 2], positions[i]);
-                            
-                            const newAngle = currentAngle + delta * userData.rotationSpeed * 2;
-                            const newRadius = currentRadius * (1 - delta * 0.5); // Spiral inward
-                            
-                            // Reset particles that get too close to center
-                            if (newRadius < 2) {
-                                const resetRadius = Math.random() * userData.throatRadius * 0.8;
-                                const resetAngle = Math.random() * Math.PI * 2;
-                                positions[i] = Math.cos(resetAngle) * resetRadius;
-                                positions[i + 2] = Math.sin(resetAngle) * resetRadius;
-                            } else {
-                                positions[i] = Math.cos(newAngle) * newRadius;
-                                positions[i + 2] = Math.sin(newAngle) * newRadius;
-                            }
-                            
-                            // Add vertical oscillation
-                            positions[i + 1] += Math.sin(time * 2 + particleIndex * 0.1) * delta * 2;
-                            
-                            // Modulate particle colors for energy flux
-                            const flux = Math.sin(time * 3 + particleIndex * 0.2) * 0.3 + 0.7;
-                            colors[i] *= flux;
-                            colors[i + 1] *= flux;
-                            colors[i + 2] *= flux;
-                        }
-                        
-                        vortexParticles.geometry.attributes.position.needsUpdate = true;
-                        vortexParticles.geometry.attributes.color.needsUpdate = true;
-                        
-                        // Rotate entire vortex
-                        vortexParticles.rotation.y += delta * userData.rotationSpeed * 1.5;
-                    }
-                    
-                    // Check for player proximity to wormhole for teleportation
-                    if (this.playerCharacter) {
-                        const playerDistance = this.playerCharacter.position.distanceTo(wormhole.position);
-                        if (playerDistance < userData.throatRadius * 0.8) {
-                            this.triggerWormholeTravel(index);
-                        }
+                // Find all wormhole portals in landmarks
+                this.scene.traverse((object) => {
+                    if (object.userData && object.userData.landmarkType === 'wormholePortal') {
+                        this.animateIndividualWormhole(object, delta);
                     }
                 });
             }
-
-            triggerWormholeTravel(wormholeIndex) {
-                if (!this.wormholes || this.wormholeTravelCooldown) return;
-                
-                const sourceWormhole = this.wormholes[wormholeIndex];
-                const destinationIndex = sourceWormhole.userData.destinationIndex;
-                const destinationWormhole = this.wormholes[destinationIndex];
-                
-                if (!destinationWormhole) return;
-                
-                // Teleport player to destination wormhole
-                const destinationPosition = destinationWormhole.position.clone();
-                destinationPosition.y += 50; // Emerge above the wormhole
-                
-                this.playerPosition.copy(destinationPosition);
-                this.playerCharacter.position.copy(destinationPosition);
-                
-                // Create space-time travel effect
-                this.createSpaceTimeTravelEffect();
-                
-                // Set cooldown to prevent rapid teleportation
-                this.wormholeTravelCooldown = true;
-                setTimeout(() => {
-                    this.wormholeTravelCooldown = false;
-                }, 3000);
-                
-                console.log(`🌀 Traveled through wormhole from ${wormholeIndex} to ${destinationIndex}!`);
-            }
-
-            createSpaceTimeTravelEffect() {
-                // Create brief visual/audio effect for wormhole travel
+            
+            animateIndividualWormhole(wormhole, delta) {
                 const time = this.clock.getElapsedTime();
                 
-                // Flash screen effect
-                document.body.style.filter = 'brightness(200%) hue-rotate(180deg)';
-                setTimeout(() => {
-                    document.body.style.filter = 'brightness(100%) hue-rotate(0deg)';
-                }, 200);
+                // Find and animate the central ring (first child)
+                const centralRing = wormhole.children[0];
+                if (centralRing) {
+                    centralRing.rotation.z += delta * 0.5;
+                }
                 
-                // TODO: Add wormhole travel audio effect
-                console.log('✨ Space-time travel effect activated');
+                // Find and animate the event horizon (second child)
+                const eventHorizon = wormhole.children[1];
+                if (eventHorizon) {
+                    eventHorizon.rotation.z -= delta * 0.3;
+                    
+                    // Pulse the event horizon intensity
+                    const pulse = Math.sin(time * 2) * 0.4 + 1.0;
+                    eventHorizon.material.emissiveIntensity = 1.2 * pulse;
+                }
+                
+                // Animate swirling particles if they exist
+                const particleSystem = wormhole.children[2];
+                if (particleSystem && particleSystem.userData && particleSystem.userData.particleSystem) {
+                    const particles = particleSystem.userData.particleSystem;
+                    const positions = particles.geometry.attributes.position.array;
+                    const rotationSpeed = particleSystem.userData.rotationSpeed || 0.02;
+                    
+                    for (let i = 0; i < particleSystem.userData.particleCount; i++) {
+                        const i3 = i * 3;
+                        const x = positions[i3];
+                        const z = positions[i3 + 2];
+                        
+                        // Create spiral rotation
+                        const currentAngle = Math.atan2(z, x);
+                        const currentRadius = Math.sqrt(x * x + z * z);
+                        const newAngle = currentAngle + delta * rotationSpeed * (2 + currentRadius * 0.1);
+                        
+                        positions[i3] = Math.cos(newAngle) * currentRadius;
+                        positions[i3 + 2] = Math.sin(newAngle) * currentRadius;
+                        
+                        // Add slight vertical oscillation
+                        positions[i3 + 1] += Math.sin(time * 3 + i * 0.1) * delta * 0.5;
+                    }
+                    
+                    particles.geometry.attributes.position.needsUpdate = true;
+                    
+                    // Rotate the entire particle system
+                    particles.rotation.z += delta * rotationSpeed;
+                }
+                
+                // Animate outer stabilizing rings (children 3-5)
+                for (let i = 3; i < 6; i++) {
+                    const ring = wormhole.children[i];
+                    if (ring) {
+                        ring.rotation.z += delta * 0.1 * (i - 2);
+                        
+                        // Add ripple scaling effect
+                        const ripple = Math.sin(time * 2 + i) * 0.1 + 1.0;
+                        ring.scale.setScalar(ripple);
+                    }
+                }
+                
+                // Animate energy pillars and beams (children 6+)
+                for (let i = 6; i < wormhole.children.length; i++) {
+                    const component = wormhole.children[i];
+                    if (component && component.material && component.material.emissive) {
+                        const energyPulse = Math.sin(time * 4 + i * 0.5) * 0.3 + 0.7;
+                        if (component.material.emissiveIntensity !== undefined) {
+                            const baseIntensity = component.material.userData?.baseIntensity || component.material.emissiveIntensity;
+                            component.material.emissiveIntensity = baseIntensity * energyPulse;
+                        }
+                    }
+                }
+            }
+            
+            // AI-Driven Dynamic Universe Generation System
+            createAIDrivenUniverse() {
+                this.aiUniverse = {
+                    galaxyDensityMap: new Map(),
+                    starFormationRegions: [],
+                    cosmicEvents: [],
+                    intelligentPlacements: [],
+                    evolutionRate: 0.001,
+                    complexityLevel: 1
+                };
+                
+                this.initializeGalaxyStructure();
+                this.createDynamicStarFormation();
+                this.setupCosmicEventSystem();
+                this.enableAdaptiveGeneration();
+            }
+            
+            initializeGalaxyStructure() {
+                // Create procedural galaxy arms using AI-driven density mapping
+                const armCount = 4 + Math.floor(Math.random() * 3); // 4-6 spiral arms
+                
+                for (let arm = 0; arm < armCount; arm++) {
+                    const armAngle = (arm / armCount) * Math.PI * 2;
+                    const armData = {
+                        angle: armAngle,
+                        density: 0.3 + Math.random() * 0.7,
+                        starCount: Math.floor(200 + Math.random() * 800),
+                        civilizationProbability: 0.02 + Math.random() * 0.05
+                    };
+                    
+                    this.generateSpiralArm(armData);
+                }
+                
+                // Create galactic core with supermassive phenomena
+                this.generateGalacticCore();
+            }
+            
+            generateSpiralArm(armData) {
+                const starsGenerated = [];
+                
+                for (let i = 0; i < armData.starCount; i++) {
+                    const radius = 50 + Math.random() * 400; // Galaxy radius
+                    const spiralFactor = radius * 0.01; // Spiral tightness
+                    const angle = armData.angle + spiralFactor + (Math.random() - 0.5) * 0.5;
+                    
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    const y = (Math.random() - 0.5) * 40; // Galactic disk height
+                    
+                    const starData = {
+                        position: { x, y, z },
+                        type: this.determineStarType(radius, armData.density),
+                        age: Math.random() * 13.8, // Billion years
+                        hasplanets: Math.random() < 0.7,
+                        civilization: Math.random() < armData.civilizationProbability
+                    };
+                    
+                    if (starData.hasplanets) {
+                        this.generatePlanetarySystem(starData);
+                    }
+                    
+                    if (starData.civilization) {
+                        this.generateAlienCivilization(starData);
+                    }
+                    
+                    starsGenerated.push(starData);
+                }
+                
+                this.aiUniverse.galaxyDensityMap.set(`arm_${armData.angle}`, starsGenerated);
+            }
+            
+            determineStarType(galacticRadius, armDensity) {
+                const coreDistance = galacticRadius / 450; // Normalized distance from core
+                const metalicity = Math.max(0, 1 - coreDistance * 0.7); // Higher metals near core
+                
+                const random = Math.random();
+                if (random < 0.05) return { type: 'O', color: 0x9bb2ff, mass: 15 + Math.random() * 75 }; // Blue supergiant
+                else if (random < 0.15) return { type: 'B', color: 0xaabfff, mass: 3 + Math.random() * 12 }; // Blue-white
+                else if (random < 0.25) return { type: 'A', color: 0xcad7ff, mass: 1.4 + Math.random() * 1.6 }; // White
+                else if (random < 0.45) return { type: 'F', color: 0xf8f7ff, mass: 1.04 + Math.random() * 0.36 }; // Yellow-white
+                else if (random < 0.65) return { type: 'G', color: 0xfff4ea, mass: 0.8 + Math.random() * 0.4 }; // Yellow (Sun-like)
+                else if (random < 0.85) return { type: 'K', color: 0xffeedd, mass: 0.45 + Math.random() * 0.35 }; // Orange
+                else return { type: 'M', color: 0xffccaa, mass: 0.08 + Math.random() * 0.37 }; // Red dwarf
+            }
+            
+            generatePlanetarySystem(starData) {
+                const planetCount = Math.floor(Math.random() * 8) + 1; // 1-8 planets
+                starData.planets = [];
+                
+                for (let p = 0; p < planetCount; p++) {
+                    const planet = {
+                        orbit: (p + 1) * (1 + Math.random() * 3), // AU from star
+                        type: this.determinePlanetType(starData.type, (p + 1)),
+                        habitability: 0,
+                        moons: Math.floor(Math.random() * 5)
+                    };
+                    
+                    // Calculate habitability based on star type and orbital distance
+                    const habZoneInner = Math.sqrt(starData.type.mass / 1.1);
+                    const habZoneOuter = Math.sqrt(starData.type.mass / 0.53);
+                    
+                    if (planet.orbit >= habZoneInner && planet.orbit <= habZoneOuter) {
+                        planet.habitability = 0.3 + Math.random() * 0.7;
+                        planet.atmosphere = Math.random() < 0.8;
+                        planet.water = Math.random() < 0.6;
+                        planet.life = planet.habitability > 0.5 && Math.random() < 0.1;
+                    }
+                    
+                    starData.planets.push(planet);
+                }
+            }
+            
+            determinePlanetType(starType, orbitPosition) {
+                const random = Math.random();
+                const isInnerSystem = orbitPosition <= 3;
+                
+                if (isInnerSystem) {
+                    if (random < 0.3) return 'rocky';
+                    else if (random < 0.6) return 'desert';
+                    else return 'volcanic';
+                } else {
+                    if (random < 0.4) return 'gasGiant';
+                    else if (random < 0.7) return 'iceGiant';
+                    else return 'frozen';
+                }
+            }
+            
+            generateAlienCivilization(starData) {
+                starData.civilization = {
+                    type: this.determineCivilizationType(),
+                    level: Math.random() * 3, // Kardashev scale approximation
+                    technology: {
+                        spaceFlight: Math.random() < 0.6,
+                        interstellar: Math.random() < 0.2,
+                        megaStructures: Math.random() < 0.05
+                    },
+                    temperament: Math.random(), // 0=hostile, 1=friendly
+                    contactAttempts: 0
+                };
+                
+                if (starData.civilization.technology.megaStructures) {
+                    this.generateMegaStructure(starData);
+                }
+            }
+            
+            determineCivilizationType() {
+                const types = ['aquatic', 'terrestrial', 'silicon', 'energy', 'collective', 'synthetic'];
+                return types[Math.floor(Math.random() * types.length)];
+            }
+            
+            generateMegaStructure(starData) {
+                const structures = ['dysonSphere', 'ringWorld', 'matrioshkaBrain', 'aldersonDisk'];
+                const structure = structures[Math.floor(Math.random() * structures.length)];
+                
+                starData.megaStructure = {
+                    type: structure,
+                    completion: Math.random(),
+                    energyOutput: starData.type.mass * 1e26 * Math.random(),
+                    detectable: true
+                };
+            }
+            
+            generateGalacticCore() {
+                // Create central supermassive black hole
+                this.aiUniverse.galacticCore = {
+                    blackHole: {
+                        mass: 4.1e6, // Solar masses (like Sagittarius A*)
+                        accretionDisk: true,
+                        jets: true,
+                        eventHorizon: 12e6 // km
+                    },
+                    starFormation: 0.9, // High star formation rate
+                    civilizations: Math.floor(Math.random() * 50) + 10,
+                    ancientTechnology: Math.random() < 0.8
+                };
+            }
+            
+            createDynamicStarFormation() {
+                // Create regions where new stars are actively forming
+                const formationRegions = Math.floor(Math.random() * 8) + 3; // 3-10 regions
+                
+                for (let i = 0; i < formationRegions; i++) {
+                    const region = {
+                        center: {
+                            x: (Math.random() - 0.5) * 800,
+                            y: (Math.random() - 0.5) * 80,
+                            z: (Math.random() - 0.5) * 800
+                        },
+                        radius: 20 + Math.random() * 80,
+                        intensity: Math.random(),
+                        newStarsPerCycle: Math.floor(Math.random() * 5) + 1,
+                        nebulaDensity: 0.3 + Math.random() * 0.7,
+                        age: Math.random() * 10 // Million years
+                    };
+                    
+                    this.aiUniverse.starFormationRegions.push(region);
+                    this.createNebulaCloud(region);
+                }
+            }
+            
+            createNebulaCloud(region) {
+                const group = new THREE.Group();
+                
+                // Central emission nebula
+                const nebulaGeometry = new THREE.SphereGeometry(region.radius, 16, 16);
+                const nebulaMaterial = new THREE.MeshLambertMaterial({
+                    color: this.colors.secondary,
+                    emissive: this.colors.accent,
+                    emissiveIntensity: region.nebulaDensity * 0.5,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                
+                const nebula = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
+                nebula.position.set(region.center.x, region.center.y, region.center.z);
+                group.add(nebula);
+                
+                // Protostar formations within nebula
+                const protostarCount = region.newStarsPerCycle * 3;
+                for (let p = 0; p < protostarCount; p++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * region.radius * 0.8;
+                    const height = (Math.random() - 0.5) * region.radius * 0.4;
+                    
+                    const protostarGeometry = new THREE.SphereGeometry(1 + Math.random() * 3, 8, 8);
+                    const protostarMaterial = new THREE.MeshLambertMaterial({
+                        color: this.colors.primary,
+                        emissive: this.colors.primary,
+                        emissiveIntensity: 0.8,
+                        transparent: true,
+                        opacity: 0.7
+                    });
+                    
+                    const protostar = new THREE.Mesh(protostarGeometry, protostarMaterial);
+                    protostar.position.set(
+                        region.center.x + Math.cos(angle) * distance,
+                        region.center.y + height,
+                        region.center.z + Math.sin(angle) * distance
+                    );
+                    
+                    group.add(protostar);
+                }
+                
+                this.scene.add(group);
+                region.visualRepresentation = group;
+            }
+            
+            setupCosmicEventSystem() {
+                // Define possible cosmic events that can occur dynamically
+                this.cosmicEventTypes = [
+                    'supernova', 'gammaRayBurst', 'neutronStarCollision', 
+                    'blackHoleFormation', 'darkMatterInteraction', 'quantumFluctuation',
+                    'hyperspaceAnomaly', 'temporalDistortion', 'dimensionalRift'
+                ];
+                
+                // Initialize cosmic event scheduler
+                this.scheduleNextCosmicEvent();
+            }
+            
+            scheduleNextCosmicEvent() {
+                const nextEventTime = Math.random() * 300000 + 60000; // 1-5 minutes
+                
+                setTimeout(() => {
+                    this.triggerCosmicEvent();
+                    this.scheduleNextCosmicEvent(); // Schedule the next event
+                }, nextEventTime);
+            }
+            
+            triggerCosmicEvent() {
+                const eventType = this.cosmicEventTypes[Math.floor(Math.random() * this.cosmicEventTypes.length)];
+                const eventLocation = {
+                    x: (Math.random() - 0.5) * 1000,
+                    y: (Math.random() - 0.5) * 100,
+                    z: (Math.random() - 0.5) * 1000
+                };
+                
+                const event = {
+                    type: eventType,
+                    location: eventLocation,
+                    intensity: Math.random(),
+                    duration: 10000 + Math.random() * 30000, // 10-40 seconds
+                    startTime: this.clock.getElapsedTime(),
+                    visual: null
+                };
+                
+                // Create visual representation of the event
+                event.visual = this.createCosmicEventVisual(event);
+                this.scene.add(event.visual);
+                
+                // Add to active events
+                this.aiUniverse.cosmicEvents.push(event);
+                
+                // Trigger narrative
+                this.displayCosmicEventNarrative(event);
+            }
+            
+            createCosmicEventVisual(event) {
+                const group = new THREE.Group();
+                group.position.set(event.location.x, event.location.y, event.location.z);
+                
+                switch (event.type) {
+                    case 'supernova':
+                        return this.createSupernovaVisual(event, group);
+                    case 'gammaRayBurst':
+                        return this.createGammaRayBurstVisual(event, group);
+                    case 'blackHoleFormation':
+                        return this.createBlackHoleFormationVisual(event, group);
+                    case 'dimensionalRift':
+                        return this.createDimensionalRiftVisual(event, group);
+                    default:
+                        return this.createGenericCosmicEventVisual(event, group);
+                }
+            }
+            
+            createSupernovaVisual(event, group) {
+                // Expanding shockwave
+                const shockwaveGeometry = new THREE.SphereGeometry(5, 32, 32);
+                const shockwaveMaterial = new THREE.MeshLambertMaterial({
+                    color: this.colors.accent,
+                    emissive: this.colors.accent,
+                    emissiveIntensity: 1.5,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const shockwave = new THREE.Mesh(shockwaveGeometry, shockwaveMaterial);
+                group.add(shockwave);
+                
+                // Store for animation
+                group.userData.shockwave = shockwave;
+                group.userData.maxRadius = 50 + event.intensity * 100;
+                
+                return group;
+            }
+            
+            createGammaRayBurstVisual(event, group) {
+                // Focused energy beam
+                const beamGeometry = new THREE.CylinderGeometry(0.5, 2, 100, 8);
+                const beamMaterial = new THREE.MeshLambertMaterial({
+                    color: this.colors.primary,
+                    emissive: this.colors.primary,
+                    emissiveIntensity: 2.0,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                
+                const beam = new THREE.Mesh(beamGeometry, beamMaterial);
+                beam.rotation.x = Math.PI / 2;
+                group.add(beam);
+                
+                return group;
+            }
+            
+            createDimensionalRiftVisual(event, group) {
+                // Tear in spacetime
+                const riftGeometry = new THREE.PlaneGeometry(20, 40);
+                const riftMaterial = new THREE.MeshLambertMaterial({
+                    color: this.colors.dark,
+                    emissive: this.colors.secondary,
+                    emissiveIntensity: 1.0,
+                    transparent: true,
+                    opacity: 0.6,
+                    side: THREE.DoubleSide
+                });
+                
+                const rift = new THREE.Mesh(riftGeometry, riftMaterial);
+                rift.rotation.y = Math.random() * Math.PI * 2;
+                group.add(rift);
+                
+                // Add crackling energy around edges
+                for (let i = 0; i < 12; i++) {
+                    const sparkGeometry = new THREE.SphereGeometry(0.5, 6, 6);
+                    const sparkMaterial = new THREE.MeshLambertMaterial({
+                        color: this.colors.accent,
+                        emissive: this.colors.accent,
+                        emissiveIntensity: 1.8
+                    });
+                    
+                    const spark = new THREE.Mesh(sparkGeometry, sparkMaterial);
+                    const angle = (i / 12) * Math.PI * 2;
+                    spark.position.set(
+                        Math.cos(angle) * 10,
+                        (Math.random() - 0.5) * 40,
+                        Math.sin(angle) * 5
+                    );
+                    group.add(spark);
+                }
+                
+                return group;
+            }
+            
+            createGenericCosmicEventVisual(event, group) {
+                const eventGeometry = new THREE.SphereGeometry(8 + event.intensity * 12, 16, 16);
+                const eventMaterial = new THREE.MeshLambertMaterial({
+                    color: this.colors.secondary,
+                    emissive: this.colors.primary,
+                    emissiveIntensity: 0.5 + event.intensity,
+                    transparent: true,
+                    opacity: 0.7
+                });
+                
+                const eventSphere = new THREE.Mesh(eventGeometry, eventMaterial);
+                group.add(eventSphere);
+                
+                return group;
+            }
+            
+            displayCosmicEventNarrative(event) {
+                const narratives = {
+                    'supernova': "A massive star has reached the end of its life, exploding in brilliant fury!",
+                    'gammaRayBurst': "A focused beam of gamma radiation cuts through the cosmos!",
+                    'neutronStarCollision': "Two ultra-dense neutron stars spiral into collision!",
+                    'blackHoleFormation': "Spacetime itself collapses as a new black hole forms!",
+                    'darkMatterInteraction': "Invisible dark matter streams interact with visible matter!",
+                    'quantumFluctuation': "The quantum vacuum fluctuates, creating energy from nothing!",
+                    'hyperspaceAnomaly': "An anomaly in hyperspace distorts local reality!",
+                    'temporalDistortion': "Time itself bends and warps in this region!",
+                    'dimensionalRift': "A tear in the fabric of spacetime reveals other dimensions!"
+                };
+                
+                const message = narratives[event.type] || "A mysterious cosmic phenomenon manifests nearby!";
+                this.displayNarrative(message, 'cosmic_event');
+            }
+            
+            enableAdaptiveGeneration() {
+                // Monitor player behavior and adapt universe generation
+                this.aiUniverse.playerBehavior = {
+                    explorationPattern: 'random',
+                    preferredRegions: [],
+                    discoveryRate: 0,
+                    interactionStyle: 'curious'
+                };
+                
+                // Start adaptive evolution
+                setInterval(() => {
+                    this.evolveUniverse();
+                }, 60000); // Every minute
+            }
+            
+            evolveUniverse() {
+                // Analyze player behavior
+                this.analyzePlayerBehavior();
+                
+                // Evolve star formation regions
+                this.evolveStarFormationRegions();
+                
+                // Update cosmic events based on player preferences
+                this.adaptCosmicEvents();
+                
+                // Increase complexity over time
+                this.aiUniverse.complexityLevel += this.aiUniverse.evolutionRate;
+            }
+            
+            analyzePlayerBehavior() {
+                // Track player's favorite areas
+                const playerPos = this.camera.position;
+                const currentRegion = `${Math.floor(playerPos.x/100)},${Math.floor(playerPos.z/100)}`;
+                
+                if (!this.aiUniverse.playerBehavior.preferredRegions[currentRegion]) {
+                    this.aiUniverse.playerBehavior.preferredRegions[currentRegion] = 0;
+                }
+                this.aiUniverse.playerBehavior.preferredRegions[currentRegion]++;
+            }
+            
+            evolveStarFormationRegions() {
+                this.aiUniverse.starFormationRegions.forEach(region => {
+                    // Age the region
+                    region.age += 0.1;
+                    
+                    // Potentially create new stars
+                    if (Math.random() < region.intensity * this.aiUniverse.evolutionRate) {
+                        this.createNewStar(region);
+                    }
+                    
+                    // Update visual representation
+                    if (region.visualRepresentation && region.visualRepresentation.children[0]) {
+                        const nebula = region.visualRepresentation.children[0];
+                        const ageFactor = Math.max(0, 1 - region.age / 100);
+                        nebula.material.emissiveIntensity = region.nebulaDensity * 0.5 * ageFactor;
+                        nebula.material.opacity = 0.3 * ageFactor;
+                    }
+                });
+            }
+            
+            createNewStar(region) {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * region.radius;
+                
+                const newStar = {
+                    position: {
+                        x: region.center.x + Math.cos(angle) * distance,
+                        y: region.center.y + (Math.random() - 0.5) * 10,
+                        z: region.center.z + Math.sin(angle) * distance
+                    },
+                    type: this.determineStarType(distance, region.nebulaDensity),
+                    age: 0,
+                    hasplanets: Math.random() < 0.5,
+                    civilization: Math.random() < 0.01
+                };
+                
+                // Add visual representation
+                this.createStarVisual(newStar, region.visualRepresentation);
+            }
+            
+            createStarVisual(star, parent) {
+                const starGeometry = new THREE.SphereGeometry(0.5 + Math.random() * 1.5, 8, 8);
+                const starMaterial = new THREE.MeshLambertMaterial({
+                    color: star.type.color,
+                    emissive: star.type.color,
+                    emissiveIntensity: 0.8
+                });
+                
+                const starMesh = new THREE.Mesh(starGeometry, starMaterial);
+                starMesh.position.set(star.position.x, star.position.y, star.position.z);
+                
+                if (parent) {
+                    parent.add(starMesh);
+                } else {
+                    this.scene.add(starMesh);
+                }
+                
+                star.visual = starMesh;
+            }
+            
+            adaptCosmicEvents() {
+                // Adjust cosmic event frequency based on player engagement
+                const engagementLevel = Object.keys(this.aiUniverse.playerBehavior.preferredRegions).length / 10;
+                
+                // More engaged players get more spectacular events
+                if (engagementLevel > 0.5) {
+                    this.cosmicEventTypes = this.cosmicEventTypes.concat(['hypernova', 'quasarActivation', 'galacticCollision']);
+                }
             }
 
             animateAsteroidBelts(delta) {
@@ -4601,14 +5276,111 @@
             }
         }
 
+        // Loading progress management
+        function updateLoadingProgress(progress, text) {
+            const progressBar = document.getElementById('progressBar');
+            const loadingText = document.getElementById('loadingText');
+            if (progressBar) progressBar.style.width = progress + '%';
+            if (loadingText) loadingText.textContent = text;
+        }
+
         // Initialize the ultimate game experience
         let game;
         window.addEventListener('load', () => {
             console.log('🔥 Initializing Blaze Worlds Ultimate...');
-            game = new BlazeWorldsUltimate();
+            updateLoadingProgress(10, 'Checking Three.js...');
             
-            // Make game globally accessible for world selector buttons
-            window.game = game;
+            try {
+                // Check if Three.js is loaded
+                if (typeof THREE === 'undefined') {
+                    throw new Error('Three.js is not loaded!');
+                }
+                
+                console.log('✅ Three.js loaded, version:', THREE.REVISION);
+                updateLoadingProgress(25, 'Three.js loaded successfully!');
+                
+                // Check if canvas exists
+                const canvas = document.getElementById('gameCanvas');
+                if (!canvas) {
+                    throw new Error('Game canvas not found!');
+                }
+                
+                console.log('✅ Canvas found:', canvas);
+                updateLoadingProgress(40, 'Setting up WebGL renderer...');
+                
+                // Small delay to show progress
+                setTimeout(() => {
+                    updateLoadingProgress(60, 'Generating cosmic universe...');
+                    
+                    setTimeout(() => {
+                        // Initialize game
+                        game = new BlazeWorldsUltimate();
+                        console.log('✅ Game initialized successfully!');
+                        
+                        // Make game globally accessible for world selector buttons
+                        window.game = game;
+                        
+                        updateLoadingProgress(90, 'Starting cosmic exploration...');
+                        
+                        // Hide loading screen after successful initialization
+                        setTimeout(() => {
+                            updateLoadingProgress(100, 'Welcome to the cosmos!');
+                            
+                            setTimeout(() => {
+                                const loadingScreen = document.getElementById('loadingScreen');
+                                if (loadingScreen) {
+                                    loadingScreen.style.opacity = '0';
+                                    loadingScreen.style.transition = 'opacity 0.5s ease';
+                                    setTimeout(() => {
+                                        loadingScreen.style.display = 'none';
+                                    }, 500);
+                                }
+                            }, 500);
+                        }, 500);
+                    }, 300);
+                }, 500);
+                
+            } catch (error) {
+                console.error('❌ Failed to initialize game:', error);
+                updateLoadingProgress(0, 'Initialization failed!');
+                
+                // Show error message to user
+                const errorDiv = document.createElement('div');
+                errorDiv.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(255, 0, 0, 0.9);
+                    color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    font-family: monospace;
+                    z-index: 10001;
+                    text-align: center;
+                    max-width: 500px;
+                `;
+                errorDiv.innerHTML = `
+                    <h3>🚨 Game Initialization Failed</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>This usually happens when:</p>
+                    <ul style="text-align: left; margin: 10px 0;">
+                        <li>Three.js failed to load from CDN</li>
+                        <li>WebGL is not supported by your browser</li>
+                        <li>Browser blocked 3D acceleration</li>
+                    </ul>
+                    <p>Please try refreshing or use a different browser.</p>
+                    <div style="margin-top: 15px;">
+                        <button onclick="location.reload()" style="background: white; color: red; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">
+                            🔄 Reload Page
+                        </button>
+                        <button onclick="window.open('chrome://settings/content/webGL')" style="background: #333; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">
+                            ⚙️ Check WebGL
+                        </button>
+                    </div>
+                `;
+                document.body.appendChild(errorDiv);
+            }
         });
     </script>
 

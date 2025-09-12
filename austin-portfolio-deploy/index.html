@@ -148,6 +148,158 @@
         body { font-family: "Inter", sans-serif; background: #0A192F; color: #E6F1FF; }
         .hero { min-height: 100vh; display: flex; align-items: center; }
         .cta-button { background: linear-gradient(45deg, #BF5700, #FF6B35); color: white; padding: 1rem 2rem; }
+        
+        /* Enhanced Navigation Styles */
+        .professional-nav {
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(191, 87, 0, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            color: #E6F1FF;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .nav-link:hover {
+            color: #BF5700;
+            background: rgba(191, 87, 0, 0.1);
+            border-color: rgba(191, 87, 0, 0.3);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(45deg, #BF5700, #FF6B35);
+            color: white;
+        }
+        
+        .nav-link.highlight {
+            background: linear-gradient(45deg, #BF5700, #FF6B35);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(191, 87, 0, 0.3);
+        }
+        
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .nav-dropdown-toggle {
+            color: #E6F1FF;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            background: rgba(191, 87, 0, 0.1);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav-dropdown-toggle:hover {
+            background: rgba(191, 87, 0, 0.2);
+            border-color: rgba(191, 87, 0, 0.5);
+        }
+        
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(10, 25, 47, 0.98);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            min-width: 200px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+        }
+        
+        .nav-dropdown:hover .nav-dropdown-menu {
+            display: block;
+        }
+        
+        .nav-dropdown-menu .nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            margin: 0;
+            border-radius: 0;
+            border: none;
+        }
+        
+        .nav-season-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-left: 2rem;
+        }
+        
+        .season-text {
+            color: #BF5700;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .last-update {
+            color: #94A9C9;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem 0;
+            }
+            
+            .nav-season-info {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .nav-dropdown-menu {
+                position: relative;
+                display: block;
+                background: transparent;
+                border: none;
+                box-shadow: none;
+                margin-top: 0.5rem;
+            }
+        }
     </style>
     
     <!-- Layout and Spacing Fixes -->
@@ -227,10 +379,38 @@
                     <a href="/orioles-executive-intelligence.html" class="nav-link">Executive Intelligence</a>
                     <a href="/live-demo.html" class="nav-link">Live Analytics</a>
                     <a href="/nil-calculator.html" class="nav-link">NIL Engine</a>
-                    <a href="/analytics-dashboard.html" class="nav-link">Dashboard</a>
-                    <a href="/api/health" class="nav-link">API Status</a>
-                    <a href="/demo.html" class="nav-link">Get Started</a>
-                    <a href="/live-demo.html" class="nav-link highlight">Launch Platform</a>
+                    <a href="/dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="/api/status" class="nav-link">API Status</a>
+                    <a href="/get-started.html" class="nav-link">Get Started</a>
+                    <a href="/blaze-vision-ai-scouting.html" class="nav-link highlight">Launch Platform</a>
+                    
+                    <!-- Sports Section -->
+                    <div class="nav-dropdown">
+                        <span class="nav-dropdown-toggle">🏈 College Football 🏈</span>
+                        <div class="nav-dropdown-menu">
+                            <a href="/longhorns-intelligence.html" class="nav-link">Longhorns Intelligence</a>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-dropdown">
+                        <span class="nav-dropdown-toggle">🏆 NFL 🏆</span>
+                        <div class="nav-dropdown-menu">
+                            <a href="/titans-intelligence.html" class="nav-link">Titans Intelligence</a>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-dropdown">
+                        <span class="nav-dropdown-toggle">⚾ MLB ⚾</span>
+                        <div class="nav-dropdown-menu">
+                            <a href="/cardinals-intelligence.html" class="nav-link">Cardinals Intelligence</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Season Info -->
+                    <div class="nav-season-info">
+                        <span class="season-text">Season: 2023-2024</span>
+                        <span class="last-update">Last Update: --</span>
+                    </div>
                 </div>
             </div>
             
@@ -1407,11 +1587,12 @@
             }
         });
         
-        // Mobile menu toggle functionality
+        // Enhanced Navigation Functionality
         document.addEventListener('DOMContentLoaded', () => {
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
             const navLinks = document.querySelector('.nav-links');
             
+            // Mobile menu toggle
             if (mobileMenuToggle && navLinks) {
                 mobileMenuToggle.addEventListener('click', () => {
                     navLinks.classList.toggle('active');
@@ -1441,6 +1622,43 @@
                     }
                 });
             }
+            
+            // Update last update time in navigation
+            function updateLastUpdateTime() {
+                const lastUpdateElement = document.querySelector('.last-update');
+                if (lastUpdateElement) {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('en-US', {
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    lastUpdateElement.textContent = `Last Update: ${timeString}`;
+                }
+            }
+            
+            // Update time every minute
+            updateLastUpdateTime();
+            setInterval(updateLastUpdateTime, 60000);
+            
+            // Enhanced dropdown functionality for mobile
+            const dropdownToggles = document.querySelectorAll('.nav-dropdown-toggle');
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        const dropdown = toggle.closest('.nav-dropdown');
+                        const menu = dropdown.querySelector('.nav-dropdown-menu');
+                        
+                        // Toggle menu visibility
+                        if (menu.style.display === 'block') {
+                            menu.style.display = 'none';
+                        } else {
+                            menu.style.display = 'block';
+                        }
+                    }
+                });
+            });
         });
         
         // Three.js Hero Animation
