@@ -1,0 +1,121 @@
+{
+  "lastUpdated": "2025-09-13T17:30:00Z",
+  "season": "2025",
+  "week": 3,
+  "currentDate": "September 13, 2025",
+  "source": "Dave Campbell's Texas Football (DCTF)",
+  "uil6ARankings": {
+    "week3": [
+      {
+        "rank": 1,
+        "team": "Southlake Carroll Dragons",
+        "classification": "UIL 6A Division I",
+        "record": "3-0",
+        "keyPlayers": {
+          "qb": {
+            "name": "Angelo Renda",
+            "commitment": "Pittsburgh",
+            "stats": "597 yards, 5 TDs through 2 games"
+          },
+          "wr": {
+            "name": "Brock Boyd",
+            "commitment": "Ohio State",
+            "note": "State's top QB-WR tandem"
+          }
+        },
+        "nextOpponent": "Trophy Club Byron Nelson Bobcats",
+        "location": "Southlake, Texas",
+        "conference": "District 5-6A Division I",
+        "championships": {
+          "stateTitle": 8,
+          "note": "Perennial powerhouse program"
+        }
+      },
+      {
+        "rank": 2,
+        "team": "Duncanville Panthers",
+        "classification": "UIL 6A Division I",
+        "record": "1-0",
+        "location": "Duncanville, Texas"
+      },
+      {
+        "rank": 3,
+        "team": "North Crowley Panthers",
+        "classification": "UIL 6A Division I",
+        "record": "3-0",
+        "location": "North Crowley, Texas"
+      },
+      {
+        "rank": 4,
+        "team": "Allen Eagles",
+        "classification": "UIL 6A Division I",
+        "record": "3-0",
+        "keyPlayers": {
+          "qb": {
+            "name": "Ty Snell",
+            "year": "Freshman",
+            "transfer": "Lipscomb Academy",
+            "stats": "9/11, 146 yards, 1 TD vs Midland Legacy",
+            "note": "Week 1 debut performance"
+          }
+        },
+        "nextOpponent": "Prosper Rock Hill Blue Hawks",
+        "location": "Allen, Texas",
+        "conference": "District 9-6A Division I",
+        "stadium": "Eagle Stadium",
+        "championships": {
+          "stateTitle": 6,
+          "note": "Elite program with massive facility"
+        }
+      }
+    ]
+  },
+  "coverageScope": {
+    "totalTeams": 2847,
+    "description": "Every snap, every play, every moment from 6A powerhouses to 1A dynasties",
+    "classifications": ["6A", "5A", "4A", "3A", "2A", "1A"],
+    "specialFocus": "6A Division I championship contenders"
+  },
+  "keyMatchups": {
+    "week3": [
+      {
+        "game": "Trophy Club Byron Nelson at Southlake Carroll",
+        "significance": "Test for #1 ranked Dragons",
+        "date": "September 13, 2025"
+      },
+      {
+        "game": "Prosper Rock Hill at Allen",
+        "significance": "Test for #4 ranked Eagles",
+        "date": "September 13, 2025"
+      }
+    ]
+  },
+  "recruitingPipeline": {
+    "collegeCommitments": [
+      {
+        "player": "Angelo Renda",
+        "position": "QB",
+        "highSchool": "Southlake Carroll",
+        "commitment": "Pittsburgh",
+        "status": "Senior leader"
+      },
+      {
+        "player": "Brock Boyd",
+        "position": "WR",
+        "highSchool": "Southlake Carroll",
+        "commitment": "Ohio State",
+        "status": "Elite receiver"
+      }
+    ]
+  },
+  "blazeIntelligenceTracker": {
+    "focus": "Deep South authority for Texas high school football",
+    "dataPoints": [
+      "Friday night lights performance metrics",
+      "Recruitment pipeline analysis",
+      "Championship trajectory modeling",
+      "Player development tracking"
+    ],
+    "heritage": "Texas as a state of mind - scale, grit, and pride"
+  }
+}

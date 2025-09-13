@@ -1,0 +1,113 @@
+{
+  "lastUpdated": "2025-09-13T17:30:00Z",
+  "season": "2025",
+  "week": 3,
+  "currentDate": "September 13, 2025",
+  "secExpansion": {
+    "newMembers": ["Texas", "Oklahoma"],
+    "totalTeams": 16,
+    "effective": "2025 season"
+  },
+  "top25Rankings": {
+    "week3": [
+      {
+        "rank": 3,
+        "team": "LSU Tigers",
+        "conference": "SEC",
+        "record": "2-0",
+        "nextGame": "vs Florida, 7:30 PM ABC"
+      },
+      {
+        "rank": 6,
+        "team": "Georgia Bulldogs",
+        "conference": "SEC",
+        "record": "2-0",
+        "nextGame": "at #15 Tennessee, 3:30 PM ABC"
+      },
+      {
+        "rank": 7,
+        "team": "Texas Longhorns",
+        "conference": "SEC",
+        "record": "2-0",
+        "week2Result": "defeated San Jose State 38-7",
+        "keyPlayer": "Arch Manning - QB",
+        "nextGame": "vs UTEP, 4:15 PM SEC Network",
+        "note": "First season in SEC"
+      },
+      {
+        "rank": 13,
+        "team": "Oklahoma Sooners",
+        "conference": "SEC",
+        "record": "2-0",
+        "week2Result": "defeated #15 Michigan 24-13",
+        "keyPlayer": "John Mateer - QB (transfer from Washington State)",
+        "stats": {
+          "passing": "270 yards, 1 TD",
+          "rushing": "74 yards, 1 TD"
+        },
+        "nextGame": "at Temple, 12:00 PM ESPN2",
+        "note": "First season in SEC, major victory over ranked Michigan"
+      },
+      {
+        "rank": 15,
+        "team": "Tennessee Volunteers",
+        "conference": "SEC",
+        "record": "2-0",
+        "week2Result": "defeated ETSU 72-17"
+      },
+      {
+        "rank": 17,
+        "team": "Ole Miss Rebels",
+        "conference": "SEC",
+        "record": "2-0",
+        "week2Result": "defeated Kentucky 30-23"
+      },
+      {
+        "rank": 19,
+        "team": "Texas A&M Aggies",
+        "conference": "SEC",
+        "record": "2-0",
+        "week2Result": "defeated Utah State 44-22"
+      },
+      {
+        "rank": 21,
+        "team": "Alabama Crimson Tide",
+        "conference": "SEC",
+        "record": "2-0",
+        "week2Result": "defeated UL Monroe 73-0"
+      }
+    ]
+  },
+  "scheduleStrength": {
+    "oklahoma": {
+      "remainingGames": 10,
+      "rankedOpponents": 8,
+      "upcomingRanked": [
+        "#24 Auburn",
+        "#7 Texas",
+        "#11 South Carolina",
+        "#17 Ole Miss",
+        "#15 Tennessee",
+        "#19 Alabama",
+        "#25 Missouri",
+        "#3 LSU"
+      ],
+      "note": "One of the toughest schedules in college football"
+    },
+    "texas": {
+      "note": "Easier 2024 slate with only 3 regular-season top-20 opponents, but 2025 projects 5 such games with improved Florida and Oklahoma"
+    }
+  },
+  "keyTransfers": {
+    "johnMateer": {
+      "from": "Washington State",
+      "to": "Oklahoma",
+      "position": "QB",
+      "rank": "#1 in top 100 transfers for 2024-25 cycle"
+    }
+  },
+  "collegeCoverage": {
+    "primaryFocus": ["SEC", "Big 12", "Texas High School Pipeline"],
+    "specialEmphasis": "Texas and Oklahoma SEC transition"
+  }
+}
