@@ -10,6 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
 
+    <!-- Championship Performance Monitoring -->
+    <script type="module" src="js/performance-monitor.js"></script>
+
     <style>
         :root {
             --cardinals-red: #C41E3A;
@@ -791,6 +794,17 @@
         window.addEventListener('load', drawPlayoffRing);
 
         console.log('🔴 Cardinals Intelligence Dashboard loaded - Real-time analytics active');
+
+        // Register Championship Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('🏆 Championship Service Worker registered:', registration.scope);
+                })
+                .catch(error => {
+                    console.warn('Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
 </html>
