@@ -3,263 +3,572 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - Blaze Intelligence</title>
+    <title>Blaze Intelligence | Contact Championship Intelligence</title>
+    <meta name="description" content="Connect with the Deep South's premier sports intelligence platform. Let's build championship programs together.">
+
+    <!-- Three.js for Background Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --burnt-orange: #BF5700;
-            --dark-burnt-orange: #8B3A00;
-            --white: #FFFFFF;
-            --black: #1D1D1F;
-            --light-gray: #F5F5F7;
-            --medium-gray: #86868B;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --championship-gold: #FFD700;
+            --sec-crimson: #9E1B32;
+            --success-green: #10B981;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-            background: var(--white);
-            color: var(--black);
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
         }
-        
-        /* Clean Navigation */
-        .nav {
-            background: var(--white);
-            padding: 20px 40px;
-            box-shadow: 0 1px 10px rgba(0,0,0,0.1);
-            position: sticky;
+
+        /* 3D Canvas Background */
+        #bg-canvas {
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
         }
-        
-        .nav-content {
-            max-width: 1200px;
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid var(--burnt-orange);
+            padding: 20px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--burnt-orange);
-            text-decoration: none;
-        }
-        
-        .cta-button {
-            background: var(--burnt-orange);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 18px 36px;
-            font-size: 18px;
-            font-weight: 600;
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
             text-decoration: none;
-            display: inline-block;
         }
-        
-        .cta-button:hover {
-            background: var(--dark-burnt-orange);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(191, 87, 0, 0.3);
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--black) 0%, #2D2D30 100%);
-            color: white;
-            padding: 100px 0 120px;
-            text-align: center;
-        }
-        
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-        
-        .hero h1 {
-            font-size: clamp(48px, 8vw, 72px);
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.1;
-        }
-        
-        .hero-subtitle {
-            font-size: clamp(18px, 3vw, 24px);
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 40px;
-            font-weight: 400;
-        }
-        
-        /* Contact Section */
-        .contact {
-            background: var(--light-gray);
-            padding: 100px 0;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-        
-        .contact-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-        
-        .contact-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease;
-        }
-        
-        .contact-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .contact-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--burnt-orange), var(--dark-burnt-orange));
-            border-radius: 20px;
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            font-size: 40px;
-        }
-        
-        .contact-title {
+            font-weight: 900;
             font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 15px;
         }
-        
-        .contact-text {
-            color: var(--medium-gray);
+
+        .brand-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: var(--burnt-orange);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 60px;
+            line-height: 1.6;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Contact Grid */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        @media (max-width: 968px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Contact Form */
+        .contact-form-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--burnt-orange);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--burnt-orange);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(191, 87, 0, 0.3);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .form-select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--burnt-orange), #FF6B00);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.5);
+        }
+
+        /* Contact Info Section */
+        .contact-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateX(10px);
+            border-color: var(--cardinal-blue);
+            box-shadow: 0 10px 30px rgba(155, 203, 235, 0.2);
+        }
+
+        .info-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--cardinal-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-content {
             font-size: 16px;
             line-height: 1.6;
-            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.8);
         }
-        
-        .contact-link {
+
+        .info-link {
             color: var(--burnt-orange);
             text-decoration: none;
             font-weight: 600;
+            transition: color 0.3s;
         }
-        
-        .contact-link:hover {
-            text-decoration: underline;
+
+        .info-link:hover {
+            color: var(--cardinal-blue);
         }
-        
-        /* Section Headers */
-        .section-header {
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .quick-link {
+            padding: 10px 20px;
+            background: rgba(191, 87, 0, 0.2);
+            border: 1px solid var(--burnt-orange);
+            border-radius: 25px;
+            color: var(--burnt-orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .quick-link:hover {
+            background: var(--burnt-orange);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success-green);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            color: var(--success-green);
+            font-weight: 600;
             text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Office Location */
+        .location-card {
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(155, 203, 235, 0.1));
+            border: 2px solid var(--burnt-orange);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .location-title {
+            font-size: 28px;
+            font-weight: 800;
             margin-bottom: 20px;
+            color: var(--burnt-orange);
         }
-        
-        .section-title {
-            font-size: clamp(32px, 5vw, 48px);
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-        
-        .section-subtitle {
+
+        .location-details {
             font-size: 18px;
-            color: var(--medium-gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .hero {
-                padding: 80px 0 100px;
-            }
-            
-            .hero-content,
-            .container {
-                padding: 0 20px;
-            }
-            
-            .contact {
-                padding: 60px 0;
-            }
-            
-            .contact-methods {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
         }
     </style>
 </head>
 <body>
-    <script src="/src/js/simple-analytics.js"></script>
-    <!-- Clean Navigation -->
-    <nav class="nav">
-        <div class="nav-content">
-            <a href="/" class="logo">🔥 Blaze</a>
-            <div class="user-info">
-                <a href="/athlete-dashboard.html" class="cta-button">Dashboard</a>
-            </div>
-        </div>
-    </nav>
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Let's Talk.</h1>
-            <p class="hero-subtitle">Ready to take your performance to the next level?</p>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="brand">
+                <div class="logo">BI</div>
+                <div class="brand-text">BLAZE INTELLIGENCE</div>
+            </a>
+            <nav class="nav-menu">
+                <a href="/analytics.html" class="nav-item">Analytics</a>
+                <a href="/sec-nil-analytics.html" class="nav-item">SEC NIL</a>
+                <a href="/insights.html" class="nav-item">Insights</a>
+                <a href="/contact.html" class="nav-item">Contact</a>
+            </nav>
         </div>
-    </section>
+    </header>
 
-    <!-- Contact Section -->
-    <section class="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Get in Touch</h2>
-                <p class="section-subtitle">We respond within 24 hours. For urgent needs, call directly.</p>
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Let's Build Champions Together</h1>
+        <p class="page-subtitle">
+            From Friday night lights to Saturday showdowns, from spring training to the Final Four—
+            we're here to transform your program with championship-level intelligence. Every dynasty
+            starts with a conversation.
+        </p>
+
+        <div class="contact-grid">
+            <!-- Contact Form -->
+            <div class="contact-form-section">
+                <h2 class="form-title">Start the Conversation</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Your Name</label>
+                        <input type="text" id="name" name="name" class="form-input" required placeholder="Coach Smith">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" required placeholder="coach@university.edu">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="organization">Organization</label>
+                        <input type="text" id="organization" name="organization" class="form-input" placeholder="Texas Athletics">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="interest">Area of Interest</label>
+                        <select id="interest" name="interest" class="form-select">
+                            <option value="">Select your focus area</option>
+                            <option value="nil-analytics">NIL Analytics & Valuation</option>
+                            <option value="recruiting">Recruiting Intelligence</option>
+                            <option value="performance">Performance Analytics</option>
+                            <option value="video-intelligence">Video Intelligence Platform</option>
+                            <option value="youth-development">Youth Development (Perfect Game)</option>
+                            <option value="custom">Custom Solution</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="message">Tell Us Your Story</label>
+                        <textarea id="message" name="message" class="form-textarea" placeholder="What championship are you chasing? How can we help you get there?"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+
+                <div id="successMessage" class="success-message">
+                    Message sent! We'll be in touch within 24 hours.
+                </div>
             </div>
-            
-            <div class="contact-methods">
-                <div class="contact-card">
-                    <div class="contact-icon">📧</div>
-                    <h3 class="contact-title">Email</h3>
-                    <p class="contact-text">Best for detailed questions or partnership inquiries.</p>
-                    <a href="mailto:ahump20@outlook.com" class="contact-link">ahump20@outlook.com</a>
+
+            <!-- Contact Info -->
+            <div class="contact-info-section">
+                <div class="info-card">
+                    <h3 class="info-title">
+                        <span>📧</span> Direct Line
+                    </h3>
+                    <div class="info-content">
+                        <p>Email: <a href="mailto:championship@blazeintelligence.com" class="info-link">championship@blazeintelligence.com</a></p>
+                        <p>Response time: Within 24 hours</p>
+                        <p>Phone: <a href="tel:+12102735538" class="info-link">(210) 273-5538</a></p>
+                    </div>
                 </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">📱</div>
-                    <h3 class="contact-title">Phone</h3>
-                    <p class="contact-text">For urgent questions or to schedule a demo call.</p>
-                    <a href="tel:+12102735538" class="contact-link">(210) 273-5538</a>
+
+                <div class="info-card">
+                    <h3 class="info-title">
+                        <span>🏆</span> What We Deliver
+                    </h3>
+                    <div class="info-content">
+                        <p>• Real-time NIL valuations and market intelligence</p>
+                        <p>• Championship probability modeling</p>
+                        <p>• Recruiting pipeline analytics</p>
+                        <p>• Performance optimization insights</p>
+                        <p>• Custom dashboards for your program</p>
+                    </div>
                 </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">🏆</div>
-                    <h3 class="contact-title">Demo</h3>
-                    <p class="contact-text">See your team's data in action with a personalized demo.</p>
-                    <a href="/athlete-dashboard.html" class="contact-link">View Dashboard</a>
+
+                <div class="info-card">
+                    <h3 class="info-title">
+                        <span>🤝</span> Partnership Options
+                    </h3>
+                    <div class="info-content">
+                        <p>Whether you're a Power 5 athletic department, an elite high school program,
+                        or a Perfect Game organization, we have solutions scaled to your ambitions.</p>
+                        <div class="quick-links">
+                            <a href="#" class="quick-link">Schedule Demo</a>
+                            <a href="#" class="quick-link">View Pricing</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+
+        <!-- Location -->
+        <div class="location-card">
+            <h2 class="location-title">Deep in the Heart of Texas</h2>
+            <div class="location-details">
+                <p><strong>Blaze Intelligence Headquarters</strong></p>
+                <p>San Antonio, Texas</p>
+                <p>Where championship dreams meet data-driven reality</p>
+                <p style="margin-top: 20px; font-style: italic; color: var(--cardinal-blue);">
+                    "From the fields of Friday Night Lights to the war rooms of the SEC,
+                    we speak the language of champions."
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Three.js Background Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Create particle field
+        const particles = new THREE.BufferGeometry();
+        const particleCount = 1000;
+        const posArray = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 50;
+        }
+
+        particles.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.005,
+            color: 0xBF5700,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particlesMesh = new THREE.Points(particles, material);
+        scene.add(particlesMesh);
+
+        camera.position.z = 15;
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.x += 0.0003;
+            particlesMesh.rotation.y += 0.0005;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Contact Form Handler
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Simulate form submission
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            // Show success message
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.add('show');
+
+            // Reset form
+            e.target.reset();
+
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 5000);
+
+            // In production, this would send to your API
+            console.log('Form submitted:', data);
+        });
+    </script>
 </body>
 </html>

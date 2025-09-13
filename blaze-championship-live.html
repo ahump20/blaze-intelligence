@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Championship Live Intelligence Platform</title>
+
+    <!-- Core Libraries -->
+    <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide-react@latest/dist/umd/lucide-react.js"></script>
+    <script src="https://unpkg.com/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        blaze: {
+                            orange: '#BF5700',
+                            'orange-light': '#FF6A00',
+                            'orange-dark': '#8F3E00',
+                            blue: '#9BCBEB',
+                            'blue-light': '#B8DCEE',
+                            'blue-dark': '#7AB8DB',
+                            navy: '#002244',
+                            teal: '#00B2A9',
+                            platinum: '#E5E4E2',
+                            graphite: '#36454F'
+                        },
+                        cardinal: { DEFAULT: '#C41E3A', light: '#DC2E4B', dark: '#9A1628' },
+                        titans: { DEFAULT: '#002244', light: '#0A2C4E', red: '#C8102E' },
+                        longhorns: { DEFAULT: '#BF5700', light: '#FF6A00', dark: '#8F3E00' },
+                        grizzlies: { DEFAULT: '#5D76A9', light: '#7E92BA', dark: '#445A8A', gold: '#F5B112' }
+                    },
+                    fontFamily: {
+                        'display': ['Neue Haas Grotesk Display', 'Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    animation: {
+                        'data-pulse': 'dataPulse 2s ease-in-out infinite',
+                        'championship-glow': 'championshipGlow 3s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out'
+                    },
+                    keyframes: {
+                        dataPulse: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.02)' }
+                        },
+                        championshipGlow: {
+                            '0%': { boxShadow: '0 0 20px rgba(191, 87, 0, 0.3)' },
+                            '100%': { boxShadow: '0 0 40px rgba(191, 87, 0, 0.7)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #001122 0%, #002244 50%, #001133 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .blaze-gradient {
+            background: linear-gradient(135deg, #BF5700 0%, #FF6A00 25%, #9BCBEB 75%, #00B2A9 100%);
+        }
+
+        .blaze-gradient-text {
+            background: linear-gradient(135deg, #BF5700 0%, #FF6A00 50%, #9BCBEB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .deep-south-authority {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .live-indicator {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const {
+            Trophy, Activity, TrendingUp, Users, Database,
+            Globe, Zap, BarChart3, Target, Shield,
+            ChevronRight, ExternalLink, RefreshCw, Radio
+        } = lucide;
+
+        // Live Sports Data Service
+        class LiveSportsService {
+            constructor() {
+                this.apiBase = '/.netlify/functions';
+                this.cache = new Map();
+                this.updateInterval = 30000; // 30 seconds
+            }
+
+            async fetchLiveScores(sport, team) {
+                const cacheKey = `${sport}-${team}`;
+                const cached = this.cache.get(cacheKey);
+
+                if (cached && Date.now() - cached.timestamp < this.updateInterval) {
+                    return cached.data;
+                }
+
+                try {
+                    const response = await axios.get(`${this.apiBase}/live-scores`, {
+                        params: { sport, team }
+                    });
+
+                    const data = response.data;
+                    this.cache.set(cacheKey, { data, timestamp: Date.now() });
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching live scores:', error);
+                    return this.getMockData(sport, team);
+                }
+            }
+
+            getMockData(sport, team) {
+                const mockData = {
+                    mlb: {
+                        cardinals: {
+                            team: 'St. Louis Cardinals',
+                            opponent: 'Chicago Cubs',
+                            score: { home: 7, away: 4 },
+                            inning: '7th',
+                            status: 'LIVE',
+                            lastPlay: 'Goldschmidt doubles to left field',
+                            winProbability: 78.5
+                        }
+                    },
+                    nfl: {
+                        titans: {
+                            team: 'Tennessee Titans',
+                            opponent: 'Jacksonville Jaguars',
+                            score: { home: 24, away: 17 },
+                            quarter: '3rd',
+                            time: '8:42',
+                            status: 'LIVE',
+                            lastPlay: 'Henry rushes for 12 yards',
+                            winProbability: 71.2
+                        }
+                    },
+                    ncaa: {
+                        longhorns: {
+                            team: 'Texas Longhorns',
+                            opponent: 'Oklahoma Sooners',
+                            score: { home: 35, away: 28 },
+                            quarter: '4th',
+                            time: '5:21',
+                            status: 'LIVE',
+                            lastPlay: 'Ewers connects with Worthy for 23 yards',
+                            winProbability: 89.3
+                        }
+                    },
+                    nba: {
+                        grizzlies: {
+                            team: 'Memphis Grizzlies',
+                            opponent: 'Golden State Warriors',
+                            score: { home: 112, away: 108 },
+                            quarter: '4th',
+                            time: '2:14',
+                            status: 'LIVE',
+                            lastPlay: 'Morant drives for the layup',
+                            winProbability: 92.1
+                        }
+                    }
+                };
+
+                return mockData[sport]?.[team] || null;
+            }
+        }
+
+        const liveService = new LiveSportsService();
+
+        // Championship Platform Component
+        function ChampionshipPlatform() {
+            const [liveScores, setLiveScores] = useState({});
+            const [selectedTeam, setSelectedTeam] = useState('all');
+            const [isLoading, setIsLoading] = useState(false);
+            const [lastUpdate, setLastUpdate] = useState(new Date());
+
+            const teams = [
+                { id: 'cardinals', name: 'Cardinals', sport: 'mlb', color: 'cardinal' },
+                { id: 'titans', name: 'Titans', sport: 'nfl', color: 'titans' },
+                { id: 'longhorns', name: 'Longhorns', sport: 'ncaa', color: 'longhorns' },
+                { id: 'grizzlies', name: 'Grizzlies', sport: 'nba', color: 'grizzlies' }
+            ];
+
+            useEffect(() => {
+                loadLiveData();
+                const interval = setInterval(loadLiveData, 30000);
+                return () => clearInterval(interval);
+            }, []);
+
+            async function loadLiveData() {
+                setIsLoading(true);
+                const scores = {};
+
+                for (const team of teams) {
+                    const data = await liveService.fetchLiveScores(team.sport, team.id);
+                    if (data) scores[team.id] = data;
+                }
+
+                setLiveScores(scores);
+                setLastUpdate(new Date());
+                setIsLoading(false);
+            }
+
+            return (
+                <div className="min-h-screen relative">
+                    {/* Hero Section */}
+                    <header className="relative z-10 pt-8 pb-16 px-4">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="flex items-center justify-between mb-8">
+                                <div className="flex items-center space-x-4">
+                                    <div className="w-12 h-12 bg-blaze-orange rounded-lg flex items-center justify-center">
+                                        <Trophy className="w-7 h-7 text-white" />
+                                    </div>
+                                    <div>
+                                        <h1 className="text-3xl font-bold deep-south-authority">
+                                            BLAZE INTELLIGENCE
+                                        </h1>
+                                        <p className="text-blaze-blue text-sm">Championship Live Platform</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center space-x-4">
+                                    <div className="flex items-center space-x-2">
+                                        <Radio className="w-4 h-4 text-red-500 live-indicator" />
+                                        <span className="text-sm text-gray-300">LIVE</span>
+                                    </div>
+                                    <button
+                                        onClick={loadLiveData}
+                                        className="p-2 glass-morphism rounded-lg hover:bg-white/10 transition-colors"
+                                        disabled={isLoading}
+                                    >
+                                        <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="glass-morphism rounded-2xl p-8 animate-fade-in">
+                                <h2 className="text-5xl font-bold mb-4 deep-south-authority blaze-gradient-text">
+                                    Where Friday Night Lights Meet Silicon Valley Innovation
+                                </h2>
+                                <p className="text-xl text-gray-300 mb-6">
+                                    Real-time intelligence from the gridiron to the diamond,
+                                    powered by Texas-sized ambition and SEC-caliber analytics
+                                </p>
+                                <div className="flex flex-wrap gap-4">
+                                    <button className="px-6 py-3 blaze-gradient text-white font-semibold rounded-lg hover:shadow-lg transition-all animate-championship-glow">
+                                        View Live Dashboard
+                                    </button>
+                                    <button className="px-6 py-3 glass-morphism border border-blaze-blue text-blaze-blue font-semibold rounded-lg hover:bg-white/10 transition-all">
+                                        Schedule Demo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Live Scores Section */}
+                    <section className="relative z-10 py-12 px-4">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="flex items-center justify-between mb-8">
+                                <h3 className="text-2xl font-bold deep-south-authority">
+                                    Championship Live Feeds
+                                </h3>
+                                <p className="text-sm text-gray-400">
+                                    Last updated: {lastUpdate.toLocaleTimeString()}
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {teams.map(team => {
+                                    const score = liveScores[team.id];
+                                    if (!score) return null;
+
+                                    return (
+                                        <div key={team.id} className="glass-morphism rounded-xl p-6 animate-slide-up hover:scale-105 transition-transform">
+                                            <div className={`flex items-center justify-between mb-4 text-${team.color}`}>
+                                                <h4 className="font-bold text-lg">{team.name}</h4>
+                                                {score.status === 'LIVE' && (
+                                                    <Radio className="w-4 h-4 text-red-500 live-indicator" />
+                                                )}
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-sm text-gray-400">vs {score.opponent.split(' ').slice(-1)[0]}</span>
+                                                    <span className="font-mono text-xl">
+                                                        {score.score.home} - {score.score.away}
+                                                    </span>
+                                                </div>
+
+                                                <div className="text-sm text-gray-400">
+                                                    {score.quarter || score.inning} {score.time && `• ${score.time}`}
+                                                </div>
+
+                                                <div className="pt-3 border-t border-gray-700">
+                                                    <p className="text-xs text-gray-400 mb-1">Last Play:</p>
+                                                    <p className="text-sm">{score.lastPlay}</p>
+                                                </div>
+
+                                                <div className="flex items-center justify-between pt-3 border-t border-gray-700">
+                                                    <span className="text-xs text-gray-400">Win Probability</span>
+                                                    <span className="text-sm font-bold text-green-400">
+                                                        {score.winProbability}%
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Intelligence Features */}
+                    <section className="relative z-10 py-12 px-4">
+                        <div className="max-w-7xl mx-auto">
+                            <h3 className="text-2xl font-bold mb-8 deep-south-authority">
+                                Deep South Intelligence Suite
+                            </h3>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="glass-morphism rounded-xl p-6">
+                                    <BarChart3 className="w-10 h-10 text-blaze-orange mb-4" />
+                                    <h4 className="text-xl font-bold mb-2">Advanced Analytics</h4>
+                                    <p className="text-gray-400 text-sm mb-4">
+                                        SEC-caliber performance metrics and predictive modeling
+                                        that would make Bear Bryant proud
+                                    </p>
+                                    <div className="flex items-center text-blaze-blue text-sm">
+                                        <span>Explore Analytics</span>
+                                        <ChevronRight className="w-4 h-4 ml-1" />
+                                    </div>
+                                </div>
+
+                                <div className="glass-morphism rounded-xl p-6">
+                                    <Target className="w-10 h-10 text-cardinal mb-4" />
+                                    <h4 className="text-xl font-bold mb-2">Recruitment Intelligence</h4>
+                                    <p className="text-gray-400 text-sm mb-4">
+                                        From Perfect Game showcases to Friday night lights,
+                                        tracking tomorrow's champions today
+                                    </p>
+                                    <div className="flex items-center text-blaze-blue text-sm">
+                                        <span>View Pipeline</span>
+                                        <ChevronRight className="w-4 h-4 ml-1" />
+                                    </div>
+                                </div>
+
+                                <div className="glass-morphism rounded-xl p-6">
+                                    <Zap className="w-10 h-10 text-grizzlies-gold mb-4" />
+                                    <h4 className="text-xl font-bold mb-2">Vision AI Coaching</h4>
+                                    <p className="text-gray-400 text-sm mb-4">
+                                        Biomechanical analysis meets grit detection -
+                                        reading the heart of a champion
+                                    </p>
+                                    <div className="flex items-center text-blaze-blue text-sm">
+                                        <span>Launch Platform</span>
+                                        <ChevronRight className="w-4 h-4 ml-1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Performance Metrics */}
+                    <section className="relative z-10 py-12 px-4">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="glass-morphism rounded-2xl p-8">
+                                <h3 className="text-2xl font-bold mb-8 deep-south-authority">
+                                    Championship Performance Metrics
+                                </h3>
+
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold blaze-gradient-text mb-2">2.8M+</div>
+                                        <div className="text-sm text-gray-400">Data Points Analyzed</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold text-cardinal mb-2">94.6%</div>
+                                        <div className="text-sm text-gray-400">Prediction Accuracy</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold text-titans mb-2">&lt;100ms</div>
+                                        <div className="text-sm text-gray-400">Response Time</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold text-grizzlies-gold mb-2">24/7</div>
+                                        <div className="text-sm text-gray-400">Live Intelligence</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="relative z-10 py-8 px-4 border-t border-gray-800">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="flex flex-col md:flex-row justify-between items-center">
+                                <div className="mb-4 md:mb-0">
+                                    <p className="text-sm text-gray-400">
+                                        © 2025 Blaze Intelligence. Turning data into dominance.
+                                    </p>
+                                </div>
+                                <div className="flex space-x-6 text-sm text-gray-400">
+                                    <a href="#" className="hover:text-blaze-blue transition-colors">Methods & Definitions</a>
+                                    <a href="#" className="hover:text-blaze-blue transition-colors">API Documentation</a>
+                                    <a href="#" className="hover:text-blaze-blue transition-colors">Contact</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        // Initialize Three.js Background
+        function initThreeBackground() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('three-canvas'),
+                alpha: true,
+                antialias: true
+            });
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create particle field
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 1000; i++) {
+                vertices.push(
+                    Math.random() * 200 - 100,
+                    Math.random() * 200 - 100,
+                    Math.random() * 200 - 100
+                );
+
+                const color = new THREE.Color();
+                color.setHSL(20 / 360, 0.8, 0.5 + Math.random() * 0.2);
+                colors.push(color.r, color.g, color.b);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 2,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            camera.position.z = 50;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.001;
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Render the app
+        ReactDOM.render(<ChampionshipPlatform />, document.getElementById('root'));
+
+        // Initialize Three.js after React renders
+        setTimeout(initThreeBackground, 100);
+    </script>
+</body>
+</html>

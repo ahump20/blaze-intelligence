@@ -1,0 +1,87 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# API redirects
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Championship platform redirects - fix 404 issues
+[[redirects]]
+  from = "/blaze-championship-live"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/blaze-championship-live.html"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/index-championship-ultimate"
+  to = "/analytics.html"
+  status = 200
+
+[[redirects]]
+  from = "/index-championship-ultimate.html"
+  to = "/analytics.html"
+  status = 200
+
+[[redirects]]
+  from = "/championship-3d-universe"
+  to = "/universe.html"
+  status = 200
+
+[[redirects]]
+  from = "/championship-3d-universe.html"
+  to = "/universe.html"
+  status = 200
+
+[[redirects]]
+  from = "/championship-ai-analytics"
+  to = "/analytics.html"
+  status = 200
+
+[[redirects]]
+  from = "/championship-ai-analytics.html"
+  to = "/analytics.html"
+  status = 200
+
+# Clean extensionless URLs
+[[redirects]]
+  from = "/analytics"
+  to = "/analytics.html"
+  status = 200
+
+[[redirects]]
+  from = "/universe"
+  to = "/universe.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/blaze-championship-live.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
