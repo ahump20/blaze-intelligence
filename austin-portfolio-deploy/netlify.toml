@@ -43,3 +43,27 @@ status = 200
 from = "/universe"
 to   = "/universe.html"
 status = 200
+
+# Security headers with CSP allowing Three.js and external resources
+[[headers]]
+for = "/*"
+  [headers.values]
+  X-Frame-Options = "DENY"
+  X-XSS-Protection = "1; mode=block"
+  X-Content-Type-Options = "nosniff"
+  Referrer-Policy = "strict-origin-when-cross-origin"
+  Content-Security-Policy = "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'"
+
+# Proper MIME types for JavaScript files
+[[headers]]
+for = "/*.js"
+  [headers.values]
+  Content-Type = "application/javascript; charset=utf-8"
+  Cache-Control = "public, max-age=31536000, immutable"
+
+# CSS file headers
+[[headers]]
+for = "/*.css"
+  [headers.values]
+  Content-Type = "text/css; charset=utf-8"
+  Cache-Control = "public, max-age=31536000, immutable"
