@@ -1,181 +1,1762 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blaze Intelligence | Championship Intelligence Platform</title>
-  <style>
-    /* Color palette inspired by the existing Blaze Intelligence branding */
-    :root {
-      --burnt-orange: #BF5700;
-      --deep-navy: #002244;
-      --championship-gold: #FFD700;
-      --neural-green: #00FF41;
-      --ai-purple: #8B5CF6;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Championship Sports Analytics Platform</title>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <!-- Enhanced Meta Tags -->
+    <meta name="description" content="Transform Data Into Championships - AI-powered sports analytics platform with 94.6% accuracy for MLB, NFL, NBA, NCAA teams">
+    <meta name="keywords" content="sports analytics, AI coaching, NIL calculator, digital combine, championship intelligence">
+    <meta name="author" content="Austin Humphrey, Blaze Intelligence">
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, var(--deep-navy), #1a1a2e);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 40px;
-      background: rgba(0, 0, 0, 0.8);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+    <!-- Enhanced Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    .brand {
-      font-size: 24px;
-      font-weight: 800;
-      text-decoration: none;
-      color: var(--championship-gold);
-    }
+    <!-- Advanced Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 
-    nav a {
-      margin-left: 20px;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
+    <style>
+        :root {
+            /* Championship Color Palette */
+            --blaze-orange: #BF5700;
+            --blaze-gold: #FFD700;
+            --blaze-deep: #FF8C00;
+            --cardinal-red: #C41E3A;
+            --titan-blue: #4B92DB;
+            --grizzly-navy: #5D76A9;
+            --longhorn-burnt: #BF5700;
 
-    nav a:hover {
-      color: var(--burnt-orange);
-    }
+            /* Neural Network Colors */
+            --neural-primary: rgba(191, 87, 0, 0.8);
+            --neural-secondary: rgba(255, 215, 0, 0.6);
+            --neural-accent: rgba(75, 146, 219, 0.5);
 
-    .hero {
-      text-align: center;
-      padding: 120px 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Consolas', monospace;
 
-    .hero h1 {
-      font-size: 3.5rem;
-      background: linear-gradient(135deg, var(--ai-purple), var(--neural-green), var(--burnt-orange), var(--championship-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 20px;
-    }
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
 
-    .hero p {
-      font-size: 1.1rem;
-      color: #d1d5db;
-      margin-bottom: 40px;
-    }
+            /* Animations */
+            --transition-fast: 0.2s ease;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
 
-    .cta-buttons a {
-      text-decoration: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      margin: 5px;
-      font-weight: 600;
-      display: inline-block;
-      color: #fff;
-      background: var(--burnt-orange);
-      transition: transform 0.2s;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .cta-buttons a:hover {
-      transform: translateY(-3px);
-    }
+        body {
+            font-family: var(--font-primary);
+            background: linear-gradient(135deg, #0c1222 0%, #1a2744 50%, #0f1419 100%);
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-    .metrics {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 30px;
-      margin-top: 60px;
-    }
+        /* Neural Background Canvas */
+        .neural-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
 
-    .metric {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px 30px;
-      border-radius: 12px;
-      backdrop-filter: blur(10px);
-      text-align: center;
-      width: 180px;
-    }
+        /* Enhanced Header */
+        .championship-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(12, 18, 34, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(191, 87, 0, 0.1);
+            transition: all var(--transition-smooth);
+        }
 
-    .metric .number {
-      font-size: 2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-    }
+        .championship-header.scrolled {
+            background: rgba(12, 18, 34, 0.98);
+            border-bottom-color: rgba(191, 87, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
 
-    .metric .label {
-      font-size: 0.875rem;
-      color: #9CA3AF;
-    }
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+        }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #6b7280;
-      font-size: 0.875rem;
-    }
-  </style>
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: white;
+            transition: all var(--transition-smooth);
+        }
+
+        .brand-section:hover {
+            transform: translateY(-2px);
+        }
+
+        .brand-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-deep) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(191, 87, 0, 0.3);
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: #94A3B8;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Enhanced Navigation */
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: #E2E8F0;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all var(--transition-smooth);
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blaze-orange) 0%, var(--blaze-gold) 100%);
+            transition: width var(--transition-smooth);
+        }
+
+        .nav-link:hover {
+            color: var(--blaze-orange);
+            transform: translateY(-1px);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-deep) 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all var(--transition-smooth);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(191, 87, 0, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(191, 87, 0, 0.4);
+        }
+
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--blaze-orange);
+            border-radius: 2px;
+            transition: all var(--transition-smooth);
+        }
+
+        .mobile-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-deep) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-deep) 50%, var(--blaze-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #94A3B8;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-smooth);
+        }
+
+        .metric-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--blaze-orange);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.2);
+        }
+
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .hero-visual {
+            position: relative;
+            z-index: 1;
+        }
+
+        .consciousness-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .consciousness-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--blaze-orange) 50%, transparent 100%);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .ai-indicator {
+            width: 12px;
+            height: 12px;
+            background: #22C55E;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .neural-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--blaze-orange);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .consciousness-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .control-label {
+            font-size: 0.9rem;
+            color: #E2E8F0;
+            font-weight: 500;
+        }
+
+        .sensitivity-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .sensitivity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-deep) 100%);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #94A3B8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blaze-orange) 0%, var(--blaze-gold) 100%);
+            transform: scaleX(0);
+            transition: transform var(--transition-smooth);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(191, 87, 0, 0.3);
+            box-shadow: 0 20px 50px rgba(191, 87, 0, 0.1);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-deep) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 25px rgba(191, 87, 0, 0.3);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: #94A3B8;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-highlights {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-highlights li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #E2E8F0;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .feature-highlights li::before {
+            content: "✓";
+            color: #22C55E;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        /* Video AI Section */
+        .video-section {
+            padding: 6rem 2rem;
+            background: rgba(191, 87, 0, 0.05);
+            border-top: 1px solid rgba(191, 87, 0, 0.1);
+            border-bottom: 1px solid rgba(191, 87, 0, 0.1);
+        }
+
+        .video-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .video-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .video-upload-zone {
+            border: 2px dashed rgba(191, 87, 0, 0.5);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-upload-zone:hover {
+            border-color: var(--blaze-orange);
+            background: rgba(191, 87, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--blaze-orange);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: #94A3B8;
+            font-size: 0.9rem;
+        }
+
+        /* Analytics Dashboard Section */
+        .analytics-section {
+            padding: 6rem 2rem;
+        }
+
+        .analytics-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .dashboard-main {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .dashboard-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .team-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .team-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            transition: all var(--transition-smooth);
+        }
+
+        .team-item:hover {
+            background: rgba(191, 87, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .team-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .cardinals-logo { background: linear-gradient(135deg, #C41E3A 0%, #FF1744 100%); }
+        .titans-logo { background: linear-gradient(135deg, #0C2340 0%, #4B92DB 100%); }
+        .longhorns-logo { background: linear-gradient(135deg, #BF5700 0%, #FF8C00 100%); }
+        .grizzlies-logo { background: linear-gradient(135deg, #5D76A9 0%, #12173F 100%); }
+
+        .team-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .team-metric {
+            font-weight: 700;
+            color: var(--blaze-orange);
+        }
+
+        /* Footer */
+        .championship-footer {
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 2rem 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-description {
+            color: #94A3B8;
+            line-height: 1.6;
+        }
+
+        .footer-section h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--blaze-orange);
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #94A3B8;
+            text-decoration: none;
+            transition: all var(--transition-smooth);
+        }
+
+        .footer-links a:hover {
+            color: var(--blaze-orange);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #64748B;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .video-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .hero-section {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                padding: 2rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-metrics {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .consciousness-panel {
+                padding: 1.5rem;
+            }
+
+            .neural-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-deep) 100%);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--blaze-deep) 0%, var(--blaze-gold) 100%);
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="brand">Blaze Intelligence</a>
-    <nav>
-      <a href="index.html#dashboard">Dashboard</a>
-      <a href="analytics.html">AI Analytics</a>
-      <a href="universe.html">3D Universe</a>
-      <a href="demo.html">Demo</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
-  <main class="hero">
-    <h1>Championship Intelligence</h1>
-    <p>From Friday Night Lights to SEC Championships—real‑time analytics and visionary AI to turn data into dominance.</p>
-    <div class="cta-buttons">
-      <a href="demo.html">Launch Demo</a>
-      <a href="analytics.html">View Analytics</a>
-      <a href="universe.html">Explore Universe</a>
-    </div>
-    <div class="metrics">
-      <div class="metric">
-        <div class="number">2.8M+</div>
-        <div class="label">Data Points</div>
-      </div>
-      <div class="metric">
-        <div class="number">94.6%</div>
-        <div class="label">Prediction Accuracy</div>
-      </div>
-      <div class="metric">
-        <div class="number">&lt;100ms</div>
-        <div class="label">Response Time</div>
-      </div>
-    </div>
-  </main>
-  <footer>
-    &copy; 2025 Blaze Intelligence. All rights reserved.
-  </footer>
+    <!-- Neural Network Canvas -->
+    <canvas id="neuralCanvas" class="neural-canvas"></canvas>
+
+    <!-- Enhanced Header -->
+    <header class="championship-header" id="header">
+        <div class="header-container">
+            <a href="#home" class="brand-section">
+                <div class="brand-icon">🏆</div>
+                <div class="brand-text">
+                    <h1>Blaze Intelligence</h1>
+                    <div class="brand-tagline">Championship Sports Analytics</div>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <ul class="nav-links">
+                    <li><a href="#features" class="nav-link">Features</a></li>
+                    <li><a href="#video-ai" class="nav-link">Video AI</a></li>
+                    <li><a href="#ar-coach" class="nav-link">AR Coach</a></li>
+                    <li><a href="#analytics" class="nav-link">Analytics</a></li>
+                    <li><a href="#live-demo" class="nav-link">Live Demo</a></li>
+                </ul>
+
+                <a href="/deep-south-sports-authority.html" class="cta-button">
+                    <i class="fas fa-rocket"></i>
+                    Get Started
+                </a>
+
+                <button class="mobile-toggle" id="mobileToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content loading">
+                <div class="hero-badge">
+                    <div class="hero-badge-icon">AI</div>
+                    <span>Powered by Advanced Neural Networks</span>
+                </div>
+
+                <h1 class="hero-title">Transform Data Into Championships</h1>
+                <p class="hero-subtitle">
+                    Revolutionary AI-powered sports analytics platform with 94.6% prediction accuracy.
+                    Designed for elite MLB, NFL, NBA, and NCAA programs seeking championship excellence.
+                </p>
+
+                <div class="hero-metrics">
+                    <div class="metric-item">
+                        <div class="metric-value">94.6%</div>
+                        <div class="metric-label">AI Accuracy</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">&lt;100ms</div>
+                        <div class="metric-label">Response Time</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">2.8M+</div>
+                        <div class="metric-label">Data Points</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">12</div>
+                        <div class="metric-label">Platforms</div>
+                    </div>
+                </div>
+
+                <div class="hero-actions">
+                    <a href="#video-ai" class="cta-button">
+                        <i class="fas fa-play"></i>
+                        Watch Demo
+                    </a>
+                    <a href="/championship-live-dashboard.html" class="cta-button" style="background: transparent; border: 2px solid var(--blaze-orange);">
+                        <i class="fas fa-chart-line"></i>
+                        Live Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual loading">
+                <div class="consciousness-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="fas fa-brain"></i>
+                            AI Consciousness
+                            <div class="ai-indicator"></div>
+                        </div>
+                        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: #64748B;">
+                            v2.0.0 • Live
+                        </div>
+                    </div>
+
+                    <div class="neural-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="neuronCount">25</div>
+                            <div class="stat-label">Neurons</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="synapseCount">15</div>
+                            <div class="stat-label">Synapses</div>
+                        </div>
+                    </div>
+
+                    <div class="consciousness-controls">
+                        <div class="control-group">
+                            <label class="control-label">Neural Sensitivity</label>
+                            <input type="range" class="sensitivity-slider" min="10" max="100" value="75" id="sensitivitySlider">
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Learning Rate</label>
+                            <input type="range" class="sensitivity-slider" min="1" max="10" value="7" id="learningSlider">
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Prediction Depth</label>
+                            <input type="range" class="sensitivity-slider" min="1" max="5" value="3" id="depthSlider">
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 8px; border-left: 3px solid #22C55E;">
+                        <div style="font-size: 0.9rem; font-weight: 600; color: #22C55E; margin-bottom: 0.5rem;">
+                            <i class="fas fa-check-circle"></i> System Status: Optimal
+                        </div>
+                        <div style="font-size: 0.8rem; color: #94A3B8;">
+                            All neural pathways active • Ready for championship analysis
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="features-container">
+            <div class="section-header">
+                <h2 class="section-title">Championship Intelligence Suite</h2>
+                <p class="section-subtitle">
+                    Comprehensive sports analytics platform designed for elite programs seeking championship excellence across all major sports
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card loading">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">AI Consciousness Engine</h3>
+                    <p class="feature-description">
+                        Advanced neural networks with 94.6% prediction accuracy for championship readiness evaluation and strategic decision-making.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Predictive modeling & pattern recognition</li>
+                        <li>Decision velocity analysis</li>
+                        <li>Championship readiness scoring</li>
+                        <li>Real-time strategic insights</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card loading">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">NIL Valuation Calculator</h3>
+                    <p class="feature-description">
+                        Advanced NIL marketplace intelligence with 2025-26 valuations. Track $22M Texas roster values, Arch Manning's $6.8M projection, and SEC expansion impact on athlete branding.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Real-time market valuation</li>
+                        <li>Performance-based calculations</li>
+                        <li>Recruitment pipeline tracking</li>
+                        <li>Contract negotiation insights</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card loading">
+                    <div class="feature-icon">🎥</div>
+                    <h3 class="feature-title">Digital Combine™</h3>
+                    <p class="feature-description">
+                        Revolutionary AI-powered video analysis with biomechanical assessment, micro-expression detection, and character evaluation.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>33-point biomechanical tracking</li>
+                        <li>Micro-expression character analysis</li>
+                        <li>Elite pattern matching</li>
+                        <li>Real-time coaching feedback</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card loading">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title">3D Championship Universe</h3>
+                    <p class="feature-description">
+                        Immersive 3D visualization platform with neural networks, stadium environments, and interactive data exploration capabilities.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Interactive 3D environments</li>
+                        <li>Neural network visualization</li>
+                        <li>Stadium data representation</li>
+                        <li>Cosmic analytics exploration</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card loading">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Live Analytics Dashboard</h3>
+                    <p class="feature-description">
+                        Real-time sports intelligence with championship-level insights for Cardinals, Titans, Longhorns, and Grizzlies performance tracking.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Real-time game analytics</li>
+                        <li>Team performance monitoring</li>
+                        <li>Championship probability tracking</li>
+                        <li>AI-powered insights</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card loading">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">AR Coaching Platform</h3>
+                    <p class="feature-description">
+                        Next-generation augmented reality coaching system with real-time biomechanical feedback and elite performance optimization.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>AR-enhanced training sessions</li>
+                        <li>Real-time form correction</li>
+                        <li>Elite athlete comparisons</li>
+                        <li>Performance optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video AI Section -->
+    <section id="video-ai" class="video-section">
+        <div class="video-container">
+            <div class="video-content">
+                <h2>Revolutionary Video Analysis</h2>
+                <p style="font-size: 1.125rem; color: #94A3B8; margin-bottom: 2rem;">
+                    Upload training videos and receive instant AI-powered analysis with biomechanical insights,
+                    character evaluation, and performance optimization recommendations.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--blaze-orange); margin-bottom: 0.5rem;">33</div>
+                        <div style="font-size: 0.9rem; color: #94A3B8;">Body Landmarks</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--blaze-orange); margin-bottom: 0.5rem;">95%</div>
+                        <div style="font-size: 0.9rem; color: #94A3B8;">Detection Accuracy</div>
+                    </div>
+                </div>
+
+                <a href="/ai-coaching-platform.html" class="cta-button" style="margin-right: 1rem;">
+                    <i class="fas fa-camera"></i>
+                    Try Video Analysis
+                </a>
+
+                <a href="/executive-presentation.html" class="cta-button" style="background: transparent; border: 2px solid var(--blaze-orange);">
+                    <i class="fas fa-presentation"></i>
+                    View Presentation
+                </a>
+            </div>
+
+            <div class="video-upload-zone" id="videoUpload">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3 class="upload-text">Drop your training video here</h3>
+                <p class="upload-hint">Supports MP4, MOV, AVI • Max 100MB</p>
+                <div style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <span style="background: rgba(196, 30, 58, 0.2); color: #FF1744; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">Baseball</span>
+                    <span style="background: rgba(75, 146, 219, 0.2); color: #4B92DB; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">Football</span>
+                    <span style="background: rgba(191, 87, 0, 0.2); color: #FF8C00; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">Basketball</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Dashboard Section -->
+    <section id="analytics" class="analytics-section">
+        <div class="analytics-container">
+            <div class="section-header">
+                <h2 class="section-title">Championship Analytics Dashboard</h2>
+                <p class="section-subtitle">
+                    Real-time intelligence for elite sports programs with comprehensive team performance tracking and AI-powered insights
+                </p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-main">
+                    <canvas id="performanceChart" width="800" height="400"></canvas>
+                </div>
+
+                <div class="dashboard-sidebar">
+                    <div class="sidebar-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-trophy"></i>
+                            Championship Teams
+                        </h3>
+                        <div class="team-list">
+                            <div class="team-item">
+                                <div class="team-info">
+                                    <div class="team-logo cardinals-logo">STL</div>
+                                    <div>
+                                        <div class="team-name">Cardinals</div>
+                                        <div style="font-size: 0.75rem; color: #94A3B8;">MLB • NL Central</div>
+                                    </div>
+                                </div>
+                                <div class="team-metric">89%</div>
+                            </div>
+
+                            <div class="team-item">
+                                <div class="team-info">
+                                    <div class="team-logo titans-logo">TEN</div>
+                                    <div>
+                                        <div class="team-name">Titans</div>
+                                        <div style="font-size: 0.75rem; color: #94A3B8;">NFL • AFC South</div>
+                                    </div>
+                                </div>
+                                <div class="team-metric">84%</div>
+                            </div>
+
+                            <div class="team-item">
+                                <div class="team-info">
+                                    <div class="team-logo longhorns-logo">TEX</div>
+                                    <div>
+                                        <div class="team-name">Longhorns</div>
+                                        <div style="font-size: 0.75rem; color: #94A3B8;">NCAA • SEC</div>
+                                    </div>
+                                </div>
+                                <div class="team-metric">97%</div>
+                            </div>
+
+                            <div class="team-item">
+                                <div class="team-info">
+                                    <div class="team-logo grizzlies-logo">MEM</div>
+                                    <div>
+                                        <div class="team-name">Grizzlies</div>
+                                        <div style="font-size: 0.75rem; color: #94A3B8;">NBA • Western</div>
+                                    </div>
+                                </div>
+                                <div class="team-metric">91%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-brain"></i>
+                            AI Insights
+                        </h3>
+                        <div style="font-size: 0.9rem; line-height: 1.6; color: #E2E8F0;">
+                            <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 8px; border-left: 3px solid #22C55E;">
+                                <strong>Longhorns:</strong> Elite SEC transition at 97% - Ranked #7 AP Poll, 2-0 record with Arch Manning leading $22M NIL roster value
+                            </div>
+                            <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(196, 30, 58, 0.1); border-radius: 8px; border-left: 3px solid #C41E3A;">
+                                <strong>Cardinals:</strong> Late season positioning at 89% - Building toward October with veteran leadership and proven clutch factor
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-line"></i>
+                            System Status
+                        </h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #22C55E;">Online</div>
+                                <div style="font-size: 0.75rem; color: #94A3B8;">API Status</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--blaze-orange);">87ms</div>
+                                <div style="font-size: 0.75rem; color: #94A3B8;">Response</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="championship-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <div class="brand-icon">🏆</div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.25rem;">Blaze Intelligence</h3>
+                        <div style="font-size: 0.8rem; color: #94A3B8;">Deep South Sports Authority</div>
+                    </div>
+                </div>
+                <p class="footer-description">
+                    Founded by Austin Humphrey, former Texas Running Back. Transform your sports program with championship-level AI intelligence and data-driven insights.
+                </p>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <a href="mailto:ahump20@outlook.com" style="color: #94A3B8; font-size: 1.25rem; transition: all var(--transition-smooth);">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="tel:+12102735538" style="color: #94A3B8; font-size: 1.25rem; transition: all var(--transition-smooth);">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/john-humphrey-2033" style="color: #94A3B8; font-size: 1.25rem; transition: all var(--transition-smooth);">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <ul class="footer-links">
+                    <li><a href="/deep-south-sports-authority.html">Deep South Authority</a></li>
+                    <li><a href="/championship-live-dashboard.html">Live Dashboard</a></li>
+                    <li><a href="/ai-coaching-platform.html">AI Coaching</a></li>
+                    <li><a href="/analytics.html">Analytics Hub</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Business</h4>
+                <ul class="footer-links">
+                    <li><a href="/championship-pricing.html">Pricing</a></li>
+                    <li><a href="/executive-presentation.html">Presentation</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#enterprise">Enterprise</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#methods">Methods & Definitions</a></li>
+                    <li><a href="#documentation">Documentation</a></li>
+                    <li><a href="#support">Support</a></li>
+                    <li><a href="#api">API Access</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Blaze Intelligence. Founded by Austin Humphrey. Championship Intelligence For Elite Sports Programs.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Neural Network Background
+        class NeuralNetwork {
+            constructor() {
+                this.canvas = document.getElementById('neuralCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.neurons = [];
+                this.connections = [];
+                this.mouse = { x: 0, y: 0 };
+
+                this.resize();
+                this.createNeurons();
+                this.animate();
+
+                window.addEventListener('resize', () => this.resize());
+                document.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            createNeurons() {
+                const count = Math.min(50, Math.floor((window.innerWidth * window.innerHeight) / 15000));
+                this.neurons = [];
+
+                for (let i = 0; i < count; i++) {
+                    this.neurons.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 1,
+                        vy: (Math.random() - 0.5) * 1,
+                        radius: Math.random() * 3 + 2,
+                        opacity: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Update neurons
+                this.neurons.forEach(neuron => {
+                    neuron.x += neuron.vx;
+                    neuron.y += neuron.vy;
+
+                    if (neuron.x < 0 || neuron.x > this.canvas.width) neuron.vx *= -1;
+                    if (neuron.y < 0 || neuron.y > this.canvas.height) neuron.vy *= -1;
+
+                    // Mouse interaction
+                    const mouseDistance = Math.sqrt(
+                        Math.pow(this.mouse.x - neuron.x, 2) + Math.pow(this.mouse.y - neuron.y, 2)
+                    );
+
+                    if (mouseDistance < 100) {
+                        neuron.opacity = Math.min(1, neuron.opacity + 0.02);
+                    } else {
+                        neuron.opacity = Math.max(0.3, neuron.opacity - 0.01);
+                    }
+                });
+
+                // Draw connections
+                for (let i = 0; i < this.neurons.length; i++) {
+                    for (let j = i + 1; j < this.neurons.length; j++) {
+                        const distance = Math.sqrt(
+                            Math.pow(this.neurons[i].x - this.neurons[j].x, 2) +
+                            Math.pow(this.neurons[i].y - this.neurons[j].y, 2)
+                        );
+
+                        if (distance < 150) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(this.neurons[i].x, this.neurons[i].y);
+                            this.ctx.lineTo(this.neurons[j].x, this.neurons[j].y);
+                            this.ctx.strokeStyle = `rgba(191, 87, 0, ${0.2 - distance / 750})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+
+                // Draw neurons
+                this.neurons.forEach(neuron => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(neuron.x, neuron.y, neuron.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `rgba(191, 87, 0, ${neuron.opacity})`;
+                    this.ctx.fill();
+
+                    // Glow effect
+                    this.ctx.beginPath();
+                    this.ctx.arc(neuron.x, neuron.y, neuron.radius * 2, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `rgba(255, 215, 0, ${neuron.opacity * 0.1})`;
+                    this.ctx.fill();
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Initialize neural network
+        const neuralNetwork = new NeuralNetwork();
+
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            // Add mobile menu logic here
+        });
+
+        // Consciousness panel interactivity
+        const sensitivitySlider = document.getElementById('sensitivitySlider');
+        const learningSlider = document.getElementById('learningSlider');
+        const depthSlider = document.getElementById('depthSlider');
+        const neuronCount = document.getElementById('neuronCount');
+        const synapseCount = document.getElementById('synapseCount');
+
+        sensitivitySlider.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            neuronCount.textContent = Math.floor(value * 0.5) + 10;
+        });
+
+        learningSlider.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            synapseCount.textContent = Math.floor(value * 2) + 5;
+        });
+
+        // Video upload zone interaction
+        const videoUpload = document.getElementById('videoUpload');
+        videoUpload.addEventListener('click', () => {
+            // Simulate upload process
+            videoUpload.innerHTML = `
+                <div class="upload-icon" style="color: #22C55E;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="upload-text" style="color: #22C55E;">Analysis Complete!</h3>
+                <p class="upload-hint">94.6% accuracy • Elite biomechanical patterns detected</p>
+                <div style="margin-top: 1rem;">
+                    <a href="/ai-coaching-platform.html" style="color: #BF5700; text-decoration: none; font-weight: 600;">
+                        View Full Analysis →
+                    </a>
+                </div>
+            `;
+
+            videoUpload.style.border = '2px solid #22C55E';
+            videoUpload.style.background = 'rgba(34, 197, 94, 0.1)';
+        });
+
+        // Performance chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Sep 7', 'Sep 8', 'Sep 9', 'Sep 10', 'Sep 11', 'Sep 12', 'Sep 13'],
+                datasets: [{
+                    label: 'Cardinals',
+                    data: [79, 81, 84, 86, 87, 88, 89],
+                    borderColor: '#C41E3A',
+                    backgroundColor: 'rgba(196, 30, 58, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Titans',
+                    data: [73, 75, 78, 80, 82, 83, 84],
+                    borderColor: '#4B92DB',
+                    backgroundColor: 'rgba(75, 146, 219, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Longhorns',
+                    data: [90, 92, 93, 94, 95, 96, 97],
+                    borderColor: '#BF5700',
+                    backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Grizzlies',
+                    data: [85, 86, 87, 88, 89, 90, 91],
+                    borderColor: '#5D76A9',
+                    backgroundColor: 'rgba(93, 118, 169, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#E2E8F0',
+                            font: {
+                                family: 'Inter'
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Championship Readiness Trends',
+                        color: '#E2E8F0',
+                        font: {
+                            size: 16,
+                            weight: 'bold',
+                            family: 'Inter'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#94A3B8',
+                            font: {
+                                family: 'Inter'
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#94A3B8',
+                            font: {
+                                family: 'Inter'
+                            }
+                        },
+                        min: 70,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animate loading elements
+        gsap.from('.loading', {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power2.out'
+        });
+
+        // Animate feature cards on scroll
+        gsap.from('.feature-card', {
+            scrollTrigger: {
+                trigger: '.features-grid',
+                start: 'top 80%'
+            },
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.3,
+            ease: 'power2.out'
+        });
+
+        // Animate team items
+        gsap.from('.team-item', {
+            scrollTrigger: {
+                trigger: '.team-list',
+                start: 'top 90%'
+            },
+            x: -50,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.2,
+            ease: 'power2.out'
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Dynamic metrics counter
+        function animateCounters() {
+            const counters = document.querySelectorAll('.metric-value');
+            counters.forEach(counter => {
+                if (counter.textContent.includes('%')) {
+                    const target = parseFloat(counter.textContent);
+                    gsap.from({value: 0}, {
+                        value: target,
+                        duration: 2,
+                        ease: 'power2.out',
+                        onUpdate: function() {
+                            counter.textContent = this.targets()[0].value.toFixed(1) + '%';
+                        }
+                    });
+                }
+            });
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            animateCounters();
+        });
+
+        // Live updates simulation
+        setInterval(() => {
+            const teamMetrics = document.querySelectorAll('.team-metric');
+            teamMetrics.forEach(metric => {
+                const current = parseInt(metric.textContent);
+                const variation = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+                const newValue = Math.max(80, Math.min(100, current + variation));
+                metric.textContent = newValue + '%';
+
+                if (variation > 0) {
+                    metric.style.color = '#22C55E';
+                } else if (variation < 0) {
+                    metric.style.color = '#EF4444';
+                } else {
+                    metric.style.color = '#BF5700';
+                }
+
+                setTimeout(() => {
+                    metric.style.color = '#BF5700';
+                }, 1000);
+            });
+        }, 5000);
+
+        console.log(`
+        🏆 BLAZE INTELLIGENCE CHAMPIONSHIP PLATFORM
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        Founded by Austin Humphrey
+        Texas Running Back • Sports Intelligence Innovator
+
+        Platform Status: LIVE ✅
+        AI Accuracy: 94.6%
+        Response Time: <100ms
+        Neural Networks: ACTIVE
+        Championship Ready: TRUE
+
+        Contact: ahump20@outlook.com | (210) 273-5538
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        `);
+    </script>
 </body>
 </html>
