@@ -37,6 +37,25 @@
 /college-football         /site/index.html          200
 /college-baseball         /site/index.html          200
 
+# Unified Championship Platform Routes
+/championship-dashboard   /unified-championship-dashboard.html 200
+/perfect-game            /perfect-game-intelligence.html      200
+/pg                      /perfect-game-intelligence.html      200
+/sec                     /site/sec-football.html              200
+/sec-football            /site/sec-football-enhanced.html     200
+/deep-south              /site/sec-analytics.html             200
+
+# AI Consciousness & Video Intelligence
+/consciousness           /api/consciousness-stream            200
+/video-analysis          /api/video-intelligence             200
+/narratives              /api/narrative-generator            200
+
+# Real-Time Data Streams
+/stream/cardinals        /api/consciousness-stream           200
+/stream/titans           /api/consciousness-stream           200
+/stream/longhorns        /api/consciousness-stream           200
+/stream/grizzlies        /api/consciousness-stream           200
+
 # API routes to Netlify Functions
 /api/*                    /.netlify/functions/:splat 200
 /health                   /.netlify/functions/health 200
