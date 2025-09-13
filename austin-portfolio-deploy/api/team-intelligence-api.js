@@ -229,6 +229,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    console.log('Team Intelligence API called:', event.httpMethod, event.path);
     const { path, queryStringParameters } = event;
     const params = queryStringParameters || {};
 

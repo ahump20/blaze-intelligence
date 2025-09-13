@@ -206,6 +206,7 @@ exports.handler = async (event, context) => {
     }
 
     try {
+        console.log('Video Intelligence API called:', event.httpMethod, event.path);
         let requestData = {};
 
         if (event.httpMethod === 'POST') {
