@@ -1,239 +1,349 @@
+// Team Intelligence API - Netlify Function
+// Championship-level team analytics and intelligence
 
-// Team Intelligence API Endpoints
-export const TEAM_ENDPOINTS = {
-  getAllTeams: '/api/teams',
-  getTeamById: '/api/teams/:id',
-  getLeagueTeams: '/api/teams/league/:league',
-  getTopPerformers: '/api/teams/top/:count',
-  getFeaturedTeams: '/api/teams/featured'
-};
-
-// Team Intelligence Data
-export const TEAM_INTELLIGENCE = [
+const TEAM_INTELLIGENCE = [
   {
-    "id": "new-york-yankees",
-    "name": "New York Yankees",
+    "id": "st-louis-cardinals",
+    "name": "St. Louis Cardinals",
     "league": "MLB",
-    "division": "AL East",
-    "founded": 1901,
-    "championships": 27,
+    "division": "NL Central",
+    "founded": 1882,
+    "championships": 11,
     "metrics": {
-      "competitive_index": 268,
-      "legacy_score": 180,
-      "blaze_intelligence_score": 214,
+      "competitive_index": 245,
+      "legacy_score": 167,
+      "blaze_intelligence_score": 186,
       "prediction_accuracy": 94.6,
-      "data_points": 31907
+      "data_points": 28947
     },
     "analytics": {
-      "injury_risk": 0.29257194674936937,
+      "injury_risk": 0.23,
+      "performance_trend": "stable",
+      "playoff_probability": 0.67,
+      "championship_probability": 0.12
+    },
+    "current_season": {
+      "wins": 82,
+      "losses": 80,
+      "win_percentage": 0.506,
+      "runs_scored": 744,
+      "runs_allowed": 738,
+      "run_differential": 6
+    },
+    "key_players": [
+      "Nolan Arenado",
+      "Paul Goldschmidt",
+      "Willson Contreras"
+    ],
+    "strengths": ["veteran leadership", "clutch hitting", "defensive fundamentals"],
+    "areas_for_improvement": ["starting pitching depth", "base running efficiency"]
+  },
+  {
+    "id": "tennessee-titans",
+    "name": "Tennessee Titans",
+    "league": "NFL",
+    "division": "AFC South",
+    "founded": 1960,
+    "championships": 0,
+    "metrics": {
+      "competitive_index": 156,
+      "legacy_score": 98,
+      "blaze_intelligence_score": 134,
+      "prediction_accuracy": 91.2,
+      "data_points": 19847
+    },
+    "analytics": {
+      "injury_risk": 0.31,
+      "performance_trend": "rebuilding",
+      "playoff_probability": 0.23,
+      "championship_probability": 0.03
+    },
+    "current_season": {
+      "wins": 6,
+      "losses": 11,
+      "win_percentage": 0.353,
+      "points_scored": 298,
+      "points_allowed": 387,
+      "point_differential": -89
+    },
+    "key_players": [
+      "Derrick Henry",
+      "Ryan Tannehill",
+      "Jeffery Simmons"
+    ],
+    "strengths": ["ground game", "defensive line", "special teams"],
+    "areas_for_improvement": ["quarterback consistency", "red zone efficiency"]
+  },
+  {
+    "id": "texas-longhorns-football",
+    "name": "Texas Longhorns",
+    "league": "NCAA Football",
+    "division": "Big 12",
+    "founded": 1893,
+    "championships": 4,
+    "metrics": {
+      "competitive_index": 198,
+      "legacy_score": 156,
+      "blaze_intelligence_score": 178,
+      "prediction_accuracy": 92.8,
+      "data_points": 24156
+    },
+    "analytics": {
+      "injury_risk": 0.27,
       "performance_trend": "rising",
-      "playoff_probability": 0.5025114591172282,
-      "roster_efficiency": 0.9127032432578279
+      "playoff_probability": 0.45,
+      "championship_probability": 0.08
     },
-    "last_updated": "2025-09-09T12:56:45.590Z"
+    "current_season": {
+      "wins": 12,
+      "losses": 2,
+      "win_percentage": 0.857,
+      "points_scored": 476,
+      "points_allowed": 298,
+      "point_differential": 178
+    },
+    "key_players": [
+      "Quinn Ewers",
+      "Bijan Robinson",
+      "T'Vondre Sweat"
+    ],
+    "strengths": ["explosive offense", "defensive depth", "recruiting momentum"],
+    "areas_for_improvement": ["consistency in big games", "special teams coverage"]
   },
   {
-    "id": "notre-dame-fighting-irish",
-    "name": "Notre Dame Fighting Irish",
-    "league": "NCAA Football",
-    "division": "Independent",
-    "founded": 1887,
-    "championships": 13,
-    "metrics": {
-      "competitive_index": 195,
-      "legacy_score": 130,
-      "blaze_intelligence_score": 192,
-      "prediction_accuracy": 94.6,
-      "data_points": 57146
-    },
-    "analytics": {
-      "injury_risk": 0.2650373966660551,
-      "performance_trend": "rising",
-      "playoff_probability": 0.8480128415664312,
-      "roster_efficiency": 0.7830305883791594
-    },
-    "last_updated": "2025-09-09T12:56:45.590Z"
-  },
-  {
-    "id": "michigan-wolverines",
-    "name": "Michigan Wolverines",
-    "league": "NCAA Football",
-    "division": "Big Ten",
-    "founded": 1879,
-    "championships": 12,
-    "metrics": {
-      "competitive_index": 185,
-      "legacy_score": 125,
-      "blaze_intelligence_score": 191,
-      "prediction_accuracy": 94.6,
-      "data_points": 39644
-    },
-    "analytics": {
-      "injury_risk": 0.0329416915046753,
-      "performance_trend": "declining",
-      "playoff_probability": 0.7763741857100082,
-      "roster_efficiency": 0.934276678370028
-    },
-    "last_updated": "2025-09-09T12:56:45.590Z"
-  },
-  {
-    "id": "alabama-crimson-tide",
-    "name": "Alabama Crimson Tide",
-    "league": "NCAA Football",
-    "division": "SEC",
-    "founded": 1892,
-    "championships": 18,
-    "metrics": {
-      "competitive_index": 225,
-      "legacy_score": 145,
-      "blaze_intelligence_score": 189,
-      "prediction_accuracy": 94.6,
-      "data_points": 40984
-    },
-    "analytics": {
-      "injury_risk": 0.05906354827760382,
-      "performance_trend": "declining",
-      "playoff_probability": 0.9588718558582163,
-      "roster_efficiency": 0.7049506449460053
-    },
-    "last_updated": "2025-09-09T12:56:45.590Z"
-  },
-  {
-    "id": "los-angeles-lakers",
-    "name": "Los Angeles Lakers",
+    "id": "memphis-grizzlies",
+    "name": "Memphis Grizzlies",
     "league": "NBA",
-    "division": "Pacific",
-    "founded": 1947,
-    "championships": 17,
+    "division": "Southwest",
+    "founded": 1995,
+    "championships": 0,
     "metrics": {
-      "competitive_index": 215,
-      "legacy_score": 130,
-      "blaze_intelligence_score": 180,
-      "prediction_accuracy": 94.6,
-      "data_points": 27955
+      "competitive_index": 167,
+      "legacy_score": 78,
+      "blaze_intelligence_score": 142,
+      "prediction_accuracy": 89.4,
+      "data_points": 15698
     },
     "analytics": {
-      "injury_risk": 0.10243635782418803,
-      "performance_trend": "rising",
-      "playoff_probability": 0.6253144132230869,
-      "roster_efficiency": 0.8590929048453368
+      "injury_risk": 0.35,
+      "performance_trend": "young_core",
+      "playoff_probability": 0.34,
+      "championship_probability": 0.05
     },
-    "last_updated": "2025-09-09T12:56:45.590Z"
+    "current_season": {
+      "wins": 27,
+      "losses": 55,
+      "win_percentage": 0.329,
+      "points_scored": 110.2,
+      "points_allowed": 115.8,
+      "point_differential": -5.6
+    },
+    "key_players": [
+      "Ja Morant",
+      "Jaren Jackson Jr.",
+      "Desmond Bane"
+    ],
+    "strengths": ["athleticism", "defensive potential", "young talent"],
+    "areas_for_improvement": ["shooting consistency", "veteran leadership"]
   }
 ];
 
-// League Summaries
-export const LEAGUE_SUMMARIES = {
-  "MLB": {
-    "total_teams": 30,
-    "total_championships": 119,
-    "avg_competitive_index": 105,
-    "avg_legacy_score": 59,
-    "top_performers": [
-      {
-        "name": "New York Yankees",
-        "score": 237
-      },
-      {
-        "name": "St. Louis Cardinals",
-        "score": 164
-      },
-      {
-        "name": "Boston Red Sox",
-        "score": 141
-      },
-      {
-        "name": "Oakland Athletics",
-        "score": 131
-      },
-      {
-        "name": "Los Angeles Dodgers",
-        "score": 127
+function getTeamById(teamId) {
+  return TEAM_INTELLIGENCE.find(team => team.id === teamId);
+}
+
+function getTeamsByLeague(league) {
+  return TEAM_INTELLIGENCE.filter(team => team.league === league.toUpperCase());
+}
+
+function getTopPerformers(count = 5) {
+  return TEAM_INTELLIGENCE
+    .sort((a, b) => b.metrics.blaze_intelligence_score - a.metrics.blaze_intelligence_score)
+    .slice(0, count);
+}
+
+function getFeaturedTeams() {
+  return TEAM_INTELLIGENCE.filter(team =>
+    team.metrics.blaze_intelligence_score > 150 ||
+    team.current_season.win_percentage > 0.600
+  );
+}
+
+function generateTeamAnalytics(team) {
+  if (!team) return null;
+
+  const analytics = {
+    team_overview: {
+      name: team.name,
+      league: team.league,
+      division: team.division,
+      championship_history: team.championships
+    },
+    performance_metrics: team.metrics,
+    current_form: {
+      record: `${team.current_season.wins}-${team.current_season.losses}`,
+      win_percentage: Math.round(team.current_season.win_percentage * 1000) / 1000,
+      form_trend: team.analytics.performance_trend
+    },
+    championship_outlook: {
+      playoff_chances: Math.round(team.analytics.playoff_probability * 100) + '%',
+      title_chances: Math.round(team.analytics.championship_probability * 100) + '%',
+      injury_risk_level: team.analytics.injury_risk < 0.25 ? 'Low' :
+                         team.analytics.injury_risk < 0.35 ? 'Medium' : 'High'
+    },
+    key_insights: {
+      primary_strengths: team.strengths,
+      improvement_areas: team.areas_for_improvement,
+      star_players: team.key_players
+    },
+    blaze_intelligence_grade: team.metrics.blaze_intelligence_score > 180 ? 'A' :
+                              team.metrics.blaze_intelligence_score > 160 ? 'B' :
+                              team.metrics.blaze_intelligence_score > 140 ? 'C' : 'D'
+  };
+
+  return analytics;
+}
+
+exports.handler = async (event, context) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    };
+  }
+
+  if (event.httpMethod !== 'GET') {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
+  }
+
+  try {
+    const { path, queryStringParameters } = event;
+    const params = queryStringParameters || {};
+
+    // Route handling
+    if (path.includes('/teams/league/')) {
+      const league = path.split('/teams/league/')[1];
+      const teams = getTeamsByLeague(league);
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          league: league.toUpperCase(),
+          teams: teams,
+          count: teams.length
+        })
+      };
+    }
+
+    if (path.includes('/teams/top/')) {
+      const count = parseInt(path.split('/teams/top/')[1]) || 5;
+      const topTeams = getTopPerformers(count);
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          top_performers: topTeams,
+          count: topTeams.length
+        })
+      };
+    }
+
+    if (path.includes('/teams/featured')) {
+      const featured = getFeaturedTeams();
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          featured_teams: featured,
+          count: featured.length
+        })
+      };
+    }
+
+    if (params.teamId || params.team_id) {
+      const teamId = params.teamId || params.team_id;
+      const team = getTeamById(teamId);
+
+      if (!team) {
+        return {
+          statusCode: 404,
+          headers,
+          body: JSON.stringify({
+            success: false,
+            error: 'Team not found',
+            available_teams: TEAM_INTELLIGENCE.map(t => ({ id: t.id, name: t.name, league: t.league }))
+          })
+        };
       }
-    ]
-  },
-  "NFL": {
-    "total_teams": 32,
-    "total_championships": 100,
-    "avg_competitive_index": 100,
-    "avg_legacy_score": 50,
-    "top_performers": [
-      {
-        "name": "Green Bay Packers",
-        "score": 166
-      },
-      {
-        "name": "New York Giants",
-        "score": 145
-      },
-      {
-        "name": "Chicago Bears",
-        "score": 134
-      },
-      {
-        "name": "New England Patriots",
-        "score": 121
-      },
-      {
-        "name": "Pittsburgh Steelers",
-        "score": 118
-      }
-    ]
-  },
-  "NBA": {
-    "total_teams": 30,
-    "total_championships": 81,
-    "avg_competitive_index": 97,
-    "avg_legacy_score": 49,
-    "top_performers": [
-      {
-        "name": "Boston Celtics",
-        "score": 195
-      },
-      {
-        "name": "Los Angeles Lakers",
-        "score": 188
-      },
-      {
-        "name": "Golden State Warriors",
-        "score": 139
-      },
-      {
-        "name": "Chicago Bulls",
-        "score": 127
-      },
-      {
-        "name": "San Antonio Spurs",
-        "score": 99
-      }
-    ]
-  },
-  "NCAA_FOOTBALL": {
-    "total_teams": 10,
-    "total_championships": 83,
-    "avg_competitive_index": 162,
-    "avg_legacy_score": 107,
-    "top_performers": [
-      {
-        "name": "Alabama Crimson Tide",
-        "score": 212
-      },
-      {
-        "name": "Michigan Wolverines",
-        "score": 188
-      },
-      {
-        "name": "Notre Dame Fighting Irish",
-        "score": 168
-      },
-      {
-        "name": "USC Trojans",
-        "score": 164
-      },
-      {
-        "name": "Ohio State Buckeyes",
-        "score": 161
-      }
-    ]
+
+      const analytics = generateTeamAnalytics(team);
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          team_data: team,
+          analytics: analytics,
+          timestamp: new Date().toISOString()
+        })
+      };
+    }
+
+    // Default: return all teams
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        success: true,
+        message: 'Championship Team Intelligence API',
+        total_teams: TEAM_INTELLIGENCE.length,
+        available_endpoints: [
+          '/api/team-intelligence-api?teamId=st-louis-cardinals',
+          '/api/team-intelligence-api?league=MLB',
+          '/api/team-intelligence-api?featured=true',
+          '/api/team-intelligence-api?top=5'
+        ],
+        teams: TEAM_INTELLIGENCE.map(team => ({
+          id: team.id,
+          name: team.name,
+          league: team.league,
+          blaze_score: team.metrics.blaze_intelligence_score
+        })),
+        timestamp: new Date().toISOString()
+      })
+    };
+
+  } catch (error) {
+    console.error('Team Intelligence API Error:', error);
+
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({
+        success: false,
+        error: 'Team intelligence analysis failed',
+        message: error.message,
+        timestamp: new Date().toISOString()
+      })
+    };
   }
 };
