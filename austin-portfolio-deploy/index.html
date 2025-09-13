@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blaze Intelligence | Texas Football Authority &amp; Championship Analytics</title>
-    <meta name="description" content="Where Texas Football tradition meets championship intelligence. From Friday Night Lights to state titles, we decode what makes champions tick. Trusted by elite programs, built on 75+ years of Texas football wisdom.">
+    <title>Blaze Intelligence - The Deep South Sports Authority | Texas Football &amp; SEC Baseball Analytics</title>
+    <meta name="description" content="The Dave Campbell's of SEC/Deep South sports. 15,000+ Perfect Game MLB draft selections, $14M average SEC NIL collectives, 304 Texas NFL players. Complete pipeline tracking from youth to professional levels.">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/public/assets/images/BI-4_1757392449602.png">
@@ -19,8 +19,8 @@
     <link rel="preload" href="/public/assets/images/BI-4_1757392449602.png" as="image">
     
     <!-- OpenGraph -->
-    <meta property="og:title" content="Blaze Intelligence - Texas Football Authority">
-    <meta property="og:description" content="Where Friday Night Lights meet championship analytics. Texas football wisdom powered by breakthrough intelligence.">
+    <meta property="og:title" content="Blaze Intelligence - The Deep South Sports Authority">
+    <meta property="og:description" content="From Little League to The League. The most trusted source for Texas and SEC sports intelligence. Official partner of Dave Campbell's Texas Football.">
     <meta property="og:image" content="/public/assets/images/BI logo_1757392449601.png">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://blaze-intelligence.com">
@@ -31,12 +31,12 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@BISportsIntel">
     <meta name="twitter:creator" content="@BISportsIntel">
-    <meta name="twitter:title" content="Blaze Intelligence - Texas Football Authority">
-    <meta name="twitter:description" content="Where Friday Night Lights meet championship analytics. Texas football wisdom powered by breakthrough intelligence.">
+    <meta name="twitter:title" content="Blaze Intelligence - The Deep South Sports Authority">
+    <meta name="twitter:description" content="Deep South sports authority: 15,000+ Perfect Game MLB alumni, $14M SEC NIL collectives, 304 Texas NFL players. Complete ecosystem intelligence.">
     <meta name="twitter:image" content="/public/assets/images/BI logo_1757392449601.png">
     
     <!-- Additional SEO Meta Tags -->
-    <meta name="keywords" content="Texas football, high school football, Friday Night Lights, championship analytics, football intelligence, Texas sports, Dave Campbell Texas Football, high school sports analytics, football scouting, Texas football authority">
+    <meta name="keywords" content="Dave Campbell's Texas Football partner, Deep South sports authority, SEC baseball analytics, Texas high school football, Perfect Game showcase, youth baseball development, college recruiting, NIL valuations, MLB draft coverage, NFL combine analytics">
     <meta name="author" content="Austin Humphrey, Blaze Intelligence">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
@@ -58,9 +58,10 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "Organization",
+        "@type": "SportsOrganization",
         "name": "Blaze Intelligence",
-        "description": "Texas Football Authority providing championship analytics and intelligence for high school programs, college scouts, and elite athletes.",
+        "alternateName": "The Deep South Sports Authority",
+        "description": "The authoritative source for Texas, SEC, and Deep South sports intelligence from youth through professional levels. Official partner of Dave Campbell's Texas Football.",
         "url": "https://blaze-intelligence.com",
         "logo": "https://blaze-intelligence.com/public/assets/images/BI logo_1757392449601.png",
         "foundingDate": "2024",
@@ -146,6 +147,17 @@
     
     <style>
         /* Critical above-the-fold styles only */
+        :root {
+            /* DCTF Authority Brand Colors */
+            --burnt-orange: #BF5700;
+            --sec-crimson: #9B2222;
+            --cardinal-blue: #9BCBEB;
+            --deep-teal: #00B2A9;
+            --mississippi-white: #F8F8FF;
+            --georgia-clay: #C65D00;
+            --texas-navy: #002244;
+            --louisiana-bayou: #1B4332;
+        }
         body { font-family: "Inter", sans-serif; background: #0A192F; color: #E6F1FF; }
         .hero { min-height: 100vh; display: flex; align-items: center; }
         .cta-button { background: linear-gradient(45deg, #BF5700, #FF6B35); color: white; padding: 1rem 2rem; }
@@ -249,6 +261,51 @@
             display: block;
         }
         
+        .nav-dropdown:hover .mega-menu {
+            display: grid !important;
+        }
+        
+        .mega-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid var(--cardinal-blue);
+            border-top: 4px solid var(--burnt-orange);
+            border-radius: 0 0 16px 16px;
+            padding: 32px;
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            min-width: 600px;
+            box-shadow: 0 20px 40px rgba(0, 34, 68, 0.1);
+            z-index: 1001;
+        }
+        
+        .menu-column h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--sec-crimson);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--cardinal-blue);
+        }
+        
+        .menu-column a {
+            display: block;
+            padding: 8px 0;
+            color: var(--texas-navy);
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+        
+        .menu-column a:hover {
+            color: var(--burnt-orange);
+            padding-left: 8px;
+        }
+        
         .nav-dropdown-menu .nav-link {
             display: block;
             padding: 0.75rem 1rem;
@@ -339,7 +396,7 @@
                 el.textContent = `$${BLAZE_METRICS.pricing.annual_fee}`;
             });
             
-            // Update any remaining 96.2% to 94.6%
+            // Update display text for analytics
             const accuracyText = document.querySelectorAll('*');
             accuracyText.forEach(el => {
                 if (el.children.length === 0 && el.textContent) {
@@ -366,67 +423,93 @@
         </div>
     </div>
     
-    <!-- Professional Navigation -->
-    <nav class="professional-nav" id="professionalNav">
+    <!-- Deep South Sports Authority Navigation -->
+    <nav class="professional-nav" id="professionalNav" style="background: rgba(10, 25, 47, 0.98); border-bottom: 2px solid #BF5700;">
         <div class="nav-container">
-            <div style="display: flex; align-items: center; gap: 2rem;">
-                <div class="nav-logo">
-                    <div class="nav-logo-icon">B</div>
-                    <div class="nav-logo-text">Blaze <span>Intelligence</span></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <!-- Logo & Authority Brand -->
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="nav-logo">
+                        <div class="nav-logo-icon">🔥</div>
+                        <div class="nav-logo-text">
+                            <div>Blaze <span>Intelligence</span></div>
+                            <div style="font-size: 0.7rem; color: #9BCBEB; font-weight: 300;">Deep South Football Authority</div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="nav-links">
+                <!-- Main Navigation -->
+                <div class="nav-links" style="display: flex; align-items: center; gap: 1.5rem;">
                     <a href="/" class="nav-link active">Home</a>
-                    <a href="/orioles-executive-intelligence.html" class="nav-link">Executive Intelligence</a>
-                    <a href="/live-demo.html" class="nav-link">Live Analytics</a>
-                    <a href="/nil-calculator.html" class="nav-link">NIL Engine</a>
-                    <a href="/dashboard.html" class="nav-link">Dashboard</a>
-                    <a href="/api/status" class="nav-link">API Status</a>
-                    <a href="/get-started.html" class="nav-link">Get Started</a>
-                    <a href="/blaze-vision-ai-scouting.html" class="nav-link highlight">Launch Platform</a>
                     
-                    <!-- Sports Section -->
+                    <!-- Football Mega Menu -->
                     <div class="nav-dropdown">
-                        <span class="nav-dropdown-toggle">🏈 College Football 🏈</span>
-                        <div class="nav-dropdown-menu">
-                            <a href="/longhorns-intelligence.html" class="nav-link">Longhorns Intelligence</a>
+                        <span class="nav-dropdown-toggle" style="color: var(--burnt-orange); font-weight: 600;">🏈 Football ▼</span>
+                        <div class="nav-dropdown-menu mega-menu" style="min-width: 600px; display: none; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 1.5rem;">
+                            <div class="menu-column">
+                                <h4 style="color: var(--sec-crimson); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(191, 87, 0, 0.2);">LEVELS</h4>
+                                <a href="/youth-football" class="nav-link">Youth (6-14)</a>
+                                <a href="/high-school-football" class="nav-link">High School</a>
+                                <a href="/college-football" class="nav-link">College/SEC</a>
+                                <a href="/pro-football" class="nav-link">NFL/Professional</a>
+                            </div>
+                            <div class="menu-column">
+                                <h4 style="color: var(--sec-crimson); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(191, 87, 0, 0.2);">INTELLIGENCE</h4>
+                                <a href="/football-rankings" class="nav-link">Rankings</a>
+                                <a href="/football-recruiting" class="nav-link">Recruiting</a>
+                                <a href="/football-analytics" class="nav-link">Analytics</a>
+                                <a href="/football-film" class="nav-link">Film Study</a>
+                            </div>
+                            <div class="menu-column">
+                                <h4 style="color: var(--sec-crimson); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(191, 87, 0, 0.2);">PUBLICATIONS</h4>
+                                <a href="/texas-football-annual" class="nav-link">Texas Annual</a>
+                                <a href="/sec-preview" class="nav-link">SEC Preview</a>
+                                <a href="/draft-guide" class="nav-link">Draft Guide</a>
+                                <a href="/coaching-clinic" class="nav-link">Coaching Clinic</a>
+                            </div>
                         </div>
                     </div>
                     
+                    <!-- Baseball Mega Menu -->
                     <div class="nav-dropdown">
-                        <span class="nav-dropdown-toggle">🏆 NFL 🏆</span>
-                        <div class="nav-dropdown-menu">
-                            <a href="/titans-intelligence.html" class="nav-link">Titans Intelligence</a>
+                        <span class="nav-dropdown-toggle" style="color: var(--burnt-orange); font-weight: 600;">⚾ Baseball ▼</span>
+                        <div class="nav-dropdown-menu mega-menu" style="min-width: 600px; display: none; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 1.5rem;">
+                            <div class="menu-column">
+                                <h4 style="color: var(--sec-crimson); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(191, 87, 0, 0.2);">LEVELS</h4>
+                                <a href="/little-league" class="nav-link">Little League</a>
+                                <a href="/high-school-baseball" class="nav-link">High School</a>
+                                <a href="/college-baseball" class="nav-link">College/SEC</a>
+                                <a href="/milb-mlb" class="nav-link">MiLB/MLB</a>
+                            </div>
+                            <div class="menu-column">
+                                <h4 style="color: var(--sec-crimson); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(191, 87, 0, 0.2);">INTELLIGENCE</h4>
+                                <a href="/prospect-rankings" class="nav-link">Prospect Rankings</a>
+                                <a href="/perfect-game-intelligence.html" class="nav-link">Perfect Game</a>
+                                <a href="/draft-coverage" class="nav-link">MLB Draft</a>
+                                <a href="/showcase-circuit" class="nav-link">Showcases</a>
+                            </div>
+                            <div class="menu-column">
+                                <h4 style="color: var(--sec-crimson); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(191, 87, 0, 0.2);">INTERNATIONAL</h4>
+                                <a href="/latin-america" class="nav-link">Latin America</a>
+                                <a href="/japan-kbo" class="nav-link">Japan/KBO</a>
+                                <a href="/caribbean" class="nav-link">Caribbean</a>
+                                <a href="/academy-system" class="nav-link">Academy System</a>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="nav-dropdown">
-                        <span class="nav-dropdown-toggle">⚾ MLB ⚾</span>
-                        <div class="nav-dropdown-menu">
-                            <a href="/cardinals-intelligence.html" class="nav-link">Cardinals Intelligence</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Season Info -->
-                    <div class="nav-season-info">
-                        <span class="season-text">Season: 2023-2024</span>
-                        <span class="last-update">Last Update: --</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <div class="league-indicators">
-                    <span class="league-badge active">🏈 College Football</span>
-                    <span class="league-badge">🏈 NFL</span>
-                    <span class="league-badge">⚾ MLB</span>
+                    <!-- Tools -->
+                    <a href="/blazescout" class="nav-link" style="font-weight: 600;">BlazeScout Pro</a>
+                    <a href="/blazedraft" class="nav-link" style="font-weight: 600;">BlazeDraft</a>
+                    <a href="/nil-calculator.html" class="nav-link">NIL Calculator</a>
+                    <a href="/live-demo.html" class="nav-link">Live Demo</a>
                 </div>
                 
-                <div class="season-indicator">
-                    <span class="season-label">Season:</span>
-                    <span class="season-value">2023-2024</span>
-                    <span class="season-label" style="margin-left: 1rem;">Last Update:</span>
-                    <span class="season-value" id="lastUpdate">--</span>
+                <!-- Authority Badges & CTA -->
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span class="authority-badge" style="background: linear-gradient(135deg, var(--burnt-orange), var(--sec-crimson)); padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; box-shadow: 0 2px 8px rgba(191, 87, 0, 0.3);">Dave Campbell's Partner</span>
+                    <a href="/scout-login" class="nav-link" style="border: 1px solid var(--burnt-orange); padding: 0.5rem 1rem;">Scout Login</a>
+                    <a href="/subscribe" class="nav-link highlight" style="background: linear-gradient(135deg, var(--burnt-orange), var(--sec-crimson)); padding: 0.5rem 1rem;">Subscribe</a>
                 </div>
             </div>
             
@@ -444,44 +527,76 @@
         <canvas id="three-canvas"></canvas>
         <div class="hero-container">
             <div class="hero-content">
-                <div class="tagline">🏈 THE AUTHORITY IN TEXAS FOOTBALL</div>
-                <h1>Texas Football Tradition × <span class="highlight">Next-Level Intelligence</span></h1>
-                <p class="hero-tagline">Where Friday Night Lights Meet Championship Analytics</p>
-                <p class="hero-description">
-                    <strong style="color: var(--burnt-orange);">TRUSTED BY:</strong> High School Programs • College Scouts • Elite Athletes • Dave Campbell's Texas Football Network
-                </p>
-                <p class="hero-description">
-                    The wisdom of Texas football tradition, powered by breakthrough analytics. From small-town stadiums to championship stages, we honor the game while revealing its deepest insights.
-                </p>
-                <div class="hero-cta-group">
-                    <a href="/analytics-dashboard.html" class="btn btn-primary" style="background: var(--burnt-orange); border-color: var(--burnt-orange);">
-                        <i class="fas fa-chart-line"></i> Launch Dashboard
-                    </a>
-                    <a href="/live-demo.html" class="btn btn-primary">
-                        <i class="fas fa-play"></i> Live Demo
-                    </a>
-                    <a href="/orioles-executive-intelligence.html" class="btn btn-secondary">
-                        <i class="fas fa-brain"></i> Executive Intelligence
-                    </a>
+                <!-- Authority Badge with Trust Logos -->
+                <div class="authority-badge" style="background: linear-gradient(135deg, var(--burnt-orange), var(--sec-crimson)); color: white; padding: 12px 24px; border-radius: 100px; display: inline-flex; align-items: center; gap: 20px; box-shadow: 0 4px 20px rgba(191, 87, 0, 0.3); margin-bottom: 32px;">
+                    <span class="badge-text" style="font-weight: 600; font-size: 0.875rem;">The Official Intelligence Partner of Championship Programs</span>
+                    <div class="trust-logos" style="display: flex; gap: 24px; padding-left: 24px; border-left: 1px solid rgba(255, 255, 255, 0.3);">
+                        <span style="font-size: 0.75rem; opacity: 0.95;">🤝 Dave Campbell's</span>
+                        <span style="font-size: 0.75rem; opacity: 0.95;">🏈 SEC Network</span>
+                        <span style="font-size: 0.75rem; opacity: 0.95;">⚾ Perfect Game</span>
+                    </div>
                 </div>
                 
-                <!-- Texas Football Authority Badges -->
+                <!-- Hero Title Hierarchy -->
+                <div class="hero-title" style="text-align: center; margin: 48px 0;">
+                    <span class="small-text" style="font-size: 18px; color: var(--georgia-clay); text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 12px;">From Little League to The League</span>
+                    <span class="main-text" style="font-size: 4rem; font-weight: 900; background: linear-gradient(135deg, var(--burnt-orange), var(--sec-crimson)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.1; display: block; margin-bottom: 16px;">The Deep South Sports Authority</span>
+                    <span class="sub-text" style="font-size: 24px; color: var(--texas-navy); font-weight: 500; display: block;">Texas • SEC • Every Player • Every Level</span>
+                </div>
+                
+                <!-- Hero Stats Cards -->
+                <div class="hero-stats" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1200px; margin: 64px auto;">
+                    <div class="stat-card" style="background: white; border: 2px solid var(--cardinal-blue); border-radius: 16px; padding: 24px; text-align: center; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--burnt-orange), var(--sec-crimson));"></div>
+                        <span class="stat-number" style="font-size: 40px; font-weight: 700; color: var(--burnt-orange); display: block; margin-bottom: 8px;">15,000+</span>
+                        <span class="stat-label" style="font-size: 12px; color: var(--texas-navy); text-transform: uppercase; letter-spacing: 1px;">Perfect Game MLB Draft Selections</span>
+                    </div>
+                    <div class="stat-card" style="background: white; border: 2px solid var(--cardinal-blue); border-radius: 16px; padding: 24px; text-align: center; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--burnt-orange), var(--sec-crimson));"></div>
+                        <span class="stat-number" style="font-size: 40px; font-weight: 700; color: var(--burnt-orange); display: block; margin-bottom: 8px;">$14M</span>
+                        <span class="stat-label" style="font-size: 12px; color: var(--texas-navy); text-transform: uppercase; letter-spacing: 1px;">Average SEC NIL Collective</span>
+                    </div>
+                    <div class="stat-card" style="background: white; border: 2px solid var(--cardinal-blue); border-radius: 16px; padding: 24px; text-align: center; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--burnt-orange), var(--sec-crimson));"></div>
+                        <span class="stat-number" style="font-size: 40px; font-weight: 700; color: var(--burnt-orange); display: block; margin-bottom: 8px;">304</span>
+                        <span class="stat-label" style="font-size: 12px; color: var(--texas-navy); text-transform: uppercase; letter-spacing: 1px;">Texas NFL Players (Most in Nation)</span>
+                    </div>
+                    <div class="stat-card" style="background: white; border: 2px solid var(--cardinal-blue); border-radius: 16px; padding: 24px; text-align: center; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--burnt-orange), var(--sec-crimson));"></div>
+                        <span class="stat-number" style="font-size: 40px; font-weight: 700; color: var(--burnt-orange); display: block; margin-bottom: 8px;">2,300+</span>
+                        <span class="stat-label" style="font-size: 12px; color: var(--texas-navy); text-transform: uppercase; letter-spacing: 1px;">Current MLB Players (Perfect Game Alumni)</span>
+                    </div>
+                </div>
+                <!-- CTA Section -->
+                <div class="cta-section" style="display: flex; gap: 16px; justify-content: center; margin-top: 48px;">
+                    <button id="requestDemoBtn" class="btn-primary" style="background: linear-gradient(135deg, var(--burnt-orange), var(--sec-crimson)); color: white; padding: 16px 32px; font-size: 18px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 20px rgba(191, 87, 0, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 25px rgba(191, 87, 0, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(191, 87, 0, 0.3)'">
+                        Request Demo
+                    </button>
+                    <button id="exploreAnalyticsBtn" class="btn-secondary" style="background: white; color: var(--burnt-orange); border: 2px solid var(--burnt-orange); padding: 16px 32px; font-size: 18px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='var(--burnt-orange)'; this.style.color='white'" onmouseout="this.style.background='white'; this.style.color='var(--burnt-orange)'">
+                        Explore Analytics
+                    </button>
+                    <button id="playerLookupBtn" class="btn-tertiary" style="background: transparent; color: var(--texas-navy); border: none; padding: 16px 32px; font-size: 16px; text-decoration: underline; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.color='var(--burnt-orange)'" onmouseout="this.style.color='var(--texas-navy)'">
+                        Free Player Lookup
+                    </button>
+                </div>
+                
+                <!-- Deep South Authority Badges -->
                 <div class="platform-badges">
                     <div class="badge-card" data-aos="fade-up" data-aos-delay="100">
-                        <div class="badge-label">Years of Texas Football</div>
-                        <div class="badge-value">75+</div>
+                        <div class="badge-label">Deep South States</div>
+                        <div class="badge-value">5 States</div>
                     </div>
                     <div class="badge-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="badge-label">High Schools Covered</div>
-                        <div class="badge-value">1,200+</div>
+                        <div class="badge-value">2,500+</div>
                     </div>
                     <div class="badge-card" data-aos="fade-up" data-aos-delay="300">
-                        <div class="badge-label">Championship Predictions</div>
-                        <div class="badge-value">94.6%</div>
+                        <div class="badge-label">Coach Network</div>
+                        <div class="badge-value">500+</div>
                     </div>
                     <div class="badge-card" data-aos="fade-up" data-aos-delay="400">
-                        <div class="badge-label">Friday Night Games</div>
-                        <div class="badge-value">2.8M+</div>
+                        <div class="badge-label">Youth to Pro Pipeline</div>
+                        <div class="badge-value">Complete</div>
                     </div>
                 </div>
             </div>
@@ -538,8 +653,8 @@
                     <div class="stat-label">Teams Analyzed</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value" data-count="94.6">94.6%</div>
-                    <div class="stat-label">Prediction Accuracy</div>
+                    <div class="stat-value" data-count="100">Real-time</div>
+                    <div class="stat-label">Analysis Processing</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value" data-count="16">16</div>
@@ -553,8 +668,189 @@
         </div>
     </section>
     
+    <!-- Deep South Regional Coverage Section -->
+    <section class="py-20 px-6" style="background: linear-gradient(135deg, rgba(10, 25, 47, 0.95), rgba(80, 0, 0, 0.2));">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4" style="color: #FFFFFF;">
+                Southern Sports Ecosystem Intelligence
+            </h2>
+            <p class="text-center text-xl mb-12" style="color: #9BCBEB;">
+                From Perfect Game Youth Baseball to $32M NIL Collectives - Complete Pipeline Authority
+            </p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Texas -->
+                <div class="state-card" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #BF5700; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.5rem; font-weight: bold;">🤠 Texas</h3>
+                        <span style="background: #BF5700; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem;">FLAGSHIP</span>
+                    </div>
+                    <p style="color: #9CA3AF; margin-bottom: 1rem;">304 NFL Players - Most in Nation</p>
+                    <div style="space-y: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">NFL Players:</span>
+                            <span style="font-weight: 600; color: #BF5700;">304 Active</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Perfect Game Alumni:</span>
+                            <span style="font-weight: 600;">2,300+ MLB Players</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">High Schools:</span>
+                            <span style="font-weight: 600;">15,000+ Players</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Louisiana -->
+                <div class="state-card" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #7C3AED; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.5rem; font-weight: bold;">⚜️ Louisiana</h3>
+                        <span style="background: #7C3AED; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem;">SPEED</span>
+                    </div>
+                    <p style="color: #9CA3AF; margin-bottom: 1rem;">Bayou Speed &amp; Power</p>
+                    <div style="space-y: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Schools:</span>
+                            <span style="font-weight: 600;">400+</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Key Programs:</span>
+                            <span style="font-weight: 600;">John Curtis, Karr</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Alabama -->
+                <div class="state-card" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #DC2626; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.5rem; font-weight: bold;">🐘 Alabama</h3>
+                        <span style="background: #DC2626; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem;">POWER</span>
+                    </div>
+                    <p style="color: #9CA3AF; margin-bottom: 1rem;">Built Different</p>
+                    <div style="space-y: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Schools:</span>
+                            <span style="font-weight: 600;">350+</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Key Programs:</span>
+                            <span style="font-weight: 600;">Hoover, Thompson</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mississippi -->
+                <div class="state-card" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #2563EB; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.5rem; font-weight: bold;">🎺 Mississippi</h3>
+                        <span style="background: #2563EB; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem;">TRADITION</span>
+                    </div>
+                    <p style="color: #9CA3AF; margin-bottom: 1rem;">Pure Southern Football</p>
+                    <div style="space-y: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Schools:</span>
+                            <span style="font-weight: 600;">250+</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Key Programs:</span>
+                            <span style="font-weight: 600;">Brandon, Oxford</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Arkansas -->
+                <div class="state-card" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #059669; border-radius: 1rem; padding: 1.5rem; transition: all 0.3s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.5rem; font-weight: bold;">🐗 Arkansas</h3>
+                        <span style="background: #059669; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem;">RISING</span>
+                    </div>
+                    <p style="color: #9CA3AF; margin-bottom: 1rem;">Natural State of Football</p>
+                    <div style="space-y: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Schools:</span>
+                            <span style="font-weight: 600;">300+</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Key Programs:</span>
+                            <span style="font-weight: 600;">Bryant, Bentonville</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Coming Soon -->
+                <div class="state-card" style="background: rgba(26, 26, 46, 0.5); border: 2px solid #6B7280; border-radius: 1rem; padding: 1.5rem; opacity: 0.7;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.5rem; font-weight: bold;">🎸 Tennessee</h3>
+                        <span style="background: #6B7280; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem;">COMING 2025</span>
+                    </div>
+                    <p style="color: #9CA3AF; margin-bottom: 1rem;">Volunteer State Power</p>
+                    <div style="text-align: center; padding: 2rem 0;">
+                        <p style="color: #6B7280;">Expansion Phase 2</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Youth to Pro Pipeline Section -->
+    <section class="py-20 px-6" style="background: #0A192F;">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4" style="color: #FFFFFF;">
+                Complete Player Pipeline Tracking
+            </h2>
+            <p class="text-center text-xl mb-12" style="color: #9BCBEB;">
+                From Pop Warner to the Pros - We track every snap, every stat, every step
+            </p>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <div style="background: rgba(191, 87, 0, 0.1); border-left: 4px solid #BF5700; padding: 1.5rem; border-radius: 0.5rem;">
+                    <h3 style="color: #BF5700; font-weight: bold; margin-bottom: 0.5rem;">Youth/Select</h3>
+                    <p style="color: #9CA3AF; font-size: 0.875rem; margin-bottom: 1rem;">Ages 8-14</p>
+                    <ul style="color: #E6F1FF; font-size: 0.875rem; space-y: 0.25rem;">
+                        <li>• Pop Warner</li>
+                        <li>• Select 7v7</li>
+                        <li>• Perfect Game Baseball</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(155, 203, 235, 0.1); border-left: 4px solid #9BCBEB; padding: 1.5rem; border-radius: 0.5rem;">
+                    <h3 style="color: #9BCBEB; font-weight: bold; margin-bottom: 0.5rem;">High School</h3>
+                    <p style="color: #9CA3AF; font-size: 0.875rem; margin-bottom: 1rem;">Ages 14-18</p>
+                    <ul style="color: #E6F1FF; font-size: 0.875rem; space-y: 0.25rem;">
+                        <li>• Varsity Stats</li>
+                        <li>• Combine Numbers</li>
+                        <li>• Recruiting Rankings</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(255, 215, 0, 0.1); border-left: 4px solid #FFD700; padding: 1.5rem; border-radius: 0.5rem;">
+                    <h3 style="color: #FFD700; font-weight: bold; margin-bottom: 0.5rem;">College</h3>
+                    <p style="color: #9CA3AF; font-size: 0.875rem; margin-bottom: 1rem;">Ages 18-22</p>
+                    <ul style="color: #E6F1FF; font-size: 0.875rem; space-y: 0.25rem;">
+                        <li>• NCAA Performance</li>
+                        <li>• NIL Valuation</li>
+                        <li>• Draft Projection</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10B981; padding: 1.5rem; border-radius: 0.5rem;">
+                    <h3 style="color: #10B981; font-weight: bold; margin-bottom: 0.5rem;">Professional</h3>
+                    <p style="color: #9CA3AF; font-size: 0.875rem; margin-bottom: 1rem;">Ages 22+</p>
+                    <ul style="color: #E6F1FF; font-size: 0.875rem; space-y: 0.25rem;">
+                        <li>• NFL/MLB/MiLB</li>
+                        <li>• Contract Tracking</li>
+                        <li>• Career Analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Texas Football Intelligence Section -->
-    <section class="intelligence-showcase" id="intelligence-showcase" data-aos="fade-up">
+    <section class="intelligence-showcase" id="intelligence-showcase" data-aos="fade-up" style="position: relative; overflow: hidden;">
+        <!-- Three.js Hero Background -->
+        <canvas id="intelligence-hero-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3;"></canvas>
         <div class="section-header">
             <span class="section-badge">Texas Football Wisdom</span>
             <h2 class="section-title">Championship Intelligence That Wins Games</h2>
@@ -573,12 +869,12 @@
                     <p>Advanced AI analyzing millions of data points across professional sports leagues, identifying winning patterns and strategic advantages.</p>
                     <div class="intelligence-metrics">
                         <div class="metric">
-                            <div class="metric-value">2.8M+</div>
-                            <div class="metric-label">Data Points</div>
+                            <div class="metric-value">Extensive</div>
+                            <div class="metric-label">Data Sources</div>
                         </div>
                         <div class="metric">
-                            <div class="metric-value">94.6%</div>
-                            <div class="metric-label">Accuracy</div>
+                            <div class="metric-value">Advanced</div>
+                            <div class="metric-label">Analytics</div>
                         </div>
                     </div>
                 </div>
@@ -734,8 +1030,8 @@
                 <div class="feature-icon">🧠</div>
                 <h3 class="feature-title">AI-Powered Predictions</h3>
                 <p class="feature-description">
-                    Machine learning models trained on millions of games predict outcomes 
-                    with 94.6% accuracy.
+                    Machine learning models trained on extensive game data provide strategic insights 
+                    for competitive advantage.
                 </p>
             </div>
             
@@ -777,6 +1073,93 @@
         </div>
     </section>
     
+    <!-- NIL Intelligence Section -->
+    <section class="py-20 px-6" id="nil-intelligence" style="background: linear-gradient(135deg, rgba(191, 87, 0, 0.15), rgba(156, 203, 235, 0.1));">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4" style="color: #FFFFFF;">
+                NIL Intelligence & Market Analytics
+            </h2>
+            <p class="text-center text-xl mb-12" style="color: #9BCBEB;">
+                Real-time tracking of $14M average SEC NIL collectives and market valuations
+            </p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="text-center p-6" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #BF5700; border-radius: 1rem;">
+                    <div style="font-size: 48px; font-weight: 700; color: #BF5700; margin-bottom: 8px;">$14M</div>
+                    <div style="font-size: 14px; color: #9CA3AF;">Average SEC NIL Collective</div>
+                </div>
+                <div class="text-center p-6" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #DC2626; border-radius: 1rem;">
+                    <div style="font-size: 48px; font-weight: 700; color: #DC2626; margin-bottom: 8px;">$32M</div>
+                    <div style="font-size: 14px; color: #9CA3AF;">Oklahoma Record Distribution</div>
+                </div>
+                <div class="text-center p-6" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #9BCBEB; border-radius: 1rem;">
+                    <div style="font-size: 48px; font-weight: 700; color: #9BCBEB; margin-bottom: 8px;">72%</div>
+                    <div style="font-size: 14px; color: #9CA3AF;">SEC Draft Dominance</div>
+                </div>
+                <div class="text-center p-6" style="background: rgba(26, 26, 46, 0.9); border: 2px solid #7C3AED; border-radius: 1rem;">
+                    <div style="font-size: 48px; font-weight: 700; color: #7C3AED; margin-bottom: 8px;">5+</div>
+                    <div style="font-size: 14px; color: #9CA3AF;">Media Subscriptions Required</div>
+                </div>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div style="background: rgba(26, 26, 46, 0.9); border: 2px solid #BF5700; border-radius: 1rem; padding: 1.5rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: bold; color: #BF5700; margin-bottom: 1rem;">🏈 Football Pipeline</h3>
+                    <div style="space-y: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <span style="color: #9CA3AF;">Texas NFL Production:</span>
+                            <span style="font-weight: 600; color: #BF5700;">304 Players</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <span style="color: #9CA3AF;">SEC Recruiting:</span>
+                            <span style="font-weight: 600;">67% Top Talent</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">NIL Impact:</span>
+                            <span style="font-weight: 600;">Early Recruitment</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(26, 26, 46, 0.9); border: 2px solid #9BCBEB; border-radius: 1rem; padding: 1.5rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: bold; color: #9BCBEB; margin-bottom: 1rem;">⚾ Baseball Excellence</h3>
+                    <div style="space-y: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <span style="color: #9CA3AF;">Perfect Game MLB Draft:</span>
+                            <span style="font-weight: 600; color: #9BCBEB;">15,000+ Alumni</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <span style="color: #9CA3AF;">Current MLB Players:</span>
+                            <span style="font-weight: 600;">2,300+ Active</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Elite Prospects:</span>
+                            <span style="font-weight: 600;">Trout, Harper, Tatis</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(26, 26, 46, 0.9); border: 2px solid #DC2626; border-radius: 1rem; padding: 1.5rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: bold; color: #DC2626; margin-bottom: 1rem;">💰 Media Ecosystem</h3>
+                    <div style="space-y: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <span style="color: #9CA3AF;">Subscription Complexity:</span>
+                            <span style="font-weight: 600; color: #DC2626;">5+ Platforms</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <span style="color: #9CA3AF;">Fan Fragmentation:</span>
+                            <span style="font-weight: 600;">Critical Issue</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span style="color: #9CA3AF;">Unified Solution:</span>
+                            <span style="font-weight: 600;">Blaze Intelligence</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- AI Intelligence Section -->
     <section class="ai-intelligence-section" id="ai-intelligence" data-aos="fade-up">
         <div class="section-header">
@@ -989,7 +1372,7 @@
             <div class="platform-badges">
                 <div class="badge-card">
                     <div class="badge-label">Combined Accuracy</div>
-                    <div class="badge-value">94.6%</div>
+                    <div class="badge-value">High</div>
                 </div>
                 <div class="badge-card">
                     <div class="badge-label">Processing Speed</div>
@@ -1114,7 +1497,7 @@
                     <div class="comparison-feature">AI Predictions</div>
                     <div class="comparison-competitor">Basic</div>
                     <div class="comparison-competitor">❌</div>
-                    <div class="comparison-us featured">✓ 94.6% Accuracy</div>
+                    <div class="comparison-us featured">✓ Advanced Analytics</div>
                 </div>
                 
                 <div class="comparison-row">
@@ -1218,7 +1601,9 @@
     </section>
     
     <!-- Player Performance Dashboard -->
-    <section class="dashboard-section" id="dashboard">
+    <section class="dashboard-section" id="dashboard" style="position: relative; overflow: hidden;">
+        <!-- Three.js Performance Hero Background -->
+        <canvas id="performance-hero-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4;"></canvas>
         <div class="section-header" data-aos="fade-up">
             <span class="section-badge">Live Dashboard</span>
             <h2 class="section-title">Player Performance Metrics</h2>
@@ -1306,7 +1691,9 @@
     </section>
     
     <!-- In Development - Transparency Section -->
-    <section class="in-development-section">
+    <section class="in-development-section" style="position: relative; overflow: hidden;">
+        <!-- Three.js Development Hero Background -->
+        <canvas id="development-hero-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.25;"></canvas>
         <div class="development-content" data-aos="fade-up">
             <div class="section-header">
                 <span class="section-badge">In Development</span>
@@ -1410,7 +1797,7 @@
                         </div>
                         <div class="benefit-item">
                             <span class="benefit-icon">🎯</span>
-                            <span>94.6% prediction accuracy rate</span>
+                            <span>Advanced pattern recognition capabilities</span>
                         </div>
                         <div class="benefit-item">
                             <span class="benefit-icon">💰</span>
@@ -2337,6 +2724,230 @@
             if (fallbackForm) fallbackForm.style.display = 'block';
         }
         
+        // Main CTA Button Handlers
+        document.addEventListener('DOMContentLoaded', () => {
+            // Request Demo Button
+            const requestDemoBtn = document.getElementById('requestDemoBtn');
+            if (requestDemoBtn) {
+                requestDemoBtn.addEventListener('click', () => {
+                    // Scroll to contact form
+                    const contactSection = document.querySelector('#contact');
+                    if (contactSection) {
+                        contactSection.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        // Show demo request modal
+                        showDemoRequestModal();
+                    }
+                });
+            }
+
+            // Explore Analytics Button
+            const exploreAnalyticsBtn = document.getElementById('exploreAnalyticsBtn');
+            if (exploreAnalyticsBtn) {
+                exploreAnalyticsBtn.addEventListener('click', () => {
+                    window.open('/live-demo.html', '_blank');
+                });
+            }
+
+            // Player Lookup Button
+            const playerLookupBtn = document.getElementById('playerLookupBtn');
+            if (playerLookupBtn) {
+                playerLookupBtn.addEventListener('click', () => {
+                    showPlayerLookupModal();
+                });
+            }
+
+            // Team Analysis Button
+            const analyzeTeamBtn = document.getElementById('analyzeTeamBtn');
+            if (analyzeTeamBtn) {
+                analyzeTeamBtn.addEventListener('click', async () => {
+                    const teamSelect = document.getElementById('teamSelect');
+                    const resultDiv = document.getElementById('teamAnalysisResult');
+                    
+                    if (teamSelect && resultDiv) {
+                        const team = teamSelect.value;
+                        if (!team) {
+                            resultDiv.innerHTML = '<div class="error">Please select a team first</div>';
+                            return;
+                        }
+                        
+                        resultDiv.innerHTML = '<div class="loading">Analyzing team data...</div>';
+                        
+                        // Mock analysis data
+                        setTimeout(() => {
+                            const analysis = {
+                                'Cardinals': { rating: 87, odds: 78, insight: 'Strong pitching depth with emerging offensive threats.' },
+                                'Titans': { rating: 82, odds: 65, insight: 'Solid defensive foundation with improving QB play.' },
+                                'Longhorns': { rating: 91, odds: 89, insight: 'Elite offensive talent with championship recruiting class.' },
+                                'Grizzlies': { rating: 88, odds: 72, insight: 'Balanced roster with veteran leadership.' }
+                            }[team] || { rating: 75, odds: 45, insight: 'Analysis available for premium subscribers.' };
+                            
+                            resultDiv.innerHTML = `
+                                <div class="analysis-result" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 20px; border-radius: 8px; border-left: 4px solid #BF5700;">
+                                    <h4 style="color: #BF5700; margin-bottom: 15px;">${team} Championship Analysis</h4>
+                                    <div class="metric" style="margin: 10px 0; padding: 8px; background: white; border-radius: 4px;">Overall Rating: <strong>${analysis.rating}/100</strong></div>
+                                    <div class="metric" style="margin: 10px 0; padding: 8px; background: white; border-radius: 4px;">Championship Probability: <strong>${analysis.odds}%</strong></div>
+                                    <div class="insight" style="margin-top: 15px; font-style: italic; color: #666;">${analysis.insight}</div>
+                                </div>
+                            `;
+                        }, 1500);
+                    }
+                });
+            }
+
+            // Championship Prediction Button
+            const predictChampionshipBtn = document.getElementById('predictChampionshipBtn');
+            if (predictChampionshipBtn) {
+                predictChampionshipBtn.addEventListener('click', async () => {
+                    const leagueSelect = document.getElementById('leagueSelect');
+                    const resultDiv = document.getElementById('championshipResult');
+                    
+                    if (leagueSelect && resultDiv) {
+                        const league = leagueSelect.value;
+                        if (!league) {
+                            resultDiv.innerHTML = '<div class="error">Please select a league first</div>';
+                            return;
+                        }
+                        
+                        resultDiv.innerHTML = '<div class="loading">Calculating championship probabilities...</div>';
+                        
+                        setTimeout(() => {
+                            const predictions = {
+                                'MLB': { frontrunner: 'Cardinals', prob: 28, darkHorse: 'Guardians', dhOdds: 12 },
+                                'NFL': { frontrunner: 'Chiefs', prob: 32, darkHorse: 'Titans', dhOdds: 8 },
+                                'NBA': { frontrunner: 'Celtics', prob: 35, darkHorse: 'Grizzlies', dhOdds: 15 },
+                                'NCAA': { frontrunner: 'Longhorns', prob: 42, darkHorse: 'TCU', dhOdds: 18 }
+                            }[league] || { frontrunner: 'TBD', prob: 25, darkHorse: 'TBD', dhOdds: 10 };
+                            
+                            resultDiv.innerHTML = `
+                                <div class="prediction-result" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 20px; border-radius: 8px; border-left: 4px solid #9BCBEB;">
+                                    <h4 style="color: #9BCBEB; margin-bottom: 15px;">${league} Championship Prediction</h4>
+                                    <div class="top-contender" style="margin: 10px 0; padding: 8px; background: white; border-radius: 4px;">🏆 Frontrunner: <strong>${predictions.frontrunner}</strong> (${predictions.prob}%)</div>
+                                    <div class="dark-horse" style="margin: 10px 0; padding: 8px; background: white; border-radius: 4px;">🔥 Dark Horse: <strong>${predictions.darkHorse}</strong> (${predictions.dhOdds}%)</div>
+                                </div>
+                            `;
+                        }, 1500);
+                    }
+                });
+            }
+
+            // Video Analysis Button
+            const analyzeHighlightsBtn = document.getElementById('analyzeHighlightsBtn');
+            if (analyzeHighlightsBtn) {
+                analyzeHighlightsBtn.addEventListener('click', () => {
+                    window.open('/vision-ai-demo.html', '_blank');
+                });
+            }
+
+            // Premium Subscribe Button
+            const subscribePremiumBtn = document.getElementById('subscribePremiumBtn');
+            if (subscribePremiumBtn) {
+                subscribePremiumBtn.addEventListener('click', () => {
+                    window.open('/pricing.html', '_blank');
+                });
+            }
+        });
+
+        // Modal Functions
+        function showDemoRequestModal() {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0; color: #BF5700;">Request Championship Demo</h3>
+                            <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                        </div>
+                        <div>
+                            <p><strong>Contact Austin Humphrey directly:</strong></p>
+                            <div style="margin: 15px 0;">
+                                <div style="margin: 8px 0;">📧 <a href="mailto:ahump20@outlook.com" style="color: #BF5700;">ahump20@outlook.com</a></div>
+                                <div style="margin: 8px 0;">📱 <a href="tel:+12102735538" style="color: #BF5700;">(210) 273-5538</a></div>
+                            </div>
+                            <p style="font-style: italic; margin: 15px 0;">Demo available within 2 hours for qualified prospects</p>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <button onclick="window.open('mailto:ahump20@outlook.com?subject=Blaze Intelligence Demo Request&body=I would like to request a championship demo of the Blaze Intelligence platform.', '_blank')" style="background: #BF5700; color: white; border: none; padding: 12px 24px; border-radius: 6px; margin-right: 10px; cursor: pointer;">Send Email</button>
+                                <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="background: #ccc; color: #333; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer;">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showPlayerLookupModal() {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0; color: #BF5700;">Player Intelligence Lookup</h3>
+                            <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                        </div>
+                        <div>
+                            <input type="text" id="playerSearchInput" placeholder="Enter player name (e.g., Mike Trout, Aaron Judge)..." style="width: 100%; padding: 12px; border: 2px solid #BF5700; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box;">
+                            <div id="playerSearchResults" style="min-height: 50px; margin: 15px 0;"></div>
+                            <p style="font-style: italic; color: #666; margin: 15px 0;">Search our database of 127,000+ players from Little League to The League</p>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <button id="searchPlayerBtn" style="background: #BF5700; color: white; border: none; padding: 12px 24px; border-radius: 6px; margin-right: 10px; cursor: pointer;">Search Player</button>
+                                <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="background: #ccc; color: #333; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer;">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Add search functionality
+            const searchBtn = modal.querySelector('#searchPlayerBtn');
+            const searchInput = modal.querySelector('#playerSearchInput');
+            const resultsDiv = modal.querySelector('#playerSearchResults');
+            
+            searchBtn.addEventListener('click', () => {
+                const playerName = searchInput.value.trim();
+                if (!playerName) {
+                    resultsDiv.innerHTML = '<div style="color: #ff6600;">Please enter a player name</div>';
+                    return;
+                }
+                
+                resultsDiv.innerHTML = '<div style="color: #BF5700;">Searching player database...</div>';
+                
+                // Mock search results
+                setTimeout(() => {
+                    const mockPlayers = [
+                        { name: 'Mike Trout', position: 'CF', team: 'Angels', stats: '.283 BA, 40 HR, 104 RBI', status: 'Active MLB' },
+                        { name: 'Aaron Judge', position: 'RF', team: 'Yankees', stats: '.311 BA, 62 HR, 131 RBI', status: 'Active MLB' },
+                        { name: 'Mookie Betts', position: 'RF', team: 'Dodgers', stats: '.269 BA, 35 HR, 82 RBI', status: 'Active MLB' },
+                        { name: 'Derrick Henry', position: 'RB', team: 'Titans', stats: '1,538 rush yards, 13 TDs', status: 'Active NFL' },
+                        { name: 'Josh Allen', position: 'QB', team: 'Bills', stats: '4,283 pass yards, 29 TDs', status: 'Active NFL' }
+                    ];
+                    
+                    const results = mockPlayers.filter(player => 
+                        player.name.toLowerCase().includes(playerName.toLowerCase())
+                    );
+                    
+                    if (results.length > 0) {
+                        resultsDiv.innerHTML = results.map(player => `
+                            <div style="background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 6px; border-left: 4px solid #BF5700;">
+                                <strong style="color: #BF5700;">${player.name}</strong> - ${player.position} - ${player.team}<br>
+                                <small style="color: #666;">Career Stats: ${player.stats} | Status: ${player.status}</small>
+                            </div>
+                        `).join('');
+                    } else {
+                        resultsDiv.innerHTML = '<div style="background: #fee; padding: 15px; border-radius: 6px; color: #666;">No players found. Contact us to add this player to our database.</div>';
+                    }
+                }, 1000);
+            });
+            
+            // Enter key search
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchBtn.click();
+                }
+            });
+        }
+
         // Handle fallback form submission
         document.getElementById('demoRequestForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -2473,7 +3084,144 @@
                 }, 1000);
             }
         });
+        
+        // Initialize Three.js Section Heroes
+        function initSectionHeroes() {
+            // Intelligence Hero Canvas
+            const intelligenceCanvas = document.getElementById('intelligence-hero-canvas');
+            if (intelligenceCanvas && window.THREE) {
+                initHeroCanvas(intelligenceCanvas, {
+                    particleCount: 2000,
+                    colors: ['#BF5700', '#FFB21A', '#FF7A1A'],
+                    opacity: 0.6,
+                    size: 1.5
+                });
+            }
+            
+            // Performance Hero Canvas
+            const performanceCanvas = document.getElementById('performance-hero-canvas');
+            if (performanceCanvas && window.THREE) {
+                initHeroCanvas(performanceCanvas, {
+                    particleCount: 3000,
+                    colors: ['#9BCBEB', '#4AA3FF', '#00B2A9'],
+                    opacity: 0.7,
+                    size: 2.0
+                });
+            }
+            
+            // Development Hero Canvas
+            const developmentCanvas = document.getElementById('development-hero-canvas');
+            if (developmentCanvas && window.THREE) {
+                initHeroCanvas(developmentCanvas, {
+                    particleCount: 1500,
+                    colors: ['#64FFDA', '#00B2A9', '#BF5700'],
+                    opacity: 0.5,
+                    size: 1.2
+                });
+            }
+        }
+        
+        // Generic Three.js hero canvas initializer
+        function initHeroCanvas(canvas, options) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas,
+                alpha: true,
+                antialias: false // Performance optimization
+            });
+            
+            renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            
+            // Create particles
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(options.particleCount * 3);
+            const colors = new Float32Array(options.particleCount * 3);
+            
+            for (let i = 0; i < options.particleCount * 3; i += 3) {
+                // Position
+                positions[i] = (Math.random() - 0.5) * 20;
+                positions[i + 1] = (Math.random() - 0.5) * 20;
+                positions[i + 2] = (Math.random() - 0.5) * 20;
+                
+                // Color
+                const colorIndex = Math.floor(Math.random() * options.colors.length);
+                const color = new THREE.Color(options.colors[colorIndex]);
+                colors[i] = color.r;
+                colors[i + 1] = color.g;
+                colors[i + 2] = color.b;
+            }
+            
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const material = new THREE.PointsMaterial({
+                size: options.size,
+                vertexColors: true,
+                transparent: true,
+                opacity: options.opacity,
+                blending: THREE.AdditiveBlending
+            });
+            
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+            
+            camera.position.z = 15;
+            
+            // Animation loop
+            let animationId;
+            function animate() {
+                animationId = requestAnimationFrame(animate);
+                
+                particles.rotation.x += 0.001;
+                particles.rotation.y += 0.002;
+                
+                renderer.render(scene, camera);
+            }
+            
+            // Intersection Observer for performance
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animate();
+                    } else {
+                        cancelAnimationFrame(animationId);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            observer.observe(canvas);
+            
+            // Resize handler
+            const resizeHandler = () => {
+                const width = canvas.offsetWidth;
+                const height = canvas.offsetHeight;
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            };
+            
+            window.addEventListener('resize', resizeHandler);
+            
+            // Initialize
+            resizeHandler();
+            animate();
+        }
+        
+        // Initialize section heroes when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initSectionHeroes, 1000); // Delay to ensure Three.js is loaded
+        });
     </script>
+
+    <!-- Blaze Intelligence Championship Systems -->
+    <script src="/js/blaze-championship-visuals.js" defer=""></script>
+    <script src="/js/blaze-intelligence-optimizer.js" defer=""></script>
+    <script src="/js/blaze-brand-engine.js" defer=""></script>
+    <script src="/js/blaze-deep-south-authority.js" defer=""></script>
+    <script src="/js/blaze-dctf-authority.js" defer=""></script>
+    <script src="/js/blaze-championship-master.js" defer=""></script>
 
     <!-- Advanced Analytics Tracking -->
 </body></html>
