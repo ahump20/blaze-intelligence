@@ -1,0 +1,647 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC NIL Analytics | Blaze Intelligence - Championship NIL Intelligence</title>
+    <meta name="description" content="Real-time SEC NIL valuations and analytics. Track the $200M+ SEC NIL arms race with championship-level intelligence.">
+
+    <!-- Three.js for advanced visualizations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --championship-gold: #FFD700;
+            --sec-crimson: #9E1B32;
+            --lsu-purple: #461D7C;
+            --georgia-red: #BA0C2F;
+            --tennessee-orange: #FF8200;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section with Three.js Background */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #three-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid var(--burnt-orange);
+            max-width: 900px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(191, 87, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--cardinal-blue);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-container {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(0, 34, 68, 0.2));
+            border: 1px solid var(--burnt-orange);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--burnt-orange) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(191, 87, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--cardinal-blue);
+            margin-bottom: 1rem;
+        }
+
+        .stat-change {
+            font-size: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .stat-change.positive {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .stat-change.negative {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+
+        /* SEC Schools Ranking */
+        .rankings-section {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .ranking-item {
+            display: grid;
+            grid-template-columns: 60px 200px 1fr 150px 100px;
+            align-items: center;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, rgba(191, 87, 0, 0.1), transparent);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .ranking-item:hover {
+            background: linear-gradient(90deg, rgba(191, 87, 0, 0.2), rgba(0, 34, 68, 0.1));
+            transform: translateX(10px);
+        }
+
+        .rank-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--championship-gold);
+        }
+
+        .school-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .value-bar {
+            height: 30px;
+            background: linear-gradient(90deg, var(--burnt-orange), var(--cardinal-blue));
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            100% {
+                left: 100%;
+            }
+        }
+
+        .value-amount {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            text-align: right;
+        }
+
+        .trend-indicator {
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--burnt-orange);
+        }
+
+        /* Live Ticker */
+        .live-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, var(--deep-navy), var(--burnt-orange));
+            padding: 1rem;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-item {
+            padding: 0 2rem;
+            font-size: 1rem;
+            color: white;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .ranking-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section with Three.js Background -->
+    <section class="hero-section">
+        <canvas id="three-canvas"></canvas>
+        <div class="hero-content">
+            <h1>SEC NIL Command Center</h1>
+            <p class="subtitle">Real-Time Championship NIL Intelligence</p>
+            <div class="stats-preview">
+                <span class="stat-preview-item">$200M+ Total SEC NIL</span>
+                <span class="stat-preview-item">|</span>
+                <span class="stat-preview-item">16 Programs Tracked</span>
+                <span class="stat-preview-item">|</span>
+                <span class="stat-preview-item">Live Updates</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard-container">
+        <!-- Key Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">$22.0M</div>
+                <div class="stat-label">Texas Leads SEC</div>
+                <span class="stat-change positive">↑ $2.1M YoY</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">$196.4M</div>
+                <div class="stat-label">Total SEC NIL Value</div>
+                <span class="stat-change positive">↑ 34.2% YoY</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">$12.3M</div>
+                <div class="stat-label">SEC Average</div>
+                <span class="stat-change positive">↑ $3.1M from 2024</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value">77.2%</div>
+                <div class="stat-label">LSU's YoY Growth</div>
+                <span class="stat-change positive">Biggest Gainer</span>
+            </div>
+        </div>
+
+        <!-- SEC Rankings -->
+        <div class="rankings-section">
+            <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: var(--championship-gold);">
+                SEC NIL Power Rankings 2025-26
+            </h2>
+
+            <div id="rankings-container">
+                <!-- Rankings will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem; color: var(--cardinal-blue);">Year-over-Year Growth</h3>
+                <canvas id="growth-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem; color: var(--cardinal-blue);">Position Value Distribution</h3>
+                <canvas id="position-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top Athletes Section -->
+        <div class="rankings-section">
+            <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: var(--championship-gold);">
+                Top SEC NIL Athletes
+            </h2>
+
+            <div id="athletes-container">
+                <!-- Top athletes will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Ticker -->
+    <div class="live-ticker">
+        <div class="ticker-content">
+            <span class="ticker-item">🏆 Texas: $22M Total NIL</span>
+            <span class="ticker-item">🔥 LSU: +77.2% YoY Growth</span>
+            <span class="ticker-item">⚡ Alabama: $18.4M War Chest</span>
+            <span class="ticker-item">💰 Arch Manning: $6.8M Valuation</span>
+            <span class="ticker-item">📈 SEC Dominates: 8 of Top 12 National</span>
+            <span class="ticker-item">🚀 Texas A&amp;M: +$5M Year-over-Year</span>
+        </div>
+    </div>
+
+    <script>
+        // Three.js Championship Visualization
+        let scene, camera, renderer, particles;
+
+        function initThree() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('three-canvas'),
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Create particle system for championship effect
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 5000; i++) {
+                vertices.push(
+                    Math.random() * 2000 - 1000,
+                    Math.random() * 2000 - 1000,
+                    Math.random() * 2000 - 1000
+                );
+
+                // Burnt orange and championship gold particles
+                const color = Math.random() > 0.5
+                    ? new THREE.Color(0xBF5700)
+                    : new THREE.Color(0xFFD700);
+                colors.push(color.r, color.g, color.b);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            camera.position.z = 500;
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            particles.rotation.x += 0.001;
+            particles.rotation.y += 0.002;
+
+            renderer.render(scene, camera);
+        }
+
+        // Load SEC Rankings Data
+        async function loadSECRankings() {
+            try {
+                const response = await fetch('/data/nil/2025-26-valuations.json');
+                const data = await response.json();
+
+                displayRankings(data.secRankings);
+                displayTopAthletes(data.top50Programs);
+                initCharts(data);
+            } catch (error) {
+                console.error('Error loading NIL data:', error);
+                // Use fallback data
+                displayFallbackRankings();
+            }
+        }
+
+        function displayRankings(rankings) {
+            const container = document.getElementById('rankings-container');
+
+            rankings.forEach(school => {
+                const maxValue = 22000000; // Texas has the max
+                const barWidth = (school.totalValue / maxValue) * 100;
+
+                const rankingHTML = `
+                    <div class="ranking-item">
+                        <div class="rank-number">#${school.rank}</div>
+                        <div class="school-name">${school.school}</div>
+                        <div class="value-bar" style="width: ${barWidth}%"></div>
+                        <div class="value-amount">$${(school.totalValue / 1000000).toFixed(1)}M</div>
+                        <div class="trend-indicator">${school.rank <= 5 ? '🔥' : '📈'}</div>
+                    </div>
+                `;
+
+                container.innerHTML += rankingHTML;
+            });
+        }
+
+        function displayFallbackRankings() {
+            // Fallback data if JSON fails to load
+            const fallbackRankings = [
+                { rank: 1, school: 'Texas', totalValue: 22000000 },
+                { rank: 2, school: 'Alabama', totalValue: 18400000 },
+                { rank: 3, school: 'LSU', totalValue: 17900000 },
+                { rank: 4, school: 'Georgia', totalValue: 15700000 },
+                { rank: 5, school: 'Texas A&M', totalValue: 14300000 },
+                { rank: 6, school: 'Oklahoma', totalValue: 12600000 },
+                { rank: 7, school: 'Tennessee', totalValue: 11500000 },
+                { rank: 8, school: 'South Carolina', totalValue: 10600000 }
+            ];
+
+            displayRankings(fallbackRankings);
+        }
+
+        function displayTopAthletes(programs) {
+            const container = document.getElementById('athletes-container');
+            const topAthletes = [
+                { name: 'Arch Manning', position: 'QB', school: 'Texas', value: 6800000 },
+                { name: 'Nico Iamaleava', position: 'QB', school: 'Tennessee', value: 8000000 },
+                { name: 'Garrett Nussmeier', position: 'QB', school: 'LSU', value: 4000000 },
+                { name: 'LaNorris Sellers', position: 'QB', school: 'South Carolina', value: 3800000 },
+                { name: 'Ryan Williams', position: 'WR', school: 'Alabama', value: 2600000 }
+            ];
+
+            topAthletes.sort((a, b) => b.value - a.value);
+
+            topAthletes.forEach((athlete, index) => {
+                const athleteHTML = `
+                    <div class="ranking-item">
+                        <div class="rank-number">#${index + 1}</div>
+                        <div class="school-name">${athlete.name}</div>
+                        <div style="flex: 1; padding: 0 1rem;">
+                            <span style="color: var(--cardinal-blue);">${athlete.position} - ${athlete.school}</span>
+                        </div>
+                        <div class="value-amount">$${(athlete.value / 1000000).toFixed(1)}M</div>
+                        <div class="trend-indicator">⭐</div>
+                    </div>
+                `;
+
+                container.innerHTML += athleteHTML;
+            });
+        }
+
+        function initCharts(data) {
+            // Year-over-Year Growth Chart
+            const growthCtx = document.getElementById('growth-chart').getContext('2d');
+            new Chart(growthCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['LSU', 'Texas A&M', 'Ohio State', 'Penn State', 'South Carolina'],
+                    datasets: [{
+                        label: 'YoY Growth ($M)',
+                        data: [7.8, 5.0, 4.7, 4.7, 2.6],
+                        backgroundColor: [
+                            'rgba(70, 29, 124, 0.8)',
+                            'rgba(80, 0, 0, 0.8)',
+                            'rgba(187, 0, 0, 0.8)',
+                            'rgba(0, 30, 68, 0.8)',
+                            'rgba(115, 0, 10, 0.8)'
+                        ],
+                        borderColor: 'rgba(191, 87, 0, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#ffffff',
+                                callback: function(value) {
+                                    return '$' + value + 'M';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Position Value Chart
+            const positionCtx = document.getElementById('position-chart').getContext('2d');
+            new Chart(positionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['QB', 'WR', 'DL', 'OL', 'DB', 'LB', 'RB'],
+                    datasets: [{
+                        data: [45, 20, 12, 10, 8, 3, 2],
+                        backgroundColor: [
+                            'rgba(191, 87, 0, 0.8)',
+                            'rgba(155, 203, 235, 0.8)',
+                            'rgba(255, 215, 0, 0.8)',
+                            'rgba(0, 34, 68, 0.8)',
+                            'rgba(158, 27, 50, 0.8)',
+                            'rgba(70, 29, 124, 0.8)',
+                            'rgba(186, 12, 47, 0.8)'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#000000'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#ffffff',
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '% of NIL value';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            initThree();
+            loadSECRankings();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+</body></html>
