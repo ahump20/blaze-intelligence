@@ -93,7 +93,29 @@
   </header>
   <main>
     <h1>Championship AI Analytics</h1>
-    <p class="description">Explore NIL valuations, transfer activity and program rankings in a unified dashboard. The chart below shows example NIL values for top programs.</p>
+    <p class="description">Explore NIL valuations, transfer activity and program rankings in a unified dashboard. Access real-time team intelligence and advanced 3D visualizations.</p>
+
+    <!-- Analytics Navigation Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px;">
+      <div style="background: rgba(196, 30, 58, 0.1); border: 2px solid #C41E3A; border-radius: 15px; padding: 25px; text-align: center; transition: transform 0.3s ease;">
+        <h3 style="color: #C41E3A; margin-bottom: 15px; font-size: 1.3rem;">⚾ Cardinals Intelligence</h3>
+        <p style="color: #d1d5db; margin-bottom: 20px;">Real-time Cardinals analytics with championship projection models</p>
+        <a href="cardinals-intelligence-dashboard.html" style="display: inline-block; background: #C41E3A; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Launch Dashboard</a>
+      </div>
+
+      <div style="background: rgba(191, 87, 0, 0.1); border: 2px solid var(--burnt-orange); border-radius: 15px; padding: 25px; text-align: center; transition: transform 0.3s ease;">
+        <h3 style="color: var(--burnt-orange); margin-bottom: 15px; font-size: 1.3rem;">🏈 Enhanced Analytics</h3>
+        <p style="color: #d1d5db; margin-bottom: 20px;">Advanced SEC analytics with 3D visualizations and AI insights</p>
+        <a href="analytics-enhanced.html" style="display: inline-block; background: var(--burnt-orange); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Explore 3D Analytics</a>
+      </div>
+
+      <div style="background: rgba(255, 215, 0, 0.1); border: 2px solid var(--championship-gold); border-radius: 15px; padding: 25px; text-align: center; transition: transform 0.3s ease;">
+        <h3 style="color: var(--championship-gold); margin-bottom: 15px; font-size: 1.3rem;">💰 NIL Calculator</h3>
+        <p style="color: #d1d5db; margin-bottom: 20px;">Advanced NIL valuation with SEC-specific market intelligence</p>
+        <a href="nil-calculator-advanced.html" style="display: inline-block; background: var(--championship-gold); color: black; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Calculate Value</a>
+      </div>
+    </div>
+
     <div id="chart-container">
       <canvas id="nilChart" width="400" height="240"></canvas>
     </div>
