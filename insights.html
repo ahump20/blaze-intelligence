@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Championship Insights</title>
+    <meta name="description" content="Deep dive analytics and insights from the intersection of Friday Night Lights and Wall Street precision.">
+
+    <!-- Three.js for Visualizations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --championship-gold: #FFD700;
+            --sec-crimson: #9E1B32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid var(--burnt-orange);
+            padding: 20px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 24px;
+        }
+
+        .brand-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: var(--burnt-orange);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 60px;
+            line-height: 1.6;
+        }
+
+        /* Insights Feed */
+        .insights-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .insight-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .insight-card:hover {
+            transform: translateX(10px);
+            border-color: var(--burnt-orange);
+            box-shadow: 0 10px 40px rgba(191, 87, 0, 0.2);
+        }
+
+        .insight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .insight-category {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-mlb {
+            background: rgba(155, 203, 235, 0.2);
+            color: var(--cardinal-blue);
+            border: 1px solid var(--cardinal-blue);
+        }
+
+        .category-ncaa {
+            background: rgba(191, 87, 0, 0.2);
+            color: var(--burnt-orange);
+            border: 1px solid var(--burnt-orange);
+        }
+
+        .category-nfl {
+            background: rgba(0, 34, 68, 0.4);
+            color: #4A90E2;
+            border: 1px solid #4A90E2;
+        }
+
+        .category-recruiting {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--championship-gold);
+            border: 1px solid var(--championship-gold);
+        }
+
+        .insight-date {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .insight-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .insight-excerpt {
+            font-size: 18px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .insight-metrics {
+            display: flex;
+            gap: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--burnt-orange);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Featured Section */
+        .featured-section {
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(155, 203, 235, 0.1));
+            border-radius: 30px;
+            border: 2px solid var(--burnt-orange);
+        }
+
+        .featured-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .featured-item {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .featured-item:hover {
+            transform: scale(1.05);
+            border-color: var(--cardinal-blue);
+        }
+
+        /* Live Updates */
+        .live-ticker {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10B981;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            padding: 0 30px;
+            white-space: nowrap;
+            font-weight: 600;
+            color: #10B981;
+        }
+
+        /* Read More Button */
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--burnt-orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: gap 0.3s;
+        }
+
+        .read-more:hover {
+            gap: 15px;
+        }
+
+        .read-more::after {
+            content: '→';
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="brand">
+                <div class="logo">BI</div>
+                <div class="brand-text">BLAZE INTELLIGENCE</div>
+            </a>
+            <nav class="nav-menu">
+                <a href="/analytics.html" class="nav-item">Analytics</a>
+                <a href="/sec-nil-analytics.html" class="nav-item">SEC NIL</a>
+                <a href="/insights.html" class="nav-item">Insights</a>
+                <a href="/contact.html" class="nav-item">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">Championship Insights</h1>
+        <p class="page-subtitle">
+            The stories behind the stats. Where gridiron wisdom meets Silicon Valley precision,
+            delivering the intelligence that separates champions from the rest of the field.
+        </p>
+
+        <!-- Live Ticker -->
+        <div class="live-ticker">
+            <div class="ticker-content">
+                <span class="ticker-item">🔥 Arch Manning NIL value surges to $6.8M</span>
+                <span class="ticker-item">⚾ Cardinals 5-game win streak analysis</span>
+                <span class="ticker-item">🏈 SEC recruiting class rankings update</span>
+                <span class="ticker-item">📊 Perfect Game showcase standouts</span>
+                <span class="ticker-item">🏀 Grizzlies championship probability: 78.3%</span>
+                <span class="ticker-item">🔥 Arch Manning NIL value surges to $6.8M</span>
+                <span class="ticker-item">⚾ Cardinals 5-game win streak analysis</span>
+                <span class="ticker-item">🏈 SEC recruiting class rankings update</span>
+            </div>
+        </div>
+
+        <!-- Featured Section -->
+        <div class="featured-section">
+            <h2 class="featured-title">This Week's Championship Intelligence</h2>
+            <div class="featured-grid">
+                <div class="featured-item">
+                    <h3 style="color: var(--burnt-orange); margin-bottom: 10px;">🏈 Red River Showdown</h3>
+                    <p>Texas vs Oklahoma: $34.6M combined NIL talent on display. Breaking down the matchup that will define SEC supremacy.</p>
+                </div>
+                <div class="featured-item">
+                    <h3 style="color: var(--cardinal-blue); margin-bottom: 10px;">⚾ October Magic</h3>
+                    <p>Cardinals' Devil Magic quantified: 76.3% playoff probability with momentum metrics off the charts.</p>
+                </div>
+                <div class="featured-item">
+                    <h3 style="color: var(--championship-gold); margin-bottom: 10px;">🌟 Perfect Game Elite</h3>
+                    <p>2026 class rankings: The bloodlines and biomechanics producing tomorrow's first-round picks.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Feed -->
+        <div class="insights-feed">
+            <article class="insight-card">
+                <div class="insight-header">
+                    <span class="insight-category category-ncaa">NCAA FOOTBALL</span>
+                    <span class="insight-date">2 hours ago</span>
+                </div>
+                <h2 class="insight-title">The $200 Million Question: How NIL is Reshaping SEC Dominance</h2>
+                <p class="insight-excerpt">
+                    We're witnessing the most significant transformation in college athletics since integration.
+                    The SEC's combined NIL war chest has crossed $196 million, with Texas leading the charge
+                    at $22 million. But here's what the spreadsheets don't tell you: it's not just about
+                    the money—it's about the infrastructure, the vision, and the championship DNA that
+                    money amplifies, not creates.
+                </p>
+                <div class="insight-metrics">
+                    <div class="metric-item">
+                        <span class="metric-value">$196.4M</span>
+                        <span class="metric-label">Total SEC NIL</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">8</span>
+                        <span class="metric-label">Top 25 Teams</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">77.2%</span>
+                        <span class="metric-label">YoY Growth</span>
+                    </div>
+                </div>
+                <a href="#" class="read-more">Deep Dive Analysis</a>
+            </article>
+
+            <article class="insight-card">
+                <div class="insight-header">
+                    <span class="insight-category category-mlb">MLB ANALYTICS</span>
+                    <span class="insight-date">5 hours ago</span>
+                </div>
+                <h2 class="insight-title">Cardinals' September Surge: The Analytics Behind Devil Magic</h2>
+                <p class="insight-excerpt">
+                    Call it Devil Magic if you want, but we prefer to call it leverage optimization.
+                    The Cardinals are converting high-leverage at-bats at a 42% clip—that's not luck,
+                    that's the kind of execution that turns wild card hopes into October dynasties.
+                    Our models show a path that runs straight through Milwaukee and into the NLDS.
+                </p>
+                <div class="insight-metrics">
+                    <div class="metric-item">
+                        <span class="metric-value">89</span>
+                        <span class="metric-label">Projected Wins</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">76.3%</span>
+                        <span class="metric-label">Playoff Odds</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">.342</span>
+                        <span class="metric-label">RISP Average</span>
+                    </div>
+                </div>
+                <a href="#" class="read-more">View Full Report</a>
+            </article>
+
+            <article class="insight-card">
+                <div class="insight-header">
+                    <span class="insight-category category-recruiting">RECRUITING</span>
+                    <span class="insight-date">Yesterday</span>
+                </div>
+                <h2 class="insight-title">Perfect Game Fall Showcase: The Next Generation Emerges</h2>
+                <p class="insight-excerpt">
+                    We tracked 2,847 elite prospects across 47 showcases this fall, and the talent
+                    pipeline has never been deeper. The 2026 class is producing exit velocities
+                    and spin rates that would've been MLB-average a decade ago. These aren't just
+                    kids with dreams—they're athletes with data, and that data tells a story of
+                    evolution in real-time.
+                </p>
+                <div class="insight-metrics">
+                    <div class="metric-item">
+                        <span class="metric-value">2,847</span>
+                        <span class="metric-label">Prospects</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">147</span>
+                        <span class="metric-label">5-Star Ratings</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">94.2</span>
+                        <span class="metric-label">Avg Exit Velo</span>
+                    </div>
+                </div>
+                <a href="#" class="read-more">Scouting Reports</a>
+            </article>
+
+            <article class="insight-card">
+                <div class="insight-header">
+                    <span class="insight-category category-nfl">NFL ANALYSIS</span>
+                    <span class="insight-date">2 days ago</span>
+                </div>
+                <h2 class="insight-title">Titans' Quiet Revolution: Building Through the Trenches</h2>
+                <p class="insight-excerpt">
+                    While everyone's watching the skill positions, Mike Vrabel is building something
+                    special in Nashville. The Titans' offensive line efficiency rating has jumped
+                    to 78.4—fourth in the AFC. When you combine that with King Henry's legacy and
+                    an emerging passing game, you get a team that nobody wants to face in January.
+                </p>
+                <div class="insight-metrics">
+                    <div class="metric-item">
+                        <span class="metric-value">78.4</span>
+                        <span class="metric-label">OL Rating</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">58.2%</span>
+                        <span class="metric-label">Playoff Odds</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">10-7</span>
+                        <span class="metric-label">Projected Record</span>
+                    </div>
+                </div>
+                <a href="#" class="read-more">Film Breakdown</a>
+            </article>
+        </div>
+    </main>
+
+    <script>
+        // Animate metrics on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all insight cards
+        document.querySelectorAll('.insight-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Update live ticker
+        setInterval(() => {
+            const ticker = document.querySelector('.ticker-content');
+            // Reset animation periodically for smooth loop
+        }, 30000);
+    </script>
+</body>
+</html>
