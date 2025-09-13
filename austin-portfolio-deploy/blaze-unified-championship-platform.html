@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔥 Blaze Intelligence — Championship Platform Unification</title>
@@ -385,7 +383,7 @@
         <div class="header">
             <h1>🔥 Blaze Intelligence</h1>
             <h2>Deep South Sports Authority — Championship Platform Unification</h2>
-            <p>Single entry-point that merges your Netlify & Replit experiences into one cohesive championship interface. Real-time sync, performance monitoring, and unified navigation across all platforms.</p>
+            <p>Single entry-point that merges your Netlify &amp; Replit experiences into one cohesive championship interface. Real-time sync, performance monitoring, and unified navigation across all platforms.</p>
             <div class="championship-badge">🏆 Championship Merger Complete</div>
         </div>
 
@@ -492,49 +490,37 @@
         let platformStatuses = {};
         let syncInProgress = false;
 
-        // Platform Status Checker
+        // Platform Status Checker using Championship Sync API
         async function checkPlatformStatus(platform) {
-            const startTime = Date.now();
-
             try {
-                // Use a CORS proxy for cross-origin requests
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(platform.url)}`;
-
-                const response = await fetch(proxyUrl, {
-                    method: 'GET',
-                    timeout: 10000
+                const response = await fetch('/api/championship-sync', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ platform: platform.slug })
                 });
-
-                const responseTime = Date.now() - startTime;
 
                 if (response.ok) {
                     const data = await response.json();
-                    const html = data.contents;
-
-                    // Feature detection
-                    const detectedFeatures = [];
-                    if (html.includes('three.js') || html.includes('THREE.')) detectedFeatures.push('Three.js');
-                    if (html.includes('neural') || html.includes('consciousness')) detectedFeatures.push('Neural AI');
-                    if (html.includes('MediaPipe') || html.includes('holistic')) detectedFeatures.push('AR Coaching');
-                    if (html.includes('analytics') || html.includes('intelligence')) detectedFeatures.push('Analytics');
-                    if (html.includes('nil') || html.includes('NIL')) detectedFeatures.push('NIL');
-                    if (html.includes('championship') || html.includes('Championship')) detectedFeatures.push('Championship');
-
-                    return {
-                        status: 'active',
-                        responseTime: responseTime,
-                        features: detectedFeatures,
-                        hasChampionshipFeatures: detectedFeatures.length > 0,
-                        lastChecked: new Date().toISOString()
-                    };
-                } else {
-                    throw new Error(`HTTP ${response.status}`);
+                    if (data.success && data.platform) {
+                        const p = data.platform;
+                        return {
+                            status: p.status,
+                            responseTime: p.responseTime || p.health?.responseTime,
+                            features: p.metadata?.features || [],
+                            hasChampionshipFeatures: p.metadata?.hasChampionshipFeatures || false,
+                            lastChecked: p.lastSync,
+                            health: p.health
+                        };
+                    }
                 }
+
+                throw new Error('Sync API failed');
             } catch (error) {
                 return {
                     status: 'error',
                     error: error.message,
-                    responseTime: Date.now() - startTime,
                     features: [],
                     hasChampionshipFeatures: false,
                     lastChecked: new Date().toISOString()
@@ -609,7 +595,7 @@
             updateMetrics();
         }
 
-        // Sync All Platforms
+        // Sync All Platforms using Championship Sync API
         async function syncAllPlatforms() {
             if (syncInProgress) return;
 
@@ -624,27 +610,71 @@
             });
             renderPlatformGrid();
 
-            // Check all platforms concurrently
-            const statusPromises = PLATFORMS.map(async platform => {
-                const status = await checkPlatformStatus(platform);
-                platformStatuses[platform.slug] = status;
-                renderPlatformGrid();
-                updateMetrics();
-                return { platform, status };
-            });
+            try {
+                // Call the full sync API
+                const response = await fetch('/api/championship-sync', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-            const results = await Promise.all(statusPromises);
+                if (response.ok) {
+                    const data = await response.json();
 
-            // Update sync status
-            const successful = results.filter(r => r.status.status === 'active').length;
-            const withFeatures = results.filter(r => r.status.hasChampionshipFeatures).length;
+                    if (data.success && data.sync) {
+                        // Update platform statuses from sync results
+                        data.sync.platforms.forEach(platform => {
+                            platformStatuses[platform.slug] = {
+                                status: platform.status,
+                                responseTime: platform.responseTime || platform.health?.responseTime,
+                                features: platform.metadata?.features || [],
+                                hasChampionshipFeatures: platform.metadata?.hasChampionshipFeatures || false,
+                                lastChecked: platform.lastSync,
+                                health: platform.health
+                            };
+                        });
 
-            document.getElementById('syncStatus').innerHTML = `
-                ✅ Championship sync complete: ${successful}/${PLATFORMS.length} platforms active, ${withFeatures} with championship features
-            `;
+                        renderPlatformGrid();
+                        updateMetrics();
+
+                        // Update sync status with comprehensive results
+                        const successful = data.sync.activePlatforms;
+                        const withFeatures = data.sync.platformsWithChampionshipFeatures;
+                        const avgTime = data.sync.averageResponseTime;
+
+                        document.getElementById('syncStatus').innerHTML = `
+                            ✅ Championship sync complete: ${successful}/${data.sync.totalPlatforms} platforms active, ${withFeatures} with championship features (${avgTime}ms avg)
+                        `;
+
+                        return;
+                    }
+                }
+
+                throw new Error('Sync API failed');
+
+            } catch (error) {
+                console.error('Sync failed:', error);
+
+                // Fallback to individual platform checks
+                const statusPromises = PLATFORMS.map(async platform => {
+                    const status = await checkPlatformStatus(platform);
+                    platformStatuses[platform.slug] = status;
+                    renderPlatformGrid();
+                    updateMetrics();
+                    return { platform, status };
+                });
+
+                const results = await Promise.all(statusPromises);
+                const successful = results.filter(r => r.status.status === 'active').length;
+                const withFeatures = results.filter(r => r.status.hasChampionshipFeatures).length;
+
+                document.getElementById('syncStatus').innerHTML = `
+                    ⚠️ Fallback sync complete: ${successful}/${PLATFORMS.length} platforms checked, ${withFeatures} with championship features
+                `;
+            }
 
             syncInProgress = false;
-            updateMetrics();
         }
 
         // Update Performance Metrics
@@ -680,5 +710,5 @@
             }, 5 * 60 * 1000);
         });
     </script>
-</body>
-</html>
+
+</body></html>
