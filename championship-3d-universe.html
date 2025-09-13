@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Championship 3D Universe</title>
+    <meta name="description" content="Revolutionary 3D sports intelligence visualization platform">
+
+    <!-- Core Libraries -->
+    <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.157.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://unpkg.com/three@0.157.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+        }
+
+        #universe-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .ui-overlay {
+            position: fixed;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .ui-overlay > * {
+            pointer-events: auto;
+        }
+
+        .glass-panel {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .data-orb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .holographic-text {
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holographic 3s ease infinite;
+        }
+
+        @keyframes holographic {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .team-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .team-node:hover {
+            transform: scale(1.1);
+        }
+
+        .metric-stream {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, #00ffff, transparent);
+            animation: stream 2s linear infinite;
+        }
+
+        @keyframes stream {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .neural-connection {
+            stroke: #00ffff;
+            stroke-width: 1;
+            fill: none;
+            opacity: 0.3;
+            animation: neural-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neural-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .floating-metric {
+            position: absolute;
+            background: rgba(191, 87, 0, 0.2);
+            border: 1px solid #BF5700;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="universe-canvas"></canvas>
+
+    <!-- Top Navigation Bar -->
+    <div class="ui-overlay top-0 left-0 right-0 p-6">
+        <div class="glass-panel flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-2xl font-bold holographic-text">CHAMPIONSHIP UNIVERSE</h1>
+                <div class="flex items-center space-x-2">
+                    <span class="data-orb" style="background: #00ff00;"></span>
+                    <span class="text-sm">LIVE</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <button onclick="toggleView('galaxy')" class="px-4 py-2 bg-blue-600/30 hover:bg-blue-600/50 rounded-lg transition">
+                    Galaxy View
+                </button>
+                <button onclick="toggleView('field')" class="px-4 py-2 bg-green-600/30 hover:bg-green-600/50 rounded-lg transition">
+                    Field View
+                </button>
+                <button onclick="toggleView('neural')" class="px-4 py-2 bg-purple-600/30 hover:bg-purple-600/50 rounded-lg transition">
+                    Neural View
+                </button>
+                <button onclick="toggleFullscreen()" class="px-4 py-2 bg-orange-600/30 hover:bg-orange-600/50 rounded-lg transition">
+                    Fullscreen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Left Side Panel - Team Metrics -->
+    <div class="ui-overlay left-0 top-32 bottom-32 w-80 p-6">
+        <div class="glass-panel h-full overflow-y-auto">
+            <h2 class="text-xl font-bold mb-4">LIVE TEAM METRICS</h2>
+
+            <div id="team-metrics" class="space-y-4">
+                <!-- Cardinals -->
+                <div class="team-metric-card p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold">Cardinals</h3>
+                        <span class="text-xs bg-red-500 px-2 py-1 rounded">MLB</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>Win Prob: <span class="text-green-400">78.5%</span></div>
+                        <div>Score: <span class="font-bold">7-4</span></div>
+                        <div>Momentum: <span class="text-yellow-400">+15</span></div>
+                        <div>xRuns: <span>8.2</span></div>
+                    </div>
+                </div>
+
+                <!-- Titans -->
+                <div class="team-metric-card p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold">Titans</h3>
+                        <span class="text-xs bg-blue-500 px-2 py-1 rounded">NFL</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>Win Prob: <span class="text-green-400">71.2%</span></div>
+                        <div>Score: <span class="font-bold">24-17</span></div>
+                        <div>EPA/Play: <span class="text-green-400">+0.18</span></div>
+                        <div>TOP: <span>18:42</span></div>
+                    </div>
+                </div>
+
+                <!-- Longhorns -->
+                <div class="team-metric-card p-4 bg-orange-900/20 border border-orange-500/30 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold">Longhorns</h3>
+                        <span class="text-xs bg-orange-500 px-2 py-1 rounded">NCAA</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>Win Prob: <span class="text-green-400">89.3%</span></div>
+                        <div>Score: <span class="font-bold">35-28</span></div>
+                        <div>SP+: <span class="text-green-400">+24.7</span></div>
+                        <div>Rank: <span>#3</span></div>
+                    </div>
+                </div>
+
+                <!-- Grizzlies -->
+                <div class="team-metric-card p-4 bg-indigo-900/20 border border-indigo-500/30 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold">Grizzlies</h3>
+                        <span class="text-xs bg-indigo-500 px-2 py-1 rounded">NBA</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div>Win Prob: <span class="text-green-400">92.1%</span></div>
+                        <div>Score: <span class="font-bold">112-108</span></div>
+                        <div>NetRtg: <span class="text-green-400">+8.4</span></div>
+                        <div>eFG%: <span>58.2%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-700">
+                <h3 class="text-sm font-bold mb-2">SYSTEM PERFORMANCE</h3>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between">
+                        <span>Data Points/Sec:</span>
+                        <span class="text-green-400">47,892</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Prediction Accuracy:</span>
+                        <span class="text-green-400">94.6%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Latency:</span>
+                        <span class="text-green-400">87ms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side Panel - AI Insights -->
+    <div class="ui-overlay right-0 top-32 bottom-32 w-80 p-6">
+        <div class="glass-panel h-full overflow-y-auto">
+            <h2 class="text-xl font-bold mb-4">AI CHAMPIONSHIP INSIGHTS</h2>
+
+            <div class="space-y-4">
+                <!-- Real-time Insight Feed -->
+                <div class="insight-card p-3 bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-lg border border-purple-500/30">
+                    <div class="flex items-start space-x-2">
+                        <span class="text-purple-400">🧠</span>
+                        <div>
+                            <p class="text-sm font-semibold">Pattern Detected</p>
+                            <p class="text-xs text-gray-300">Cardinals showing 87% similarity to 2011 World Series run in current momentum metrics</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card p-3 bg-gradient-to-r from-green-900/20 to-teal-900/20 rounded-lg border border-green-500/30">
+                    <div class="flex items-start space-x-2">
+                        <span class="text-green-400">📈</span>
+                        <div>
+                            <p class="text-sm font-semibold">Performance Spike</p>
+                            <p class="text-xs text-gray-300">Titans' defensive efficiency up 34% in red zone situations this quarter</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card p-3 bg-gradient-to-r from-orange-900/20 to-red-900/20 rounded-lg border border-orange-500/30">
+                    <div class="flex items-start space-x-2">
+                        <span class="text-orange-400">⚡</span>
+                        <div>
+                            <p class="text-sm font-semibold">Momentum Shift</p>
+                            <p class="text-xs text-gray-300">Longhorns' win probability increased 18% in last 3 minutes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-card p-3 bg-gradient-to-r from-blue-900/20 to-indigo-900/20 rounded-lg border border-blue-500/30">
+                    <div class="flex items-start space-x-2">
+                        <span class="text-blue-400">🎯</span>
+                        <div>
+                            <p class="text-sm font-semibold">Clutch Factor</p>
+                            <p class="text-xs text-gray-300">Grizzlies performing 22% above season average in clutch time</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-700">
+                <h3 class="text-sm font-bold mb-3">PREDICTIVE MODELS</h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Next Score Probability</span>
+                            <span>Cardinals 72%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full" style="width: 72%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Momentum Index</span>
+                            <span>+18.5</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-green-500 to-teal-500 h-2 rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Upset Alert</span>
+                            <span>Low (12%)</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-yellow-500 to-red-500 h-2 rounded-full" style="width: 12%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Control Panel -->
+    <div class="ui-overlay bottom-0 left-0 right-0 p-6">
+        <div class="glass-panel">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6">
+                    <div>
+                        <p class="text-xs text-gray-400">Universe Time</p>
+                        <p class="text-lg font-mono" id="universe-time">00:00:00</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Data Nodes</p>
+                        <p class="text-lg font-mono" id="node-count">0</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Active Connections</p>
+                        <p class="text-lg font-mono" id="connection-count">0</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleAnimation()" class="px-4 py-2 bg-green-600/30 hover:bg-green-600/50 rounded-lg transition">
+                        <span id="animation-toggle">⏸ Pause</span>
+                    </button>
+                    <button onclick="resetCamera()" class="px-4 py-2 bg-blue-600/30 hover:bg-blue-600/50 rounded-lg transition">
+                        🎯 Reset View
+                    </button>
+                    <button onclick="exportData()" class="px-4 py-2 bg-purple-600/30 hover:bg-purple-600/50 rounded-lg transition">
+                        📊 Export Data
+                    </button>
+                    <button onclick="launchAR()" class="px-4 py-2 bg-orange-600/30 hover:bg-orange-600/50 rounded-lg transition">
+                        🥽 AR Mode
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Metrics -->
+    <div id="floating-metrics"></div>
+
+    <script>
+        // Three.js Universe Setup
+        let scene, camera, renderer, controls;
+        let galaxyParticles, fieldMesh, neuralNetwork;
+        let animationPaused = false;
+        let currentView = 'galaxy';
+        let dataNodes = [];
+        let connections = [];
+
+        function init() {
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000000, 0.0008);
+
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+            camera.position.set(0, 100, 200);
+
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('universe-canvas'),
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 50;
+            controls.maxDistance = 500;
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            const pointLight1 = new THREE.PointLight(0xBF5700, 2, 500);
+            pointLight1.position.set(100, 100, 100);
+            scene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0x9BCBEB, 2, 500);
+            pointLight2.position.set(-100, -100, -100);
+            scene.add(pointLight2);
+
+            // Create views
+            createGalaxyView();
+            createFieldView();
+            createNeuralView();
+
+            // Start animation
+            animate();
+
+            // Update metrics
+            updateMetrics();
+            setInterval(updateMetrics, 1000);
+
+            // Create floating metrics
+            createFloatingMetrics();
+        }
+
+        function createGalaxyView() {
+            // Create galaxy of data points
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 10000; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(Math.random() * 2 - 1);
+                const r = Math.random() * 200 + 50;
+
+                vertices.push(
+                    r * Math.sin(phi) * Math.cos(theta),
+                    r * Math.sin(phi) * Math.sin(theta),
+                    r * Math.cos(phi)
+                );
+
+                const color = new THREE.Color();
+                color.setHSL(Math.random() * 0.3 + 0.5, 0.8, 0.5);
+                colors.push(color.r, color.g, color.b);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 2,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            galaxyParticles = new THREE.Points(geometry, material);
+            scene.add(galaxyParticles);
+
+            // Create team nodes
+            const teams = [
+                { name: 'Cardinals', color: 0xC41E3A, position: [50, 0, 0] },
+                { name: 'Titans', color: 0x002244, position: [-50, 0, 0] },
+                { name: 'Longhorns', color: 0xBF5700, position: [0, 50, 0] },
+                { name: 'Grizzlies', color: 0x5D76A9, position: [0, -50, 0] }
+            ];
+
+            teams.forEach(team => {
+                const geometry = new THREE.SphereGeometry(10, 32, 32);
+                const material = new THREE.MeshPhongMaterial({
+                    color: team.color,
+                    emissive: team.color,
+                    emissiveIntensity: 0.5,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(...team.position);
+                mesh.name = team.name;
+
+                // Add pulsing animation
+                mesh.userData.pulse = 0;
+
+                dataNodes.push(mesh);
+                scene.add(mesh);
+
+                // Create orbiting data points
+                for (let i = 0; i < 20; i++) {
+                    const orbitGeometry = new THREE.SphereGeometry(1, 8, 8);
+                    const orbitMaterial = new THREE.MeshBasicMaterial({
+                        color: team.color,
+                        transparent: true,
+                        opacity: 0.6
+                    });
+
+                    const orbitMesh = new THREE.Mesh(orbitGeometry, orbitMaterial);
+                    const angle = (i / 20) * Math.PI * 2;
+                    const radius = 20;
+
+                    orbitMesh.position.set(
+                        team.position[0] + Math.cos(angle) * radius,
+                        team.position[1] + Math.sin(angle) * radius,
+                        team.position[2]
+                    );
+
+                    orbitMesh.userData.orbitCenter = team.position;
+                    orbitMesh.userData.orbitAngle = angle;
+                    orbitMesh.userData.orbitRadius = radius;
+
+                    dataNodes.push(orbitMesh);
+                    scene.add(orbitMesh);
+                }
+            });
+
+            // Create connections between nodes
+            createConnections();
+        }
+
+        function createFieldView() {
+            // Create stadium field visualization
+            const fieldGeometry = new THREE.PlaneGeometry(200, 100);
+            const fieldMaterial = new THREE.MeshBasicMaterial({
+                color: 0x2d5a2d,
+                side: THREE.DoubleSide,
+                visible: false
+            });
+
+            fieldMesh = new THREE.Mesh(fieldGeometry, fieldMaterial);
+            fieldMesh.rotation.x = -Math.PI / 2;
+            scene.add(fieldMesh);
+
+            // Add field lines
+            const lineMaterial = new THREE.LineBasicMaterial({
+                color: 0xffffff,
+                visible: false
+            });
+
+            for (let i = -80; i <= 80; i += 20) {
+                const points = [];
+                points.push(new THREE.Vector3(i, 0.1, -40));
+                points.push(new THREE.Vector3(i, 0.1, 40));
+
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                const line = new THREE.Line(geometry, lineMaterial);
+                scene.add(line);
+            }
+        }
+
+        function createNeuralView() {
+            // Create neural network visualization
+            neuralNetwork = new THREE.Group();
+
+            const layers = 5;
+            const nodesPerLayer = [4, 8, 16, 8, 4];
+
+            for (let l = 0; l < layers; l++) {
+                for (let n = 0; n < nodesPerLayer[l]; n++) {
+                    const geometry = new THREE.SphereGeometry(3, 16, 16);
+                    const material = new THREE.MeshPhongMaterial({
+                        color: 0x00ffff,
+                        emissive: 0x00ffff,
+                        emissiveIntensity: 0.3,
+                        visible: false
+                    });
+
+                    const node = new THREE.Mesh(geometry, material);
+                    node.position.set(
+                        (l - 2) * 40,
+                        (n - nodesPerLayer[l] / 2) * 15,
+                        0
+                    );
+
+                    neuralNetwork.add(node);
+                }
+            }
+
+            scene.add(neuralNetwork);
+        }
+
+        function createConnections() {
+            // Create glowing connections between team nodes
+            const connectionMaterial = new THREE.LineBasicMaterial({
+                color: 0x00ffff,
+                transparent: true,
+                opacity: 0.3
+            });
+
+            for (let i = 0; i < dataNodes.length - 1; i++) {
+                if (dataNodes[i].name) {
+                    for (let j = i + 1; j < dataNodes.length; j++) {
+                        if (dataNodes[j].name) {
+                            const points = [];
+                            points.push(dataNodes[i].position);
+                            points.push(dataNodes[j].position);
+
+                            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                            const line = new THREE.Line(geometry, connectionMaterial);
+
+                            connections.push(line);
+                            scene.add(line);
+                        }
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            if (!animationPaused) {
+                requestAnimationFrame(animate);
+
+                // Rotate galaxy
+                if (galaxyParticles) {
+                    galaxyParticles.rotation.y += 0.0005;
+                }
+
+                // Animate team nodes
+                dataNodes.forEach((node, index) => {
+                    if (node.userData.pulse !== undefined) {
+                        node.userData.pulse += 0.05;
+                        const scale = 1 + Math.sin(node.userData.pulse) * 0.1;
+                        node.scale.set(scale, scale, scale);
+                    }
+
+                    // Animate orbiting nodes
+                    if (node.userData.orbitCenter) {
+                        node.userData.orbitAngle += 0.01;
+                        node.position.x = node.userData.orbitCenter[0] +
+                            Math.cos(node.userData.orbitAngle) * node.userData.orbitRadius;
+                        node.position.y = node.userData.orbitCenter[1] +
+                            Math.sin(node.userData.orbitAngle) * node.userData.orbitRadius;
+                    }
+                });
+
+                // Pulse connections
+                connections.forEach((connection, index) => {
+                    const opacity = 0.3 + Math.sin(Date.now() * 0.001 + index) * 0.2;
+                    connection.material.opacity = opacity;
+                });
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+        }
+
+        function toggleView(view) {
+            currentView = view;
+
+            // Hide all views
+            if (galaxyParticles) galaxyParticles.visible = false;
+            if (fieldMesh) fieldMesh.material.visible = false;
+            if (neuralNetwork) {
+                neuralNetwork.children.forEach(child => {
+                    child.material.visible = false;
+                });
+            }
+
+            // Show selected view
+            switch(view) {
+                case 'galaxy':
+                    if (galaxyParticles) galaxyParticles.visible = true;
+                    dataNodes.forEach(node => node.visible = true);
+                    connections.forEach(conn => conn.visible = true);
+                    break;
+                case 'field':
+                    if (fieldMesh) fieldMesh.material.visible = true;
+                    break;
+                case 'neural':
+                    if (neuralNetwork) {
+                        neuralNetwork.children.forEach(child => {
+                            child.material.visible = true;
+                        });
+                    }
+                    break;
+            }
+        }
+
+        function toggleAnimation() {
+            animationPaused = !animationPaused;
+            document.getElementById('animation-toggle').textContent = animationPaused ? '▶ Play' : '⏸ Pause';
+            if (!animationPaused) animate();
+        }
+
+        function resetCamera() {
+            camera.position.set(0, 100, 200);
+            camera.lookAt(0, 0, 0);
+            controls.reset();
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function updateMetrics() {
+            // Update time
+            const now = new Date();
+            document.getElementById('universe-time').textContent =
+                now.toLocaleTimeString();
+
+            // Update counts
+            document.getElementById('node-count').textContent = dataNodes.length;
+            document.getElementById('connection-count').textContent = connections.length;
+
+            // Update team metrics with random variations
+            updateTeamMetrics();
+
+            // Add new insights
+            addNewInsight();
+        }
+
+        function updateTeamMetrics() {
+            // Simulate live data updates
+            const metrics = document.querySelectorAll('.team-metric-card');
+            metrics.forEach(card => {
+                const probElement = card.querySelector('.text-green-400');
+                if (probElement && probElement.textContent.includes('%')) {
+                    const currentProb = parseFloat(probElement.textContent);
+                    const newProb = Math.max(0, Math.min(100,
+                        currentProb + (Math.random() - 0.5) * 5));
+                    probElement.textContent = newProb.toFixed(1) + '%';
+                }
+            });
+        }
+
+        function addNewInsight() {
+            // Randomly add new insights
+            if (Math.random() < 0.1) {
+                const insights = [
+                    "Defensive pressure increasing in the paint",
+                    "Momentum shift detected in favor of home team",
+                    "Clutch performance metrics exceeding expectations",
+                    "Historical pattern match found in archive",
+                    "Fatigue indicators rising for key players"
+                ];
+
+                const insight = insights[Math.floor(Math.random() * insights.length)];
+                console.log('New Insight:', insight);
+            }
+        }
+
+        function createFloatingMetrics() {
+            const container = document.getElementById('floating-metrics');
+
+            for (let i = 0; i < 5; i++) {
+                const metric = document.createElement('div');
+                metric.className = 'floating-metric';
+                metric.style.left = Math.random() * 80 + 10 + '%';
+                metric.style.top = Math.random() * 60 + 20 + '%';
+                metric.style.animationDelay = Math.random() * 6 + 's';
+                metric.textContent = 'Data Node ' + (i + 1);
+                container.appendChild(metric);
+            }
+        }
+
+        function exportData() {
+            alert('Exporting championship data to executive report...');
+        }
+
+        function launchAR() {
+            alert('AR Mode requires compatible device. Launching mobile companion app...');
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize on load
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

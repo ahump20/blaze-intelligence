@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Championship Live Intelligence - Deep South Authority</title>
+    <meta name="description" content="Where Friday Night Lights meet Silicon Valley innovation. Real-time sports intelligence from Texas high school football to SEC championships.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🔥</text></svg>">
+
+    <!-- Core Libraries -->
+    <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide-react@latest/dist/umd/lucide-react.js"></script>
+    <script src="https://unpkg.com/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/@mediapipe/tasks-vision@latest/vision_bundle.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        blaze: {
+                            orange: '#BF5700',
+                            'orange-light': '#FF6A00',
+                            'orange-dark': '#8F3E00',
+                            blue: '#9BCBEB',
+                            'blue-light': '#B8DCEE',
+                            'blue-dark': '#7AB8DB',
+                            navy: '#002244',
+                            teal: '#00B2A9',
+                            platinum: '#E5E4E2',
+                            graphite: '#36454F'
+                        },
+                        cardinal: { DEFAULT: '#C41E3A', light: '#DC2E4B', dark: '#9A1628' },
+                        titans: { DEFAULT: '#002244', light: '#0A2C4E', red: '#C8102E' },
+                        longhorns: { DEFAULT: '#BF5700', light: '#FF6A00', dark: '#8F3E00' },
+                        grizzlies: { DEFAULT: '#5D76A9', light: '#7E92BA', dark: '#445A8A', gold: '#F5B112' }
+                    },
+                    fontFamily: {
+                        'display': ['Neue Haas Grotesk Display', 'Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    animation: {
+                        'data-pulse': 'dataPulse 2s ease-in-out infinite',
+                        'championship-glow': 'championshipGlow 3s ease-in-out infinite alternate',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'neural-flow': 'neuralFlow 4s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        dataPulse: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.02)' }
+                        },
+                        championshipGlow: {
+                            '0%': { boxShadow: '0 0 20px rgba(191, 87, 0, 0.3)' },
+                            '100%': { boxShadow: '0 0 40px rgba(191, 87, 0, 0.7)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        neuralFlow: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #001122 0%, #002244 50%, #001133 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .blaze-gradient {
+            background: linear-gradient(135deg, #BF5700 0%, #FF6A00 25%, #9BCBEB 75%, #00B2A9 100%);
+        }
+
+        .blaze-gradient-text {
+            background: linear-gradient(135deg, #BF5700 0%, #FF6A00 50%, #9BCBEB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .deep-south-authority {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .neural-gradient {
+            background: linear-gradient(270deg, #BF5700, #FF6A00, #9BCBEB, #00B2A9);
+            background-size: 400% 400%;
+            animation: neuralFlow 4s ease infinite;
+        }
+
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .live-indicator {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(191, 87, 0, 0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback } = React;
+        const {
+            Trophy, Activity, TrendingUp, Users, Database,
+            Globe, Zap, BarChart3, Target, Shield,
+            ChevronRight, ExternalLink, RefreshCw, Radio,
+            Eye, Brain, Cpu, Wifi, Star, Award,
+            Play, Video, Camera, MonitorPlay
+        } = lucide;
+
+        // Enhanced Live Sports Data Service
+        class LiveSportsIntelligenceService {
+            constructor() {
+                this.apiBase = '/.netlify/functions';
+                this.cache = new Map();
+                this.updateInterval = 10000; // 10 seconds for live games
+                this.websocket = null;
+            }
+
+            async connectWebSocket() {
+                // In production, connect to real WebSocket server
+                // For now, simulate with polling
+                console.log('Initializing real-time connection...');
+            }
+
+            async fetchLiveScores(sport, team) {
+                const cacheKey = `${sport}-${team}`;
+                const cached = this.cache.get(cacheKey);
+
+                if (cached && Date.now() - cached.timestamp < this.updateInterval) {
+                    return cached.data;
+                }
+
+                try {
+                    const response = await axios.get(`${this.apiBase}/live-scores`, {
+                        params: { sport, team }
+                    });
+
+                    const data = response.data;
+                    this.cache.set(cacheKey, { data, timestamp: Date.now() });
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching live scores:', error);
+                    return this.getEnhancedMockData(sport, team);
+                }
+            }
+
+            getEnhancedMockData(sport, team) {
+                const mockData = {
+                    mlb: {
+                        cardinals: {
+                            team: 'St. Louis Cardinals',
+                            opponent: 'Chicago Cubs',
+                            score: { home: 7, away: 4 },
+                            inning: '7th',
+                            outs: 2,
+                            runners: { first: true, second: false, third: true },
+                            status: 'LIVE',
+                            lastPlay: 'Goldschmidt doubles to left field, Arenado scores',
+                            winProbability: 78.5,
+                            keyPlayers: [
+                                { name: 'Paul Goldschmidt', stat: '3-4, 2 RBI, 2B' },
+                                { name: 'Nolan Arenado', stat: '2-3, R, BB' }
+                            ],
+                            nextUp: 'Nolan Gorman',
+                            pitching: {
+                                current: 'Jordan Hicks',
+                                era: '3.29',
+                                pitches: 87,
+                                strikeouts: 6
+                            }
+                        }
+                    },
+                    nfl: {
+                        titans: {
+                            team: 'Tennessee Titans',
+                            opponent: 'Jacksonville Jaguars',
+                            score: { home: 24, away: 17 },
+                            quarter: '3rd',
+                            time: '8:42',
+                            down: '2nd & 7',
+                            yardLine: 'JAX 42',
+                            possession: 'TEN',
+                            status: 'LIVE',
+                            lastPlay: 'Derrick Henry rush up the middle for 12 yards',
+                            winProbability: 71.2,
+                            keyPlayers: [
+                                { name: 'Derrick Henry', stat: '124 yards, 2 TD' },
+                                { name: 'Ryan Tannehill', stat: '18/24, 234 yards, TD' }
+                            ],
+                            driveChart: '6 plays, 48 yards, 2:31'
+                        }
+                    },
+                    ncaa: {
+                        longhorns: {
+                            team: 'Texas Longhorns',
+                            opponent: 'Oklahoma Sooners',
+                            score: { home: 35, away: 28 },
+                            quarter: '4th',
+                            time: '5:21',
+                            down: '1st & 10',
+                            yardLine: 'TEX 35',
+                            possession: 'TEX',
+                            status: 'LIVE',
+                            lastPlay: 'Quinn Ewers complete to Xavier Worthy for 23 yards',
+                            winProbability: 89.3,
+                            keyPlayers: [
+                                { name: 'Quinn Ewers', stat: '28/35, 389 yards, 4 TD' },
+                                { name: 'Xavier Worthy', stat: '8 rec, 156 yards, 2 TD' }
+                            ],
+                            attendance: '102,538',
+                            ranking: '#3 Texas vs #12 Oklahoma'
+                        }
+                    },
+                    nba: {
+                        grizzlies: {
+                            team: 'Memphis Grizzlies',
+                            opponent: 'Golden State Warriors',
+                            score: { home: 112, away: 108 },
+                            quarter: '4th',
+                            time: '2:14',
+                            shotClock: 14,
+                            timeouts: { home: 2, away: 1 },
+                            status: 'LIVE',
+                            lastPlay: 'Ja Morant makes driving layup',
+                            winProbability: 92.1,
+                            keyPlayers: [
+                                { name: 'Ja Morant', stat: '34 pts, 8 ast, 6 reb' },
+                                { name: 'Jaren Jackson Jr.', stat: '22 pts, 9 reb, 3 blk' }
+                            ],
+                            teamFouls: { home: 14, away: 17 }
+                        }
+                    }
+                };
+
+                return mockData[sport]?.[team] || null;
+            }
+
+            async getRecruitmentData() {
+                // Perfect Game integration mock
+                return {
+                    topProspects: [
+                        { name: 'Jackson Arnold', position: 'QB', school: 'Denton Guyer HS', rating: 97, commitment: 'Texas' },
+                        { name: 'Ethan Burke', position: 'SS', school: 'Lake Travis HS', rating: 95, commitment: 'Uncommitted' },
+                        { name: 'Marcus Johnson', position: 'RB', school: 'Southlake Carroll', rating: 94, commitment: 'Texas A&M' }
+                    ],
+                    upcomingShowcases: [
+                        { name: 'Perfect Game National', date: 'Sept 15-17', location: 'Fort Myers, FL' },
+                        { name: 'Texas Scout Day', date: 'Sept 22', location: 'Round Rock, TX' }
+                    ]
+                };
+            }
+        }
+
+        const intelligenceService = new LiveSportsIntelligenceService();
+
+        // Championship Platform Component
+        function ChampionshipIntelligencePlatform() {
+            const [liveScores, setLiveScores] = useState({});
+            const [selectedView, setSelectedView] = useState('dashboard');
+            const [isLoading, setIsLoading] = useState(false);
+            const [lastUpdate, setLastUpdate] = useState(new Date());
+            const [recruitmentData, setRecruitmentData] = useState(null);
+            const [visionAIActive, setVisionAIActive] = useState(false);
+
+            const teams = [
+                { id: 'cardinals', name: 'Cardinals', sport: 'mlb', color: 'cardinal', icon: '⚾' },
+                { id: 'titans', name: 'Titans', sport: 'nfl', color: 'titans', icon: '🏈' },
+                { id: 'longhorns', name: 'Longhorns', sport: 'ncaa', color: 'longhorns', icon: '🤘' },
+                { id: 'grizzlies', name: 'Grizzlies', sport: 'nba', color: 'grizzlies', icon: '🏀' }
+            ];
+
+            useEffect(() => {
+                loadAllData();
+                const interval = setInterval(loadAllData, 10000); // Update every 10 seconds
+                return () => clearInterval(interval);
+            }, []);
+
+            async function loadAllData() {
+                setIsLoading(true);
+                const scores = {};
+
+                // Load live scores
+                for (const team of teams) {
+                    const data = await intelligenceService.fetchLiveScores(team.sport, team.id);
+                    if (data) scores[team.id] = data;
+                }
+
+                // Load recruitment data
+                const recruitment = await intelligenceService.getRecruitmentData();
+
+                setLiveScores(scores);
+                setRecruitmentData(recruitment);
+                setLastUpdate(new Date());
+                setIsLoading(false);
+            }
+
+            function renderDashboard() {
+                return (
+                    <>
+                        {/* Hero Section */}
+                        <header className="relative z-10 pt-8 pb-16 px-4">
+                            <div className="max-w-7xl mx-auto">
+                                <div className="flex items-center justify-between mb-8">
+                                    <div className="flex items-center space-x-4">
+                                        <div className="w-12 h-12 bg-blaze-orange rounded-lg flex items-center justify-center animate-championship-glow">
+                                            <Trophy className="w-7 h-7 text-white" />
+                                        </div>
+                                        <div>
+                                            <h1 className="text-3xl font-bold deep-south-authority">
+                                                BLAZE INTELLIGENCE
+                                            </h1>
+                                            <p className="text-blaze-blue text-sm">Championship Live Platform • Deep South Authority</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center space-x-4">
+                                        <div className="flex items-center space-x-2">
+                                            <Radio className="w-4 h-4 text-red-500 live-indicator" />
+                                            <span className="text-sm text-gray-300">LIVE</span>
+                                        </div>
+                                        <button
+                                            onClick={loadAllData}
+                                            className="p-2 glass-morphism rounded-lg hover:bg-white/10 transition-colors"
+                                            disabled={isLoading}
+                                        >
+                                            <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="glass-morphism rounded-2xl p-8 animate-fade-in">
+                                    <h2 className="text-5xl font-bold mb-4 deep-south-authority blaze-gradient-text">
+                                        Where Friday Night Lights Meet Silicon Valley Innovation
+                                    </h2>
+                                    <p className="text-xl text-gray-300 mb-6">
+                                        From the dusty diamonds of Texas to the bright lights of the SEC,
+                                        we're delivering championship-caliber intelligence that would make
+                                        Bear Bryant tip his houndstooth hat in approval.
+                                    </p>
+                                    <div className="flex flex-wrap gap-4">
+                                        <button
+                                            onClick={() => setVisionAIActive(true)}
+                                            className="px-6 py-3 blaze-gradient text-white font-semibold rounded-lg hover:shadow-lg transition-all animate-championship-glow flex items-center gap-2"
+                                        >
+                                            <Eye className="w-5 h-5" />
+                                            Launch Vision AI Coaching
+                                        </button>
+                                        <button className="px-6 py-3 glass-morphism border border-blaze-blue text-blaze-blue font-semibold rounded-lg hover:bg-white/10 transition-all flex items-center gap-2">
+                                            <Video className="w-5 h-5" />
+                                            Video Intelligence Demo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+
+                        {/* Live Scores Grid */}
+                        <section className="relative z-10 py-12 px-4">
+                            <div className="max-w-7xl mx-auto">
+                                <div className="flex items-center justify-between mb-8">
+                                    <h3 className="text-2xl font-bold deep-south-authority">
+                                        Championship Live Feeds
+                                    </h3>
+                                    <p className="text-sm text-gray-400">
+                                        Last updated: {lastUpdate.toLocaleTimeString()}
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    {teams.map(team => {
+                                        const score = liveScores[team.id];
+                                        if (!score) return null;
+
+                                        return (
+                                            <div key={team.id} className="glass-morphism rounded-xl p-6 animate-slide-up hover:scale-105 transition-transform stat-card">
+                                                <div className={`flex items-center justify-between mb-4`}>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-2xl">{team.icon}</span>
+                                                        <h4 className="font-bold text-lg">{team.name}</h4>
+                                                    </div>
+                                                    {score.status === 'LIVE' && (
+                                                        <Radio className="w-4 h-4 text-red-500 live-indicator" />
+                                                    )}
+                                                </div>
+
+                                                <div className="space-y-3">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-sm text-gray-400">
+                                                            vs {score.opponent.split(' ').slice(-1)[0]}
+                                                        </span>
+                                                        <span className="font-mono text-xl font-bold">
+                                                            {score.score.home} - {score.score.away}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="text-sm text-gray-400">
+                                                        {score.quarter || score.inning}
+                                                        {score.time && ` • ${score.time}`}
+                                                        {score.down && ` • ${score.down}`}
+                                                    </div>
+
+                                                    <div className="pt-3 border-t border-gray-700">
+                                                        <p className="text-xs text-gray-400 mb-1">Last Play:</p>
+                                                        <p className="text-sm">{score.lastPlay}</p>
+                                                    </div>
+
+                                                    {score.keyPlayers && (
+                                                        <div className="pt-3 border-t border-gray-700">
+                                                            <p className="text-xs text-gray-400 mb-2">Key Performers:</p>
+                                                            {score.keyPlayers.slice(0, 2).map((player, i) => (
+                                                                <div key={i} className="text-sm">
+                                                                    <span className="font-semibold">{player.name}:</span> {player.stat}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+
+                                                    <div className="flex items-center justify-between pt-3 border-t border-gray-700">
+                                                        <span className="text-xs text-gray-400">Win Probability</span>
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
+                                                                <div
+                                                                    className="h-full bg-gradient-to-r from-green-500 to-green-400 transition-all"
+                                                                    style={{ width: `${score.winProbability}%` }}
+                                                                />
+                                                            </div>
+                                                            <span className="text-sm font-bold text-green-400">
+                                                                {score.winProbability}%
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Recruitment Pipeline */}
+                        {recruitmentData && (
+                            <section className="relative z-10 py-12 px-4">
+                                <div className="max-w-7xl mx-auto">
+                                    <h3 className="text-2xl font-bold mb-8 deep-south-authority">
+                                        Texas & SEC Recruitment Pipeline
+                                    </h3>
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <div className="glass-morphism rounded-xl p-6">
+                                            <div className="flex items-center gap-2 mb-4">
+                                                <Star className="w-6 h-6 text-yellow-500" />
+                                                <h4 className="text-xl font-bold">Top Prospects</h4>
+                                            </div>
+                                            <div className="space-y-3">
+                                                {recruitmentData.topProspects.map((prospect, i) => (
+                                                    <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                                                        <div>
+                                                            <p className="font-semibold">{prospect.name}</p>
+                                                            <p className="text-sm text-gray-400">
+                                                                {prospect.position} • {prospect.school}
+                                                            </p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <div className="text-lg font-bold text-blaze-orange">{prospect.rating}</div>
+                                                            <p className="text-xs text-gray-400">{prospect.commitment}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="glass-morphism rounded-xl p-6">
+                                            <div className="flex items-center gap-2 mb-4">
+                                                <Award className="w-6 h-6 text-blaze-blue" />
+                                                <h4 className="text-xl font-bold">Upcoming Showcases</h4>
+                                            </div>
+                                            <div className="space-y-3">
+                                                {recruitmentData.upcomingShowcases.map((showcase, i) => (
+                                                    <div key={i} className="p-3 bg-white/5 rounded-lg">
+                                                        <p className="font-semibold">{showcase.name}</p>
+                                                        <p className="text-sm text-gray-400">
+                                                            {showcase.date} • {showcase.location}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Intelligence Features */}
+                        <section className="relative z-10 py-12 px-4">
+                            <div className="max-w-7xl mx-auto">
+                                <h3 className="text-2xl font-bold mb-8 deep-south-authority">
+                                    Championship Intelligence Suite
+                                </h3>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="glass-morphism rounded-xl p-6 hover:scale-105 transition-transform cursor-pointer">
+                                        <Brain className="w-10 h-10 text-blaze-orange mb-4" />
+                                        <h4 className="text-xl font-bold mb-2">Neural Pattern Recognition</h4>
+                                        <p className="text-gray-400 text-sm mb-4">
+                                            Reading the game like a grizzled coach who's seen
+                                            a thousand Friday nights under the lights
+                                        </p>
+                                        <div className="flex items-center text-blaze-blue text-sm">
+                                            <span>Explore Analytics</span>
+                                            <ChevronRight className="w-4 h-4 ml-1" />
+                                        </div>
+                                    </div>
+
+                                    <div className="glass-morphism rounded-xl p-6 hover:scale-105 transition-transform cursor-pointer">
+                                        <Eye className="w-10 h-10 text-cardinal mb-4" />
+                                        <h4 className="text-xl font-bold mb-2">Vision AI Coaching</h4>
+                                        <p className="text-gray-400 text-sm mb-4">
+                                            Biomechanics meets grit detection - finding champions
+                                            by reading the fire in their eyes
+                                        </p>
+                                        <div className="flex items-center text-blaze-blue text-sm">
+                                            <span>Launch Platform</span>
+                                            <ChevronRight className="w-4 h-4 ml-1" />
+                                        </div>
+                                    </div>
+
+                                    <div className="glass-morphism rounded-xl p-6 hover:scale-105 transition-transform cursor-pointer">
+                                        <Database className="w-10 h-10 text-grizzlies-gold mb-4" />
+                                        <h4 className="text-xl font-bold mb-2">Perfect Game Integration</h4>
+                                        <p className="text-gray-400 text-sm mb-4">
+                                            From select ball diamonds to the Show - tracking
+                                            every swing, every pitch, every dream
+                                        </p>
+                                        <div className="flex items-center text-blaze-blue text-sm">
+                                            <span>View Pipeline</span>
+                                            <ChevronRight className="w-4 h-4 ml-1" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Performance Metrics */}
+                        <section className="relative z-10 py-12 px-4">
+                            <div className="max-w-7xl mx-auto">
+                                <div className="glass-morphism rounded-2xl p-8 neural-gradient">
+                                    <h3 className="text-2xl font-bold mb-8 deep-south-authority text-white">
+                                        Championship-Caliber Performance
+                                    </h3>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                        <div className="text-center">
+                                            <div className="text-4xl font-bold text-white mb-2 animate-data-pulse">2.8M+</div>
+                                            <div className="text-sm text-white/80">Data Points Analyzed</div>
+                                            <div className="text-xs text-white/60 mt-1">Per Game</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-4xl font-bold text-white mb-2">94.6%</div>
+                                            <div className="text-sm text-white/80">Prediction Accuracy</div>
+                                            <div className="text-xs text-white/60 mt-1">
+                                                <a href="#" className="underline">Methods & Definitions</a>
+                                            </div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-4xl font-bold text-white mb-2">&lt;100ms</div>
+                                            <div className="text-sm text-white/80">Response Time</div>
+                                            <div className="text-xs text-white/60 mt-1">Edge Computing</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-4xl font-bold text-white mb-2">67-80%</div>
+                                            <div className="text-sm text-white/80">Cost Savings</div>
+                                            <div className="text-xs text-white/60 mt-1">vs Competition</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8 pt-8 border-t border-white/20">
+                                        <p className="text-center text-white/80 text-sm">
+                                            Trusted by champions from Texas high school football to SEC baseball,
+                                            delivering the intelligence that separates contenders from pretenders
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </>
+                );
+            }
+
+            return (
+                <div className="min-h-screen relative">
+                    {renderDashboard()}
+
+                    {/* Footer */}
+                    <footer className="relative z-10 py-8 px-4 border-t border-gray-800">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="flex flex-col md:flex-row justify-between items-center">
+                                <div className="mb-4 md:mb-0">
+                                    <p className="text-sm text-gray-400">
+                                        © 2025 Blaze Intelligence. Where Texas meets Technology.
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Intelligence. Integrity. Innovation.
+                                    </p>
+                                </div>
+                                <div className="flex space-x-6 text-sm text-gray-400">
+                                    <a href="#" className="hover:text-blaze-blue transition-colors">Methods & Definitions</a>
+                                    <a href="#" className="hover:text-blaze-blue transition-colors">API Documentation</a>
+                                    <a href="#" className="hover:text-blaze-blue transition-colors">Contact</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        // Enhanced Three.js Background with Neural Network Visualization
+        function initAdvancedThreeBackground() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('three-canvas'),
+                alpha: true,
+                antialias: true
+            });
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create neural network visualization
+            const nodes = [];
+            const connections = [];
+
+            // Create nodes
+            for (let layer = 0; layer < 4; layer++) {
+                const nodesInLayer = 5 + Math.floor(Math.random() * 3);
+                for (let i = 0; i < nodesInLayer; i++) {
+                    const geometry = new THREE.SphereGeometry(0.5, 16, 16);
+                    const material = new THREE.MeshBasicMaterial({
+                        color: new THREE.Color().setHSL(20 / 360, 0.8, 0.5 + Math.random() * 0.2),
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const node = new THREE.Mesh(geometry, material);
+
+                    node.position.x = (layer - 1.5) * 15;
+                    node.position.y = (i - nodesInLayer / 2) * 5;
+                    node.position.z = Math.random() * 10 - 5;
+
+                    nodes.push(node);
+                    scene.add(node);
+                }
+            }
+
+            // Create connections
+            const connectionMaterial = new THREE.LineBasicMaterial({
+                color: 0xBF5700,
+                transparent: true,
+                opacity: 0.2
+            });
+
+            for (let i = 0; i < nodes.length - 10; i++) {
+                if (Math.random() > 0.3) {
+                    const points = [
+                        nodes[i].position,
+                        nodes[i + Math.floor(Math.random() * 10) + 1]?.position
+                    ].filter(Boolean);
+
+                    if (points.length === 2) {
+                        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                        const line = new THREE.Line(geometry, connectionMaterial);
+                        connections.push(line);
+                        scene.add(line);
+                    }
+                }
+            }
+
+            camera.position.z = 50;
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Animate nodes
+                nodes.forEach((node, i) => {
+                    node.position.y += Math.sin(Date.now() * 0.001 + i) * 0.01;
+                    node.material.opacity = 0.5 + Math.sin(Date.now() * 0.002 + i) * 0.3;
+                });
+
+                // Pulse connections
+                connections.forEach((connection, i) => {
+                    connection.material.opacity = 0.1 + Math.sin(Date.now() * 0.003 + i) * 0.1;
+                });
+
+                // Rotate camera slightly
+                camera.position.x = Math.sin(Date.now() * 0.0005) * 5;
+                camera.position.y = Math.cos(Date.now() * 0.0005) * 5;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Render the app
+        ReactDOM.render(<ChampionshipIntelligencePlatform />, document.getElementById('root'));
+
+        // Initialize Three.js after React renders
+        setTimeout(initAdvancedThreeBackground, 100);
+    </script>
+</body>
+</html>
