@@ -55,6 +55,9 @@
 /championship           /blaze-unified-championship.html     200
 /replit-unified         /blaze-unified-championship.html     200
 /all-platforms          /blaze-unified-championship.html     200
+/platform-manager       /blaze-unified-championship-platform.html 200
+/unified-platform       /blaze-unified-championship-platform.html 200
+/championship-platform  /blaze-unified-championship-platform.html 200
 
 # AR Coaching Platform Routes (Enhanced Vision AI)
 /ar-coaching            /blaze-ar-coaching-enhanced.html     200
