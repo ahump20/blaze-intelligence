@@ -50,6 +50,12 @@
 /video-analysis          /api/video-intelligence             200
 /narratives              /api/narrative-generator            200
 
+# Unified Championship Platform Routes
+/unified                /blaze-unified-championship.html     200
+/championship           /blaze-unified-championship.html     200
+/replit-unified         /blaze-unified-championship.html     200
+/all-platforms          /blaze-unified-championship.html     200
+
 # AR Coaching Platform Routes (Enhanced Vision AI)
 /ar-coaching            /blaze-ar-coaching-enhanced.html     200
 /ar-coach               /blaze-ar-coaching-enhanced.html     200
