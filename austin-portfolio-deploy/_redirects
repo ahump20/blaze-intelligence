@@ -50,6 +50,12 @@
 /video-analysis          /api/video-intelligence             200
 /narratives              /api/narrative-generator            200
 
+# AR Coaching Platform Routes
+/ar-coaching            /blaze-ar-coaching-platform.html     200
+/ar-coach               /blaze-ar-coaching-platform.html     200
+/coaching               /blaze-ar-coaching-platform.html     200
+/ar                     /blaze-ar-coaching-platform.html     200
+
 # Real-Time Data Streams
 /stream/cardinals        /api/consciousness-stream           200
 /stream/titans           /api/consciousness-stream           200
