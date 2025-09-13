@@ -198,6 +198,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    console.log('Blaze Analytics API called:', event.httpMethod, event.path);
     const { queryStringParameters } = event;
     const params = queryStringParameters || {};
 

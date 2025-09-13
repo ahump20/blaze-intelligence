@@ -134,7 +134,7 @@ function generateNILReport(profile, finalValue, breakdown) {
 }
 
 exports.handler = async (event, context) => {
-  // Handle CORS
+  // Championship-level error handling and CORS
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -146,11 +146,12 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 200,
       headers,
-      body: ''
+      body: JSON.stringify({ message: 'CORS preflight' })
     };
   }
 
   try {
+    console.log('NIL Calculator API called:', event.httpMethod, event.path);
     let profile = {};
 
     if (event.httpMethod === 'POST') {
