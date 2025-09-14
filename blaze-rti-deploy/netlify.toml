@@ -53,6 +53,12 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
+# MCP Server Proxy
+[[redirects]]
+  from = "/mcp/*"
+  to = "/.netlify/functions/hawkeye-mcp-proxy"
+  status = 200
+
 # Legacy URL redirects
 [[redirects]]
   from = "/blaze-3d-universe.html"
