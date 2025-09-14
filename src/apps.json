@@ -1,0 +1,273 @@
+{
+  "platformName": "Blaze Intelligence Championship Hub",
+  "tagline": "Championship Intelligence For Elite Sports Programs",
+  "apps": [
+    {
+      "id": "main-platform",
+      "name": "Championship Platform",
+      "description": "Main championship intelligence platform with executive dashboard",
+      "url": "https://blaze-intelligence.netlify.app",
+      "type": "primary",
+      "embed": false,
+      "tags": ["analytics", "executive", "dashboard"],
+      "icon": "trophy",
+      "status": "live",
+      "features": [
+        "Executive Analytics Dashboard",
+        "Simple/Advanced View Toggle",
+        "Real-time Sports Intelligence",
+        "Vision AI Coaching Platform"
+      ]
+    },
+    {
+      "id": "live-dashboard",
+      "name": "Live Championship Dashboard",
+      "description": "Real-time analytics for Cardinals, Titans, Longhorns, Grizzlies",
+      "url": "https://blaze-intelligence.netlify.app/blaze-championship-live.html",
+      "type": "dashboard",
+      "embed": true,
+      "tags": ["live", "analytics", "cardinals", "titans", "longhorns", "grizzlies"],
+      "icon": "activity",
+      "status": "live",
+      "features": [
+        "Real-time Game Analytics",
+        "Team Performance Tracking",
+        "Live Score Updates",
+        "Momentum Analysis"
+      ]
+    },
+    {
+      "id": "ultimate-hub",
+      "name": "Ultimate Championship Hub",
+      "description": "Complete command center with AI analytics and NIL calculations",
+      "url": "https://blaze-intelligence.netlify.app/index-championship-ultimate.html",
+      "type": "hub",
+      "embed": true,
+      "tags": ["ai", "nil", "recruitment", "analytics"],
+      "icon": "zap",
+      "status": "live",
+      "features": [
+        "AI-Powered Analytics",
+        "NIL Valuation Calculator",
+        "Recruitment Pipeline",
+        "Championship Metrics"
+      ]
+    },
+    {
+      "id": "3d-universe",
+      "name": "3D Championship Universe",
+      "description": "Immersive 3D visualization with neural networks and cosmic data",
+      "url": "https://blaze-intelligence.netlify.app/championship-3d-universe.html",
+      "type": "visualization",
+      "embed": true,
+      "tags": ["3d", "visualization", "neural", "immersive"],
+      "icon": "globe",
+      "status": "live",
+      "features": [
+        "3D Neural Networks",
+        "Cosmic Data Exploration",
+        "Stadium Visualizations",
+        "Interactive Galaxy View"
+      ]
+    },
+    {
+      "id": "ai-analytics",
+      "name": "AI Analytics Engine",
+      "description": "Advanced predictive modeling and pattern recognition",
+      "url": "https://blaze-intelligence.netlify.app/championship-ai-analytics.html",
+      "type": "ai",
+      "embed": true,
+      "tags": ["ai", "prediction", "patterns", "analytics"],
+      "icon": "brain",
+      "status": "live",
+      "features": [
+        "Predictive Modeling",
+        "Pattern Recognition",
+        "Decision Velocity Analysis",
+        "Championship Readiness"
+      ]
+    },
+    {
+      "id": "monitoring",
+      "name": "System Monitoring",
+      "description": "Real-time performance tracking and system diagnostics",
+      "url": "https://blaze-intelligence.netlify.app/monitoring-dashboard.html",
+      "type": "monitoring",
+      "embed": true,
+      "tags": ["monitoring", "performance", "diagnostics", "health"],
+      "icon": "monitor",
+      "status": "live",
+      "features": [
+        "System Health Monitoring",
+        "API Performance Tracking",
+        "Real-time Diagnostics",
+        "Performance Metrics"
+      ]
+    },
+    {
+      "id": "replit-primary",
+      "name": "Deep South Sports Authority",
+      "description": "Transform Data Into Championships - AI-powered sports analytics platform founded by Austin Humphrey",
+      "url": "https://blaze-intelligence.replit.app",
+      "type": "replit",
+      "embed": true,
+      "tags": ["deep-south", "nil", "digital-combine", "ai-consciousness", "pricing"],
+      "icon": "video",
+      "status": "live",
+      "features": [
+        "AI Consciousness Engine (94.6% accuracy)",
+        "NIL Valuation Calculator",
+        "Digital Combine™ Video Analysis",
+        "Pricing: $297/month, $1,188/year, Enterprise"
+      ]
+    },
+    {
+      "id": "deep-south-integrated",
+      "name": "Deep South Sports Authority (Integrated)",
+      "description": "Complete Deep South platform with all Replit features integrated into unified experience",
+      "url": "https://blaze-intelligence.netlify.app/deep-south-sports-authority.html",
+      "type": "integrated",
+      "embed": true,
+      "tags": ["nil-calculator", "digital-combine", "pricing", "neural-network", "austin-humphrey"],
+      "icon": "zap",
+      "status": "live",
+      "features": [
+        "Complete NIL Calculator with pricing tiers",
+        "Digital Combine™ with biomechanical analysis",
+        "Neural Network Visualization",
+        "Founded by Austin Humphrey - Texas Running Back"
+      ]
+    },
+    {
+      "id": "replit-mirror",
+      "name": "Championship Mirror Platform",
+      "description": "Mirror platform with enhanced video analysis capabilities",
+      "url": "https://blaze-intelligence-replit.netlify.app",
+      "type": "mirror",
+      "embed": true,
+      "tags": ["mirror", "video", "analysis", "neural"],
+      "icon": "mirror",
+      "status": "live",
+      "features": [
+        "Enhanced Video Analysis",
+        "Neural Control Systems",
+        "Championship Analytics",
+        "AI Consciousness Engine"
+      ]
+    },
+    {
+      "id": "championship-live-dashboard",
+      "name": "Championship Live Dashboard",
+      "description": "Real-time championship intelligence with AI insights and team performance tracking",
+      "url": "https://blaze-intelligence.netlify.app/championship-live-dashboard.html",
+      "type": "dashboard",
+      "embed": true,
+      "tags": ["live", "dashboard", "ai-insights", "real-time", "championship"],
+      "icon": "activity",
+      "status": "live",
+      "features": [
+        "Real-time AI accuracy tracking (94.6%)",
+        "Live team performance metrics",
+        "Championship readiness indicators",
+        "AI-powered insights and predictions"
+      ]
+    },
+    {
+      "id": "ai-coaching-platform",
+      "name": "AI Vision Coaching Platform",
+      "description": "Revolutionary biomechanical analysis with micro-expression detection for elite character evaluation",
+      "url": "https://blaze-intelligence.netlify.app/ai-coaching-platform.html",
+      "type": "coaching",
+      "embed": true,
+      "tags": ["ai-coaching", "biomechanics", "character-analysis", "vision-ai", "training"],
+      "icon": "camera",
+      "status": "live",
+      "features": [
+        "Biomechanical precision analysis",
+        "Micro-expression character detection",
+        "Real-time coaching feedback",
+        "Elite pattern matching against champions"
+      ]
+    },
+    {
+      "id": "executive-presentation",
+      "name": "Executive Presentation Suite",
+      "description": "Comprehensive presentation package for championship platform showcase",
+      "url": "https://blaze-intelligence.netlify.app/executive-presentation.html",
+      "type": "presentation",
+      "embed": false,
+      "tags": ["executive", "presentation", "showcase", "business", "proposal"],
+      "icon": "presentation",
+      "status": "live",
+      "features": [
+        "Interactive slide presentation",
+        "ROI and competitive analysis",
+        "Implementation roadmap",
+        "Contact and pricing information"
+      ]
+    },
+    {
+      "id": "mcp-server",
+      "name": "MCP Intelligence Server",
+      "description": "Model Context Protocol server for AI assistant integration",
+      "url": "/mcp-server-status.html",
+      "type": "integration",
+      "embed": false,
+      "tags": ["mcp", "ai", "integration", "server"],
+      "icon": "server",
+      "status": "ready",
+      "features": [
+        "ChatGPT Integration",
+        "Claude Integration",
+        "Championship Analysis Tools",
+        "Real-time AI Connectivity"
+      ]
+    }
+  ],
+  "categories": {
+    "primary": {
+      "name": "Championship Platforms",
+      "description": "Core championship intelligence platforms"
+    },
+    "dashboard": {
+      "name": "Live Analytics",
+      "description": "Real-time sports analytics and monitoring"
+    },
+    "visualization": {
+      "name": "3D & Immersive",
+      "description": "Advanced visualization and 3D experiences"
+    },
+    "replit": {
+      "name": "Deep South Authority",
+      "description": "Replit-hosted championship applications"
+    },
+    "integration": {
+      "name": "AI Integration",
+      "description": "AI assistant and server integrations"
+    }
+  },
+  "deployment": {
+    "primary_domain": "blaze-intelligence.netlify.app",
+    "replit_domains": [
+      "blaze-intelligence.replit.app",
+      "blaze-intelligence-replit.netlify.app"
+    ],
+    "proxy_enabled": true,
+    "cors_handling": "automatic"
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "last_updated": "2025-09-13",
+    "total_apps": 12,
+    "live_apps": 11,
+    "brand": "Blaze Intelligence",
+    "authority": "Deep South Championship Intelligence",
+    "enhanced_features": [
+      "Championship Live Dashboard with real-time AI insights",
+      "AI Vision Coaching Platform with biomechanical analysis",
+      "Executive Presentation Suite for business showcase",
+      "Complete Deep South Sports Authority integration",
+      "Advanced character recognition and micro-expression analysis"
+    ]
+  }
+}

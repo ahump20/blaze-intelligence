@@ -400,7 +400,12 @@
             <!-- Contact Form -->
             <div class="contact-form-section">
                 <h2 class="form-title">Start the Conversation</h2>
-                <form id="contactForm">
+                <form id="contactForm" name="blaze-contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+                    <input type="hidden" name="form-name" value="blaze-contact">
+                    <p style="display: none;">
+                        <label>Don't fill this out: <input name="bot-field"></label>
+                    </p>
+
                     <div class="form-group">
                         <label class="form-label" for="name">Your Name</label>
                         <input type="text" id="name" name="name" class="form-input" required placeholder="Coach Smith">
@@ -546,28 +551,43 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Contact Form Handler
+        // Contact Form Handler - Enhanced for Netlify Forms
         document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Simulate form submission
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData);
 
-            // Show success message
-            const successMsg = document.getElementById('successMessage');
-            successMsg.classList.add('show');
+            try {
+                // Submit to Netlify Forms
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(formData).toString()
+                });
 
-            // Reset form
-            e.target.reset();
+                if (response.ok) {
+                    // Show success message
+                    const successMsg = document.getElementById('successMessage');
+                    successMsg.classList.add('show');
 
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                successMsg.classList.remove('show');
-            }, 5000);
+                    // Reset form
+                    e.target.reset();
 
-            // In production, this would send to your API
-            console.log('Form submitted:', data);
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successMsg.classList.remove('show');
+                    }, 5000);
+
+                    console.log('Form successfully submitted to Netlify');
+                } else {
+                    console.error('Form submission failed');
+                    alert('There was an error submitting your message. Please try again or email us directly.');
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                alert('There was an error submitting your message. Please try again or email us directly.');
+            }
         });
     </script>
 </body>

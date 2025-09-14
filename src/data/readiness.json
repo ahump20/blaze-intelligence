@@ -1,0 +1,85 @@
+{
+  "lastUpdated": "2025-01-14T12:00:00Z",
+  "team": "Cardinals",
+  "readiness": {
+    "overall": 92,
+    "offense": 89,
+    "defense": 94,
+    "pitching": 96,
+    "health": 91,
+    "momentum": 88
+  },
+  "predictions": {
+    "winProbability": 0.61,
+    "playoffOdds": 0.68,
+    "projectedWins": 91,
+    "divisionOdds": 0.42
+  },
+  "recentPerformance": {
+    "last5Games": {
+      "wins": 4,
+      "losses": 1,
+      "runsScored": 28,
+      "runsAllowed": 16
+    },
+    "trend": "hot",
+    "streakType": "W",
+    "streakLength": 4
+  },
+  "keyPlayers": [
+    {
+      "name": "Paul Goldschmidt",
+      "position": "1B",
+      "status": "active",
+      "performance": {
+        "avg": 0.312,
+        "ops": 0.891,
+        "war": 4.2
+      }
+    },
+    {
+      "name": "Nolan Arenado",
+      "position": "3B",
+      "status": "active",
+      "performance": {
+        "avg": 0.287,
+        "ops": 0.843,
+        "war": 3.8
+      }
+    },
+    {
+      "name": "Willson Contreras",
+      "position": "C",
+      "status": "active",
+      "performance": {
+        "avg": 0.269,
+        "ops": 0.812,
+        "war": 3.1
+      }
+    }
+  ],
+  "nextGame": {
+    "opponent": "Cubs",
+    "date": "2025-01-15T19:15:00Z",
+    "location": "Home",
+    "winProbability": 0.57,
+    "pitchingMatchup": {
+      "our": "Sonny Gray",
+      "their": "Marcus Stroman"
+    }
+  },
+  "insights": [
+    {
+      "type": "strength",
+      "message": "Pitching rotation depth at season-high with 2.87 ERA over last 10 games"
+    },
+    {
+      "type": "opportunity",
+      "message": "Cubs struggle against right-handed pitching (.228 BA) - exploit with Gray starting"
+    },
+    {
+      "type": "focus",
+      "message": "Maintain aggressive baserunning - Cubs catcher allows 41% steal success rate"
+    }
+  ]
+}

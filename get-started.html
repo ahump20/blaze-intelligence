@@ -1,128 +1,606 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Get Started - Blaze Intelligence</title>
-<link rel="stylesheet" href="/brand.css"><link rel="stylesheet" href="/brand-components.css">
-<meta name="description" content="Join Blaze Intelligence and transform your sports analytics">
-<style>
-.auth-container{max-width:500px;margin:80px auto;padding:0 20px}
-.auth-form{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:32px}
-.form-title{font-size:32px;color:var(--ink);margin-bottom:8px;font-weight:700}
-.form-subtitle{color:var(--muted);margin-bottom:32px}
-.form-group{margin-bottom:20px}
-.form-label{display:block;color:var(--muted);font-size:14px;margin-bottom:8px;font-weight:600}
-.form-input{width:100%;padding:12px;background:#0B0B0F;border:1px solid var(--line);border-radius:8px;
-            color:var(--ink);font-size:16px;transition:all 0.2s}
-.form-input:focus{outline:none;border-color:var(--accent)}
-.form-select{width:100%;padding:12px;background:#0B0B0F;border:1px solid var(--line);border-radius:8px;
-             color:var(--ink);font-size:16px;cursor:pointer}
-.form-btn{width:100%;padding:14px;background:linear-gradient(90deg,var(--accent),var(--accent-2));
-          color:#0B0B0F;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;
-          transition:transform 0.2s;margin-top:24px}
-.form-btn:hover{transform:translateY(-2px)}
-.form-footer{text-align:center;margin-top:24px;color:var(--muted);font-size:14px}
-.form-footer a{color:var(--accent-2)}
-.plan-selector{display:grid;gap:12px;margin-bottom:20px}
-.plan-option{padding:16px;background:#0B0B0F;border:2px solid var(--line);border-radius:8px;cursor:pointer;
-             transition:all 0.2s}
-.plan-option:hover{border-color:var(--accent)}
-.plan-option.selected{border-color:var(--accent);background:rgba(191,87,0,0.1)}
-.plan-name{font-weight:700;color:var(--ink);margin-bottom:4px}
-.plan-price{color:var(--accent);font-size:20px;font-weight:700}
-.plan-desc{color:var(--muted);font-size:12px;margin-top:4px}
-</style>
-</head><body>
-<div id="header"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started | Blaze Intelligence - Championship Analytics Platform</title>
+    <meta name="description" content="Join Blaze Intelligence and transform your sports program with championship-level analytics and intelligence">
 
-<div class="auth-container">
-  <form class="auth-form" action="/api/auth/register" method="POST">
-    <h1 class="form-title">Join Blaze Intelligence</h1>
-    <p class="form-subtitle">Start your journey to championship-level analytics</p>
-    
-    <div class="form-group">
-      <label class="form-label">Organization Name</label>
-      <input type="text" name="organization" class="form-input" placeholder="Texas Longhorns" required>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Your Name</label>
-      <input type="text" name="name" class="form-input" placeholder="Coach Smith" required>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Email Address</label>
-      <input type="email" name="email" class="form-input" placeholder="coach@team.com" required>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Phone Number</label>
-      <input type="tel" name="phone" class="form-input" placeholder="(512) 555-0100">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Select Your Plan</label>
-      <div class="plan-selector">
-        <label class="plan-option">
-          <input type="radio" name="plan" value="grassroots" style="display:none">
-          <div class="plan-name">Grassroots</div>
-          <div class="plan-price">$97/month</div>
-          <div class="plan-desc">Perfect for youth teams and developing programs</div>
-        </label>
-        <label class="plan-option selected">
-          <input type="radio" name="plan" value="competitive" checked style="display:none">
-          <div class="plan-name">Competitive</div>
-          <div class="plan-price">$497/month</div>
-          <div class="plan-desc">Advanced analytics for serious competitors</div>
-        </label>
-        <label class="plan-option">
-          <input type="radio" name="plan" value="elite" style="display:none">
-          <div class="plan-name">Elite</div>
-          <div class="plan-price">Custom Pricing</div>
-          <div class="plan-desc">Enterprise solutions for professional organizations</div>
-        </label>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Primary Sport</label>
-      <select name="sport" class="form-select" required>
-        <option value="">Select a sport</option>
-        <option value="mlb">Baseball (MLB)</option>
-        <option value="nfl">Football (NFL)</option>
-        <option value="nba">Basketball (NBA)</option>
-        <option value="ncaa">College Athletics (NCAA)</option>
-        <option value="youth">Youth Sports</option>
-      </select>
-    </div>
-    
-    <button type="submit" class="form-btn">Start Free Trial</button>
-    
-    <div class="form-footer">
-      Already have an account? <a href="/login.html">Sign In</a>
-    </div>
-  </form>
-</div>
+    <!-- Three.js for Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-<div id="footer"></div>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 
-<script type="module">
-  const loadPartial = async (id, path)=>{ 
-    try {
-      const html = await fetch(path).then(r=>r.text()); 
-      document.querySelector(id).innerHTML = html; 
-    } catch(e) {
-      console.warn('Failed to load partial:', path);
-    }
-  };
-  await loadPartial('#header','/partials/header.html');
-  await loadPartial('#footer','/partials/footer.html');
-  
-  // Plan selector interaction
-  document.querySelectorAll('.plan-option').forEach(option => {
-    option.addEventListener('click', function() {
-      document.querySelectorAll('.plan-option').forEach(o => o.classList.remove('selected'));
-      this.classList.add('selected');
-      this.querySelector('input[type="radio"]').checked = true;
-    });
-  });
-</script>
-</body></html>
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --championship-gold: #FFD700;
+            --sec-crimson: #9E1B32;
+            --success-green: #10B981;
+            --bg-dark: #0a0a0a;
+            --panel-dark: rgba(255, 255, 255, 0.05);
+            --line-dark: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 3D Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid var(--burnt-orange);
+            padding: 20px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .brand-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: var(--burnt-orange);
+        }
+
+        /* Main Container */
+        .auth-container {
+            max-width: 600px;
+            margin: 120px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-form {
+            background: var(--panel-dark);
+            border: 1px solid var(--line-dark);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--burnt-orange);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(191, 87, 0, 0.3);
+        }
+
+        .form-select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        /* Plan Selector */
+        .plan-selector {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .plan-option {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .plan-option:hover {
+            border-color: var(--burnt-orange);
+            transform: translateX(5px);
+        }
+
+        .plan-option.selected {
+            border-color: var(--burnt-orange);
+            background: rgba(191, 87, 0, 0.1);
+            box-shadow: 0 0 30px rgba(191, 87, 0, 0.2);
+        }
+
+        .plan-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--burnt-orange);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .plan-name {
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .plan-price {
+            color: var(--burnt-orange);
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .plan-desc {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Submit Button */
+        .form-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--burnt-orange), #FF6B00);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(191, 87, 0, 0.4);
+        }
+
+        .form-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer Links */
+        .form-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .form-footer a {
+            color: var(--cardinal-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .form-footer a:hover {
+            color: var(--burnt-orange);
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success-green);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            color: var(--success-green);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--line-dark);
+        }
+
+        .trust-badge {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .trust-number {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--burnt-orange);
+            display: block;
+        }
+
+        .trust-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .auth-container {
+                margin-top: 100px;
+            }
+
+            .auth-form {
+                padding: 30px 20px;
+            }
+
+            .form-title {
+                font-size: 28px;
+            }
+
+            .trust-badges {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="brand">
+                <div class="logo">BI</div>
+                <div class="brand-text">BLAZE INTELLIGENCE</div>
+            </a>
+            <nav class="nav-menu">
+                <a href="/analytics.html" class="nav-item">Analytics</a>
+                <a href="/sec-nil-analytics.html" class="nav-item">SEC NIL</a>
+                <a href="/perfect-game-intelligence.html" class="nav-item">Perfect Game</a>
+                <a href="/contact.html" class="nav-item">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="auth-container">
+        <form class="auth-form" name="blaze-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="blaze-signup">
+            <p style="display: none;">
+                <label>Don't fill this out: <input name="bot-field"></label>
+            </p>
+
+            <h1 class="form-title">Join Blaze Intelligence</h1>
+            <p class="form-subtitle">Start your 14-day free trial. No credit card required.</p>
+
+            <div class="form-group">
+                <label class="form-label">Organization Name</label>
+                <input type="text" name="organization" class="form-input" placeholder="Texas Longhorns Athletics" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Your Name</label>
+                <input type="text" name="name" class="form-input" placeholder="Coach Smith" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-input" placeholder="coach@university.edu" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" name="phone" class="form-input" placeholder="(512) 555-0100">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Your Plan</label>
+                <div class="plan-selector">
+                    <label class="plan-option">
+                        <input type="radio" name="plan" value="grassroots" style="display:none">
+                        <div class="plan-name">Grassroots</div>
+                        <div class="plan-price">$97/month</div>
+                        <div class="plan-desc">Perfect for youth teams and high school programs. Includes basic analytics, 5 user accounts, and email support.</div>
+                    </label>
+                    <label class="plan-option selected">
+                        <input type="radio" name="plan" value="competitive" checked style="display:none">
+                        <div class="plan-name">Competitive</div>
+                        <div class="plan-price">$497/month</div>
+                        <div class="plan-desc">Advanced analytics for serious competitors. Includes NIL valuations, recruiting intelligence, and priority support.</div>
+                    </label>
+                    <label class="plan-option">
+                        <input type="radio" name="plan" value="elite" style="display:none">
+                        <div class="plan-name">Elite Championship</div>
+                        <div class="plan-price">Custom Pricing</div>
+                        <div class="plan-desc">Enterprise solutions for Power 5 programs and professional organizations. White-glove service included.</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Primary Sport Focus</label>
+                <select name="sport" class="form-select" required>
+                    <option value="">Select your primary sport</option>
+                    <option value="mlb">Baseball (MLB/MiLB)</option>
+                    <option value="nfl">Football (NFL/College)</option>
+                    <option value="nba">Basketball (NBA/College)</option>
+                    <option value="ncaa-football">NCAA Football</option>
+                    <option value="ncaa-baseball">NCAA Baseball</option>
+                    <option value="perfect-game">Perfect Game Baseball</option>
+                    <option value="high-school">High School Athletics</option>
+                    <option value="multi-sport">Multi-Sport Program</option>
+                </select>
+            </div>
+
+            <button type="submit" class="form-btn">Start Free Trial</button>
+
+            <div id="successMessage" class="success-message">
+                Welcome to Blaze Intelligence! Check your email for next steps.
+            </div>
+
+            <div class="form-footer">
+                Already have an account? <a href="/login.html">Sign In</a>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <span class="trust-number">94.6%</span>
+                    <span class="trust-label">Accuracy</span>
+                </div>
+                <div class="trust-badge">
+                    <span class="trust-number">&lt;100ms</span>
+                    <span class="trust-label">Response Time</span>
+                </div>
+                <div class="trust-badge">
+                    <span class="trust-number">24/7</span>
+                    <span class="trust-label">Support</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Three.js Background Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Create dynamic grid
+        const gridGeometry = new THREE.BufferGeometry();
+        const gridVertices = [];
+        const gridSize = 20;
+        const gridStep = 2;
+
+        for (let i = -gridSize; i <= gridSize; i += gridStep) {
+            for (let j = -gridSize; j <= gridSize; j += gridStep) {
+                gridVertices.push(i, 0, j);
+            }
+        }
+
+        gridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(gridVertices, 3));
+
+        const gridMaterial = new THREE.PointsMaterial({
+            color: 0xBF5700,
+            size: 0.1,
+            transparent: true,
+            opacity: 0.6
+        });
+
+        const grid = new THREE.Points(gridGeometry, gridMaterial);
+        scene.add(grid);
+
+        camera.position.set(0, 10, 20);
+        camera.lookAt(0, 0, 0);
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+            grid.rotation.y += 0.001;
+
+            // Wave animation
+            const positions = grid.geometry.attributes.position.array;
+            const time = Date.now() * 0.001;
+
+            for (let i = 0; i < positions.length; i += 3) {
+                const x = positions[i];
+                const z = positions[i + 2];
+                positions[i + 1] = Math.sin(x * 0.3 + time) * Math.cos(z * 0.3 + time) * 0.5;
+            }
+
+            grid.geometry.attributes.position.needsUpdate = true;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Plan selector interaction
+        document.querySelectorAll('.plan-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.plan-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Form submission handler for Netlify
+        document.querySelector('.auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+
+            try {
+                // Submit to Netlify Forms
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(formData).toString()
+                });
+
+                if (response.ok) {
+                    // Show success message
+                    const successMsg = document.getElementById('successMessage');
+                    successMsg.classList.add('show');
+
+                    // Reset form
+                    e.target.reset();
+
+                    // Reset plan selection to default
+                    document.querySelectorAll('.plan-option').forEach(o => o.classList.remove('selected'));
+                    document.querySelectorAll('.plan-option')[1].classList.add('selected');
+                    document.querySelectorAll('.plan-option')[1].querySelector('input[type="radio"]').checked = true;
+
+                    // Redirect after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 3000);
+                } else {
+                    console.error('Form submission failed');
+                    alert('There was an error creating your account. Please try again or contact support.');
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                alert('There was an error creating your account. Please try again or contact support.');
+            }
+        });
+    </script>
+</body>
+</html>
