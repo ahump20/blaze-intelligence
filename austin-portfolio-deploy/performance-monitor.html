@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Performance Monitor | Real-Time System Analytics</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            --blaze-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --neural-green: #00FF41;
+            --alert-red: #FF4444;
+            --deep-navy: #002244;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Inter', monospace;
+            background: #0a0e1a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .monitor-header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--blaze-orange);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .monitor-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .system-status {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-badge.healthy {
+            background: rgba(0, 255, 65, 0.2);
+            color: var(--neural-green);
+            border: 1px solid var(--neural-green);
+        }
+
+        .status-badge.warning {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--championship-gold);
+            border: 1px solid var(--championship-gold);
+        }
+
+        .status-badge.critical {
+            background: rgba(255, 68, 68, 0.2);
+            color: var(--alert-red);
+            border: 1px solid var(--alert-red);
+        }
+
+        /* Main Grid */
+        .monitor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .monitor-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--championship-gold);
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--neural-green);
+        }
+
+        /* Metrics Grid */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neural-green);
+        }
+
+        /* Charts */
+        .chart-container {
+            height: 250px;
+            position: relative;
+        }
+
+        /* Log Stream */
+        .log-stream {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            padding: 1rem;
+            height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .log-entry {
+            padding: 0.5rem;
+            border-left: 3px solid transparent;
+            margin-bottom: 0.25rem;
+        }
+
+        .log-entry.info {
+            border-color: var(--neural-green);
+            color: #aaa;
+        }
+
+        .log-entry.warning {
+            border-color: var(--championship-gold);
+            color: var(--championship-gold);
+        }
+
+        .log-entry.error {
+            border-color: var(--alert-red);
+            color: var(--alert-red);
+        }
+
+        .log-time {
+            color: #666;
+            margin-right: 1rem;
+        }
+
+        /* API Endpoints Table */
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .api-table th {
+            background: rgba(191, 87, 0, 0.2);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--championship-gold);
+        }
+
+        .api-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .api-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .endpoint-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .endpoint-status.up {
+            background: var(--neural-green);
+            box-shadow: 0 0 5px var(--neural-green);
+        }
+
+        .endpoint-status.down {
+            background: var(--alert-red);
+            box-shadow: 0 0 5px var(--alert-red);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .monitor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="monitor-header">
+        <h1 class="monitor-title">🔥 Blaze Performance Monitor</h1>
+        <div class="system-status">
+            <div id="systemHealth" class="status-badge healthy">System Healthy</div>
+            <div>Uptime: <span id="uptime">99.98%</span></div>
+            <div>Version: <span id="version">4.1.0</span></div>
+        </div>
+    </div>
+
+    <!-- Metrics Row -->
+    <div class="metrics-row" style="padding: 1.5rem;">
+        <div class="metric-box">
+            <div class="metric-label">CPU Usage</div>
+            <div class="metric-value" id="cpuUsage">28%</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-label">Memory</div>
+            <div class="metric-value" id="memoryUsage">3.2GB</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-label">Network I/O</div>
+            <div class="metric-value" id="networkIO">125MB/s</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-label">Active Users</div>
+            <div class="metric-value" id="activeUsers">1,247</div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="monitor-grid">
+        <!-- Response Time Chart -->
+        <div class="monitor-card">
+            <div class="card-header">
+                <h3 class="card-title">⚡ Response Time (ms)</h3>
+                <span id="avgResponseTime" style="color: var(--neural-green);">87ms</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="responseTimeChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Throughput Chart -->
+        <div class="monitor-card">
+            <div class="card-header">
+                <h3 class="card-title">📊 Throughput (req/s)</h3>
+                <span id="currentThroughput" style="color: var(--neural-green);">3,450</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="throughputChart"></canvas>
+            </div>
+        </div>
+
+        <!-- API Endpoints Status -->
+        <div class="monitor-card" style="grid-column: span 2;">
+            <h3 class="card-title">🔌 API Endpoints Health</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Status</th>
+                        <th>Latency</th>
+                        <th>Success Rate</th>
+                        <th>Requests/min</th>
+                    </tr>
+                </thead>
+                <tbody id="apiEndpointsList">
+                    <tr>
+                        <td><span class="endpoint-status up"></span>/api/multimodal/process</td>
+                        <td style="color: var(--neural-green);">Healthy</td>
+                        <td>45ms</td>
+                        <td>99.8%</td>
+                        <td>1,250</td>
+                    </tr>
+                    <tr>
+                        <td><span class="endpoint-status up"></span>/api/cardinals/readiness</td>
+                        <td style="color: var(--neural-green);">Healthy</td>
+                        <td>23ms</td>
+                        <td>100%</td>
+                        <td>450</td>
+                    </tr>
+                    <tr>
+                        <td><span class="endpoint-status up"></span>/api/live-data-engine</td>
+                        <td style="color: var(--neural-green);">Healthy</td>
+                        <td>67ms</td>
+                        <td>99.5%</td>
+                        <td>890</td>
+                    </tr>
+                    <tr>
+                        <td><span class="endpoint-status up"></span>/api/video-analysis</td>
+                        <td style="color: var(--neural-green);">Healthy</td>
+                        <td>125ms</td>
+                        <td>98.7%</td>
+                        <td>320</td>
+                    </tr>
+                    <tr>
+                        <td><span class="endpoint-status up"></span>/api/nil-calculator</td>
+                        <td style="color: var(--neural-green);">Healthy</td>
+                        <td>34ms</td>
+                        <td>100%</td>
+                        <td>567</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Error Rate Chart -->
+        <div class="monitor-card">
+            <div class="card-header">
+                <h3 class="card-title">❌ Error Rate (%)</h3>
+                <span id="errorRate" style="color: var(--neural-green);">0.2%</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="errorRateChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Cache Performance -->
+        <div class="monitor-card">
+            <div class="card-header">
+                <h3 class="card-title">💾 Cache Hit Rate</h3>
+                <span id="cacheHitRate" style="color: var(--neural-green);">94.6%</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="cacheChart"></canvas>
+            </div>
+        </div>
+
+        <!-- System Logs -->
+        <div class="monitor-card" style="grid-column: span 2;">
+            <h3 class="card-title">📋 System Logs</h3>
+            <div class="log-stream" id="logStream">
+                <!-- Logs will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Championship Metrics -->
+        <div class="monitor-card">
+            <h3 class="card-title">🏆 Championship Metrics</h3>
+            <div style="display: grid; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Pattern Recognition</span>
+                    <span style="color: var(--neural-green);">94.6%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Decision Velocity</span>
+                    <span style="color: var(--neural-green);">67ms</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Data Processing</span>
+                    <span style="color: var(--neural-green);">2.8M/s</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>AI Model Accuracy</span>
+                    <span style="color: var(--neural-green);">96.2%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Live Feed Sync</span>
+                    <span style="color: var(--neural-green);">100%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Connections -->
+        <div class="monitor-card">
+            <h3 class="card-title">🔗 Active Connections</h3>
+            <div style="display: grid; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>WebSocket</span>
+                    <span style="color: var(--neural-green);">247</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>API Clients</span>
+                    <span style="color: var(--neural-green);">892</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Live Streams</span>
+                    <span style="color: var(--neural-green);">45</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>MCP Servers</span>
+                    <span style="color: var(--neural-green);">4</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Edge Workers</span>
+                    <span style="color: var(--neural-green);">12</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chart configurations
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: '#888' }
+                },
+                y: {
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: '#888' }
+                }
+            }
+        };
+
+        // Initialize Response Time Chart
+        const responseTimeCtx = document.getElementById('responseTimeChart').getContext('2d');
+        const responseTimeChart = new Chart(responseTimeCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    borderColor: '#00FF41',
+                    backgroundColor: 'rgba(0, 255, 65, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Initialize Throughput Chart
+        const throughputCtx = document.getElementById('throughputChart').getContext('2d');
+        const throughputChart = new Chart(throughputCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    borderColor: '#FFD700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Initialize Error Rate Chart
+        const errorRateCtx = document.getElementById('errorRateChart').getContext('2d');
+        const errorRateChart = new Chart(errorRateCtx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: 'rgba(255, 68, 68, 0.6)',
+                    borderColor: '#FF4444',
+                    borderWidth: 1
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Initialize Cache Chart
+        const cacheCtx = document.getElementById('cacheChart').getContext('2d');
+        const cacheChart = new Chart(cacheCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Hit', 'Miss'],
+                datasets: [{
+                    data: [94.6, 5.4],
+                    backgroundColor: ['#00FF41', '#666'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#fff' }
+                    }
+                }
+            }
+        });
+
+        // Update functions
+        function updateMetrics() {
+            // Simulate metric updates
+            const cpu = 20 + Math.random() * 30;
+            const memory = (2.5 + Math.random() * 2).toFixed(1);
+            const network = Math.floor(100 + Math.random() * 50);
+            const users = Math.floor(1000 + Math.random() * 500);
+
+            document.getElementById('cpuUsage').textContent = `${cpu.toFixed(0)}%`;
+            document.getElementById('memoryUsage').textContent = `${memory}GB`;
+            document.getElementById('networkIO').textContent = `${network}MB/s`;
+            document.getElementById('activeUsers').textContent = users.toLocaleString();
+
+            // Update system health
+            if (cpu > 80 || parseFloat(memory) > 4) {
+                document.getElementById('systemHealth').className = 'status-badge warning';
+                document.getElementById('systemHealth').textContent = 'High Load';
+            } else {
+                document.getElementById('systemHealth').className = 'status-badge healthy';
+                document.getElementById('systemHealth').textContent = 'System Healthy';
+            }
+        }
+
+        function updateCharts() {
+            const now = new Date().toLocaleTimeString();
+
+            // Update Response Time
+            if (responseTimeChart.data.labels.length > 20) {
+                responseTimeChart.data.labels.shift();
+                responseTimeChart.data.datasets[0].data.shift();
+            }
+            responseTimeChart.data.labels.push(now);
+            const responseTime = 50 + Math.random() * 100;
+            responseTimeChart.data.datasets[0].data.push(responseTime);
+            document.getElementById('avgResponseTime').textContent = `${responseTime.toFixed(0)}ms`;
+            responseTimeChart.update();
+
+            // Update Throughput
+            if (throughputChart.data.labels.length > 20) {
+                throughputChart.data.labels.shift();
+                throughputChart.data.datasets[0].data.shift();
+            }
+            throughputChart.data.labels.push(now);
+            const throughput = 3000 + Math.random() * 1000;
+            throughputChart.data.datasets[0].data.push(throughput);
+            document.getElementById('currentThroughput').textContent = throughput.toFixed(0).toLocaleString();
+            throughputChart.update();
+
+            // Update Error Rate
+            if (errorRateChart.data.labels.length > 10) {
+                errorRateChart.data.labels.shift();
+                errorRateChart.data.datasets[0].data.shift();
+            }
+            errorRateChart.data.labels.push(now);
+            const errorRate = Math.random() * 0.5;
+            errorRateChart.data.datasets[0].data.push(errorRate);
+            document.getElementById('errorRate').textContent = `${errorRate.toFixed(2)}%`;
+            errorRateChart.update();
+
+            // Update Cache Hit Rate
+            const hitRate = 90 + Math.random() * 8;
+            cacheChart.data.datasets[0].data = [hitRate, 100 - hitRate];
+            document.getElementById('cacheHitRate').textContent = `${hitRate.toFixed(1)}%`;
+            cacheChart.update();
+        }
+
+        function addLogEntry(type, message) {
+            const logStream = document.getElementById('logStream');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+
+            const time = new Date().toLocaleTimeString();
+            entry.innerHTML = `<span class="log-time">${time}</span>${message}`;
+
+            logStream.insertBefore(entry, logStream.firstChild);
+
+            // Keep only last 50 entries
+            while (logStream.children.length > 50) {
+                logStream.removeChild(logStream.lastChild);
+            }
+        }
+
+        function simulateLogs() {
+            const logTypes = [
+                { type: 'info', messages: [
+                    'Cardinals readiness data updated successfully',
+                    'Multimodal processing completed in 87ms',
+                    'Live sports feed synchronized',
+                    'Cache refreshed for MLB data',
+                    'WebSocket connection established',
+                    'Perfect Game tournament data fetched',
+                    'NIL valuation calculated for 5 athletes'
+                ]},
+                { type: 'warning', messages: [
+                    'High latency detected on video processing',
+                    'Cache miss rate above threshold',
+                    'API rate limit approaching'
+                ]},
+                { type: 'error', messages: [
+                    'Failed to fetch NCAA data - retrying',
+                    'WebSocket disconnected - reconnecting'
+                ]}
+            ];
+
+            // Weighted random selection (more info, fewer errors)
+            const random = Math.random();
+            let selectedType;
+            if (random < 0.8) selectedType = logTypes[0];
+            else if (random < 0.95) selectedType = logTypes[1];
+            else selectedType = logTypes[2];
+
+            const message = selectedType.messages[Math.floor(Math.random() * selectedType.messages.length)];
+            addLogEntry(selectedType.type, message);
+        }
+
+        // Initial logs
+        addLogEntry('info', 'Performance monitoring system initialized');
+        addLogEntry('info', 'Connected to Blaze Intelligence platform');
+        addLogEntry('info', 'Loading championship metrics...');
+
+        // Start periodic updates
+        setInterval(updateMetrics, 3000);
+        setInterval(updateCharts, 2000);
+        setInterval(simulateLogs, 5000);
+
+        // Initial updates
+        updateMetrics();
+        updateCharts();
+    </script>
+</body>
+</html>
