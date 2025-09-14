@@ -805,6 +805,54 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 1.5rem;
+        }
+
+        /* Live Data Styles */
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .data-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #9BCBEB;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22C55E;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .live-games-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .games-container {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .loading-placeholder {
+            text-align: center;
+            color: #9BCBEB;
+            padding: 2rem;
+            font-style: italic;
+        }
             backdrop-filter: blur(10px);
         }
 
@@ -1416,9 +1464,25 @@
                 </p>
             </div>
 
-            <div class="dashboard-grid">
+            <div class="dashboard-grid" data-live-dashboard>
                 <div class="dashboard-main">
+                    <!-- Live Performance Chart -->
+                    <div class="chart-header">
+                        <h3>Live Performance Analytics</h3>
+                        <div class="data-status">
+                            <span class="status-dot"></span>
+                            Last Updated: <span data-last-updated>Loading...</span>
+                        </div>
+                    </div>
                     <canvas id="performanceChart" width="800" height="400"></canvas>
+
+                    <!-- Live Active Games -->
+                    <div class="live-games-section">
+                        <h4>Active Games & Upcoming</h4>
+                        <div data-active-games class="games-container">
+                            <div class="loading-placeholder">Loading live games...</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="dashboard-sidebar">
@@ -1436,7 +1500,7 @@
                                         <div style="font-size: 0.75rem; color: #94A3B8;">MLB • NL Central</div>
                                     </div>
                                 </div>
-                                <div class="team-metric">89%</div>
+                                <div class="team-metric" data-cardinals-readiness>Loading...</div>
                             </div>
 
                             <div class="team-item">
@@ -1942,6 +2006,9 @@
 
     <!-- 🎯 NAVIGATION MANAGER - INTERACTIVE FUNCTIONALITY -->
     <script src="navigation-manager.js"></script>
+
+    <!-- 📊 LIVE DATA CONNECTOR - REAL-TIME SPORTS ANALYTICS -->
+    <script src="js/live-data-connector.js"></script>
 
 </body>
 </html>
