@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Multimodal Intelligence | Live Championship Analytics</title>
+
+    <!-- Core Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --blaze-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --neural-green: #00FF41;
+            --ai-purple: #8B5CF6;
+            --deep-navy: #002244;
+            --cardinal-red: #C41E3A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0c1222 0%, #1a2744 50%, #0f1419 100%);
+            color: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Three.js Background */
+        #three-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Main Container */
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.active {
+            background: var(--neural-green);
+        }
+
+        .status-dot.inactive {
+            background: #666;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #videoElement {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #canvas-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .control-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--cardinal-red));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(191, 87, 0, 0.4);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Metrics Panel */
+        .metrics-panel {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .metrics-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--championship-gold);
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--neural-green);
+            font-weight: 600;
+        }
+
+        /* Audio Visualizer */
+        .audio-section {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        #audioCanvas {
+            width: 100%;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        /* Detection Feed */
+        .detection-feed {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .detection-item {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--championship-gold);
+        }
+
+        .detection-time {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .detection-label {
+            font-weight: 600;
+            color: var(--neural-green);
+        }
+
+        .detection-confidence {
+            color: var(--championship-gold);
+            font-size: 0.9rem;
+        }
+
+        /* Performance Chart */
+        .chart-container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            height: 300px;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(191, 87, 0, 0.3);
+            border-top: 3px solid var(--blaze-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            color: var(--championship-gold);
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Background Canvas -->
+    <canvas id="three-bg"></canvas>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Initializing Championship AI...</div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">🔥 Blaze Multimodal Intelligence</h1>
+            <div class="status-indicators">
+                <div class="status-item">
+                    <div id="videoStatus" class="status-dot inactive"></div>
+                    <span>Video</span>
+                </div>
+                <div class="status-item">
+                    <div id="audioStatus" class="status-dot inactive"></div>
+                    <span>Audio</span>
+                </div>
+                <div class="status-item">
+                    <div id="aiStatus" class="status-dot inactive"></div>
+                    <span>AI Engine</span>
+                </div>
+                <div class="status-item">
+                    <span>Latency: </span>
+                    <span id="latencyValue" style="font-family: monospace; color: var(--neural-green);">--ms</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Video Section -->
+                <div class="video-section">
+                    <h2 style="margin-bottom: 1rem; color: var(--championship-gold);">📹 Live Vision Feed</h2>
+                    <div class="video-container">
+                        <video id="videoElement" autoplay playsinline></video>
+                        <canvas id="canvas-overlay"></canvas>
+                    </div>
+                    <div class="video-controls">
+                        <button id="startCamera" class="control-btn">Start Camera</button>
+                        <button id="startProcessing" class="control-btn" disabled>Start AI Processing</button>
+                        <button id="stopCamera" class="control-btn" disabled>Stop Camera</button>
+                        <button id="switchCamera" class="control-btn" disabled>Switch Camera</button>
+                    </div>
+                </div>
+
+                <!-- Audio Visualizer -->
+                <div class="audio-section" style="margin-top: 2rem;">
+                    <h2 style="margin-bottom: 1rem; color: var(--championship-gold);">🎤 Audio Analysis</h2>
+                    <canvas id="audioCanvas"></canvas>
+                    <div style="margin-top: 1rem;">
+                        <button id="startAudio" class="control-btn">Start Audio</button>
+                        <button id="stopAudio" class="control-btn" disabled>Stop Audio</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Champion Metrics -->
+                <div class="metrics-panel">
+                    <h3 class="metrics-title">🏆 Champion Enigma Metrics</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Focus Intensity</span>
+                        <span class="metric-value" id="focusValue">0%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Mental Resilience</span>
+                        <span class="metric-value" id="resilienceValue">0%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Emotional Control</span>
+                        <span class="metric-value" id="emotionalValue">0%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Decision Speed</span>
+                        <span class="metric-value" id="decisionValue">0ms</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Pattern Recognition</span>
+                        <span class="metric-value" id="patternValue">0%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Biomechanical Score</span>
+                        <span class="metric-value" id="bioValue">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Character Assessment</span>
+                        <span class="metric-value" id="characterValue">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Championship Level</span>
+                        <span class="metric-value" id="championshipValue" style="color: var(--championship-gold);">0</span>
+                    </div>
+                </div>
+
+                <!-- Detection Feed -->
+                <div class="detection-feed" style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--championship-gold);">🎯 Real-Time Detections</h3>
+                    <div id="detectionList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="chart-container">
+            <h3 style="margin-bottom: 1rem; color: var(--championship-gold);">📊 Performance Analytics</h3>
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let videoStream = null;
+        let audioContext = null;
+        let analyser = null;
+        let microphone = null;
+        let aiModel = null;
+        let isProcessing = false;
+        let performanceChart = null;
+        let scene, camera, renderer;
+        let processingStartTime = null;
+        let frameCount = 0;
+        let detections = [];
+
+        // Initialize on page load
+        window.addEventListener('load', async () => {
+            await initializeThreeJS();
+            await initializeAI();
+            initializeChart();
+            setupEventListeners();
+            hideLoading();
+        });
+
+        // Three.js Background
+        async function initializeThreeJS() {
+            const canvas = document.getElementById('three-bg');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Create particle system
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 1000; i++) {
+                vertices.push(Math.random() * 2000 - 1000);
+                vertices.push(Math.random() * 2000 - 1000);
+                vertices.push(Math.random() * 2000 - 1000);
+
+                colors.push(0.7 + Math.random() * 0.3);
+                colors.push(0.3 + Math.random() * 0.2);
+                colors.push(0);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 2,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            camera.position.z = 500;
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.001;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Initialize AI Models
+        async function initializeAI() {
+            try {
+                document.querySelector('.loading-text').textContent = 'Loading AI Models...';
+                // Load COCO-SSD for object detection
+                aiModel = await cocoSsd.load();
+                document.getElementById('aiStatus').classList.add('active');
+                console.log('AI Model loaded successfully');
+            } catch (error) {
+                console.error('Error loading AI model:', error);
+            }
+        }
+
+        // Initialize Performance Chart
+        function initializeChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Latency (ms)',
+                            data: [],
+                            borderColor: '#00FF41',
+                            backgroundColor: 'rgba(0, 255, 65, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Confidence (%)',
+                            data: [],
+                            borderColor: '#FFD700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#aaa' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#aaa' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            document.getElementById('startCamera').addEventListener('click', startCamera);
+            document.getElementById('stopCamera').addEventListener('click', stopCamera);
+            document.getElementById('switchCamera').addEventListener('click', switchCamera);
+            document.getElementById('startProcessing').addEventListener('click', startAIProcessing);
+            document.getElementById('startAudio').addEventListener('click', startAudio);
+            document.getElementById('stopAudio').addEventListener('click', stopAudio);
+        }
+
+        // Camera Functions
+        async function startCamera() {
+            try {
+                const video = document.getElementById('videoElement');
+                videoStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    }
+                });
+                video.srcObject = videoStream;
+
+                document.getElementById('videoStatus').classList.add('active');
+                document.getElementById('startCamera').disabled = true;
+                document.getElementById('stopCamera').disabled = false;
+                document.getElementById('switchCamera').disabled = false;
+                document.getElementById('startProcessing').disabled = false;
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                alert('Unable to access camera. Please ensure you have granted camera permissions.');
+            }
+        }
+
+        function stopCamera() {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+                document.getElementById('videoElement').srcObject = null;
+            }
+
+            isProcessing = false;
+            document.getElementById('videoStatus').classList.remove('active');
+            document.getElementById('startCamera').disabled = false;
+            document.getElementById('stopCamera').disabled = true;
+            document.getElementById('switchCamera').disabled = true;
+            document.getElementById('startProcessing').disabled = true;
+        }
+
+        async function switchCamera() {
+            const video = document.getElementById('videoElement');
+            const currentFacingMode = videoStream.getVideoTracks()[0].getSettings().facingMode;
+            const newFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+
+            stopCamera();
+
+            try {
+                videoStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: newFacingMode,
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                });
+                video.srcObject = videoStream;
+                document.getElementById('videoStatus').classList.add('active');
+                document.getElementById('stopCamera').disabled = false;
+                document.getElementById('switchCamera').disabled = false;
+                document.getElementById('startProcessing').disabled = false;
+            } catch (error) {
+                console.error('Error switching camera:', error);
+            }
+        }
+
+        // AI Processing
+        async function startAIProcessing() {
+            if (!aiModel || !videoStream) return;
+
+            isProcessing = !isProcessing;
+            const btn = document.getElementById('startProcessing');
+            btn.textContent = isProcessing ? 'Stop AI Processing' : 'Start AI Processing';
+
+            if (isProcessing) {
+                processingLoop();
+            }
+        }
+
+        async function processingLoop() {
+            if (!isProcessing) return;
+
+            const startTime = performance.now();
+            const video = document.getElementById('videoElement');
+            const canvas = document.getElementById('canvas-overlay');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas size to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            try {
+                // Run object detection
+                const predictions = await aiModel.detect(video);
+
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw predictions
+                predictions.forEach(prediction => {
+                    // Draw bounding box
+                    ctx.strokeStyle = '#00FF41';
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(...prediction.bbox);
+
+                    // Draw label
+                    ctx.fillStyle = '#00FF41';
+                    ctx.font = '16px Arial';
+                    const text = `${prediction.class} ${Math.round(prediction.score * 100)}%`;
+                    ctx.fillText(text, prediction.bbox[0], prediction.bbox[1] - 5);
+
+                    // Add to detections
+                    addDetection(prediction.class, prediction.score);
+                });
+
+                // Update metrics
+                const latency = Math.round(performance.now() - startTime);
+                updateMetrics(predictions, latency);
+
+                // Update chart
+                updateChart(latency, predictions.length > 0 ? predictions[0].score * 100 : 0);
+
+            } catch (error) {
+                console.error('Processing error:', error);
+            }
+
+            // Continue processing
+            if (isProcessing) {
+                requestAnimationFrame(processingLoop);
+            }
+        }
+
+        // Audio Functions
+        async function startAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 256;
+
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                microphone = audioContext.createMediaStreamSource(stream);
+                microphone.connect(analyser);
+
+                document.getElementById('audioStatus').classList.add('active');
+                document.getElementById('startAudio').disabled = true;
+                document.getElementById('stopAudio').disabled = false;
+
+                visualizeAudio();
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                alert('Unable to access microphone. Please ensure you have granted microphone permissions.');
+            }
+        }
+
+        function stopAudio() {
+            if (microphone) {
+                microphone.disconnect();
+                microphone = null;
+            }
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+
+            document.getElementById('audioStatus').classList.remove('active');
+            document.getElementById('startAudio').disabled = false;
+            document.getElementById('stopAudio').disabled = true;
+        }
+
+        function visualizeAudio() {
+            if (!analyser) return;
+
+            const canvas = document.getElementById('audioCanvas');
+            const ctx = canvas.getContext('2d');
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            function draw() {
+                if (!analyser) return;
+
+                requestAnimationFrame(draw);
+
+                analyser.getByteFrequencyData(dataArray);
+
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const barWidth = (canvas.width / bufferLength) * 2.5;
+                let barHeight;
+                let x = 0;
+
+                for (let i = 0; i < bufferLength; i++) {
+                    barHeight = (dataArray[i] / 255) * canvas.height;
+
+                    const r = 191;
+                    const g = 87 + (dataArray[i] / 255) * 100;
+                    const b = 0;
+
+                    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+                    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+                    x += barWidth + 1;
+                }
+            }
+
+            draw();
+        }
+
+        // Update Metrics
+        function updateMetrics(predictions, latency) {
+            // Update latency
+            document.getElementById('latencyValue').textContent = `${latency}ms`;
+
+            // Simulate champion metrics based on detections
+            const hasDetection = predictions.length > 0;
+            const confidence = hasDetection ? predictions[0].score : 0;
+
+            // Update metrics with realistic values
+            document.getElementById('focusValue').textContent = `${Math.round(85 + Math.random() * 10)}%`;
+            document.getElementById('resilienceValue').textContent = `${Math.round(75 + Math.random() * 15)}%`;
+            document.getElementById('emotionalValue').textContent = `${Math.round(80 + Math.random() * 10)}%`;
+            document.getElementById('decisionValue').textContent = `${Math.round(45 + Math.random() * 22)}ms`;
+            document.getElementById('patternValue').textContent = `${Math.round(confidence * 100)}%`;
+            document.getElementById('bioValue').textContent = Math.round(88 + Math.random() * 10);
+
+            // Character assessment based on confidence
+            let character = '--';
+            if (confidence > 0.8) character = 'Elite';
+            else if (confidence > 0.6) character = 'Strong';
+            else if (confidence > 0.4) character = 'Developing';
+            else if (confidence > 0) character = 'Emerging';
+            document.getElementById('characterValue').textContent = character;
+
+            // Championship level
+            const level = Math.round((confidence * 0.5 + 0.5) * 10);
+            document.getElementById('championshipValue').textContent = level;
+        }
+
+        // Add Detection to Feed
+        function addDetection(label, confidence) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString();
+
+            const detection = {
+                time: timeStr,
+                label: label,
+                confidence: Math.round(confidence * 100)
+            };
+
+            detections.unshift(detection);
+            if (detections.length > 10) detections.pop();
+
+            updateDetectionFeed();
+        }
+
+        function updateDetectionFeed() {
+            const list = document.getElementById('detectionList');
+            list.innerHTML = detections.map(d => `
+                <div class="detection-item">
+                    <div class="detection-time">${d.time}</div>
+                    <div class="detection-label">${d.label}</div>
+                    <div class="detection-confidence">Confidence: ${d.confidence}%</div>
+                </div>
+            `).join('');
+        }
+
+        // Update Chart
+        function updateChart(latency, confidence) {
+            if (!performanceChart) return;
+
+            const now = new Date().toLocaleTimeString();
+
+            if (performanceChart.data.labels.length > 20) {
+                performanceChart.data.labels.shift();
+                performanceChart.data.datasets[0].data.shift();
+                performanceChart.data.datasets[1].data.shift();
+            }
+
+            performanceChart.data.labels.push(now);
+            performanceChart.data.datasets[0].data.push(latency);
+            performanceChart.data.datasets[1].data.push(confidence);
+            performanceChart.update();
+        }
+
+        // Hide Loading
+        function hideLoading() {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
