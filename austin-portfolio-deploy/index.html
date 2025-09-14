@@ -6,7 +6,7 @@
     <title>Blaze Intelligence | Championship Sports Analytics Platform</title>
 
     <!-- Enhanced Meta Tags -->
-    <meta name="description" content="Transform Data Into Championships - AI-powered sports analytics platform with 94.6% accuracy for MLB, NFL, NBA, NCAA teams">
+    <meta name="description" content="Transform Data Into Championships - Sports analytics platform with verified MLB/NCAA data for championship-level performance insights">
     <meta name="keywords" content="sports analytics, AI coaching, NIL calculator, digital combine, championship intelligence">
     <meta name="author" content="Austin Humphrey, Blaze Intelligence">
 
@@ -652,6 +652,106 @@
             transform: scale(1.02);
         }
 
+        .video-upload-zone.drag-active {
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.15);
+            transform: scale(1.05);
+        }
+
+        .championship-dna-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .feature-tag {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            color: var(--blaze-orange);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-tag:hover {
+            background: rgba(191, 87, 0, 0.2);
+            border-color: var(--blaze-orange);
+            transform: translateY(-2px);
+        }
+
+        .sport-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .sport-tag.baseball {
+            background: rgba(196, 30, 58, 0.2);
+            color: #FF1744;
+        }
+
+        .sport-tag.football {
+            background: rgba(75, 146, 219, 0.2);
+            color: #4B92DB;
+        }
+
+        .sport-tag.basketball {
+            background: rgba(191, 87, 0, 0.2);
+            color: #FF8C00;
+        }
+
+        .drag-active-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 215, 0, 0.9);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+
+        .video-upload-zone.drag-active .drag-active-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .drag-content {
+            text-align: center;
+            color: #0c1222;
+        }
+
+        .drag-content i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .drag-content p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
         .upload-icon {
             font-size: 3rem;
             color: var(--blaze-orange);
@@ -966,14 +1066,14 @@
                 <ul class="nav-links">
                     <li><a href="#features" class="nav-link">Features</a></li>
                     <li><a href="#video-ai" class="nav-link">Video AI</a></li>
-                    <li><a href="#ar-coach" class="nav-link">AR Coach</a></li>
-                    <li><a href="#analytics" class="nav-link">Analytics</a></li>
-                    <li><a href="#live-demo" class="nav-link">Live Demo</a></li>
+                    <li><a href="#methodology" class="nav-link">Data & Methods</a></li>
+                    <li><a href="/pricing.html" class="nav-link">Pricing</a></li>
+                    <li><a href="/contact.html" class="nav-link">Contact</a></li>
                 </ul>
 
-                <a href="/deep-south-sports-authority.html" class="cta-button">
-                    <i class="fas fa-rocket"></i>
-                    Get Started
+                <a href="/pricing.html" class="cta-button">
+                    <i class="fas fa-calculator"></i>
+                    See Pricing
                 </a>
 
                 <button class="mobile-toggle" id="mobileToggle">
@@ -996,37 +1096,37 @@
 
                 <h1 class="hero-title">Transform Data Into Championships</h1>
                 <p class="hero-subtitle">
-                    Revolutionary AI-powered sports analytics platform with 94.6% prediction accuracy.
-                    Designed for elite MLB, NFL, NBA, and NCAA programs seeking championship excellence.
+                    Sports intelligence platform powered by 5 years of verified MLB data and real-time performance tracking.
+                    Designed for elite programs seeking championship excellence through proven analytics.
                 </p>
 
                 <div class="hero-metrics">
                     <div class="metric-item">
-                        <div class="metric-value">94.6%</div>
-                        <div class="metric-label">AI Accuracy</div>
+                        <div class="metric-value">5 Years</div>
+                        <div class="metric-label">MLB Data History</div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-value">&lt;100ms</div>
-                        <div class="metric-label">Response Time</div>
+                        <div class="metric-value">&lt;2s</div>
+                        <div class="metric-label">Dashboard Load</div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-value">2.8M+</div>
-                        <div class="metric-label">Data Points</div>
+                        <div class="metric-value">Live</div>
+                        <div class="metric-label">Game Tracking</div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-value">12</div>
-                        <div class="metric-label">Platforms</div>
+                        <div class="metric-value">4 Teams</div>
+                        <div class="metric-label">Featured Coverage</div>
                     </div>
                 </div>
 
                 <div class="hero-actions">
-                    <a href="#video-ai" class="cta-button">
+                    <a href="/pricing.html" class="cta-button">
+                        <i class="fas fa-calculator"></i>
+                        Calculate ROI
+                    </a>
+                    <a href="#video-ai" class="cta-button" style="background: transparent; border: 2px solid var(--blaze-orange);">
                         <i class="fas fa-play"></i>
                         Watch Demo
-                    </a>
-                    <a href="/championship-live-dashboard.html" class="cta-button" style="background: transparent; border: 2px solid var(--blaze-orange);">
-                        <i class="fas fa-chart-line"></i>
-                        Live Dashboard
                     </a>
                 </div>
             </div>
@@ -1095,16 +1195,16 @@
 
             <div class="features-grid">
                 <div class="feature-card loading">
-                    <div class="feature-icon">🧠</div>
-                    <h3 class="feature-title">AI Consciousness Engine</h3>
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Live Analytics Engine</h3>
                     <p class="feature-description">
-                        Advanced neural networks with 94.6% prediction accuracy for championship readiness evaluation and strategic decision-making.
+                        Real-time performance tracking using verified MLB Statcast and FanGraphs data integration for championship-level insights.
                     </p>
                     <ul class="feature-highlights">
-                        <li>Predictive modeling & pattern recognition</li>
-                        <li>Decision velocity analysis</li>
-                        <li>Championship readiness scoring</li>
-                        <li>Real-time strategic insights</li>
+                        <li>Live game state tracking</li>
+                        <li>Team readiness monitoring</li>
+                        <li>Performance trend analysis</li>
+                        <li>Multi-source data integration</li>
                     </ul>
                 </div>
 
@@ -1215,15 +1315,93 @@
 
             <div class="video-upload-zone" id="videoUpload">
                 <div class="upload-icon">
-                    <i class="fas fa-cloud-upload-alt"></i>
+                    <i class="fas fa-video"></i>
+                    <div class="championship-dna-indicator">🏆</div>
                 </div>
                 <h3 class="upload-text">Drop your training video here</h3>
-                <p class="upload-hint">Supports MP4, MOV, AVI • Max 100MB</p>
-                <div style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-                    <span style="background: rgba(196, 30, 58, 0.2); color: #FF1744; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">Baseball</span>
-                    <span style="background: rgba(75, 146, 219, 0.2); color: #4B92DB; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">Football</span>
-                    <span style="background: rgba(191, 87, 0, 0.2); color: #FF8C00; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">Basketball</span>
+                <p class="upload-hint">Championship DNA Analysis • Micro-Expression Detection • Character Assessment</p>
+                <div class="analysis-features" style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <span class="feature-tag" data-feature="biomechanics">
+                        <i class="fas fa-chart-line"></i> Biomechanics
+                    </span>
+                    <span class="feature-tag" data-feature="expressions">
+                        <i class="fas fa-eye"></i> Micro-Expressions
+                    </span>
+                    <span class="feature-tag" data-feature="character">
+                        <i class="fas fa-heart"></i> Character DNA
+                    </span>
+                    <span class="feature-tag" data-feature="nil">
+                        <i class="fas fa-dollar-sign"></i> NIL Impact
+                    </span>
                 </div>
+                <div class="supported-sports" style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <span class="sport-tag baseball">Baseball</span>
+                    <span class="sport-tag football">Football</span>
+                    <span class="sport-tag basketball">Basketball</span>
+                </div>
+                <div class="drag-active-overlay">
+                    <div class="drag-content">
+                        <i class="fas fa-upload"></i>
+                        <p>Release to analyze championship potential</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology & Transparency Section -->
+    <section class="methodology-section" id="methodology" style="padding: 5rem 0; background: rgba(0, 0, 0, 0.2);">
+        <div class="container">
+            <div class="methodology-header" style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Our Data & Methods
+                </h2>
+                <p style="font-size: 1.2rem; color: #94A3B8; max-width: 600px; margin: 0 auto;">
+                    Transparency in sports analytics. Here's exactly how we generate our insights.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 2rem; border: 1px solid rgba(191, 87, 0, 0.2);">
+                    <h3 style="color: var(--blaze-orange); margin-bottom: 1rem; font-size: 1.25rem;">📊 Data Sources</h3>
+                    <ul style="list-style: none; padding: 0; color: #E2E8F0; line-height: 1.8;">
+                        <li>• MLB Statcast API (2019-2024)</li>
+                        <li>• FanGraphs Advanced Metrics</li>
+                        <li>• ESPN Sports APIs</li>
+                        <li>• Cardinals MCP Server Integration</li>
+                        <li>• Real-time game state tracking</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 2rem; border: 1px solid rgba(191, 87, 0, 0.2);">
+                    <h3 style="color: var(--blaze-orange); margin-bottom: 1rem; font-size: 1.25rem;">🎯 Team Coverage</h3>
+                    <ul style="list-style: none; padding: 0; color: #E2E8F0; line-height: 1.8;">
+                        <li>• <strong>Cardinals</strong> - Complete analytics suite</li>
+                        <li>• <strong>Titans</strong> - Game-by-game tracking</li>
+                        <li>• <strong>Longhorns</strong> - College football insights</li>
+                        <li>• <strong>Grizzlies</strong> - NBA performance metrics</li>
+                        <li>• <em>Expanding to additional teams monthly</em></li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 2rem; border: 1px solid rgba(191, 87, 0, 0.2);">
+                    <h3 style="color: var(--blaze-orange); margin-bottom: 1rem; font-size: 1.25rem;">🔬 Analysis Methods</h3>
+                    <ul style="list-style: none; padding: 0; color: #E2E8F0; line-height: 1.8;">
+                        <li>• Readiness algorithms based on historical fatigue patterns</li>
+                        <li>• Micro-expression analysis using MediaPipe models</li>
+                        <li>• Character assessment through behavioral markers</li>
+                        <li>• NIL valuations incorporating social media reach</li>
+                        <li>• Trajectory modeling from youth to professional ranks</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="color: #64748B; font-size: 0.9rem;">
+                    <strong>Built by an athlete, for athletes.</strong><br>
+                    Austin Humphrey - Former Texas HS Running Back (#20) • Sports Intelligence Developer<br>
+                    <em>"We don't just crunch numbers - we understand what numbers mean on game day."</em>
+                </p>
             </div>
         </div>
     </section>
@@ -1543,7 +1721,7 @@
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <h3 class="upload-text" style="color: #22C55E;">Analysis Complete!</h3>
-                <p class="upload-hint">94.6% accuracy • Elite biomechanical patterns detected</p>
+                <p class="upload-hint">Micro-expression analysis • Character assessment available</p>
                 <div style="margin-top: 1rem;">
                     <a href="/ai-coaching-platform.html" style="color: #BF5700; text-decoration: none; font-weight: 600;">
                         View Full Analysis →
@@ -1749,14 +1927,21 @@
         Texas Running Back • Sports Intelligence Innovator
 
         Platform Status: LIVE ✅
-        AI Accuracy: 94.6%
-        Response Time: <100ms
-        Neural Networks: ACTIVE
+        Data Sources: MLB Statcast, FanGraphs, ESPN APIs
+        Dashboard Load: <2s
+        Live Tracking: Cardinals, Titans, Longhorns, Grizzlies
         Championship Ready: TRUE
 
         Contact: ahump20@outlook.com | (210) 273-5538
         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         `);
     </script>
+
+    <!-- 🏆 CHAMPIONSHIP DNA MICRO-EXPRESSION ANALYSIS -->
+    <script src="js/digital-combine-microexpression.js"></script>
+
+    <!-- 🎯 NAVIGATION MANAGER - INTERACTIVE FUNCTIONALITY -->
+    <script src="navigation-manager.js"></script>
+
 </body>
 </html>
