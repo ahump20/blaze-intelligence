@@ -94,3 +94,6 @@ OLD_*/
 !*.html
 !*.js
 !run_*.py
+# Local Netlify folder
+.netlify
+Library/
