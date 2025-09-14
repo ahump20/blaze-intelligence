@@ -1,6 +1,6 @@
 
 // Auto-generated update script for analytics section
-// Generated at: 2025-09-10T05:38:37.011Z
+// Generated at: 2025-09-14T19:49:11.041Z
 
 const analyticsContent = {
   "title": "Sports Analytics Intelligence",
@@ -19,7 +19,7 @@ const analyticsContent = {
     "Systematic optimization mindset"
   ],
   "latestAnalysis": {
-    "timestamp": "2025-09-09T11:54:57.185Z",
+    "timestamp": "2025-09-11T08:01:03.808Z",
     "source": "Multi-AI synthesis",
     "findings": "Athletic discipline translates to business execution excellence"
   }

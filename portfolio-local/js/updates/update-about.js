@@ -1,6 +1,6 @@
 
 // Auto-generated update script for about section
-// Generated at: 2025-09-10T05:38:37.011Z
+// Generated at: 2025-09-14T19:49:11.041Z
 
 const aboutContent = {
   "story": "From the baseball diamond to the boardroom, my journey demonstrates how athletic discipline transforms into business excellence.",

@@ -1,6 +1,6 @@
 
 // Auto-generated update script for hero section
-// Generated at: 2025-09-10T05:38:37.011Z
+// Generated at: 2025-09-14T19:49:11.040Z
 
 const heroContent = {
   "tagline": "Memphis-raised, Texas-sharpened athlete-executive bringing systematic thinking and competitive edge to sports analytics",
