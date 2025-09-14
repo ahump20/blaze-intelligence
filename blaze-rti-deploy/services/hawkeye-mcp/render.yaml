@@ -1,0 +1,69 @@
+services:
+  - type: web
+    name: hawkeye-mcp-bridge
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: true
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: HEI_API_BASE
+        sync: false  # Set in Render dashboard when partner access available
+      - key: HEI_API_KEY
+        sync: false  # Set in Render dashboard when partner access available
+      - key: ALLOWED_ORIGINS
+        value: https://blaze-intelligence.netlify.app,https://blaze-intelligence.replit.app,http://localhost:3000,http://localhost:8000
+
+    # Health check configuration
+    disk:
+      name: hawkeye-mcp-data
+      mountPath: /opt/render/project/data
+      sizeGB: 1
+
+    # Custom headers for MCP compliance
+    headers:
+      - path: /*
+        headers:
+          X-Service: "Hawk-Eye MCP Bridge"
+          X-Platform: "Blaze Intelligence"
+          X-Version: "0.1.0"
+
+      - path: /mcp
+        headers:
+          Access-Control-Allow-Origin: "*"
+          Access-Control-Allow-Methods: "GET, POST, PUT, DELETE, OPTIONS"
+          Access-Control-Allow-Headers: "Content-Type, Authorization, mcp-session-id"
+          Access-Control-Expose-Headers: "Mcp-Session-Id"
+
+      - path: /healthz
+        headers:
+          Cache-Control: "no-cache, no-store, must-revalidate"
+
+# Database configuration (if needed for future enhancements)
+databases:
+  - name: hawkeye-analytics-db
+    databaseName: hawkeye_analytics
+    user: hawkeye_admin
+    plan: free
+    region: oregon
+
+# Background workers (for future data processing)
+# workers:
+#   - name: hawkeye-data-processor
+#     runtime: node
+#     buildCommand: npm ci && npm run build
+#     startCommand: node dist/workers/data-processor.js
+#     plan: starter
+#
+#     envVars:
+#       - fromService:
+#           type: web
+#           name: hawkeye-mcp-bridge
+#           envVarKey: DATABASE_URL

@@ -1,0 +1,67 @@
+# Blaze Intelligence - Championship Sports Analytics Platform
+# Deep South Sports Authority Production Configuration
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+  BLAZE_ENV = "production"
+
+# Security Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Asset Caching
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+# MCP Server Integration Headers
+[[headers]]
+  for = "/mcp/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, mcp-session-id"
+    Access-Control-Expose-Headers = "Mcp-Session-Id"
+    Access-Control-Max-Age = "86400"
+    X-Powered-By = "Blaze-Intelligence-MCP"
+    X-Sports-Analytics = "Championship-Platform"
+
+# API Redirects
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Legacy URL redirects
+[[redirects]]
+  from = "/blaze-3d-universe.html"
+  to = "/universe.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/nil-calculator"
+  to = "/sec-nil-analytics.html"
+  status = 301
+  force = true
