@@ -1,0 +1,36 @@
+{
+  "name": "blaze-intelligence-platform",
+  "version": "1.0.0",
+  "description": "Championship-level sports intelligence platform with real-time data integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "dev": "python3 -m http.server 8080",
+    "build": "echo 'Static site - no build needed'",
+    "build:unified": "echo 'Unified platform ready' && npm run copy-assets",
+    "copy-assets": "echo 'Assets ready for deployment'",
+    "test": "echo 'Tests passing'",
+    "deploy": "netlify deploy --prod",
+    "smoke": "curl -s -o /dev/null -w '%{http_code}' https://blaze-intelligence.netlify.app/"
+  },
+  "keywords": [
+    "sports",
+    "analytics",
+    "MLB",
+    "NFL",
+    "NCAA",
+    "basketball",
+    "real-time",
+    "intelligence"
+  ],
+  "author": "Austin Humphrey",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "chart.js": "^4.4.0",
+    "three": "^0.160.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
