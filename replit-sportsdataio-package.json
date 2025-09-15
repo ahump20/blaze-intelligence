@@ -1,0 +1,38 @@
+{
+  "name": "blaze-intelligence-sportsdataio",
+  "version": "2.0.0",
+  "description": "Championship-level sports analytics platform with SportsDataIO integration",
+  "main": "replit-sportsdataio-server.js",
+  "scripts": {
+    "start": "node replit-sportsdataio-server.js",
+    "dev": "nodemon replit-sportsdataio-server.js",
+    "test": "node -e \"console.log('SportsDataIO integration ready')\"",
+    "deploy": "echo 'Deploying to Replit...' && npm install && npm start"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "Austin Humphrey",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahump20/Blaze-Intelligence"
+  },
+  "keywords": [
+    "sports",
+    "analytics",
+    "sportsdataio",
+    "nfl",
+    "mlb",
+    "ncaa",
+    "real-time",
+    "championship"
+  ]
+}

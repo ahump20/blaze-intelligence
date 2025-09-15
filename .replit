@@ -1,0 +1,31 @@
+run = "npm start"
+entrypoint = "replit-sportsdataio-server.js"
+
+[nix]
+channel = "stable-22_11"
+
+[env]
+SPORTSDATAIO_API_KEY = "6ca2adb39404482da5406f0a6cd7aa37"
+NFL_TEAM_FOCUS = "TEN"
+MLB_TEAM_FOCUS = "STL"
+NCAA_TEAM_FOCUS = "TEX"
+NBA_TEAM_FOCUS = "MEM"
+
+[packager]
+language = "nodejs"
+
+[packager.features]
+packageSearch = true
+guessImports = true
+enabledForHosting = true
+
+[[ports]]
+localPort = 3000
+externalPort = 80
+
+[languages]
+[languages.javascript]
+pattern = "**/{*.js,*.jsx,*.ts,*.tsx,*.mjs,*.cjs}"
+
+[languages.javascript.languageServer]
+start = "typescript-language-server --stdio"
