@@ -79,6 +79,13 @@
   status = 200
   force = true
 
+# SportsDataIO API
+[[redirects]]
+  from = "/api/sportsdataio/*"
+  to = "/.netlify/functions/sportsdataio-api"
+  status = 200
+  force = true
+
 # Texas High School Football API
 [[redirects]]
   from = "/api/texas-hs-football"

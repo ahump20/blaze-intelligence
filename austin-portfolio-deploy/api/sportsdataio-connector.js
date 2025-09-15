@@ -12,8 +12,8 @@
 // ============================================================================
 
 const SPORTSDATAIO_CONFIG = {
-  // API Configuration
-  apiKey: process.env.SPORTSDATAIO_API_KEY || 'YOUR_API_KEY_HERE',
+  // API Configuration - Using account ahump20@outlook.com
+  apiKey: process.env.SPORTSDATAIO_API_KEY || 'YOUR_API_KEY_HERE', // Replace with actual key from SportsDataIO
   baseUrls: {
     nfl: 'https://api.sportsdata.io/v3/nfl',
     mlb: 'https://api.sportsdata.io/v3/mlb',
