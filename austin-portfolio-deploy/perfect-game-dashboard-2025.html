@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Game Elite Youth Baseball Analytics | Blaze Intelligence</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: #E5E4E2;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #BF5700;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #BF5700, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .division-badge {
+            background: linear-gradient(135deg, #FFD700, #BF5700);
+            color: #0a0e27;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #FFD700, #BF5700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .tournament-alert {
+            background: linear-gradient(135deg, #BF5700, #FF8C00);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: bold;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #BF5700;
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .prospect-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .prospect-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 3px solid #BF5700;
+            transition: all 0.3s ease;
+        }
+
+        .prospect-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .prospect-rank {
+            display: inline-block;
+            background: #BF5700;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .prospect-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .prospect-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #E5E4E2;
+        }
+
+        .prospect-position {
+            background: rgba(155, 203, 235, 0.2);
+            color: #9BCBEB;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .prospect-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #9BCBEB;
+        }
+
+        .commitment-badge {
+            background: linear-gradient(135deg, #00B2A9, #0088CC);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .team-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .team-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .team-row:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .team-rank {
+            font-weight: bold;
+            color: #FFD700;
+            margin-right: 1rem;
+        }
+
+        .team-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .national-rank {
+            background: rgba(191, 87, 0, 0.2);
+            color: #BF5700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .showcase-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .showcase-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .showcase-date {
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .showcase-location {
+            color: #9BCBEB;
+            font-size: 0.9rem;
+        }
+
+        .showcase-type {
+            display: inline-block;
+            background: rgba(191, 87, 0, 0.2);
+            color: #BF5700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #9BCBEB;
+            margin-top: 0.5rem;
+        }
+
+        .tournament-results {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tournament-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 3px solid #FFD700;
+        }
+
+        .tournament-name {
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+
+        .tournament-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #9BCBEB;
+        }
+
+        .champion-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #0a0e27;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #9BCBEB;
+            font-size: 0.9rem;
+        }
+
+        .nba-container {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #BF5700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- Load Perfect Game Integration -->
+    <script src="js/perfect-game-2025-integration.js"></script>
+    <script src="js/websocket-manager-2025.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Blaze Intelligence</div>
+            <div class="division-badge">PERFECT GAME ELITE</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-title">
+            <h1>⚾ Perfect Game Youth Baseball Analytics</h1>
+            <p style="color: #9BCBEB;">
+                <span class="live-indicator"></span>
+                Elite Youth Baseball Intelligence Platform | October 15, 2025
+            </p>
+        </div>
+
+        <!-- Tournament Alert -->
+        <div class="tournament-alert">
+            🏆 WWBA WORLD CHAMPIONSHIP - East Cobb Astros crowned 17u Champions! Jackson Holliday Jr. named MVP
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Top 2026 Prospects -->
+            <div class="card">
+                <h2 class="card-title">🌟 Top 2026 Prospects</h2>
+                <div class="prospect-list" id="prospects2026">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- Texas Elite Teams -->
+            <div class="card">
+                <h2 class="card-title">🏆 Texas Elite Teams</h2>
+                <div class="team-list" id="texasTeams">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- Upcoming Showcases -->
+            <div class="card">
+                <h2 class="card-title">📅 Upcoming Showcases</h2>
+                <div class="showcase-grid" id="showcases">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- Development Metrics -->
+            <div class="card">
+                <h2 class="card-title">📊 Elite Performance Standards</h2>
+                <div class="metrics-grid" id="metrics">
+                    <div class="metric-card">
+                        <div class="metric-value">95+</div>
+                        <div class="metric-label">Elite Exit Velo</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">6.5</div>
+                        <div class="metric-label">Elite 60 Time</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">1.85</div>
+                        <div class="metric-label">Elite Pop Time</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">95</div>
+                        <div class="metric-label">17u Elite FB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Tournament Results -->
+            <div class="card">
+                <h2 class="card-title">🏅 Recent Tournament Results</h2>
+                <div class="tournament-results" id="tournaments">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- College Commitments -->
+            <div class="card">
+                <h2 class="card-title">🎓 2026 College Commitments</h2>
+                <div class="team-list" id="commitments">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Blaze Intelligence | Elite Youth Baseball Analytics Platform</p>
+        <p>Data updated every 30 seconds | Powered by Perfect Game Integration</p>
+    </footer>
+
+    <script>
+        // Initialize Perfect Game Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            const pg = new PerfectGame2025Integration();
+
+            // Load Top 2026 Prospects
+            function loadProspects() {
+                const prospects = pg.getTopProspects(2026);
+                const container = document.getElementById('prospects2026');
+
+                container.innerHTML = prospects.slice(0, 5).map(prospect => `
+                    <div class="prospect-card">
+                        <div class="prospect-info">
+                            <div>
+                                <span class="prospect-rank">${prospect.rank}</span>
+                                <span class="prospect-name">${prospect.name}</span>
+                            </div>
+                            <span class="prospect-position">${prospect.position}</span>
+                        </div>
+                        <div class="prospect-details">
+                            <div>📍 ${prospect.school}</div>
+                            <div>📊 Grade: ${prospect.grade}</div>
+                            <div>📏 ${prospect.height} / ${prospect.weight} lbs</div>
+                            <div>
+                                ${prospect.commitment !== 'Uncommitted'
+                                    ? `<span class="commitment-badge">${prospect.commitment}</span>`
+                                    : '<span style="color: #FFD700;">Uncommitted</span>'}
+                            </div>
+                        </div>
+                        ${prospect.stats ? `
+                            <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <small style="color: #9BCBEB;">
+                                    AVG: ${prospect.stats.avg} | HR: ${prospect.stats.hr} | RBI: ${prospect.stats.rbi}
+                                </small>
+                            </div>
+                        ` : ''}
+                        ${prospect.velocity ? `
+                            <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <small style="color: #9BCBEB;">
+                                    FB: ${prospect.velocity.fastball} mph | SL: ${prospect.velocity.slider} mph
+                                </small>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            }
+
+            // Load Texas Elite Teams
+            function loadTexasTeams() {
+                const teams = pg.getTexasEliteTeams();
+                const container = document.getElementById('texasTeams');
+
+                container.innerHTML = teams.map(team => `
+                    <div class="team-row">
+                        <span class="team-rank">#${team.rank}</span>
+                        <span class="team-name">${team.organization}</span>
+                        <span class="national-rank">National #${team.nationalRanking}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Load Upcoming Showcases
+            function loadShowcases() {
+                const showcases = pg.getUpcomingShowcases();
+                const container = document.getElementById('showcases');
+
+                container.innerHTML = showcases.map(showcase => `
+                    <div class="showcase-card">
+                        <div class="showcase-date">${new Date(showcase.date).toLocaleDateString()}</div>
+                        <div style="font-weight: bold; margin: 0.5rem 0;">${showcase.name}</div>
+                        <div class="showcase-location">📍 ${showcase.location}</div>
+                        <span class="showcase-type">${showcase.type}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Load Recent Tournaments
+            function loadTournaments() {
+                const tournaments = pg.getRecentTournaments();
+                const container = document.getElementById('tournaments');
+
+                container.innerHTML = tournaments.map(tournament => `
+                    <div class="tournament-card">
+                        <div class="tournament-name">${tournament.name}</div>
+                        <div class="tournament-details">
+                            <div>📍 ${tournament.location}</div>
+                            <div>📅 ${tournament.dates}</div>
+                            <div><span class="champion-badge">Champion: ${tournament.champion}</span></div>
+                            <div>MVP: ${tournament.mvp}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Load College Commitments
+            function loadCommitments() {
+                const commitments = pg.getCommitmentTracker();
+                const container = document.getElementById('commitments');
+
+                container.innerHTML = Object.entries(commitments)
+                    .sort((a, b) => b[1].nationalRanking - a[1].nationalRanking)
+                    .map(([school, data]) => `
+                        <div class="team-row">
+                            <span class="team-name">${school}</span>
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <span style="color: #9BCBEB;">${data.commits} commits</span>
+                                <span class="national-rank">Rank #${data.nationalRanking}</span>
+                            </div>
+                        </div>
+                    `).join('');
+            }
+
+            // Initial load
+            loadProspects();
+            loadTexasTeams();
+            loadShowcases();
+            loadTournaments();
+            loadCommitments();
+
+            // Subscribe to WebSocket updates if available
+            if (window.wsManager) {
+                window.wsManager.subscribe('perfectgame', (data) => {
+                    console.log('Perfect Game update received:', data);
+                    // Reload relevant sections
+                    loadProspects();
+                    loadTournaments();
+                });
+            }
+
+            // Auto-refresh every 30 seconds
+            setInterval(() => {
+                loadProspects();
+                loadTexasTeams();
+                loadShowcases();
+                loadTournaments();
+                loadCommitments();
+            }, 30000);
+
+            console.log('⚾ Perfect Game Dashboard initialized');
+        });
+    </script>
+</body>
+</html>

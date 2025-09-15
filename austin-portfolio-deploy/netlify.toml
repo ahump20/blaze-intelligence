@@ -3,8 +3,12 @@
   publish = "."
   functions = "netlify/functions"
 
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["js/*.js", "data/*.json"]
+
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
   BLAZE_ENV = "production"
   MCP_SERVER_URL = "https://blaze-intelligence-mcp.onrender.com"
   CHAMPIONSHIP_MODE = "true"
@@ -83,6 +87,13 @@
 [[redirects]]
   from = "/api/sportsdataio/*"
   to = "/.netlify/functions/sportsdataio-api"
+  status = 200
+  force = true
+
+# SportsDataIO Proxy (new secure endpoint)
+[[redirects]]
+  from = "/api/sdio"
+  to = "/.netlify/functions/sdio"
   status = 200
   force = true
 
