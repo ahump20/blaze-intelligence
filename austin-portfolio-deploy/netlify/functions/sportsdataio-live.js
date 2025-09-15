@@ -13,7 +13,7 @@ const {
 } = require('../../api/sportsdataio-connector.js');
 
 // Environment configuration
-const API_KEY = process.env.SPORTSDATAIO_API_KEY || 'c8bbeb67b4474c3fb3b887b4e85e87f5';
+const API_KEY = process.env.SPORTSDATAIO_API_KEY || '6ca2adb39404482da5406f0a6cd7aa37';
 
 // CORS headers for browser access
 const headers = {
@@ -170,7 +170,11 @@ async function handleNFLRequest(connector, endpoint, params) {
 
   switch (endpoint) {
     case 'scores':
-      return await connector.getScores('json', season, week);
+      // NFL Week parameter needs special handling
+      if (week && week <= 18) {
+        return await connector.getScores('json', season, week);
+      }
+      return await connector.getScores('json', season);
 
     case 'teams':
       return await connector.getTeams('json');
