@@ -5,8 +5,8 @@
 
 const https = require('https');
 
-// API Configuration - IMPORTANT: Set this in Netlify environment variables
-const SPORTSDATAIO_API_KEY = process.env.SPORTSDATAIO_API_KEY || 'YOUR_API_KEY_HERE';
+// API Configuration - Using account ahump20@outlook.com
+const SPORTSDATAIO_API_KEY = process.env.SPORTSDATAIO_API_KEY || '6ca2adb39404482da5406f0a6cd7aa37';
 const BASE_URL = 'api.sportsdata.io';
 
 // Cache for reducing API calls

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportsDataIO API Test - Blaze Intelligence</title>
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --cardinal-blue: #9BCBEB;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .test-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .result-card {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary-orange);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .result-card h2 {
+            color: var(--cardinal-blue);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status.success {
+            background: #4ade80;
+            color: black;
+        }
+
+        .status.error {
+            background: #ff4757;
+            color: white;
+        }
+
+        .status.loading {
+            background: var(--championship-gold);
+            color: black;
+        }
+
+        .data-content {
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .data-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-item:hover {
+            background: rgba(191, 87, 0, 0.1);
+        }
+
+        .loader {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(191, 87, 0, 0.2);
+            border-top-color: var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .team-highlight {
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 3px solid var(--championship-gold);
+            padding-left: 10px;
+        }
+
+        .error-message {
+            color: #ff4757;
+            padding: 1rem;
+            background: rgba(255, 71, 87, 0.1);
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .metrics {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .metric {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            color: var(--championship-gold);
+            font-weight: bold;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 SportsDataIO API Integration Test</h1>
+
+        <div class="test-controls">
+            <button class="btn" onclick="testMLB()">⚾ Test MLB API</button>
+            <button class="btn" onclick="testNFL()">🏈 Test NFL API</button>
+            <button class="btn" onclick="testNBA()">🏀 Test NBA API</button>
+            <button class="btn" onclick="testNCAAFootball()">🏈 Test NCAA Football</button>
+            <button class="btn" onclick="testNCAABasketball()">🏀 Test NCAA Basketball</button>
+            <button class="btn" onclick="testAllFeaturedTeams()">🏆 Test Featured Teams</button>
+            <button class="btn" onclick="clearResults()">🗑️ Clear Results</button>
+        </div>
+
+        <div class="results-grid" id="results">
+            <!-- Results will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = '6ca2adb39404482da5406f0a6cd7aa37';
+        const resultsContainer = document.getElementById('results');
+
+        // Featured teams
+        const FEATURED_TEAMS = {
+            mlb: { key: 'STL', name: 'Cardinals' },
+            nfl: { key: 'TEN', name: 'Titans' },
+            nba: { key: 'MEM', name: 'Grizzlies' },
+            ncaaFootball: { school: 'Texas', name: 'Longhorns' }
+        };
+
+        async function makeAPIRequest(sport, endpoint, params = {}) {
+            const baseUrl = `https://api.sportsdata.io/v3/${sport}`;
+            const url = `${baseUrl}/${endpoint}?key=${API_KEY}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`API Error for ${sport}/${endpoint}:`, error);
+                throw error;
+            }
+        }
+
+        function createResultCard(title, status = 'loading') {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.innerHTML = `
+                <h2>
+                    ${title}
+                    <span class="status ${status}">${status.toUpperCase()}</span>
+                </h2>
+                <div class="content">
+                    <div class="loader">
+                        <div class="spinner"></div>
+                        <p>Loading data...</p>
+                    </div>
+                </div>
+            `;
+            resultsContainer.appendChild(card);
+            return card;
+        }
+
+        function updateCardStatus(card, status, content) {
+            const statusElement = card.querySelector('.status');
+            statusElement.className = `status ${status}`;
+            statusElement.textContent = status.toUpperCase();
+
+            const contentElement = card.querySelector('.content');
+            contentElement.innerHTML = content;
+        }
+
+        async function testMLB() {
+            const card = createResultCard('⚾ MLB - Cardinals Focus');
+
+            try {
+                // Get teams first
+                const teams = await makeAPIRequest('mlb', 'scores/json/Teams');
+                const cardinals = teams.find(t => t.Key === 'STL');
+
+                // Get current season standings
+                const standings = await makeAPIRequest('mlb', 'scores/json/Standings/2024');
+                const cardinalStanding = standings.find(s => s.Key === 'STL');
+
+                // Get today's games
+                const today = new Date().toISOString().split('T')[0];
+                const games = await makeAPIRequest('mlb', `scores/json/GamesByDate/${today}`);
+
+                let content = `<div class="data-content">`;
+
+                if (cardinals) {
+                    content += `
+                        <div class="data-item team-highlight">
+                            <strong>St. Louis Cardinals</strong><br>
+                            Stadium: ${cardinals.City} - ${cardinals.Name}<br>
+                            League: ${cardinals.League || 'NL'} | Division: ${cardinals.Division || 'Central'}
+                        </div>
+                    `;
+                }
+
+                if (cardinalStanding) {
+                    content += `
+                        <div class="data-item">
+                            <strong>2024 Season Standing</strong><br>
+                            Wins: ${cardinalStanding.Wins} | Losses: ${cardinalStanding.Losses}<br>
+                            Division Rank: ${cardinalStanding.DivisionRank || 'N/A'}<br>
+                            Win %: ${(cardinalStanding.Percentage || 0).toFixed(3)}
+                        </div>
+                    `;
+                }
+
+                content += `
+                    <div class="data-item">
+                        <strong>Today's Games (${today})</strong><br>
+                        Total Games: ${games.length}<br>
+                        ${games.slice(0, 3).map(g =>
+                            `${g.AwayTeam} @ ${g.HomeTeam} - ${g.Status}`
+                        ).join('<br>')}
+                    </div>
+                `;
+
+                content += `
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">${teams.length}</div>
+                            <div class="metric-label">Total Teams</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${games.length}</div>
+                            <div class="metric-label">Games Today</div>
+                        </div>
+                    </div>
+                `;
+
+                content += `</div>`;
+
+                updateCardStatus(card, 'success', content);
+            } catch (error) {
+                updateCardStatus(card, 'error', `
+                    <div class="error-message">
+                        Failed to fetch MLB data: ${error.message}
+                    </div>
+                `);
+            }
+        }
+
+        async function testNFL() {
+            const card = createResultCard('🏈 NFL - Titans Focus');
+
+            try {
+                const teams = await makeAPIRequest('nfl', 'scores/json/Teams');
+                const titans = teams.find(t => t.Key === 'TEN');
+
+                const standings = await makeAPIRequest('nfl', 'scores/json/Standings/2024');
+                const titansStanding = standings.find(s => s.Team === 'TEN');
+
+                const currentWeek = await makeAPIRequest('nfl', 'scores/json/CurrentWeek');
+                const scores = await makeAPIRequest('nfl', `scores/json/ScoresByWeek/2024/${currentWeek}`);
+
+                let content = `<div class="data-content">`;
+
+                if (titans) {
+                    content += `
+                        <div class="data-item team-highlight">
+                            <strong>Tennessee Titans</strong><br>
+                            City: ${titans.City}<br>
+                            Conference: ${titans.Conference} | Division: ${titans.Division}<br>
+                            Head Coach: ${titans.HeadCoach || 'N/A'}
+                        </div>
+                    `;
+                }
+
+                if (titansStanding) {
+                    content += `
+                        <div class="data-item">
+                            <strong>2024 Season</strong><br>
+                            Record: ${titansStanding.Wins}-${titansStanding.Losses}<br>
+                            Division Rank: ${titansStanding.DivisionRank}<br>
+                            Conference Rank: ${titansStanding.ConferenceRank}
+                        </div>
+                    `;
+                }
+
+                content += `
+                    <div class="data-item">
+                        <strong>Week ${currentWeek} Games</strong><br>
+                        ${scores.slice(0, 3).map(s =>
+                            `${s.AwayTeam} (${s.AwayScore || 0}) @ ${s.HomeTeam} (${s.HomeScore || 0})`
+                        ).join('<br>')}
+                    </div>
+
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">${currentWeek}</div>
+                            <div class="metric-label">Current Week</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${scores.length}</div>
+                            <div class="metric-label">Week Games</div>
+                        </div>
+                    </div>
+                </div>`;
+
+                updateCardStatus(card, 'success', content);
+            } catch (error) {
+                updateCardStatus(card, 'error', `
+                    <div class="error-message">
+                        Failed to fetch NFL data: ${error.message}
+                    </div>
+                `);
+            }
+        }
+
+        async function testNBA() {
+            const card = createResultCard('🏀 NBA - Grizzlies Focus');
+
+            try {
+                const teams = await makeAPIRequest('nba', 'scores/json/Teams');
+                const grizzlies = teams.find(t => t.Key === 'MEM');
+
+                const standings = await makeAPIRequest('nba', 'scores/json/Standings/2025');
+                const grizzliesStanding = standings.find(s => s.Key === 'MEM');
+
+                const today = new Date().toISOString().split('T')[0];
+                const games = await makeAPIRequest('nba', `scores/json/GamesByDate/${today}`);
+
+                let content = `<div class="data-content">`;
+
+                if (grizzlies) {
+                    content += `
+                        <div class="data-item team-highlight">
+                            <strong>Memphis Grizzlies</strong><br>
+                            City: ${grizzlies.City}<br>
+                            Conference: ${grizzlies.Conference} | Division: ${grizzlies.Division}
+                        </div>
+                    `;
+                }
+
+                if (grizzliesStanding) {
+                    content += `
+                        <div class="data-item">
+                            <strong>2024-25 Season</strong><br>
+                            Record: ${grizzliesStanding.Wins}-${grizzliesStanding.Losses}<br>
+                            Win %: ${(grizzliesStanding.Percentage || 0).toFixed(3)}<br>
+                            Conference Rank: ${grizzliesStanding.ConferenceRank}
+                        </div>
+                    `;
+                }
+
+                content += `
+                    <div class="data-item">
+                        <strong>Today's Games</strong><br>
+                        ${games.length > 0 ? games.slice(0, 3).map(g =>
+                            `${g.AwayTeam} @ ${g.HomeTeam}`
+                        ).join('<br>') : 'No games scheduled'}
+                    </div>
+
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">${teams.length}</div>
+                            <div class="metric-label">Total Teams</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${games.length}</div>
+                            <div class="metric-label">Games Today</div>
+                        </div>
+                    </div>
+                </div>`;
+
+                updateCardStatus(card, 'success', content);
+            } catch (error) {
+                updateCardStatus(card, 'error', `
+                    <div class="error-message">
+                        Failed to fetch NBA data: ${error.message}
+                    </div>
+                `);
+            }
+        }
+
+        async function testNCAAFootball() {
+            const card = createResultCard('🏈 NCAA Football - Texas Focus');
+
+            try {
+                const teams = await makeAPIRequest('cfb', 'scores/json/Teams');
+                const texas = teams.find(t => t.School === 'Texas' || t.Name === 'Longhorns');
+
+                const currentWeek = Math.min(15, Math.floor((new Date() - new Date('2024-08-24')) / (7 * 24 * 60 * 60 * 1000)) + 1);
+                const games = await makeAPIRequest('cfb', `scores/json/GamesByWeek/2024/${currentWeek}`);
+
+                let content = `<div class="data-content">`;
+
+                if (texas) {
+                    content += `
+                        <div class="data-item team-highlight">
+                            <strong>Texas Longhorns</strong><br>
+                            Conference: ${texas.Conference || 'SEC'}<br>
+                            AP Rank: #${texas.ApRank || 'NR'}<br>
+                            Record: ${texas.Wins || 0}-${texas.Losses || 0}
+                        </div>
+                    `;
+                }
+
+                const secTeams = teams.filter(t => t.Conference === 'SEC').slice(0, 5);
+                content += `
+                    <div class="data-item">
+                        <strong>SEC Teams</strong><br>
+                        ${secTeams.map(t =>
+                            `${t.School} (${t.Wins || 0}-${t.Losses || 0})`
+                        ).join('<br>')}
+                    </div>
+
+                    <div class="data-item">
+                        <strong>Week ${currentWeek} Games</strong><br>
+                        Total Games: ${games.length}<br>
+                        SEC Games: ${games.filter(g =>
+                            g.HomeConference === 'SEC' || g.AwayConference === 'SEC'
+                        ).length}
+                    </div>
+
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">${teams.length}</div>
+                            <div class="metric-label">Total Teams</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${currentWeek}</div>
+                            <div class="metric-label">Current Week</div>
+                        </div>
+                    </div>
+                </div>`;
+
+                updateCardStatus(card, 'success', content);
+            } catch (error) {
+                updateCardStatus(card, 'error', `
+                    <div class="error-message">
+                        Failed to fetch NCAA Football data: ${error.message}
+                    </div>
+                `);
+            }
+        }
+
+        async function testNCAABasketball() {
+            const card = createResultCard('🏀 NCAA Basketball');
+
+            try {
+                const teams = await makeAPIRequest('cbb', 'scores/json/Teams');
+                const today = new Date().toISOString().split('T')[0];
+                const games = await makeAPIRequest('cbb', `scores/json/GamesByDate/${today}`);
+
+                const texasTeams = teams.filter(t =>
+                    t.School?.includes('Texas') || t.Conference === 'Big 12' || t.Conference === 'SEC'
+                ).slice(0, 10);
+
+                let content = `<div class="data-content">
+                    <div class="data-item">
+                        <strong>Texas & Regional Teams</strong><br>
+                        ${texasTeams.map(t =>
+                            `${t.School} (${t.Conference})`
+                        ).join('<br>')}
+                    </div>
+
+                    <div class="data-item">
+                        <strong>Today's Games</strong><br>
+                        ${games.length > 0 ? `${games.length} games scheduled` : 'No games today (off-season)'}
+                    </div>
+
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-value">${teams.length}</div>
+                            <div class="metric-label">Total Teams</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${games.length}</div>
+                            <div class="metric-label">Games Today</div>
+                        </div>
+                    </div>
+                </div>`;
+
+                updateCardStatus(card, 'success', content);
+            } catch (error) {
+                updateCardStatus(card, 'error', `
+                    <div class="error-message">
+                        Failed to fetch NCAA Basketball data: ${error.message}
+                    </div>
+                `);
+            }
+        }
+
+        async function testAllFeaturedTeams() {
+            await testMLB();
+            await testNFL();
+            await testNBA();
+            await testNCAAFootball();
+        }
+
+        function clearResults() {
+            resultsContainer.innerHTML = '';
+        }
+
+        // Auto-test on load
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🔥 SportsDataIO API Test Page Ready');
+            console.log('API Key configured:', API_KEY.substring(0, 8) + '...');
+        });
+    </script>
+</body>
+</html>
