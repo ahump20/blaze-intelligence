@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Memphis Grizzlies 2025-26 NBA Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #12173F 0%, #5D76A9 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(18, 23, 63, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #F5B112;
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #5D76A9, #F5B112);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .season-badge {
+            background: #F5B112;
+            color: #12173F;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Team Hero Section */
+        .team-hero {
+            background: linear-gradient(135deg, rgba(93, 118, 169, 0.2), rgba(245, 177, 18, 0.1));
+            border: 2px solid #F5B112;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #5D76A9, #F5B112);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-record {
+            font-size: 1.5rem;
+            color: #F5B112;
+            margin-bottom: 1rem;
+        }
+
+        .team-projection {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .projection-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+        }
+
+        .projection-label {
+            font-size: 0.9rem;
+            color: #9BCBEB;
+            text-transform: uppercase;
+        }
+
+        .projection-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #F5B112;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(245, 177, 18, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #F5B112;
+            box-shadow: 0 10px 30px rgba(245, 177, 18, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #F5B112;
+        }
+
+        .stat-label {
+            color: #9BCBEB;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        /* Two Column Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 968px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(93, 118, 169, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #F5B112;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Roster Table */
+        .roster-table {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .roster-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .roster-row:hover {
+            background: rgba(245, 177, 18, 0.1);
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .player-number {
+            background: #F5B112;
+            color: #12173F;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .player-name {
+            font-weight: 500;
+        }
+
+        .player-position {
+            color: #9BCBEB;
+            font-size: 0.9rem;
+        }
+
+        .player-salary {
+            color: #F5B112;
+            font-weight: bold;
+        }
+
+        /* Schedule Cards */
+        .schedule-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(93, 118, 169, 0.2);
+        }
+
+        .game-card.upcoming {
+            border-color: #F5B112;
+            background: rgba(245, 177, 18, 0.05);
+        }
+
+        .game-date {
+            font-size: 0.9rem;
+            color: #9BCBEB;
+        }
+
+        .game-opponent {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .game-result {
+            font-weight: bold;
+        }
+
+        .game-result.win {
+            color: #00ff00;
+        }
+
+        .game-result.loss {
+            color: #ff6666;
+        }
+
+        /* Live Game */
+        .live-game {
+            background: linear-gradient(135deg, rgba(245, 177, 18, 0.2), rgba(93, 118, 169, 0.1));
+            border: 2px solid #F5B112;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Player Stats */
+        .player-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(245, 177, 18, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .player-card-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .player-card-name {
+            font-weight: bold;
+            color: #F5B112;
+        }
+
+        .player-card-position {
+            color: #9BCBEB;
+        }
+
+        .player-stat-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        .player-stat-label {
+            color: #9BCBEB;
+        }
+
+        .player-stat-value {
+            font-weight: bold;
+        }
+
+        /* Standings */
+        .standings-table {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .standings-row {
+            display: grid;
+            grid-template-columns: 30px 1fr 60px 80px;
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+
+        .standings-row.grizzlies {
+            background: rgba(245, 177, 18, 0.1);
+            border-left: 3px solid #F5B112;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #F5B112;
+        }
+
+        .team-name-short {
+            font-weight: 500;
+        }
+
+        .wins-projection {
+            text-align: center;
+            color: #9BCBEB;
+        }
+
+        .odds {
+            text-align: right;
+            color: #F5B112;
+            font-size: 0.9rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid rgba(93, 118, 169, 0.3);
+            border-top: 3px solid #F5B112;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- WebSocket Integration -->
+    <script src="js/websocket-manager-2025.js"></script>
+    <script src="js/dashboard-websocket-integration.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Blaze Intelligence</div>
+            <div class="season-badge">2025-26 NBA PRESEASON</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Team Hero -->
+        <div class="team-hero">
+            <div class="team-name">MEMPHIS GRIZZLIES</div>
+            <div class="team-record">Preseason: 3-1</div>
+            <div class="team-projection">
+                <div class="projection-item">
+                    <div class="projection-label">Projected Record</div>
+                    <div class="projection-value">52-30</div>
+                </div>
+                <div class="projection-item">
+                    <div class="projection-label">West Seed</div>
+                    <div class="projection-value">#3</div>
+                </div>
+                <div class="projection-item">
+                    <div class="projection-label">Title Odds</div>
+                    <div class="projection-value">+800</div>
+                </div>
+                <div class="projection-item">
+                    <div class="projection-label">Over/Under</div>
+                    <div class="projection-value">51.5</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">Oct 22</div>
+                <div class="stat-label">Season Opener</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$162.3M</div>
+                <div class="stat-label">Team Salary</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">26.0</div>
+                <div class="stat-label">Avg Age</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">17,794</div>
+                <div class="stat-label">Arena Capacity</div>
+            </div>
+        </div>
+
+        <!-- Next Game Alert -->
+        <div class="live-game" id="nextGameAlert">
+            <h2 style="margin-bottom: 1rem;">
+                <span class="live-indicator"></span>
+                Next Game: Tonight vs Chicago Bulls
+            </h2>
+            <div style="font-size: 1.2rem;">8:00 PM ET at FedExForum</div>
+        </div>
+
+        <!-- Two Column Content -->
+        <div class="content-grid">
+            <!-- Roster Section -->
+            <div class="content-section">
+                <h2 class="section-title">2025-26 Roster</h2>
+                <div class="roster-table" id="rosterTable">
+                    <!-- Starters -->
+                    <div style="margin-bottom: 1rem; color: #F5B112; font-weight: bold;">STARTERS</div>
+                    <div class="roster-row">
+                        <div class="player-info">
+                            <div class="player-number">12</div>
+                            <div>
+                                <div class="player-name">Ja Morant</div>
+                                <div class="player-position">PG</div>
+                            </div>
+                        </div>
+                        <div class="player-salary">$33.5M</div>
+                    </div>
+                    <div class="roster-row">
+                        <div class="player-info">
+                            <div class="player-number">22</div>
+                            <div>
+                                <div class="player-name">Desmond Bane</div>
+                                <div class="player-position">SG</div>
+                            </div>
+                        </div>
+                        <div class="player-salary">$30.2M</div>
+                    </div>
+                    <div class="roster-row">
+                        <div class="player-info">
+                            <div class="player-number">13</div>
+                            <div>
+                                <div class="player-name">Jaren Jackson Jr.</div>
+                                <div class="player-position">PF</div>
+                            </div>
+                        </div>
+                        <div class="player-salary">$28.9M</div>
+                    </div>
+                    <!-- Bench will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div class="content-section">
+                <h2 class="section-title">Preseason Schedule</h2>
+                <div class="schedule-container" id="scheduleContainer">
+                    <div class="game-card">
+                        <div>
+                            <div class="game-date">Oct 7</div>
+                            <div class="game-opponent">vs ORL</div>
+                        </div>
+                        <div class="game-result win">W 118-106</div>
+                    </div>
+                    <div class="game-card">
+                        <div>
+                            <div class="game-date">Oct 9</div>
+                            <div class="game-opponent">@ DAL</div>
+                        </div>
+                        <div class="game-result loss">L 112-117</div>
+                    </div>
+                    <div class="game-card">
+                        <div>
+                            <div class="game-date">Oct 11</div>
+                            <div class="game-opponent">vs MIA</div>
+                        </div>
+                        <div class="game-result win">W 121-115</div>
+                    </div>
+                    <div class="game-card">
+                        <div>
+                            <div class="game-date">Oct 14</div>
+                            <div class="game-opponent">@ IND</div>
+                        </div>
+                        <div class="game-result win">W 109-102</div>
+                    </div>
+                    <div class="game-card upcoming">
+                        <div>
+                            <div class="game-date">Oct 16 (Tonight)</div>
+                            <div class="game-opponent">vs CHI</div>
+                        </div>
+                        <div class="game-result">8:00 PM ET</div>
+                    </div>
+                    <div class="game-card upcoming">
+                        <div>
+                            <div class="game-date">Oct 18</div>
+                            <div class="game-opponent">@ MIL</div>
+                        </div>
+                        <div class="game-result">8:00 PM ET</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Projections -->
+        <div class="content-section">
+            <h2 class="section-title">2025-26 Player Projections</h2>
+            <div class="player-stats-grid">
+                <div class="player-card">
+                    <div class="player-card-header">
+                        <div class="player-card-name">Ja Morant</div>
+                        <div class="player-card-position">PG | All-Star</div>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">PPG</span>
+                        <span class="player-stat-value">28.5</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">APG</span>
+                        <span class="player-stat-value">8.5</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">RPG</span>
+                        <span class="player-stat-value">6.2</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">MVP Odds</span>
+                        <span class="player-stat-value" style="color: #F5B112;">+1200</span>
+                    </div>
+                </div>
+                <div class="player-card">
+                    <div class="player-card-header">
+                        <div class="player-card-name">Desmond Bane</div>
+                        <div class="player-card-position">SG | All-Star</div>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">PPG</span>
+                        <span class="player-stat-value">25.2</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">3P%</span>
+                        <span class="player-stat-value">40.2%</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">RPG</span>
+                        <span class="player-stat-value">5.5</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">MIP Odds</span>
+                        <span class="player-stat-value" style="color: #F5B112;">+2000</span>
+                    </div>
+                </div>
+                <div class="player-card">
+                    <div class="player-card-header">
+                        <div class="player-card-name">Jaren Jackson Jr.</div>
+                        <div class="player-card-position">PF/C | DPOY</div>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">PPG</span>
+                        <span class="player-stat-value">23.0</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">BPG</span>
+                        <span class="player-stat-value">3.5</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">RPG</span>
+                        <span class="player-stat-value">7.2</span>
+                    </div>
+                    <div class="player-stat-line">
+                        <span class="player-stat-label">DPOY Odds</span>
+                        <span class="player-stat-value" style="color: #F5B112;">+350</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Western Conference Standings -->
+        <div class="content-section">
+            <h2 class="section-title">Western Conference Projections</h2>
+            <div class="standings-table">
+                <div class="standings-row" style="font-weight: bold; color: #F5B112;">
+                    <div>#</div>
+                    <div>Team</div>
+                    <div>Wins</div>
+                    <div>Odds</div>
+                </div>
+                <div class="standings-row">
+                    <div class="rank">1</div>
+                    <div class="team-name-short">Denver</div>
+                    <div class="wins-projection">57</div>
+                    <div class="odds">+450</div>
+                </div>
+                <div class="standings-row">
+                    <div class="rank">2</div>
+                    <div class="team-name-short">Phoenix</div>
+                    <div class="wins-projection">54</div>
+                    <div class="odds">+600</div>
+                </div>
+                <div class="standings-row grizzlies">
+                    <div class="rank">3</div>
+                    <div class="team-name-short">Memphis</div>
+                    <div class="wins-projection">52</div>
+                    <div class="odds">+800</div>
+                </div>
+                <div class="standings-row">
+                    <div class="rank">4</div>
+                    <div class="team-name-short">LA Lakers</div>
+                    <div class="wins-projection">50</div>
+                    <div class="odds">+900</div>
+                </div>
+                <div class="standings-row">
+                    <div class="rank">5</div>
+                    <div class="team-name-short">Golden State</div>
+                    <div class="wins-projection">48</div>
+                    <div class="odds">+1200</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load NBA connector -->
+    <script src="/js/sportsdataio-nba-2025.js"></script>
+    <script>
+        // Initialize NBA data
+        const nbaData = new SportsDataIONBA2025();
+
+        async function loadDashboard() {
+            try {
+                const dashboard = await nbaData.getNBAChampionshipDashboard();
+
+                // Update live game if applicable
+                updateLiveGame(dashboard.liveGame);
+
+                // Update insights
+                console.log('Grizzlies Dashboard:', dashboard);
+
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        function updateLiveGame(game) {
+            if (game.status === 'Live') {
+                const alertDiv = document.getElementById('nextGameAlert');
+                alertDiv.innerHTML = `
+                    <h2 style="margin-bottom: 1rem;">
+                        <span class="live-indicator"></span>
+                        LIVE NOW: Grizzlies ${game.grizzliesScore} - ${game.opponentScore} ${game.opponent}
+                    </h2>
+                    <div style="font-size: 1.2rem;">Q${game.quarter} - ${game.time}</div>
+                    <div style="margin-top: 1rem;">
+                        Leading Scorer: ${game.leaders.MEM.player} (${game.leaders.MEM.pts} pts)
+                    </div>
+                `;
+            }
+        }
+
+        // Load on page ready
+        window.addEventListener('load', loadDashboard);
+
+        // Refresh every 30 seconds
+        setInterval(loadDashboard, 30000);
+    </script>
+</body>
+</html>
