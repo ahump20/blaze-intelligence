@@ -1,413 +1,590 @@
 /**
- * Championship Service Worker - Elite Caching Strategy
- * Blaze Intelligence Sports Analytics Platform
- *
- * Like a championship team's playbook, this service worker ensures
- * our platform performs flawlessly even under pressure.
+ * Service Worker for Blaze Intelligence RTI Platform
+ * Provides offline functionality, caching, and background sync
+ * Optimized for real-time sports analytics and performance
  */
 
-const CACHE_NAME = 'blaze-intelligence-v1.2.0';
-const STATIC_CACHE = 'blaze-static-v1.2.0';
-const DYNAMIC_CACHE = 'blaze-dynamic-v1.2.0';
+const CACHE_NAME = 'blaze-rti-v1.0.0';
+const STATIC_CACHE_NAME = 'blaze-rti-static-v1.0.0';
+const DYNAMIC_CACHE_NAME = 'blaze-rti-dynamic-v1.0.0';
 
-// Championship-level static assets to cache
-const STATIC_ASSETS = [
-    '/',
-    '/index.html',
-    '/analytics.html',
-    '/analytics-enhanced.html',
-    '/cardinals-intelligence-dashboard.html',
-    '/nil-calculator-advanced.html',
-    '/demo.html',
-    '/contact.html',
-    '/js/performance-monitor.js',
-    '/manifest.json'
+// Core files to cache for offline functionality
+const CORE_CACHE_FILES = [
+  '/',
+  '/index.html',
+  '/multimodal-intelligence-working.html',
+  '/manifest.json',
+
+  // RTI System Core
+  '/js/rti-fusion-engine.js',
+  '/js/webrtc-gateway.js',
+  '/js/rti-decision-engine.js',
+  '/js/sports-pattern-library.js',
+  '/js/rti-performance-tester.js',
+  '/js/mobile-responsive-handler.js',
+
+  // Essential Libraries
+  '/js/tensorflow.min.js',
+  '/js/three.min.js',
+  '/js/chart.min.js',
+
+  // CSS and Assets
+  '/css/all.min.css',
+  '/css/video-js.css'
 ];
 
-// CDN resources critical for Three.js and Charts
-const CDN_ASSETS = [
-    'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js',
-    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
-];
-
-// Championship caching strategies
-const CACHE_STRATEGIES = {
-    // Critical assets: Cache first, network fallback
-    CACHE_FIRST: 'cache-first',
-    // Dynamic content: Network first, cache fallback
-    NETWORK_FIRST: 'network-first',
-    // Static assets: Stale while revalidate
-    STALE_WHILE_REVALIDATE: 'stale-while-revalidate'
+// Dynamic content patterns to cache
+const CACHE_PATTERNS = {
+  api: /^\/api\//,
+  images: /\.(png|jpg|jpeg|webp|gif|svg)$/i,
+  videos: /\.(mp4|webm|mov|avi)$/i,
+  data: /\.(json|csv)$/i,
+  fonts: /\.(woff|woff2|eot|ttf)$/i
 };
 
-// Install event - Pre-cache championship assets
-self.addEventListener('install', event => {
-    console.log('🏆 Championship Service Worker installing...');
+// Network timeouts
+const TIMEOUT_DURATION = 3000;
+const OFFLINE_TIMEOUT = 1000;
 
-    event.waitUntil(
-        Promise.all([
-            // Cache static assets
-            caches.open(STATIC_CACHE).then(cache => {
-                console.log('📦 Caching static championship assets...');
-                return cache.addAll(STATIC_ASSETS);
-            }),
-            // Cache critical CDN resources
-            caches.open(CACHE_NAME).then(cache => {
-                console.log('🌐 Caching critical CDN resources...');
-                return cache.addAll(CDN_ASSETS);
-            })
-        ]).then(() => {
-            console.log('⚡ Championship assets cached successfully');
-            self.skipWaiting(); // Activate immediately
-        })
-    );
+/**
+ * Service Worker Installation
+ */
+self.addEventListener('install', (event) => {
+  console.log('🔧 Service Worker installing...');
+
+  event.waitUntil(
+    Promise.all([
+      // Cache core files
+      caches.open(STATIC_CACHE_NAME).then((cache) => {
+        console.log('📦 Caching core files...');
+        return cache.addAll(CORE_CACHE_FILES);
+      }),
+
+      // Pre-load critical RTI data
+      preloadCriticalData()
+    ]).then(() => {
+      console.log('✅ Service Worker installed successfully');
+      return self.skipWaiting();
+    })
+  );
 });
 
-// Activate event - Clean up old caches
-self.addEventListener('activate', event => {
-    console.log('🚀 Championship Service Worker activating...');
+/**
+ * Service Worker Activation
+ */
+self.addEventListener('activate', (event) => {
+  console.log('🚀 Service Worker activating...');
 
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    // Clean up old versions
-                    if (cacheName !== CACHE_NAME &&
-                        cacheName !== STATIC_CACHE &&
-                        cacheName !== DYNAMIC_CACHE) {
-                        console.log('🧹 Cleaning up old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        }).then(() => {
-            console.log('🏆 Championship Service Worker activated');
-            self.clients.claim(); // Take control immediately
-        })
-    );
+  event.waitUntil(
+    Promise.all([
+      // Clean up old caches
+      cleanupOldCaches(),
+
+      // Initialize background sync
+      initializeBackgroundSync(),
+
+      // Setup push notifications
+      initializePushNotifications()
+    ]).then(() => {
+      console.log('✅ Service Worker activated');
+      return self.clients.claim();
+    })
+  );
 });
 
-// Fetch event - Championship routing strategy
-self.addEventListener('fetch', event => {
-    const { request } = event;
-    const url = new URL(request.url);
+/**
+ * Fetch Event Handler - Main caching and offline strategy
+ */
+self.addEventListener('fetch', (event) => {
+  const request = event.request;
+  const url = new URL(request.url);
 
-    // Handle different types of requests with championship strategies
-    if (isStaticAsset(url)) {
-        event.respondWith(cacheFirst(request));
-    } else if (isAPICall(url)) {
-        event.respondWith(networkFirst(request));
-    } else if (isCDNResource(url)) {
-        event.respondWith(staleWhileRevalidate(request));
-    } else if (isHTMLPage(request)) {
-        event.respondWith(networkFirst(request));
-    } else {
-        event.respondWith(cacheFirst(request));
-    }
+  // Skip non-GET requests and chrome-extension URLs
+  if (request.method !== 'GET' || url.protocol === 'chrome-extension:') {
+    return;
+  }
+
+  // Handle different types of requests
+  if (CACHE_PATTERNS.api.test(url.pathname)) {
+    event.respondWith(handleAPIRequest(request));
+  } else if (CACHE_PATTERNS.images.test(url.pathname)) {
+    event.respondWith(handleImageRequest(request));
+  } else if (CACHE_PATTERNS.videos.test(url.pathname)) {
+    event.respondWith(handleVideoRequest(request));
+  } else if (CACHE_PATTERNS.data.test(url.pathname)) {
+    event.respondWith(handleDataRequest(request));
+  } else {
+    event.respondWith(handleGeneralRequest(request));
+  }
 });
 
-// Championship Strategy: Cache First (for static assets)
-async function cacheFirst(request) {
-    try {
-        const cached = await caches.match(request);
-        if (cached) {
-            return cached;
-        }
+/**
+ * Background Sync Event Handler
+ */
+self.addEventListener('sync', (event) => {
+  console.log('🔄 Background sync triggered:', event.tag);
 
-        const networkResponse = await fetch(request);
-
-        // Cache successful responses
-        if (networkResponse.ok) {
-            const cache = await caches.open(STATIC_CACHE);
-            cache.put(request, networkResponse.clone());
-        }
-
-        return networkResponse;
-    } catch (error) {
-        console.warn('Cache first failed:', error);
-        return new Response('Championship Service Worker: Asset unavailable', {
-            status: 503,
-            statusText: 'Service Unavailable'
-        });
-    }
-}
-
-// Championship Strategy: Network First (for dynamic content)
-async function networkFirst(request) {
-    try {
-        const networkResponse = await fetch(request);
-
-        // Cache successful responses for dynamic content
-        if (networkResponse.ok && shouldCache(request)) {
-            const cache = await caches.open(DYNAMIC_CACHE);
-            cache.put(request, networkResponse.clone());
-        }
-
-        return networkResponse;
-    } catch (error) {
-        console.warn('Network first failed, trying cache:', error);
-
-        const cached = await caches.match(request);
-        if (cached) {
-            return cached;
-        }
-
-        // Return offline page for HTML requests
-        if (request.headers.get('accept').includes('text/html')) {
-            return createOfflinePage();
-        }
-
-        return new Response('Championship Service Worker: Network unavailable', {
-            status: 503,
-            statusText: 'Service Unavailable'
-        });
-    }
-}
-
-// Championship Strategy: Stale While Revalidate (for CDN resources)
-async function staleWhileRevalidate(request) {
-    const cached = await caches.match(request);
-
-    // Always try to fetch fresh version in background
-    const fetchPromise = fetch(request).then(networkResponse => {
-        if (networkResponse.ok) {
-            const cache = caches.open(CACHE_NAME);
-            cache.then(c => c.put(request, networkResponse.clone()));
-        }
-        return networkResponse;
-    }).catch(err => {
-        console.warn('Stale while revalidate fetch failed:', err);
-        return cached; // Return cached version if network fails
-    });
-
-    // Return cached version immediately if available
-    return cached || fetchPromise;
-}
-
-// Helper functions for championship routing
-function isStaticAsset(url) {
-    return url.pathname.match(/\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/);
-}
-
-function isAPICall(url) {
-    return url.pathname.startsWith('/api/') ||
-           url.pathname.startsWith('/netlify/functions/');
-}
-
-function isCDNResource(url) {
-    const cdnHosts = [
-        'cdn.jsdelivr.net',
-        'cdnjs.cloudflare.com',
-        'unpkg.com',
-        'fonts.googleapis.com',
-        'fonts.gstatic.com'
-    ];
-    return cdnHosts.some(host => url.hostname.includes(host));
-}
-
-function isHTMLPage(request) {
-    return request.headers.get('accept').includes('text/html');
-}
-
-function shouldCache(request) {
-    // Don't cache POST, PUT, DELETE requests
-    if (request.method !== 'GET') return false;
-
-    // Don't cache authentication related requests
-    if (request.url.includes('auth') || request.url.includes('login')) return false;
-
-    // Don't cache real-time data
-    if (request.url.includes('live') || request.url.includes('realtime')) return false;
-
-    return true;
-}
-
-// Create championship offline page
-function createOfflinePage() {
-    const offlineHTML = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Championship Mode: Offline | Blaze Intelligence</title>
-            <style>
-                body {
-                    font-family: 'Inter', -apple-system, sans-serif;
-                    background: linear-gradient(135deg, #002244 0%, #1a1a2e 100%);
-                    color: #fff;
-                    margin: 0;
-                    padding: 0;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 100vh;
-                    text-align: center;
-                }
-                .offline-container {
-                    max-width: 600px;
-                    padding: 40px;
-                }
-                .championship-logo {
-                    font-size: 4rem;
-                    margin-bottom: 20px;
-                }
-                h1 {
-                    font-size: 2.5rem;
-                    color: #FFD700;
-                    margin-bottom: 20px;
-                }
-                p {
-                    font-size: 1.2rem;
-                    color: #d1d5db;
-                    margin-bottom: 30px;
-                    line-height: 1.6;
-                }
-                .retry-button {
-                    background: #BF5700;
-                    color: white;
-                    border: none;
-                    padding: 15px 30px;
-                    font-size: 1.1rem;
-                    font-weight: 600;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                }
-                .retry-button:hover {
-                    background: #d66600;
-                    transform: translateY(-2px);
-                }
-                .features {
-                    margin-top: 40px;
-                    text-align: left;
-                }
-                .feature {
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: 15px;
-                    color: #00FF41;
-                }
-                .feature::before {
-                    content: '⚡';
-                    margin-right: 10px;
-                    font-size: 1.2rem;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="offline-container">
-                <div class="championship-logo">🏆</div>
-                <h1>Championship Mode: Offline</h1>
-                <p>You're experiencing championship-level offline capabilities! Some cached content is available while we reconnect to live sports data.</p>
-
-                <button class="retry-button" onclick="window.location.reload()">
-                    🚀 Reconnect to Live Data
-                </button>
-
-                <div class="features">
-                    <div class="feature">Cached analytics still accessible</div>
-                    <div class="feature">Offline Three.js visualizations available</div>
-                    <div class="feature">NIL calculator functional offline</div>
-                    <div class="feature">Elite user experience maintained</div>
-                </div>
-            </div>
-
-            <script>
-                // Auto-retry connection every 30 seconds
-                setInterval(() => {
-                    if (navigator.onLine) {
-                        window.location.reload();
-                    }
-                }, 30000);
-
-                // Listen for online event
-                window.addEventListener('online', () => {
-                    window.location.reload();
-                });
-
-                console.log('🏆 Championship offline mode activated');
-            </script>
-        </body>
-        </html>
-    `;
-
-    return new Response(offlineHTML, {
-        headers: { 'Content-Type': 'text/html' }
-    });
-}
-
-// Background sync for championship data updates
-self.addEventListener('sync', event => {
-    if (event.tag === 'championship-data-sync') {
-        event.waitUntil(syncChampionshipData());
-    }
+  if (event.tag === 'rti-data-sync') {
+    event.waitUntil(syncRTIData());
+  } else if (event.tag === 'performance-metrics-sync') {
+    event.waitUntil(syncPerformanceMetrics());
+  } else if (event.tag === 'analysis-results-sync') {
+    event.waitUntil(syncAnalysisResults());
+  }
 });
 
-async function syncChampionshipData() {
-    try {
-        console.log('🔄 Syncing championship data in background...');
+/**
+ * Push Event Handler
+ */
+self.addEventListener('push', (event) => {
+  console.log('📱 Push notification received');
 
-        // Sync critical sports data
-        const endpoints = [
-            '/api/cardinals/readiness',
-            '/api/nil-calculator',
-            '/api/analytics'
-        ];
+  if (event.data) {
+    const data = event.data.json();
+    event.waitUntil(showNotification(data));
+  }
+});
 
-        const syncPromises = endpoints.map(async endpoint => {
-            try {
-                const response = await fetch(endpoint);
-                if (response.ok) {
-                    const cache = await caches.open(DYNAMIC_CACHE);
-                    cache.put(endpoint, response.clone());
-                }
-            } catch (error) {
-                console.warn(`Failed to sync ${endpoint}:`, error);
-            }
-        });
+/**
+ * Notification Click Handler
+ */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
 
-        await Promise.all(syncPromises);
-        console.log('✅ Championship data sync completed');
-    } catch (error) {
-        console.error('❌ Championship data sync failed:', error);
+  event.waitUntil(
+    clients.openWindow(event.notification.data?.url || '/')
+  );
+});
+
+/**
+ * Request Handling Strategies
+ */
+
+async function handleAPIRequest(request) {
+  try {
+    // Try network first for API requests
+    const networkResponse = await fetchWithTimeout(request, TIMEOUT_DURATION);
+
+    // Cache successful responses
+    if (networkResponse.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE_NAME);
+      cache.put(request, networkResponse.clone());
     }
+
+    return networkResponse;
+  } catch (error) {
+    // Fallback to cache
+    console.log('📡 Network failed, trying cache for API request');
+    const cachedResponse = await caches.match(request);
+
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    // Return offline response for RTI API
+    return createOfflineAPIResponse(request);
+  }
 }
 
-// Push notifications for championship updates
-self.addEventListener('push', event => {
-    if (event.data) {
-        const data = event.data.json();
-        const options = {
-            body: data.body || 'Championship update available!',
-            icon: '/favicon.ico',
-            badge: '/favicon.ico',
-            tag: 'championship-update',
-            data: data.url || '/',
-            actions: [
-                {
-                    action: 'view',
-                    title: '🏆 View Update'
-                }
-            ]
-        };
+async function handleImageRequest(request) {
+  // Cache first strategy for images
+  const cachedResponse = await caches.match(request);
 
-        event.waitUntil(
-            self.registration.showNotification(data.title || 'Blaze Intelligence', options)
-        );
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  try {
+    const networkResponse = await fetch(request);
+
+    if (networkResponse.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE_NAME);
+      cache.put(request, networkResponse.clone());
     }
-});
 
-// Handle notification clicks
-self.addEventListener('notificationclick', event => {
-    event.notification.close();
+    return networkResponse;
+  } catch (error) {
+    // Return placeholder image
+    return createPlaceholderImageResponse();
+  }
+}
 
-    if (event.action === 'view' || !event.action) {
-        event.waitUntil(
-            clients.openWindow(event.notification.data || '/')
-        );
+async function handleVideoRequest(request) {
+  // Network first for videos (large files)
+  try {
+    const networkResponse = await fetch(request);
+
+    // Don't cache large video files automatically
+    if (networkResponse.ok && request.headers.get('range')) {
+      // Handle range requests for video streaming
+      return networkResponse;
     }
-});
 
-console.log('🏆 Championship Service Worker loaded - Elite caching and offline capabilities ready!');
+    return networkResponse;
+  } catch (error) {
+    console.log('📹 Video request failed:', error);
+    return new Response('Video unavailable offline', { status: 503 });
+  }
+}
+
+async function handleDataRequest(request) {
+  // Stale while revalidate for data files
+  const cachedResponse = await caches.match(request);
+
+  // Return cached version immediately
+  const cachePromise = cachedResponse ? Promise.resolve(cachedResponse) : Promise.reject();
+
+  // Update cache in background
+  const networkPromise = fetch(request).then(async (networkResponse) => {
+    if (networkResponse.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE_NAME);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  });
+
+  return Promise.race([
+    cachePromise,
+    networkPromise
+  ]).catch(() => {
+    return createOfflineDataResponse(request);
+  });
+}
+
+async function handleGeneralRequest(request) {
+  // Network first for HTML, then cache
+  try {
+    const networkResponse = await fetchWithTimeout(request, TIMEOUT_DURATION);
+
+    if (networkResponse.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE_NAME);
+      cache.put(request, networkResponse.clone());
+    }
+
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    // Return offline page
+    return caches.match('/offline.html') || createOfflineResponse();
+  }
+}
+
+/**
+ * Utility Functions
+ */
+
+function fetchWithTimeout(request, timeout) {
+  return Promise.race([
+    fetch(request),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Network timeout')), timeout)
+    )
+  ]);
+}
+
+async function cleanupOldCaches() {
+  const cacheNames = await caches.keys();
+  const oldCaches = cacheNames.filter(name =>
+    name.startsWith('blaze-rti-') && name !== CACHE_NAME &&
+    name !== STATIC_CACHE_NAME && name !== DYNAMIC_CACHE_NAME
+  );
+
+  return Promise.all(
+    oldCaches.map(name => {
+      console.log('🗑️ Deleting old cache:', name);
+      return caches.delete(name);
+    })
+  );
+}
+
+async function preloadCriticalData() {
+  try {
+    // Pre-load sports pattern library
+    const patternsResponse = await fetch('/api/sports-patterns');
+    if (patternsResponse.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE_NAME);
+      cache.put('/api/sports-patterns', patternsResponse);
+    }
+  } catch (error) {
+    console.log('⚠️ Failed to preload critical data:', error);
+  }
+}
+
+function initializeBackgroundSync() {
+  // Register background sync tags
+  return self.registration.sync?.register('rti-data-sync').catch(() => {
+    console.log('Background sync not supported');
+  });
+}
+
+function initializePushNotifications() {
+  // Setup push notification handling
+  console.log('🔔 Push notifications initialized');
+}
+
+function createOfflineAPIResponse(request) {
+  const url = new URL(request.url);
+
+  // Create mock responses for different API endpoints
+  const mockData = {
+    '/api/health': { status: 'offline', timestamp: Date.now() },
+    '/api/sports-patterns': { patterns: [], cached: true },
+    '/api/performance-metrics': { metrics: {}, offline: true }
+  };
+
+  const responseData = mockData[url.pathname] || { error: 'Service unavailable offline' };
+
+  return new Response(JSON.stringify(responseData), {
+    status: url.pathname in mockData ? 200 : 503,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'X-Offline': 'true'
+    }
+  });
+}
+
+function createOfflineDataResponse(request) {
+  return new Response(JSON.stringify({
+    error: 'Data unavailable offline',
+    cached: false,
+    timestamp: Date.now()
+  }), {
+    status: 503,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Offline': 'true'
+    }
+  });
+}
+
+function createPlaceholderImageResponse() {
+  // Return a simple placeholder SVG
+  const svg = `
+    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="200" fill="#0a0e27"/>
+      <text x="100" y="100" text-anchor="middle" fill="#BF5700" font-family="Arial" font-size="16">
+        Image Offline
+      </text>
+    </svg>
+  `;
+
+  return new Response(svg, {
+    headers: {
+      'Content-Type': 'image/svg+xml',
+      'Cache-Control': 'no-cache'
+    }
+  });
+}
+
+function createOfflineResponse() {
+  const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Blaze RTI - Offline</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background: linear-gradient(135deg, #0a0e27, #1a1a2e);
+          color: #e0e6ed;
+          text-align: center;
+          padding: 50px 20px;
+        }
+        .offline-content {
+          max-width: 500px;
+          margin: 0 auto;
+        }
+        .logo {
+          color: #BF5700;
+          font-size: 2rem;
+          font-weight: bold;
+          margin-bottom: 20px;
+        }
+        .message {
+          font-size: 1.1rem;
+          margin-bottom: 30px;
+        }
+        .retry-btn {
+          background: #BF5700;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 1rem;
+        }
+        .retry-btn:hover {
+          background: #a04800;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="offline-content">
+        <div class="logo">🔥 Blaze RTI</div>
+        <div class="message">
+          You're currently offline. Some features may be limited.
+          <br><br>
+          Cached RTI data and offline analysis are still available.
+        </div>
+        <button class="retry-btn" onclick="location.reload()">
+          Try Again
+        </button>
+      </div>
+    </body>
+    </html>
+  `;
+
+  return new Response(html, {
+    status: 503,
+    headers: {
+      'Content-Type': 'text/html',
+      'Cache-Control': 'no-cache'
+    }
+  });
+}
+
+/**
+ * Background Sync Functions
+ */
+
+async function syncRTIData() {
+  try {
+    console.log('🔄 Syncing RTI data...');
+
+    // Get pending RTI data from IndexedDB
+    const pendingData = await getPendingRTIData();
+
+    if (pendingData.length > 0) {
+      for (const data of pendingData) {
+        await uploadRTIData(data);
+      }
+
+      await clearPendingRTIData();
+      console.log('✅ RTI data synced successfully');
+    }
+  } catch (error) {
+    console.error('❌ RTI data sync failed:', error);
+    throw error;
+  }
+}
+
+async function syncPerformanceMetrics() {
+  try {
+    console.log('📊 Syncing performance metrics...');
+
+    const metrics = await getPendingMetrics();
+    if (metrics.length > 0) {
+      await uploadPerformanceMetrics(metrics);
+      await clearPendingMetrics();
+    }
+  } catch (error) {
+    console.error('❌ Performance metrics sync failed:', error);
+    throw error;
+  }
+}
+
+async function syncAnalysisResults() {
+  try {
+    console.log('🧠 Syncing analysis results...');
+
+    const results = await getPendingAnalysisResults();
+    if (results.length > 0) {
+      await uploadAnalysisResults(results);
+      await clearPendingAnalysisResults();
+    }
+  } catch (error) {
+    console.error('❌ Analysis results sync failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * IndexedDB Helper Functions (simplified - would need full implementation)
+ */
+
+async function getPendingRTIData() {
+  // Implementation would use IndexedDB to retrieve pending data
+  return [];
+}
+
+async function clearPendingRTIData() {
+  // Implementation would clear synced data from IndexedDB
+}
+
+async function getPendingMetrics() {
+  return [];
+}
+
+async function clearPendingMetrics() {
+  // Clear metrics from local storage
+}
+
+async function getPendingAnalysisResults() {
+  return [];
+}
+
+async function clearPendingAnalysisResults() {
+  // Clear analysis results from local storage
+}
+
+async function uploadRTIData(data) {
+  return fetch('/api/rti-data', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+}
+
+async function uploadPerformanceMetrics(metrics) {
+  return fetch('/api/performance-metrics', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(metrics)
+  });
+}
+
+async function uploadAnalysisResults(results) {
+  return fetch('/api/analysis-results', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(results)
+  });
+}
+
+/**
+ * Push Notification Functions
+ */
+
+async function showNotification(data) {
+  const title = data.title || 'Blaze RTI Notification';
+  const options = {
+    body: data.body || 'New analysis results available',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/badge-72x72.png',
+    tag: data.tag || 'rti-notification',
+    data: data.data || {},
+    actions: [
+      {
+        action: 'view',
+        title: 'View Results'
+      },
+      {
+        action: 'dismiss',
+        title: 'Dismiss'
+      }
+    ],
+    requireInteraction: data.priority === 'high'
+  };
+
+  return self.registration.showNotification(title, options);
+}
+
+console.log('🛠️ Service Worker loaded successfully');

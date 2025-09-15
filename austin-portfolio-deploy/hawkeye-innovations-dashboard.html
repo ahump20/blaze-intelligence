@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hawk-Eye Innovations Dashboard | Blaze Intelligence</title>
@@ -521,26 +519,20 @@
 
                 <div class="control-section">
                     <label class="control-label">Initial Velocity (mph)</label>
-                    <input type="range" class="control-slider" id="velocity-slider"
-                           min="50" max="110" value="90" oninput="updateVelocity(this.value)">
-                    <input type="number" class="control-input" id="velocity-input"
-                           value="90" min="50" max="110" onchange="updateVelocity(this.value)">
+                    <input type="range" class="control-slider" id="velocity-slider" min="50" max="110" value="90" oninput="updateVelocity(this.value)">
+                    <input type="number" class="control-input" id="velocity-input" value="90" min="50" max="110" onchange="updateVelocity(this.value)">
                 </div>
 
                 <div class="control-section">
                     <label class="control-label">Launch Angle (degrees)</label>
-                    <input type="range" class="control-slider" id="angle-slider"
-                           min="-10" max="50" value="15" oninput="updateAngle(this.value)">
-                    <input type="number" class="control-input" id="angle-input"
-                           value="15" min="-10" max="50" onchange="updateAngle(this.value)">
+                    <input type="range" class="control-slider" id="angle-slider" min="-10" max="50" value="15" oninput="updateAngle(this.value)">
+                    <input type="number" class="control-input" id="angle-input" value="15" min="-10" max="50" onchange="updateAngle(this.value)">
                 </div>
 
                 <div class="control-section">
                     <label class="control-label">Spin Rate (rpm)</label>
-                    <input type="range" class="control-slider" id="spin-slider"
-                           min="0" max="3000" value="2400" oninput="updateSpin(this.value)">
-                    <input type="number" class="control-input" id="spin-input"
-                           value="2400" min="0" max="3000" onchange="updateSpin(this.value)">
+                    <input type="range" class="control-slider" id="spin-slider" min="0" max="3000" value="2400" oninput="updateSpin(this.value)">
+                    <input type="number" class="control-input" id="spin-input" value="2400" min="0" max="3000" onchange="updateSpin(this.value)">
                 </div>
 
                 <button class="control-btn" onclick="simulatePitch()">Simulate Pitch</button>
@@ -915,5 +907,5 @@
             setTimeout(startLiveDemo, 2000); // Give components time to load
         });
     </script>
-</body>
-</html>
+
+</body></html>

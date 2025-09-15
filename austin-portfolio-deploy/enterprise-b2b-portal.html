@@ -1,0 +1,1159 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Enterprise B2B Portal</title>
+
+    <!-- External Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Three.js Background */
+        #three-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* Header */
+        .portal-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(191, 87, 0, 0.3);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #BF5700;
+            text-shadow: 0 0 20px rgba(191, 87, 0, 0.5);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #9BCBEB;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            color: #BF5700;
+        }
+
+        /* Main Portal */
+        .portal-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .portal-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(191, 87, 0, 0.6);
+            box-shadow: 0 20px 40px rgba(191, 87, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #BF5700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, #BF5700, #FFD700);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Client Management */
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .client-card {
+            background: rgba(155, 203, 235, 0.1);
+            border: 1px solid rgba(155, 203, 235, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .client-card:hover {
+            background: rgba(155, 203, 235, 0.2);
+            border-color: rgba(155, 203, 235, 0.5);
+        }
+
+        .client-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .client-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #9BCBEB;
+        }
+
+        .client-tier {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tier-enterprise {
+            background: rgba(191, 87, 0, 0.3);
+            color: #BF5700;
+        }
+
+        .tier-pro {
+            background: rgba(155, 203, 235, 0.3);
+            color: #9BCBEB;
+        }
+
+        .tier-basic {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4CAF50;
+        }
+
+        .client-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Integration Hub */
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .integration-card {
+            background: rgba(0, 34, 68, 0.3);
+            border: 1px solid rgba(0, 178, 169, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .integration-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 178, 169, 0.6);
+            box-shadow: 0 10px 20px rgba(0, 178, 169, 0.2);
+        }
+
+        .integration-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(45deg, #00B2A9, #9BCBEB);
+            border-radius: 12px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .integration-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #00B2A9;
+            margin-bottom: 0.5rem;
+        }
+
+        .integration-status {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .status-active {
+            color: #4CAF50;
+        }
+
+        .status-pending {
+            color: #FF9800;
+        }
+
+        /* Analytics Dashboard */
+        .analytics-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #BF5700;
+        }
+
+        .time-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .time-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(155, 203, 235, 0.3);
+            background: transparent;
+            color: #9BCBEB;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-btn.active,
+        .time-btn:hover {
+            background: rgba(155, 203, 235, 0.2);
+            border-color: #9BCBEB;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        /* B2B Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(191, 87, 0, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #BF5700, #FFD700);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .service-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .service-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .service-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .service-features li {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        /* Action Buttons */
+        .action-section {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #BF5700, #FFD700);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(191, 87, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(155, 203, 235, 0.2);
+            color: #9BCBEB;
+            border: 1px solid #9BCBEB;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(155, 203, 235, 0.3);
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-online {
+            background: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+
+        .status-warning {
+            background: #FF9800;
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+        }
+
+        .status-offline {
+            background: #F44336;
+            box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .portal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portal-container {
+                padding: 1rem;
+            }
+
+            .header-nav {
+                display: none;
+            }
+
+            .client-grid,
+            .integration-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(191, 87, 0, 0.3);
+            border-top: 2px solid #BF5700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Background -->
+    <div id="three-background"></div>
+
+    <!-- Portal Header -->
+    <header class="portal-header">
+        <div class="header-content">
+            <h1 class="header-title">🏢 Enterprise B2B Portal</h1>
+            <nav class="header-nav">
+                <a href="#clients" class="nav-item active">Clients</a>
+                <a href="#analytics" class="nav-item">Analytics</a>
+                <a href="#integrations" class="nav-item">Integrations</a>
+                <a href="#services" class="nav-item">Services</a>
+                <a href="#support" class="nav-item">Support</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Portal -->
+    <main class="portal-container">
+        <!-- Overview Cards -->
+        <div class="portal-grid">
+            <div class="portal-card">
+                <h2 class="card-title">
+                    <div class="card-icon">📊</div>
+                    Enterprise Overview
+                </h2>
+                <div class="client-metrics">
+                    <div class="metric-item">
+                        <div class="metric-value" id="total-clients">0</div>
+                        <div class="metric-label">Active Clients</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="total-revenue">$0</div>
+                        <div class="metric-label">Monthly Revenue</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="total-integrations">0</div>
+                        <div class="metric-label">Live Integrations</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="support-tickets">0</div>
+                        <div class="metric-label">Support Tickets</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portal-card">
+                <h2 class="card-title">
+                    <div class="card-icon">🚀</div>
+                    System Status
+                </h2>
+                <div style="space-y: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <span class="status-indicator status-online"></span>
+                        <span>API Gateway: Operational</span>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="status-indicator status-online"></span>
+                        <span>Analytics Engine: Active</span>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="status-indicator status-warning"></span>
+                        <span>Video Processing: High Load</span>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="status-indicator status-online"></span>
+                        <span>Character Assessment: Operational</span>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="status-indicator status-online"></span>
+                        <span>Deep Learning Engine: Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Management Section -->
+        <div class="portal-card" id="clients">
+            <h2 class="card-title">
+                <div class="card-icon">👥</div>
+                Client Management
+            </h2>
+            <div class="client-grid" id="client-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Analytics Dashboard -->
+        <div class="analytics-section" id="analytics">
+            <div class="analytics-header">
+                <h2 class="analytics-title">📈 B2B Analytics Dashboard</h2>
+                <div class="time-selector">
+                    <button class="time-btn active" data-period="24h">24H</button>
+                    <button class="time-btn" data-period="7d">7D</button>
+                    <button class="time-btn" data-period="30d">30D</button>
+                    <button class="time-btn" data-period="90d">90D</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="revenue-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Integration Hub -->
+        <div class="portal-card" id="integrations">
+            <h2 class="card-title">
+                <div class="card-icon">🔌</div>
+                Integration Hub
+            </h2>
+            <div class="integration-grid" id="integration-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- B2B Services -->
+        <div class="portal-card" id="services">
+            <h2 class="card-title">
+                <div class="card-icon">🛠️</div>
+                Enterprise Services
+            </h2>
+            <div class="services-grid" id="services-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-section">
+            <button class="btn btn-primary" onclick="addNewClient()">
+                ➕ Add New Client
+            </button>
+            <button class="btn btn-secondary" onclick="generateReport()">
+                📄 Generate Report
+            </button>
+            <button class="btn btn-secondary" onclick="scheduleDemo()">
+                🎯 Schedule Demo
+            </button>
+            <button class="btn btn-secondary" onclick="contactSupport()">
+                💬 Contact Support
+            </button>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/deep-learning-pattern-engine.js"></script>
+    <script>
+        // 🏢 Enterprise B2B Portal Controller
+        class EnterpriseB2BPortal {
+            constructor() {
+                this.clients = new Map();
+                this.integrations = new Map();
+                this.services = new Map();
+                this.analytics = new Map();
+
+                this.initializeThreeJS();
+                this.initializePortal();
+                this.loadPortalData();
+                this.initializeCharts();
+            }
+
+            /**
+             * 🎨 Initialize Three.js Championship Background
+             */
+            initializeThreeJS() {
+                const container = document.getElementById('three-background');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ alpha: true });
+
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                container.appendChild(renderer.domElement);
+
+                // Create enterprise network visualization
+                const nodes = [];
+                const connections = [];
+
+                // Central hub (Blaze Intelligence)
+                const hubGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+                const hubMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xBF5700,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                const hub = new THREE.Mesh(hubGeometry, hubMaterial);
+                hub.position.set(0, 0, 0);
+                scene.add(hub);
+                nodes.push(hub);
+
+                // Client nodes
+                for (let i = 0; i < 20; i++) {
+                    const nodeGeometry = new THREE.SphereGeometry(0.08, 16, 16);
+                    const nodeMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x9BCBEB,
+                        transparent: true,
+                        opacity: 0.7
+                    });
+
+                    const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                    const angle = (i / 20) * Math.PI * 2;
+                    const radius = 8 + Math.random() * 4;
+                    node.position.set(
+                        Math.cos(angle) * radius,
+                        (Math.random() - 0.5) * 8,
+                        Math.sin(angle) * radius
+                    );
+
+                    nodes.push(node);
+                    scene.add(node);
+
+                    // Connect to hub
+                    const geometry = new THREE.BufferGeometry();
+                    const positions = new Float32Array([
+                        0, 0, 0,
+                        node.position.x, node.position.y, node.position.z
+                    ]);
+                    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+                    const material = new THREE.LineBasicMaterial({
+                        color: 0x00B2A9,
+                        transparent: true,
+                        opacity: 0.4
+                    });
+
+                    const line = new THREE.Line(geometry, material);
+                    connections.push(line);
+                    scene.add(line);
+                }
+
+                camera.position.z = 20;
+
+                // Animation loop
+                const animate = () => {
+                    requestAnimationFrame(animate);
+
+                    // Rotate the entire network
+                    scene.rotation.y += 0.002;
+
+                    // Pulse hub
+                    const time = Date.now() * 0.001;
+                    hub.material.opacity = 0.7 + 0.2 * Math.sin(time * 2);
+
+                    // Animate client nodes
+                    nodes.slice(1).forEach((node, index) => {
+                        node.material.opacity = 0.5 + 0.2 * Math.sin(time + index * 0.1);
+                    });
+
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            /**
+             * 🚀 Initialize Portal Components
+             */
+            async initializePortal() {
+                try {
+                    console.log('🏢 Initializing Enterprise B2B Portal...');
+
+                    // Initialize time selector
+                    this.initializeTimeSelector();
+
+                    // Load portal data
+                    await this.loadPortalData();
+
+                    console.log('✅ B2B Portal initialized successfully');
+
+                } catch (error) {
+                    console.error('❌ Portal initialization failed:', error);
+                }
+            }
+
+            /**
+             * 📊 Load Portal Data
+             */
+            async loadPortalData() {
+                // Load mock client data
+                this.loadClientData();
+
+                // Load integration data
+                this.loadIntegrationData();
+
+                // Load services data
+                this.loadServicesData();
+
+                // Update overview metrics
+                this.updateOverviewMetrics();
+            }
+
+            /**
+             * 👥 Load Client Management Data
+             */
+            loadClientData() {
+                const mockClients = [
+                    {
+                        id: 'client_001',
+                        name: 'University of Texas Athletics',
+                        tier: 'enterprise',
+                        monthlyUsage: 45720,
+                        revenue: 2990,
+                        integrations: 8,
+                        lastActive: 'Today',
+                        satisfaction: 9.2
+                    },
+                    {
+                        id: 'client_002',
+                        name: 'Houston Texans Organization',
+                        tier: 'enterprise',
+                        monthlyUsage: 38950,
+                        revenue: 2990,
+                        integrations: 6,
+                        lastActive: '2 hours ago',
+                        satisfaction: 8.8
+                    },
+                    {
+                        id: 'client_003',
+                        name: 'Rice University Baseball',
+                        tier: 'pro',
+                        monthlyUsage: 12400,
+                        revenue: 990,
+                        integrations: 4,
+                        lastActive: 'Yesterday',
+                        satisfaction: 9.0
+                    },
+                    {
+                        id: 'client_004',
+                        name: 'Perfect Game Southeast',
+                        tier: 'pro',
+                        monthlyUsage: 18750,
+                        revenue: 990,
+                        integrations: 5,
+                        lastActive: '3 hours ago',
+                        satisfaction: 8.9
+                    },
+                    {
+                        id: 'client_005',
+                        name: 'Dallas Youth Sports League',
+                        tier: 'basic',
+                        monthlyUsage: 3420,
+                        revenue: 290,
+                        integrations: 2,
+                        lastActive: 'Today',
+                        satisfaction: 8.5
+                    },
+                    {
+                        id: 'client_006',
+                        name: 'Austin High School Athletics',
+                        tier: 'basic',
+                        monthlyUsage: 2890,
+                        revenue: 290,
+                        integrations: 3,
+                        lastActive: '1 day ago',
+                        satisfaction: 8.7
+                    }
+                ];
+
+                const clientGrid = document.getElementById('client-grid');
+                clientGrid.innerHTML = '';
+
+                mockClients.forEach(client => {
+                    this.clients.set(client.id, client);
+
+                    const clientCard = document.createElement('div');
+                    clientCard.className = 'client-card';
+                    clientCard.innerHTML = `
+                        <div class="client-header">
+                            <div class="client-name">${client.name}</div>
+                            <div class="client-tier tier-${client.tier}">${client.tier}</div>
+                        </div>
+                        <div class="client-metrics">
+                            <div class="metric-item">
+                                <div class="metric-value">${client.monthlyUsage.toLocaleString()}</div>
+                                <div class="metric-label">API Calls</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">$${client.revenue}</div>
+                                <div class="metric-label">Monthly Revenue</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">${client.integrations}</div>
+                                <div class="metric-label">Integrations</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">${client.satisfaction}/10</div>
+                                <div class="metric-label">Satisfaction</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; font-size: 0.8rem; color: rgba(255, 255, 255, 0.6);">
+                            Last active: ${client.lastActive}
+                        </div>
+                    `;
+
+                    clientGrid.appendChild(clientCard);
+                });
+            }
+
+            /**
+             * 🔌 Load Integration Hub Data
+             */
+            loadIntegrationData() {
+                const mockIntegrations = [
+                    { name: 'Hudl Video Platform', icon: '🎬', status: 'active' },
+                    { name: 'Perfect Game Database', icon: '⚾', status: 'active' },
+                    { name: 'ESPN API Gateway', icon: '📺', status: 'active' },
+                    { name: 'Hawk-Eye Ball Tracking', icon: '👁️', status: 'active' },
+                    { name: 'MaxPreps Data Feed', icon: '🏈', status: 'active' },
+                    { name: 'SportsRadar API', icon: '📊', status: 'pending' },
+                    { name: 'Synergy Sports', icon: '🏀', status: 'pending' },
+                    { name: 'TrackMan Baseball', icon: '⚾', status: 'pending' }
+                ];
+
+                const integrationGrid = document.getElementById('integration-grid');
+                integrationGrid.innerHTML = '';
+
+                mockIntegrations.forEach(integration => {
+                    this.integrations.set(integration.name, integration);
+
+                    const integrationCard = document.createElement('div');
+                    integrationCard.className = 'integration-card';
+                    integrationCard.innerHTML = `
+                        <div class="integration-icon">${integration.icon}</div>
+                        <div class="integration-name">${integration.name}</div>
+                        <div class="integration-status status-${integration.status}">
+                            ${integration.status.charAt(0).toUpperCase() + integration.status.slice(1)}
+                        </div>
+                    `;
+
+                    integrationGrid.appendChild(integrationCard);
+                });
+            }
+
+            /**
+             * 🛠️ Load Enterprise Services Data
+             */
+            loadServicesData() {
+                const mockServices = [
+                    {
+                        name: 'Custom Analytics Dashboard',
+                        icon: '📊',
+                        description: 'Tailored analytics dashboards with your brand colors and specific KPIs.',
+                        features: ['Custom branding', 'Real-time data', 'Mobile responsive', '24/7 support']
+                    },
+                    {
+                        name: 'API Integration Services',
+                        icon: '🔌',
+                        description: 'Complete API integration and custom development for your existing systems.',
+                        features: ['Custom endpoints', 'Data synchronization', 'Authentication setup', 'Documentation']
+                    },
+                    {
+                        name: 'Video Analysis Platform',
+                        icon: '🎬',
+                        description: 'Advanced video analysis with character assessment and performance metrics.',
+                        features: ['Character assessment', 'Biomechanical analysis', 'Performance tracking', 'Custom reports']
+                    },
+                    {
+                        name: 'Dedicated Account Management',
+                        icon: '👨‍💼',
+                        description: 'Dedicated account manager and priority support for enterprise clients.',
+                        features: ['Dedicated manager', 'Priority support', 'Monthly reviews', 'Strategy consulting']
+                    },
+                    {
+                        name: 'White-Label Solutions',
+                        icon: '🏷️',
+                        description: 'Complete white-label platform with your branding and custom features.',
+                        features: ['Full customization', 'Your branding', 'Custom domain', 'Advanced features']
+                    },
+                    {
+                        name: 'Training & Onboarding',
+                        icon: '🎓',
+                        description: 'Comprehensive training programs for your staff and custom onboarding.',
+                        features: ['Staff training', 'Custom onboarding', 'Documentation', 'Ongoing support']
+                    }
+                ];
+
+                const servicesGrid = document.getElementById('services-grid');
+                servicesGrid.innerHTML = '';
+
+                mockServices.forEach(service => {
+                    this.services.set(service.name, service);
+
+                    const serviceCard = document.createElement('div');
+                    serviceCard.className = 'service-card';
+                    serviceCard.innerHTML = `
+                        <div class="service-header">
+                            <div class="service-icon">${service.icon}</div>
+                            <div class="service-name">${service.name}</div>
+                        </div>
+                        <div class="service-description">${service.description}</div>
+                        <ul class="service-features">
+                            ${service.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    `;
+
+                    servicesGrid.appendChild(serviceCard);
+                });
+            }
+
+            /**
+             * 📊 Update Overview Metrics
+             */
+            updateOverviewMetrics() {
+                const totalClients = this.clients.size;
+                const totalRevenue = Array.from(this.clients.values())
+                    .reduce((sum, client) => sum + client.revenue, 0);
+                const totalIntegrations = Array.from(this.integrations.values())
+                    .filter(int => int.status === 'active').length;
+                const supportTickets = Math.floor(Math.random() * 5) + 1;
+
+                document.getElementById('total-clients').textContent = totalClients;
+                document.getElementById('total-revenue').textContent = `$${totalRevenue.toLocaleString()}`;
+                document.getElementById('total-integrations').textContent = totalIntegrations;
+                document.getElementById('support-tickets').textContent = supportTickets;
+            }
+
+            /**
+             * 📈 Initialize Charts
+             */
+            initializeCharts() {
+                const ctx = document.getElementById('revenue-chart').getContext('2d');
+
+                // Generate mock revenue data
+                const labels = [];
+                const revenueData = [];
+                const clientData = [];
+
+                for (let i = 29; i >= 0; i--) {
+                    const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+
+                    // Generate realistic revenue progression
+                    const baseRevenue = 15000 + (29 - i) * 200;
+                    const variance = Math.random() * 2000 - 1000;
+                    revenueData.push(Math.max(0, baseRevenue + variance));
+
+                    const baseClients = 45 + Math.floor((29 - i) / 5);
+                    const clientVariance = Math.random() * 3 - 1;
+                    clientData.push(Math.max(0, baseClients + clientVariance));
+                }
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Monthly Revenue',
+                            data: revenueData,
+                            borderColor: '#BF5700',
+                            backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Active Clients',
+                            data: clientData,
+                            borderColor: '#9BCBEB',
+                            backgroundColor: 'rgba(155, 203, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            yAxisID: 'y1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#ffffff' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                ticks: {
+                                    color: '#ffffff',
+                                    callback: function(value) { return '$' + value.toLocaleString(); }
+                                },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                ticks: { color: '#ffffff' },
+                                grid: { drawOnChartArea: false }
+                            },
+                            x: {
+                                ticks: { color: '#ffffff' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            /**
+             * ⏰ Initialize Time Selector
+             */
+            initializeTimeSelector() {
+                const timeButtons = document.querySelectorAll('.time-btn');
+
+                timeButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        timeButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+
+                        const period = btn.dataset.period;
+                        this.updateAnalytics(period);
+                    });
+                });
+            }
+
+            updateAnalytics(period) {
+                console.log(`📊 Updating analytics for period: ${period}`);
+                // In production, this would fetch new data and update charts
+            }
+        }
+
+        // 🚀 Global Portal Functions
+        function addNewClient() {
+            alert('📝 New Client Onboarding\n\nRedirecting to client onboarding form...');
+        }
+
+        function generateReport() {
+            alert('📄 Generating Enterprise Report\n\nComprehensive B2B analytics report will be emailed to you.');
+        }
+
+        function scheduleDemo() {
+            alert('🎯 Demo Scheduling\n\nRedirecting to calendar booking system...');
+        }
+
+        function contactSupport() {
+            alert('💬 Enterprise Support\n\nConnecting you with dedicated account manager...');
+        }
+
+        // Initialize portal when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.enterprisePortal = new EnterpriseB2BPortal();
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            const loadTime = performance.now();
+            console.log(`🚀 Enterprise B2B Portal loaded in ${Math.round(loadTime)}ms`);
+        });
+    </script>
+
+</body></html>

@@ -1,577 +1,466 @@
-// Blaze Intelligence Live Sports Data Connector
-// Real-time sports data integration for multimodal analysis
+/**
+ * Blaze Intelligence - Live Sports Data Connector
+ * Real-time sports data integration with 30-second refresh intervals
+ * Supports MLB Stats API, ESPN API for NFL/NBA/NCAA data
+ */
 
 class LiveSportsConnector {
-    constructor(config = {}) {
-        this.config = {
-            refreshInterval: config.refreshInterval || 30000, // 30 seconds
-            maxRetries: config.maxRetries || 3,
-            timeout: config.timeout || 10000,
-            cache: new Map(),
-            ...config
+    constructor() {
+        this.cache = new Map();
+        this.cacheTTL = 30000; // 30 seconds
+        this.refreshInterval = 30000; // 30 seconds
+        this.subscribers = new Map();
+        this.isInitialized = false;
+        this.retryAttempts = 3;
+        this.retryDelay = 1000; // 1 second
+
+        // API Configuration
+        this.apis = {
+            mlb: {
+                base: 'https://statsapi.mlb.com/api/v1',
+                endpoints: {
+                    games: '/schedule/games',
+                    teams: '/teams',
+                    standings: '/standings',
+                    player: '/people/{playerId}',
+                    gameStats: '/game/{gameId}/boxscore',
+                    liveFeed: '/game/{gameId}/feed/live'
+                }
+            },
+            espn: {
+                base: 'https://site.api.espn.com/apis/site/v2/sports',
+                endpoints: {
+                    nfl: '/football/nfl',
+                    nba: '/basketball/nba',
+                    ncaaFootball: '/football/college-football',
+                    ncaaBasketball: '/basketball/mens-college-basketball'
+                }
+            }
         };
 
-        this.activeConnections = new Map();
-        this.dataStreams = new Map();
-        this.eventHandlers = new Map();
+        this.init();
     }
 
-    // Initialize all live connections
-    async initialize() {
-        console.log('🔥 Initializing Blaze Live Sports Connector...');
-
-        // Initialize different sport connections
-        await this.initializeMLB();
-        await this.initializeNFL();
-        await this.initializeNCAA();
-        await this.initializeNBA();
-
-        // Start periodic refresh
-        this.startAutoRefresh();
-
-        return true;
-    }
-
-    // MLB Live Data
-    async initializeMLB() {
+    async init() {
         try {
-            // Cardinals real-time data
-            const cardinalsEndpoint = '/api/cardinals/readiness.js';
-            const mlbStatsEndpoint = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId=138';
+            console.log('🚀 Initializing Blaze Intelligence Live Sports Connector...');
 
-            // Fetch Cardinals readiness data
-            const readinessData = await this.fetchLocalData(cardinalsEndpoint);
-            if (readinessData) {
-                this.updateDataStream('mlb_cardinals_readiness', readinessData);
-            }
+            // Start refresh intervals
+            this.startRefreshCycle();
 
-            // Simulate live game data
-            this.simulateMLBGameData('Cardinals');
+            // Load initial data
+            await this.loadInitialData();
 
-            return true;
+            this.isInitialized = true;
+            console.log('✅ Live Sports Connector initialized successfully');
+
+            // Notify subscribers of initialization
+            this.emit('initialized', { timestamp: Date.now() });
+
         } catch (error) {
-            console.error('MLB initialization error:', error);
-            return false;
+            console.error('❌ Failed to initialize Live Sports Connector:', error);
+            this.emit('error', { type: 'initialization', error: error.message });
         }
     }
 
-    // NFL Live Data
-    async initializeNFL() {
+    async loadInitialData() {
+        const promises = [
+            this.refreshMLBData(),
+            this.refreshNFLData(),
+            this.refreshNBAData(),
+            this.refreshCollegeFootballData()
+        ];
+
+        await Promise.allSettled(promises);
+    }
+
+    startRefreshCycle() {
+        // MLB data refresh (during season)
+        setInterval(() => this.refreshMLBData(), this.refreshInterval);
+
+        // NFL data refresh (during season)
+        setInterval(() => this.refreshNFLData(), this.refreshInterval);
+
+        // NBA data refresh (during season)
+        setInterval(() => this.refreshNBAData(), this.refreshInterval);
+
+        // College football refresh (during season)
+        setInterval(() => this.refreshCollegeFootballData(), this.refreshInterval);
+
+        console.log(`🔄 Started refresh cycle - updating every ${this.refreshInterval/1000} seconds`);
+    }
+
+    async refreshMLBData() {
         try {
-            // Titans live data simulation
-            this.simulateNFLGameData('Titans');
+            const today = new Date().toISOString().split('T')[0];
 
-            // Schedule periodic updates
-            setInterval(() => {
-                this.updateNFLStats('Titans');
-            }, 15000); // Every 15 seconds
+            // Get Cardinals and today's games
+            const [gamesData, cardinalsData] = await Promise.all([
+                this.fetchWithRetry(`${this.apis.mlb.base}/schedule?date=${today}&sportId=1`),
+                this.fetchWithRetry(`${this.apis.mlb.base}/teams/138`) // Cardinals team ID
+            ]);
 
-            return true;
+            // Process and cache data
+            const mlbData = {
+                games: gamesData.dates?.[0]?.games || [],
+                cardinals: cardinalsData.teams?.[0] || {},
+                lastUpdated: Date.now(),
+                season: this.getCurrentMLBSeason()
+            };
+
+            // Add live game feeds for Cardinals games
+            const cardinalsGames = mlbData.games.filter(game =>
+                game.teams.home.team.id === 138 || game.teams.away.team.id === 138
+            );
+
+            for (const game of cardinalsGames) {
+                if (game.status.detailedState === 'In Progress') {
+                    const liveFeed = await this.fetchWithRetry(
+                        `${this.apis.mlb.base}/game/${game.gamePk}/feed/live`
+                    );
+                    mlbData[`game_${game.gamePk}_live`] = liveFeed;
+                }
+            }
+
+            this.updateCache('mlb', mlbData);
+            this.emit('mlb-updated', mlbData);
+
+            console.log('📊 MLB data refreshed:', mlbData.games.length, 'games found');
+
         } catch (error) {
-            console.error('NFL initialization error:', error);
-            return false;
+            console.error('❌ MLB data refresh failed:', error);
+            this.emit('error', { type: 'mlb-refresh', error: error.message });
         }
     }
 
-    // NCAA Live Data
-    async initializeNCAA() {
+    async refreshNFLData() {
         try {
-            // Longhorns live data
-            this.simulateNCAAGameData('Longhorns');
+            const [scoresData, standingsData] = await Promise.all([
+                this.fetchWithRetry(`${this.apis.espn.base}/football/nfl/scoreboard`),
+                this.fetchWithRetry(`${this.apis.espn.base}/football/nfl/standings`)
+            ]);
 
-            // Perfect Game integration simulation
-            this.simulatePerfectGameData();
+            const nflData = {
+                games: scoresData.events || [],
+                standings: standingsData.children || [],
+                lastUpdated: Date.now(),
+                week: this.getCurrentNFLWeek()
+            };
 
-            return true;
+            // Focus on Titans data (Tennessee Titans)
+            const titansData = await this.fetchWithRetry(
+                `${this.apis.espn.base}/football/nfl/teams/10/roster` // Titans team ID
+            );
+            nflData.titans = titansData;
+
+            this.updateCache('nfl', nflData);
+            this.emit('nfl-updated', nflData);
+
+            console.log('🏈 NFL data refreshed:', nflData.games.length, 'games found');
+
         } catch (error) {
-            console.error('NCAA initialization error:', error);
-            return false;
+            console.error('❌ NFL data refresh failed:', error);
+            this.emit('error', { type: 'nfl-refresh', error: error.message });
         }
     }
 
-    // NBA Live Data
-    async initializeNBA() {
+    async refreshNBAData() {
         try {
-            // Grizzlies live data
-            this.simulateNBAGameData('Grizzlies');
+            const [scoresData, standingsData] = await Promise.all([
+                this.fetchWithRetry(`${this.apis.espn.base}/basketball/nba/scoreboard`),
+                this.fetchWithRetry(`${this.apis.espn.base}/basketball/nba/standings`)
+            ]);
 
-            return true;
+            const nbaData = {
+                games: scoresData.events || [],
+                standings: standingsData.children || [],
+                lastUpdated: Date.now(),
+                season: this.getCurrentNBASeason()
+            };
+
+            // Focus on Grizzlies data (Memphis Grizzlies)
+            const grizzliesData = await this.fetchWithRetry(
+                `${this.apis.espn.base}/basketball/nba/teams/15/roster` // Grizzlies team ID
+            );
+            nbaData.grizzlies = grizzliesData;
+
+            this.updateCache('nba', nbaData);
+            this.emit('nba-updated', nbaData);
+
+            console.log('🏀 NBA data refreshed:', nbaData.games.length, 'games found');
+
         } catch (error) {
-            console.error('NBA initialization error:', error);
-            return false;
+            console.error('❌ NBA data refresh failed:', error);
+            this.emit('error', { type: 'nba-refresh', error: error.message });
         }
     }
 
-    // Fetch local API data
-    async fetchLocalData(endpoint) {
+    async refreshCollegeFootballData() {
         try {
-            const response = await fetch(endpoint);
-            if (response.ok) {
-                return await response.json();
-            }
+            const [scoresData, standingsData] = await Promise.all([
+                this.fetchWithRetry(`${this.apis.espn.base}/football/college-football/scoreboard`),
+                this.fetchWithRetry(`${this.apis.espn.base}/football/college-football/standings`)
+            ]);
+
+            const collegeData = {
+                games: scoresData.events || [],
+                standings: standingsData.children || [],
+                lastUpdated: Date.now(),
+                week: this.getCurrentCollegeWeek()
+            };
+
+            // Focus on Longhorns data (University of Texas)
+            const longhornGames = collegeData.games.filter(game =>
+                game.competitions?.[0]?.competitors?.some(team =>
+                    team.team.displayName?.includes('Texas') &&
+                    team.team.displayName?.includes('Longhorns')
+                )
+            );
+
+            collegeData.longhorns = {
+                games: longhornGames,
+                teamId: 251, // Texas Longhorns team ID
+                conference: 'SEC'
+            };
+
+            this.updateCache('college-football', collegeData);
+            this.emit('college-football-updated', collegeData);
+
+            console.log('🎓 College Football data refreshed:', collegeData.games.length, 'games found');
+
         } catch (error) {
-            console.warn(`Could not fetch ${endpoint}:`, error);
+            console.error('❌ College Football data refresh failed:', error);
+            this.emit('error', { type: 'college-football-refresh', error: error.message });
         }
-        return null;
     }
 
-    // Simulate MLB game data
-    simulateMLBGameData(team) {
-        const gameData = {
-            team: team,
-            opponent: 'Cubs',
-            score: { home: 0, away: 0 },
-            inning: 1,
-            outs: 0,
-            runners: { first: false, second: false, third: false },
-            currentBatter: {
-                name: 'Nolan Arenado',
-                avg: '.285',
-                ops: '.825',
-                stance: 'R'
-            },
-            currentPitcher: {
-                name: 'Miles Mikolas',
-                era: '3.45',
-                pitchCount: 0,
-                velocity: 93.5
-            },
-            biomechanics: {
-                releasePoint: { x: 2.1, y: 5.8, z: 1.2 },
-                spinRate: 2280,
-                breakAngle: 12.5,
-                extension: 6.2
-            },
-            championMetrics: {
-                focusIntensity: 88,
-                mentalResilience: 92,
-                clutchFactor: 85,
-                momentum: 75
-            }
-        };
+    async fetchWithRetry(url, options = {}) {
+        let lastError;
 
-        // Update game state periodically
-        setInterval(() => {
-            // Simulate pitch
-            if (Math.random() > 0.7) {
-                gameData.currentPitcher.pitchCount++;
-                gameData.currentPitcher.velocity = 91 + Math.random() * 6;
-                gameData.biomechanics.spinRate = 2100 + Math.random() * 400;
-
-                // Simulate hit
-                if (Math.random() > 0.75) {
-                    const hitTypes = ['Single', 'Double', 'Triple', 'Home Run', 'Fly Out', 'Ground Out'];
-                    const hitType = hitTypes[Math.floor(Math.random() * hitTypes.length)];
-                    this.emitEvent('mlb_hit', { team, batter: gameData.currentBatter.name, result: hitType });
-                }
-            }
-
-            // Update champion metrics
-            gameData.championMetrics.focusIntensity = Math.min(100, 80 + Math.random() * 20);
-            gameData.championMetrics.momentum = Math.min(100, gameData.championMetrics.momentum + (Math.random() - 0.5) * 10);
-
-            this.updateDataStream('mlb_game_live', gameData);
-        }, 5000);
-
-        this.dataStreams.set('mlb_game_live', gameData);
-    }
-
-    // Simulate NFL game data
-    simulateNFLGameData(team) {
-        const gameData = {
-            team: team,
-            opponent: 'Colts',
-            score: { home: 0, away: 0 },
-            quarter: 1,
-            timeRemaining: '15:00',
-            possession: team,
-            down: 1,
-            distance: 10,
-            fieldPosition: 25,
-            currentPlay: {
-                type: 'Pass',
-                quarterback: 'Ryan Tannehill',
-                target: 'DeAndre Hopkins',
-                yards: 0
-            },
-            biomechanics: {
-                throwVelocity: 52.5,
-                releaseAngle: 28.5,
-                spiralRate: 600,
-                accuracy: 88.5
-            },
-            championMetrics: {
-                pressureIndex: 65,
-                decisionSpeed: 2.3,
-                pocketPresence: 85,
-                clutchFactor: 78
-            }
-        };
-
-        // Update game periodically
-        setInterval(() => {
-            // Simulate play
-            if (Math.random() > 0.6) {
-                const playTypes = ['Pass', 'Run', 'Screen', 'Play Action'];
-                gameData.currentPlay.type = playTypes[Math.floor(Math.random() * playTypes.length)];
-                gameData.currentPlay.yards = Math.floor(Math.random() * 20) - 5;
-
-                // Update field position
-                gameData.fieldPosition = Math.max(0, Math.min(100, gameData.fieldPosition + gameData.currentPlay.yards));
-
-                // Update down and distance
-                if (gameData.currentPlay.yards >= gameData.distance) {
-                    gameData.down = 1;
-                    gameData.distance = 10;
-                } else {
-                    gameData.down++;
-                    gameData.distance -= gameData.currentPlay.yards;
-                }
-
-                // Scoring
-                if (gameData.fieldPosition >= 100) {
-                    gameData.score.home += 7;
-                    gameData.fieldPosition = 25;
-                    this.emitEvent('nfl_touchdown', { team, scorer: gameData.currentPlay.target });
-                }
-            }
-
-            // Update biomechanics
-            gameData.biomechanics.throwVelocity = 48 + Math.random() * 8;
-            gameData.biomechanics.accuracy = 75 + Math.random() * 20;
-
-            this.updateDataStream('nfl_game_live', gameData);
-        }, 8000);
-
-        this.dataStreams.set('nfl_game_live', gameData);
-    }
-
-    // Simulate NCAA game data
-    simulateNCAAGameData(team) {
-        const gameData = {
-            team: team,
-            opponent: 'Oklahoma',
-            score: { home: 0, away: 0 },
-            quarter: 1,
-            timeRemaining: '15:00',
-            recruitingImpact: {
-                viewership: 125000,
-                topRecruits: [
-                    { name: 'Arch Manning', position: 'QB', rating: 5, watching: true },
-                    { name: 'David Hicks', position: 'WR', rating: 4, watching: true }
-                ],
-                nilValue: 850000
-            },
-            biomechanics: {
-                teamSpeed: 4.45,
-                explosiveness: 92,
-                physicality: 88
-            },
-            championMetrics: {
-                teamChemistry: 90,
-                coachingImpact: 88,
-                homeFieldAdvantage: 95,
-                momentum: 82
-            }
-        };
-
-        // Update periodically
-        setInterval(() => {
-            // Simulate scoring
-            if (Math.random() > 0.85) {
-                const scorer = Math.random() > 0.5 ? 'home' : 'away';
-                const points = Math.random() > 0.7 ? 7 : 3;
-                gameData.score[scorer] += points;
-
-                // Update recruiting impact
-                gameData.recruitingImpact.viewership += Math.floor(Math.random() * 5000);
-                gameData.recruitingImpact.nilValue += Math.floor(Math.random() * 10000);
-            }
-
-            // Update metrics
-            gameData.championMetrics.momentum = Math.max(0, Math.min(100,
-                gameData.championMetrics.momentum + (Math.random() - 0.5) * 15));
-
-            this.updateDataStream('ncaa_game_live', gameData);
-        }, 10000);
-
-        this.dataStreams.set('ncaa_game_live', gameData);
-    }
-
-    // Simulate NBA game data
-    simulateNBAGameData(team) {
-        const gameData = {
-            team: team,
-            opponent: 'Lakers',
-            score: { home: 0, away: 0 },
-            quarter: 1,
-            timeRemaining: '12:00',
-            shotClock: 24,
-            currentPlayer: {
-                name: 'Ja Morant',
-                position: 'PG',
-                stats: { points: 0, assists: 0, rebounds: 0 }
-            },
-            biomechanics: {
-                jumpHeight: 38.5,
-                lateralSpeed: 2.8,
-                reactionTime: 0.42,
-                shootingForm: 92
-            },
-            championMetrics: {
-                clutchGene: 88,
-                courtVision: 90,
-                defensiveIntensity: 82,
-                energyLevel: 95
-            }
-        };
-
-        // Update game
-        setInterval(() => {
-            // Simulate shot
-            if (Math.random() > 0.7) {
-                const made = Math.random() > 0.45;
-                const points = Math.random() > 0.7 ? 3 : 2;
-
-                if (made) {
-                    gameData.score.home += points;
-                    gameData.currentPlayer.stats.points += points;
-                    this.emitEvent('nba_score', { team, player: gameData.currentPlayer.name, points });
-                }
-
-                gameData.shotClock = 24;
-            } else {
-                gameData.shotClock = Math.max(0, gameData.shotClock - 1);
-            }
-
-            // Update biomechanics
-            gameData.biomechanics.jumpHeight = 35 + Math.random() * 8;
-            gameData.biomechanics.shootingForm = 85 + Math.random() * 10;
-
-            this.updateDataStream('nba_game_live', gameData);
-        }, 3000);
-
-        this.dataStreams.set('nba_game_live', gameData);
-    }
-
-    // Simulate Perfect Game data
-    simulatePerfectGameData() {
-        const pgData = {
-            event: 'WWBA National Championship',
-            location: 'East Cobb, GA',
-            activeGames: 12,
-            topProspects: [
-                {
-                    name: 'Jackson Hill',
-                    position: 'SS',
-                    grad: 2026,
-                    rating: 9.5,
-                    velocity: 92,
-                    battingAvg: '.385',
-                    commits: ['Texas', 'LSU', 'Vanderbilt']
-                },
-                {
-                    name: 'Marcus Rodriguez',
-                    position: 'OF',
-                    grad: 2025,
-                    rating: 9.0,
-                    sixtyTime: 6.4,
-                    battingAvg: '.412',
-                    commits: ['Texas', 'TCU', 'Arkansas']
-                }
-            ],
-            scoutingNotes: [],
-            liveMetrics: {
-                totalScouts: 85,
-                mlbScouts: 28,
-                collegeScouts: 57,
-                mediaPresent: 12
-            }
-        };
-
-        // Update periodically
-        setInterval(() => {
-            // Add scouting notes
-            if (Math.random() > 0.8) {
-                const notes = [
-                    'Plus arm strength from the shortstop position',
-                    'Elite bat speed, projectable power',
-                    'Outstanding makeup and leadership qualities',
-                    'Plus-plus speed, elite defender'
-                ];
-                pgData.scoutingNotes.unshift({
-                    time: new Date().toLocaleTimeString(),
-                    note: notes[Math.floor(Math.random() * notes.length)],
-                    scout: 'Area Scout #' + Math.floor(Math.random() * 100)
+        for (let attempt = 1; attempt <= this.retryAttempts; attempt++) {
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'User-Agent': 'Blaze Intelligence Sports Connector/1.0',
+                        'Accept': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
                 });
 
-                if (pgData.scoutingNotes.length > 5) {
-                    pgData.scoutingNotes.pop();
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data;
+
+            } catch (error) {
+                lastError = error;
+                console.warn(`⚠️ Attempt ${attempt}/${this.retryAttempts} failed for ${url}:`, error.message);
+
+                if (attempt < this.retryAttempts) {
+                    await this.delay(this.retryDelay * attempt);
                 }
             }
+        }
 
-            // Update metrics
-            pgData.liveMetrics.totalScouts = 80 + Math.floor(Math.random() * 20);
-
-            this.updateDataStream('perfect_game_live', pgData);
-        }, 15000);
-
-        this.dataStreams.set('perfect_game_live', pgData);
+        throw lastError;
     }
 
-    // Update NFL stats
-    updateNFLStats(team) {
-        const stats = {
-            passingYards: Math.floor(200 + Math.random() * 150),
-            rushingYards: Math.floor(80 + Math.random() * 70),
-            turnovers: Math.floor(Math.random() * 3),
-            timeOfPossession: `${15 + Math.floor(Math.random() * 15)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`
+    updateCache(key, data) {
+        this.cache.set(key, {
+            data,
+            timestamp: Date.now(),
+            ttl: this.cacheTTL
+        });
+    }
+
+    getFromCache(key) {
+        const cached = this.cache.get(key);
+        if (!cached) return null;
+
+        const isExpired = Date.now() - cached.timestamp > cached.ttl;
+        if (isExpired) {
+            this.cache.delete(key);
+            return null;
+        }
+
+        return cached.data;
+    }
+
+    // Public API methods
+    getMLBData() {
+        return this.getFromCache('mlb');
+    }
+
+    getNFLData() {
+        return this.getFromCache('nfl');
+    }
+
+    getNBAData() {
+        return this.getFromCache('nba');
+    }
+
+    getCollegeFootballData() {
+        return this.getFromCache('college-football');
+    }
+
+    getAllSportsData() {
+        return {
+            mlb: this.getMLBData(),
+            nfl: this.getNFLData(),
+            nba: this.getNBAData(),
+            collegeFootball: this.getCollegeFootballData(),
+            lastSync: Date.now()
         };
-
-        this.updateDataStream('nfl_stats', stats);
     }
 
-    // Update data stream
-    updateDataStream(streamId, data) {
-        this.dataStreams.set(streamId, data);
-        this.emitEvent('data_update', { streamId, data });
-    }
-
-    // Get live data
-    getLiveData(streamId) {
-        return this.dataStreams.get(streamId);
-    }
-
-    // Get all active streams
-    getAllStreams() {
-        const streams = {};
-        for (const [key, value] of this.dataStreams) {
-            streams[key] = value;
+    // Event system
+    subscribe(event, callback) {
+        if (!this.subscribers.has(event)) {
+            this.subscribers.set(event, new Set());
         }
-        return streams;
+        this.subscribers.get(event).add(callback);
+
+        return () => {
+            this.subscribers.get(event)?.delete(callback);
+        };
     }
 
-    // Event handling
-    on(event, handler) {
-        if (!this.eventHandlers.has(event)) {
-            this.eventHandlers.set(event, []);
-        }
-        this.eventHandlers.get(event).push(handler);
-    }
-
-    off(event, handler) {
-        const handlers = this.eventHandlers.get(event);
-        if (handlers) {
-            const index = handlers.indexOf(handler);
-            if (index > -1) {
-                handlers.splice(index, 1);
-            }
-        }
-    }
-
-    emitEvent(event, data) {
-        const handlers = this.eventHandlers.get(event);
-        if (handlers) {
-            handlers.forEach(handler => {
+    emit(event, data) {
+        const callbacks = this.subscribers.get(event);
+        if (callbacks) {
+            callbacks.forEach(callback => {
                 try {
-                    handler(data);
+                    callback(data);
                 } catch (error) {
-                    console.error(`Error in event handler for ${event}:`, error);
+                    console.error(`❌ Error in ${event} callback:`, error);
                 }
             });
         }
     }
 
-    // Start auto refresh
-    startAutoRefresh() {
-        this.refreshInterval = setInterval(() => {
-            this.refreshAllStreams();
-        }, this.config.refreshInterval);
+    // Utility methods
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // Stop auto refresh
-    stopAutoRefresh() {
-        if (this.refreshInterval) {
-            clearInterval(this.refreshInterval);
-            this.refreshInterval = null;
+    getCurrentMLBSeason() {
+        const now = new Date();
+        const year = now.getFullYear();
+        return now.getMonth() >= 2 ? year : year - 1; // Season starts in March
+    }
+
+    getCurrentNFLWeek() {
+        const now = new Date();
+        const seasonStart = new Date(now.getFullYear(), 8, 1); // September 1st
+        if (now < seasonStart) return 0;
+
+        const weeksSinceStart = Math.floor((now - seasonStart) / (7 * 24 * 60 * 60 * 1000));
+        return Math.min(weeksSinceStart + 1, 18);
+    }
+
+    getCurrentNBASeason() {
+        const now = new Date();
+        const year = now.getFullYear();
+        return now.getMonth() >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
+    }
+
+    getCurrentCollegeWeek() {
+        const now = new Date();
+        const seasonStart = new Date(now.getFullYear(), 7, 15); // August 15th
+        if (now < seasonStart) return 0;
+
+        const weeksSinceStart = Math.floor((now - seasonStart) / (7 * 24 * 60 * 60 * 1000));
+        return Math.min(weeksSinceStart + 1, 15);
+    }
+
+    // Dashboard integration
+    getDashboardMetrics() {
+        const allData = this.getAllSportsData();
+
+        return {
+            activeGames: this.countActiveGames(allData),
+            totalTeamsTracked: 4, // Cardinals, Titans, Longhorns, Grizzlies
+            dataFreshness: this.calculateDataFreshness(allData),
+            apiStatus: this.getAPIStatus(),
+            lastUpdateTime: Math.max(
+                allData.mlb?.lastUpdated || 0,
+                allData.nfl?.lastUpdated || 0,
+                allData.nba?.lastUpdated || 0,
+                allData.collegeFootball?.lastUpdated || 0
+            )
+        };
+    }
+
+    countActiveGames(data) {
+        let activeCount = 0;
+
+        // Count MLB active games
+        activeCount += data.mlb?.games?.filter(game =>
+            game.status?.detailedState === 'In Progress'
+        ).length || 0;
+
+        // Count NFL active games
+        activeCount += data.nfl?.games?.filter(game =>
+            game.status?.type?.name === 'STATUS_IN_PROGRESS'
+        ).length || 0;
+
+        // Count NBA active games
+        activeCount += data.nba?.games?.filter(game =>
+            game.status?.type?.name === 'STATUS_IN_PROGRESS'
+        ).length || 0;
+
+        // Count College Football active games
+        activeCount += data.collegeFootball?.games?.filter(game =>
+            game.status?.type?.name === 'STATUS_IN_PROGRESS'
+        ).length || 0;
+
+        return activeCount;
+    }
+
+    calculateDataFreshness(data) {
+        const now = Date.now();
+        const freshnesScores = [];
+
+        if (data.mlb?.lastUpdated) {
+            freshnesScores.push(1 - Math.min((now - data.mlb.lastUpdated) / this.cacheTTL, 1));
         }
-    }
-
-    // Refresh all streams
-    refreshAllStreams() {
-        console.log('🔄 Refreshing all live data streams...');
-        // In production, this would fetch fresh data from APIs
-        // For now, we're using simulated data that auto-updates
-    }
-
-    // WebSocket connection for real-time updates
-    async connectWebSocket(url) {
-        return new Promise((resolve, reject) => {
-            try {
-                const ws = new WebSocket(url);
-
-                ws.onopen = () => {
-                    console.log('✅ WebSocket connected');
-                    this.activeConnections.set(url, ws);
-                    resolve(ws);
-                };
-
-                ws.onmessage = (event) => {
-                    try {
-                        const data = JSON.parse(event.data);
-                        this.handleWebSocketMessage(data);
-                    } catch (error) {
-                        console.error('WebSocket message error:', error);
-                    }
-                };
-
-                ws.onerror = (error) => {
-                    console.error('WebSocket error:', error);
-                    reject(error);
-                };
-
-                ws.onclose = () => {
-                    console.log('WebSocket disconnected');
-                    this.activeConnections.delete(url);
-                    // Attempt reconnection
-                    setTimeout(() => {
-                        this.connectWebSocket(url);
-                    }, 5000);
-                };
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
-
-    // Handle WebSocket messages
-    handleWebSocketMessage(message) {
-        if (message.type === 'data_update') {
-            this.updateDataStream(message.streamId, message.data);
-        } else if (message.type === 'event') {
-            this.emitEvent(message.event, message.data);
+        if (data.nfl?.lastUpdated) {
+            freshnesScores.push(1 - Math.min((now - data.nfl.lastUpdated) / this.cacheTTL, 1));
         }
+        if (data.nba?.lastUpdated) {
+            freshnesScores.push(1 - Math.min((now - data.nba.lastUpdated) / this.cacheTTL, 1));
+        }
+        if (data.collegeFootball?.lastUpdated) {
+            freshnesScores.push(1 - Math.min((now - data.collegeFootball.lastUpdated) / this.cacheTTL, 1));
+        }
+
+        return freshnesScores.length > 0
+            ? freshnesScores.reduce((a, b) => a + b) / freshnesScores.length
+            : 0;
     }
 
-    // Cleanup
-    destroy() {
-        this.stopAutoRefresh();
-
-        // Close all WebSocket connections
-        for (const [url, ws] of this.activeConnections) {
-            ws.close();
-        }
-        this.activeConnections.clear();
-
-        // Clear all data
-        this.dataStreams.clear();
-        this.eventHandlers.clear();
+    getAPIStatus() {
+        return {
+            mlb: this.getFromCache('mlb') ? 'connected' : 'disconnected',
+            espn: (this.getFromCache('nfl') || this.getFromCache('nba') || this.getFromCache('college-football'))
+                ? 'connected' : 'disconnected'
+        };
     }
 }
 
-// Export for use
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = LiveSportsConnector;
-} else {
-    window.LiveSportsConnector = LiveSportsConnector;
+// Global instance
+window.LiveSportsConnector = LiveSportsConnector;
+
+// Auto-initialize if in browser
+if (typeof window !== 'undefined') {
+    window.blazeSportsConnector = new LiveSportsConnector();
+
+    // Expose for dashboard integration
+    window.getBlazeSpotrsData = () => window.blazeSportsConnector.getAllSportsData();
+    window.getBlazeSportsDashboard = () => window.blazeSportsConnector.getDashboardMetrics();
 }
+
+export default LiveSportsConnector;

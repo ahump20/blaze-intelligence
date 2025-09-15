@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blaze RTI Dashboard | Real-Time Multimodal Intelligence</title>
@@ -46,6 +44,7 @@
             background: rgba(0, 0, 0, 0.9);
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 0 2rem;
             border-bottom: 2px solid var(--blaze-orange);
         }
@@ -429,7 +428,14 @@
     <div class="dashboard-container">
         <!-- Header with Latency Budget -->
         <div class="header">
-            <h1 class="title">🔥 Blaze RTI Dashboard</h1>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <h1 class="title">🔥 Blaze RTI Dashboard</h1>
+                <nav style="display: flex; gap: 8px;">
+                    <a href="/" style="color: #BF5700; text-decoration: none; font-size: 10px; padding: 5px 8px; border-radius: 4px; background: rgba(191, 87, 0, 0.1); border: 1px solid rgba(191, 87, 0, 0.3); transition: all 0.3s ease; text-transform: uppercase; font-weight: 600;">🔥 RTI MAIN</a>
+                    <a href="/realtime-multimodal-dashboard.html" style="color: #00B2A9; text-decoration: none; font-size: 10px; padding: 5px 8px; border-radius: 4px; background: rgba(0, 178, 169, 0.2); border: 1px solid rgba(0, 178, 169, 0.5); text-transform: uppercase; font-weight: 600;">⚡ RTI ADVANCED</a>
+                    <a href="/sports-intelligence-dashboard.html" style="color: #FFD700; text-decoration: none; font-size: 10px; padding: 5px 8px; border-radius: 4px; background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.3); transition: all 0.3s ease; text-transform: uppercase; font-weight: 600;">🏆 SPORTS INTEL</a>
+                </nav>
+            </div>
             <div class="latency-budget">
                 <div class="budget-item">
                     <div class="budget-label">Video</div>
@@ -459,13 +465,13 @@
             <!-- Video Section -->
             <div class="video-section">
                 <div class="video-container">
-                    <video id="videoElement" autoplay playsinline muted></video>
+                    <video id="videoElement" autoplay="" playsinline="" muted=""></video>
                     <canvas id="overlayCanvas"></canvas>
 
                     <div class="video-controls">
                         <button id="startBtn" class="control-btn">Start Capture</button>
-                        <button id="stopBtn" class="control-btn" disabled>Stop</button>
-                        <button id="switchBtn" class="control-btn" disabled>Switch Camera</button>
+                        <button id="stopBtn" class="control-btn" disabled="">Stop</button>
+                        <button id="switchBtn" class="control-btn" disabled="">Switch Camera</button>
                         <span style="margin-left: auto; padding: 0.5rem;">
                             FPS: <span id="fpsCounter">0</span>
                         </span>
@@ -1091,5 +1097,5 @@
             }
         });
     </script>
-</body>
-</html>
+
+</body></html>

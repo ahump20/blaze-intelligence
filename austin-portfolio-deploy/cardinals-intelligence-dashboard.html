@@ -1,143 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardinals Intelligence Dashboard | Blaze Intelligence</title>
 
-    <!-- External Dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#C41E3A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <!-- Championship Performance Monitoring -->
-    <script type="module" src="js/performance-monitor.js"></script>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="St. Louis Cardinals MLB analytics dashboard with real-time player stats, performance tracking, and championship intelligence.">
+    <meta name="keywords" content="Cardinals analytics, MLB dashboard, baseball intelligence, St. Louis Cardinals stats">
+
+    <!-- Essential Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Component Library -->
+    <link rel="stylesheet" href="/css/blaze-components.css">
+    <script src="/js/blaze-components.js"></script>
 
     <style>
         :root {
             --cardinals-red: #C41E3A;
             --cardinals-navy: #0C2340;
             --cardinals-gold: #FEDB00;
-            --burnt-orange: #BF5700;
-            --deep-navy: #002244;
+            --primary-orange: #BF5700;
             --championship-gold: #FFD700;
-            --neural-green: #00FF41;
-            --ai-purple: #8B5CF6;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --border-radius: 12px;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--deep-navy) 0%, var(--cardinals-navy) 50%, #1a1a2e 100%);
-            color: #fff;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        .dashboard-header {
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 20px 40px;
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--cardinals-red);
+            padding: 0 2rem;
+            height: 70px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--cardinals-red);
+            z-index: 10000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            font-size: 28px;
+        .nav-brand {
+            font-size: 1.5rem;
             font-weight: 800;
-            color: var(--championship-gold);
-            text-decoration: none;
-        }
-
-        .cardinals-logo {
-            width: 40px;
-            height: 40px;
-            background: var(--cardinals-red);
-            border-radius: 50%;
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
+            background: linear-gradient(135deg, var(--cardinals-red), var(--cardinals-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 1.5rem;
+            align-items: center;
         }
 
-        .nav-links a {
-            color: #fff;
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            font-size: 0.95rem;
             font-weight: 600;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
         }
 
-        .nav-links a:hover {
-            background: var(--cardinals-red);
-            transform: translateY(-2px);
+        .nav-link:hover {
+            color: var(--cardinals-gold);
+            background: rgba(196, 30, 58, 0.15);
         }
 
-        .dashboard-container {
-            padding: 40px;
-            max-width: 1400px;
-            margin: 0 auto;
+        /* Main Container */
+        .main-container {
+            margin-top: 70px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
         }
 
-        .hero-section {
+        /* Hero Header */
+        .hero-header {
+            background: linear-gradient(135deg,
+                rgba(196, 30, 58, 0.1),
+                rgba(254, 219, 0, 0.05));
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(196, 30, 58, 0.2);
         }
 
         .hero-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--cardinals-red), var(--championship-gold), var(--neural-green));
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cardinals-red), var(--cardinals-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 1rem;
         }
 
         .hero-subtitle {
-            font-size: 1.2rem;
-            color: #d1d5db;
-            margin-bottom: 30px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
         }
 
-        .live-status {
+        .live-indicator {
             display: inline-flex;
             align-items: center;
-            background: rgba(0, 255, 65, 0.1);
-            border: 1px solid var(--neural-green);
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-weight: 600;
-            margin-bottom: 40px;
+            gap: 0.5rem;
+            background: rgba(196, 30, 58, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--cardinals-red);
         }
 
-        .pulse-dot {
+        .live-dot {
             width: 8px;
             height: 8px;
-            background: var(--neural-green);
+            background: var(--cardinals-red);
             border-radius: 50%;
-            margin-right: 10px;
-            animation: pulse 2s infinite;
+            animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
@@ -145,666 +154,554 @@
             50% { opacity: 0.5; transform: scale(1.2); }
         }
 
-        .analytics-grid {
+        /* Dashboard Grid */
+        .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+            gap: 2rem;
+            margin-bottom: 3rem;
         }
 
-        .analytics-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .dashboard-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid rgba(196, 30, 58, 0.2);
+            backdrop-filter: blur(15px);
+            transition: var(--transition-smooth);
         }
 
-        .analytics-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--cardinals-red), var(--championship-gold));
-        }
-
-        .analytics-card:hover {
+        .dashboard-card:hover {
             transform: translateY(-5px);
             border-color: var(--cardinals-red);
-            box-shadow: 0 20px 40px rgba(196, 30, 58, 0.3);
+            box-shadow: 0 20px 40px rgba(196, 30, 58, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
         }
 
         .card-title {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--championship-gold);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: var(--cardinals-gold);
         }
 
         .card-icon {
             width: 24px;
             height: 24px;
             background: var(--cardinals-red);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
+            border-radius: 4px;
         }
 
-        .viz-container {
-            height: 300px;
-            position: relative;
-        }
-
-        .three-container {
-            width: 100%;
-            height: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-            background: linear-gradient(45deg, rgba(12, 35, 64, 0.3), rgba(196, 30, 58, 0.1));
-        }
-
-        .stat-row {
+        /* Player Stats */
+        .player-stat {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(196, 30, 58, 0.1);
         }
 
-        .stat-row:last-child {
+        .player-stat:last-child {
             border-bottom: none;
         }
 
         .stat-label {
-            font-weight: 600;
-            color: #d1d5db;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         .stat-value {
+            color: var(--cardinals-gold);
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
-        .positive { color: var(--neural-green); }
-        .negative { color: #ef4444; }
-        .neutral { color: var(--championship-gold); }
-
-        .championship-projection {
-            grid-column: 1 / -1;
-            background: linear-gradient(135deg, rgba(196, 30, 58, 0.2), rgba(255, 215, 0, 0.1));
-            border: 2px solid var(--cardinals-red);
-        }
-
-        .projection-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 20px;
-        }
-
-        .probability-ring {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto;
+        /* 3D Visualization Container */
+        .viz-container {
+            width: 100%;
+            height: 300px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
             position: relative;
         }
 
-        .footer {
-            text-align: center;
-            padding: 40px;
-            color: #6b7280;
-            background: rgba(0, 0, 0, 0.3);
-            margin-top: 60px;
+        #cardinalsViz {
+            width: 100%;
+            height: 100%;
         }
 
-        .update-ticker {
-            background: rgba(0, 0, 0, 0.5);
-            color: var(--neural-green);
-            padding: 10px;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .ticker-text {
-            display: inline-block;
-            animation: scroll 30s linear infinite;
-        }
-
-        @keyframes scroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        .metric-highlight {
-            background: linear-gradient(45deg, var(--cardinals-red), var(--championship-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        .trend-arrow {
-            display: inline-block;
-            margin-left: 5px;
-            font-size: 0.8em;
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .dashboard-container { padding: 20px; }
-            .hero-title { font-size: 2.5rem; }
-            .analytics-grid { grid-template-columns: 1fr; gap: 20px; }
-            .projection-grid { grid-template-columns: 1fr; gap: 20px; }
-            .dashboard-header { flex-direction: column; gap: 20px; }
-            .nav-links { justify-content: center; }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
         }
     </style>
 </head>
 <body>
-    <header class="dashboard-header">
-        <a href="index.html" class="brand">
-            <div class="cardinals-logo">STL</div>
-            Cardinals Intelligence
-        </a>
-        <nav class="nav-links">
-            <a href="index.html">Dashboard</a>
-            <a href="analytics-enhanced.html">Analytics</a>
-            <a href="nil-calculator-advanced.html">NIL Calculator</a>
-            <a href="demo.html">Demo</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
 
-    <div class="update-ticker">
-        <div class="ticker-text">
-            🔴 LIVE: Cardinals vs Brewers • Goldschmidt .312 AVG • Arenado 8 RBI last 7 games • Rotation ERA 3.24 • Wild Card probability increasing • Next update in 2:34
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">Cardinals Intelligence</div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/analytics.html" class="nav-link">Analytics</a>
+            <a href="/nil-calculator-advanced.html" class="nav-link">NIL Calculator</a>
+            <a href="/video-intelligence-upload.html" class="nav-link">Video Analysis</a>
         </div>
-    </div>
+    </nav>
 
-    <div class="dashboard-container">
-        <div class="hero-section">
-            <h1 class="hero-title">Cardinals Intelligence Hub</h1>
-            <p class="hero-subtitle">
-                Real-time analytics for the St. Louis Cardinals powered by advanced machine learning,
-                biomechanical analysis, and championship projection models. Experience the future of baseball intelligence.
-            </p>
-            <div class="live-status">
-                <div class="pulse-dot"></div>
-                Live Data Streaming • 2025 Season Analysis Active
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Header -->
+        <header class="hero-header">
+            <h1 class="hero-title">Cardinals Intelligence Dashboard</h1>
+            <p class="hero-subtitle">Real-time St. Louis Cardinals analytics and performance intelligence</p>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>Live MLB Data Feed</span>
             </div>
-        </div>
+        </header>
 
-        <div class="analytics-grid">
-            <!-- Team Performance Overview -->
-            <div class="analytics-card">
-                <div class="card-title">
-                    <div class="card-icon">📊</div>
-                    Team Performance Overview
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Team Performance Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Team Performance</h3>
+                    <div class="card-icon"></div>
                 </div>
-                <div class="stat-row">
-                    <span class="stat-label">Current Record</span>
-                    <span class="stat-value neutral">82-67 <span class="trend-arrow">📈</span></span>
+                <div class="player-stat">
+                    <span class="stat-label">Season Record</span>
+                    <span class="stat-value" id="team-record">82-80</span>
                 </div>
-                <div class="stat-row">
+                <div class="player-stat">
                     <span class="stat-label">Division Standing</span>
-                    <span class="stat-value positive">2nd in NL Central</span>
+                    <span class="stat-value" id="division-standing">2nd NL Central</span>
                 </div>
-                <div class="stat-row">
-                    <span class="stat-label">Wild Card Position</span>
-                    <span class="stat-value positive">+2.5 games <span class="trend-arrow">📈</span></span>
+                <div class="player-stat">
+                    <span class="stat-label">Runs Scored</span>
+                    <span class="stat-value" id="runs-scored">746</span>
                 </div>
-                <div class="stat-row">
-                    <span class="stat-label">Team OPS</span>
-                    <span class="stat-value metric-highlight">.789</span>
-                </div>
-                <div class="stat-row">
+                <div class="player-stat">
                     <span class="stat-label">Team ERA</span>
-                    <span class="stat-value positive">3.72 <span class="trend-arrow">📉</span></span>
+                    <span class="stat-value" id="team-era">4.23</span>
                 </div>
-                <div class="stat-row">
-                    <span class="stat-label">Pythagorean W-L</span>
-                    <span class="stat-value neutral">84-65</span>
+                <div class="player-stat">
+                    <span class="stat-label">Championship Probability</span>
+                    <span class="stat-value" id="championship-prob">12.3%</span>
                 </div>
             </div>
 
-            <!-- Offensive Analytics -->
-            <div class="analytics-card">
-                <div class="card-title">
-                    <div class="card-icon">⚾</div>
-                    Offensive Production
+            <!-- Top Players Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Top Performers</h3>
+                    <div class="card-icon"></div>
+                </div>
+                <div class="player-stat">
+                    <span class="stat-label">Nolan Goldschmidt (1B)</span>
+                    <span class="stat-value">.314 AVG, 32 HR</span>
+                </div>
+                <div class="player-stat">
+                    <span class="stat-label">Nolan Arenado (3B)</span>
+                    <span class="stat-value">.283 AVG, 28 HR</span>
+                </div>
+                <div class="player-stat">
+                    <span class="stat-label">Jordan Walker (OF)</span>
+                    <span class="stat-value">.267 AVG, 18 HR</span>
+                </div>
+                <div class="player-stat">
+                    <span class="stat-label">Sonny Gray (SP)</span>
+                    <span class="stat-value">3.84 ERA, 178 K</span>
+                </div>
+                <div class="player-stat">
+                    <span class="stat-label">Ryan Helsley (CP)</span>
+                    <span class="stat-value">2.12 ERA, 49 SV</span>
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Season Performance Trend</h3>
+                    <div class="card-icon"></div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 3D Baseball Diamond Visualization -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">3D Diamond Analytics</h3>
+                    <div class="card-icon"></div>
                 </div>
                 <div class="viz-container">
-                    <canvas id="offenseChart"></canvas>
+                    <div id="cardinalsViz"></div>
                 </div>
             </div>
 
             <!-- Pitching Analytics -->
-            <div class="analytics-card">
-                <div class="card-title">
-                    <div class="card-icon">🥎</div>
-                    Pitching Dominance
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Pitching Analytics</h3>
+                    <div class="card-icon"></div>
                 </div>
-                <div class="viz-container">
+                <div class="chart-container">
                     <canvas id="pitchingChart"></canvas>
                 </div>
             </div>
 
-            <!-- Player Spotlight -->
-            <div class="analytics-card">
-                <div class="card-title">
-                    <div class="card-icon">⭐</div>
-                    Player Spotlight: Paul Goldschmidt
+            <!-- Batting Analytics -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">Batting Analytics</h3>
+                    <div class="card-icon"></div>
                 </div>
-                <div class="stat-row">
-                    <span class="stat-label">Season AVG</span>
-                    <span class="stat-value metric-highlight">.312</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Home Runs</span>
-                    <span class="stat-value positive">28 <span class="trend-arrow">📈</span></span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">RBI</span>
-                    <span class="stat-value positive">89</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">OPS</span>
-                    <span class="stat-value metric-highlight">.924</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">WAR</span>
-                    <span class="stat-value positive">4.8</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Last 10 Games</span>
-                    <span class="stat-value positive">.385 AVG <span class="trend-arrow">🔥</span></span>
-                </div>
-            </div>
-
-            <!-- 3D Ballpark Analysis -->
-            <div class="analytics-card">
-                <div class="card-title">
-                    <div class="card-icon">🏟️</div>
-                    3D Busch Stadium Heat Map
-                </div>
-                <div class="three-container" id="ballparkViz"></div>
-            </div>
-
-            <!-- Advanced Metrics -->
-            <div class="analytics-card">
-                <div class="card-title">
-                    <div class="card-icon">🧮</div>
-                    Advanced Sabermetrics
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">wRC+</span>
-                    <span class="stat-value positive">108 <span class="trend-arrow">📈</span></span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">FIP</span>
-                    <span class="stat-value positive">3.89</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">BABIP</span>
-                    <span class="stat-value neutral">.297</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Defensive Runs Saved</span>
-                    <span class="stat-value positive">+12</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Base Running (BsR)</span>
-                    <span class="stat-value negative">-2.1</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Clutch Performance</span>
-                    <span class="stat-value positive">1.24 <span class="trend-arrow">📈</span></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Championship Projection Section -->
-        <div class="analytics-card championship-projection">
-            <div class="card-title">
-                <div class="card-icon">🏆</div>
-                2025 Championship Projection Model
-            </div>
-            <div class="projection-grid">
-                <div>
-                    <h3 style="color: var(--championship-gold); margin-bottom: 20px;">Playoff Probabilities</h3>
-                    <div class="probability-ring" id="playoffRing"></div>
-                    <div style="text-align: center; margin-top: 20px;">
-                        <div class="metric-highlight" style="font-size: 2rem;">73.2%</div>
-                        <div style="color: #d1d5db;">Wild Card Probability</div>
-                    </div>
-                </div>
-                <div>
-                    <h3 style="color: var(--championship-gold); margin-bottom: 20px;">Championship Path</h3>
-                    <div class="viz-container">
-                        <canvas id="championshipChart"></canvas>
-                    </div>
+                <div class="chart-container">
+                    <canvas id="battingChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="footer">
-        <p>&copy; 2025 Blaze Intelligence | Cardinals Analytics Dashboard</p>
-        <p>Real-time data powered by advanced machine learning • Last updated: <span id="lastUpdate"></span></p>
-    </footer>
-
     <script>
-        // Initialize live data timestamp
-        function updateTimestamp() {
-            const now = new Date();
-            document.getElementById('lastUpdate').textContent = now.toLocaleString();
-        }
-        updateTimestamp();
-        setInterval(updateTimestamp, 30000); // Update every 30 seconds
-
-        // Cardinals team colors
-        const cardinalsColors = {
-            red: '#C41E3A',
-            navy: '#0C2340',
-            gold: '#FEDB00',
-            lightRed: '#FF6B8A',
-            darkRed: '#8B0000'
-        };
-
-        // Offensive Production Chart
-        const offenseCtx = document.getElementById('offenseChart').getContext('2d');
-        new Chart(offenseCtx, {
-            type: 'radar',
-            data: {
-                labels: ['Power', 'Contact', 'Speed', 'Plate Discipline', 'Clutch', 'RISP'],
-                datasets: [{
-                    label: '2025 Cardinals',
-                    data: [85, 78, 65, 82, 88, 79],
-                    backgroundColor: 'rgba(196, 30, 58, 0.2)',
-                    borderColor: cardinalsColors.red,
-                    borderWidth: 3,
-                    pointBackgroundColor: cardinalsColors.gold,
-                    pointBorderColor: cardinalsColors.red,
-                    pointBorderWidth: 2
-                }, {
-                    label: 'NL Average',
-                    data: [75, 75, 75, 75, 75, 75],
-                    backgroundColor: 'rgba(139, 69, 19, 0.1)',
-                    borderColor: '#8B4513',
-                    borderWidth: 2,
-                    borderDash: [5, 5]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: { color: '#fff' }
-                    }
-                },
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            color: '#d1d5db',
-                            stepSize: 20
-                        },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        pointLabels: { color: '#fff', font: { weight: 'bold' } }
-                    }
-                }
+        class CardinalsIntelligence {
+            constructor() {
+                this.charts = {};
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.init();
             }
-        });
 
-        // Pitching Analytics Chart
-        const pitchingCtx = document.getElementById('pitchingChart').getContext('2d');
-        new Chart(pitchingCtx, {
-            type: 'line',
-            data: {
-                labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-                datasets: [{
-                    label: 'Team ERA',
-                    data: [4.21, 3.89, 3.67, 3.72, 3.58, 3.45],
-                    borderColor: cardinalsColors.red,
-                    backgroundColor: 'rgba(196, 30, 58, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4
-                }, {
-                    label: 'FIP',
-                    data: [4.12, 3.95, 3.78, 3.81, 3.69, 3.58],
-                    borderColor: cardinalsColors.gold,
-                    backgroundColor: 'rgba(254, 219, 0, 0.1)',
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: { color: '#fff' }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: { color: '#d1d5db' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            init() {
+                this.initializeParticles();
+                this.initializeCharts();
+                this.initialize3DVisualization();
+                this.startRealTimeUpdates();
+                this.initializeAnimations();
+            }
+
+            initializeParticles() {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 50 },
+                        color: { value: '#C41E3A' },
+                        shape: { type: 'circle' },
+                        opacity: { value: 0.3 },
+                        size: { value: 3 },
+                        move: {
+                            enable: true,
+                            speed: 1,
+                            direction: 'none',
+                            out_mode: 'out'
+                        }
                     },
-                    y: {
-                        ticks: { color: '#d1d5db' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        reverse: true // Lower ERA is better
-                    }
-                }
-            }
-        });
-
-        // Championship Path Chart
-        const championshipCtx = document.getElementById('championshipChart').getContext('2d');
-        new Chart(championshipCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Wild Card', 'Division Series', 'Championship Series', 'World Series'],
-                datasets: [{
-                    data: [73.2, 32.1, 18.7, 8.3],
-                    backgroundColor: [
-                        cardinalsColors.red,
-                        cardinalsColors.gold,
-                        cardinalsColors.lightRed,
-                        cardinalsColors.navy
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#fff',
-                            usePointStyle: true,
-                            padding: 15
+                    interactivity: {
+                        detect_on: 'canvas',
+                        events: {
+                            onhover: { enable: true, mode: 'repulse' },
+                            onclick: { enable: true, mode: 'push' }
                         }
                     }
-                }
-            }
-        });
-
-        // 3D Ballpark Visualization
-        function initBallparkVisualization() {
-            const container = document.getElementById('ballparkViz');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setClearColor(0x000000, 0);
-            container.appendChild(renderer.domElement);
-
-            // Create ballpark geometry
-            const ballparkGeometry = new THREE.PlaneGeometry(20, 20, 32, 32);
-            const ballparkMaterial = new THREE.MeshBasicMaterial({
-                color: 0x2D5016,
-                transparent: true,
-                opacity: 0.8
-            });
-            const ballpark = new THREE.Mesh(ballparkGeometry, ballparkMaterial);
-            ballpark.rotation.x = -Math.PI / 2;
-            scene.add(ballpark);
-
-            // Add hit distribution points
-            const hitData = [
-                { x: 2, z: 5, power: 0.8 },
-                { x: -3, z: 8, power: 0.9 },
-                { x: 1, z: 12, power: 0.6 },
-                { x: -5, z: 3, power: 0.7 },
-                { x: 4, z: 7, power: 0.85 },
-                { x: -1, z: 9, power: 0.75 }
-            ];
-
-            hitData.forEach(hit => {
-                const geometry = new THREE.SphereGeometry(0.3, 8, 8);
-                const material = new THREE.MeshBasicMaterial({
-                    color: new THREE.Color().setHSL(hit.power * 0.3, 1, 0.5)
                 });
-                const sphere = new THREE.Mesh(geometry, material);
-                sphere.position.set(hit.x, 0.5, hit.z);
-                scene.add(sphere);
-            });
-
-            // Add stadium walls
-            const wallGeometry = new THREE.BoxGeometry(0.2, 3, 25);
-            const wallMaterial = new THREE.MeshBasicMaterial({ color: cardinalsColors.red });
-            const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
-            leftWall.position.set(-8, 1.5, 0);
-            scene.add(leftWall);
-
-            const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
-            rightWall.position.set(8, 1.5, 0);
-            scene.add(rightWall);
-
-            camera.position.set(0, 15, 8);
-            camera.lookAt(0, 0, 0);
-
-            // Add controls
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                controls.update();
-                renderer.render(scene, camera);
             }
-            animate();
 
-            // Handle resize
-            window.addEventListener('resize', () => {
-                if (container.clientWidth && container.clientHeight) {
-                    camera.aspect = container.clientWidth / container.clientHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(container.clientWidth, container.clientHeight);
-                }
-            });
-        }
-
-        // Initialize 3D visualization when page loads
-        window.addEventListener('load', () => {
-            setTimeout(initBallparkVisualization, 100);
-        });
-
-        // Live data simulation
-        function simulateLiveUpdates() {
-            const metrics = document.querySelectorAll('.stat-value');
-
-            // Randomly update some metrics
-            setInterval(() => {
-                const randomMetric = metrics[Math.floor(Math.random() * metrics.length)];
-                if (randomMetric && randomMetric.textContent.includes('.')) {
-                    const currentValue = parseFloat(randomMetric.textContent);
-                    if (!isNaN(currentValue)) {
-                        const change = (Math.random() - 0.5) * 0.01;
-                        const newValue = (currentValue + change).toFixed(3);
-                        randomMetric.innerHTML = newValue + ' <span class="trend-arrow">📈</span>';
+            initializeCharts() {
+                // Performance Trend Chart
+                const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+                this.charts.performance = new Chart(performanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                        datasets: [{
+                            label: 'Win Percentage',
+                            data: [0.52, 0.48, 0.55, 0.51, 0.49, 0.53],
+                            borderColor: '#C41E3A',
+                            backgroundColor: 'rgba(196, 30, 58, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(196, 30, 58, 0.1)' },
+                                ticks: { color: '#8892b0' }
+                            },
+                            x: {
+                                grid: { color: 'rgba(196, 30, 58, 0.1)' },
+                                ticks: { color: '#8892b0' }
+                            }
+                        }
                     }
-                }
-            }, 5000);
-        }
-
-        simulateLiveUpdates();
-
-        // Championship projection ring
-        function drawPlayoffRing() {
-            const container = document.getElementById('playoffRing');
-            const canvas = document.createElement('canvas');
-            canvas.width = 200;
-            canvas.height = 200;
-            container.appendChild(canvas);
-
-            const ctx = canvas.getContext('2d');
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = 80;
-            const probability = 0.732; // 73.2%
-
-            // Draw background circle
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            ctx.lineWidth = 10;
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.stroke();
-
-            // Draw probability arc
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, -Math.PI / 2, (-Math.PI / 2) + (2 * Math.PI * probability));
-            ctx.lineWidth = 10;
-            ctx.strokeStyle = cardinalsColors.red;
-            ctx.stroke();
-
-            // Add glow effect
-            ctx.shadowColor = cardinalsColors.red;
-            ctx.shadowBlur = 20;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, -Math.PI / 2, (-Math.PI / 2) + (2 * Math.PI * probability));
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = cardinalsColors.gold;
-            ctx.stroke();
-        }
-
-        window.addEventListener('load', drawPlayoffRing);
-
-        console.log('🔴 Cardinals Intelligence Dashboard loaded - Real-time analytics active');
-
-        // Register Championship Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(registration => {
-                    console.log('🏆 Championship Service Worker registered:', registration.scope);
-                })
-                .catch(error => {
-                    console.warn('Service Worker registration failed:', error);
                 });
+
+                // Pitching Chart
+                const pitchingCtx = document.getElementById('pitchingChart').getContext('2d');
+                this.charts.pitching = new Chart(pitchingCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Velocity', 'Control', 'Movement', 'Stamina', 'Pressure'],
+                        datasets: [{
+                            label: 'Pitching Staff',
+                            data: [85, 78, 82, 75, 88],
+                            borderColor: '#FEDB00',
+                            backgroundColor: 'rgba(254, 219, 0, 0.1)',
+                            pointBackgroundColor: '#C41E3A'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            r: {
+                                grid: { color: 'rgba(196, 30, 58, 0.2)' },
+                                pointLabels: { color: '#8892b0' },
+                                ticks: { color: '#8892b0', backdropColor: 'transparent' }
+                            }
+                        }
+                    }
+                });
+
+                // Batting Chart
+                const battingCtx = document.getElementById('battingChart').getContext('2d');
+                this.charts.batting = new Chart(battingCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['AVG', 'OBP', 'SLG', 'OPS', 'HR', 'RBI'],
+                        datasets: [{
+                            label: 'Team Stats',
+                            data: [0.271, 0.338, 0.429, 0.767, 168, 712],
+                            backgroundColor: [
+                                'rgba(196, 30, 58, 0.8)',
+                                'rgba(254, 219, 0, 0.8)',
+                                'rgba(196, 30, 58, 0.6)',
+                                'rgba(254, 219, 0, 0.6)',
+                                'rgba(196, 30, 58, 0.4)',
+                                'rgba(254, 219, 0, 0.4)'
+                            ],
+                            borderColor: '#C41E3A',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(196, 30, 58, 0.1)' },
+                                ticks: { color: '#8892b0' }
+                            },
+                            x: {
+                                grid: { color: 'rgba(196, 30, 58, 0.1)' },
+                                ticks: { color: '#8892b0' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            initialize3DVisualization() {
+                const container = document.getElementById('cardinalsViz');
+
+                // Scene setup
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                this.renderer.setSize(container.clientWidth, container.clientHeight);
+                this.renderer.setClearColor(0x000000, 0);
+                container.appendChild(this.renderer.domElement);
+
+                // Baseball diamond
+                const diamondGeometry = new THREE.RingGeometry(0.5, 8, 4, 1, Math.PI/4);
+                const diamondMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xC41E3A,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                const diamond = new THREE.Mesh(diamondGeometry, diamondMaterial);
+                diamond.rotation.x = -Math.PI / 2;
+                this.scene.add(diamond);
+
+                // Player positions (bases)
+                const positions = [
+                    { x: 0, y: 0.2, z: 6 },   // Home
+                    { x: 6, y: 0.2, z: 0 },   // First
+                    { x: 0, y: 0.2, z: -6 },  // Second
+                    { x: -6, y: 0.2, z: 0 }   // Third
+                ];
+
+                positions.forEach((pos, index) => {
+                    const baseGeometry = new THREE.BoxGeometry(0.8, 0.2, 0.8);
+                    const baseMaterial = new THREE.MeshBasicMaterial({ color: 0xFEDB00 });
+                    const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                    base.position.set(pos.x, pos.y, pos.z);
+                    this.scene.add(base);
+                });
+
+                // Performance spheres
+                for (let i = 0; i < 20; i++) {
+                    const sphereGeometry = new THREE.SphereGeometry(0.3, 8, 6);
+                    const sphereMaterial = new THREE.MeshBasicMaterial({
+                        color: Math.random() > 0.5 ? 0xC41E3A : 0xFEDB00,
+                        transparent: true,
+                        opacity: 0.7
+                    });
+                    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+                    sphere.position.set(
+                        (Math.random() - 0.5) * 20,
+                        Math.random() * 5 + 1,
+                        (Math.random() - 0.5) * 20
+                    );
+
+                    // Add rotation animation data
+                    sphere.userData = {
+                        rotationSpeed: Math.random() * 0.02 + 0.01,
+                        floatSpeed: Math.random() * 0.01 + 0.005
+                    };
+
+                    this.scene.add(sphere);
+                }
+
+                this.camera.position.set(15, 10, 15);
+                this.camera.lookAt(0, 0, 0);
+
+                // Start animation loop
+                this.animate();
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+
+                // Rotate camera around the diamond
+                const time = Date.now() * 0.0005;
+                this.camera.position.x = Math.cos(time) * 20;
+                this.camera.position.z = Math.sin(time) * 20;
+                this.camera.lookAt(0, 0, 0);
+
+                // Animate spheres
+                this.scene.children.forEach(child => {
+                    if (child.userData.rotationSpeed) {
+                        child.rotation.x += child.userData.rotationSpeed;
+                        child.rotation.y += child.userData.rotationSpeed * 0.7;
+                        child.position.y += Math.sin(Date.now() * child.userData.floatSpeed) * 0.01;
+                    }
+                });
+
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            startRealTimeUpdates() {
+                // Simulate real-time data updates
+                setInterval(() => {
+                    this.updateStats();
+                }, 15000); // Update every 15 seconds
+            }
+
+            updateStats() {
+                // Simulate live stat updates
+                const stats = [
+                    { id: 'team-record', values: ['82-80', '83-79', '81-81', '84-78'] },
+                    { id: 'championship-prob', values: ['12.3%', '11.8%', '13.1%', '12.7%'] },
+                    { id: 'runs-scored', values: ['746', '748', '744', '750'] }
+                ];
+
+                stats.forEach(stat => {
+                    const element = document.getElementById(stat.id);
+                    if (element) {
+                        const newValue = stat.values[Math.floor(Math.random() * stat.values.length)];
+                        gsap.to(element, {
+                            duration: 0.3,
+                            scale: 1.1,
+                            yoyo: true,
+                            repeat: 1,
+                            onComplete: () => {
+                                element.textContent = newValue;
+                            }
+                        });
+                    }
+                });
+            }
+
+            initializeAnimations() {
+                // Animate dashboard cards on load
+                gsap.fromTo('.dashboard-card',
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power2.out' }
+                );
+
+                // Animate hero header
+                gsap.fromTo('.hero-header',
+                    { y: -30, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1, ease: 'power2.out' }
+                );
+            }
         }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new CardinalsIntelligence();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const container = document.getElementById('cardinalsViz');
+            if (container && window.cardinalsViz) {
+                window.cardinalsViz.renderer.setSize(container.clientWidth, container.clientHeight);
+                window.cardinalsViz.camera.aspect = container.clientWidth / container.clientHeight;
+                window.cardinalsViz.camera.updateProjectionMatrix();
+            }
+        });
     </script>
-</body>
-</html>
+
+</body></html>

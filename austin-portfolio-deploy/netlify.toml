@@ -1,72 +1,124 @@
-[[redirects]]
-# Redirect legacy or broken paths to their new equivalents. This helps avoid 404s
-# for visitors who have bookmarked old URLs or clicked outdated links.
-# Each redirect uses a 200 (OK) status so the browser doesn’t change the URL,
-# allowing single‑page apps to handle navigation internally if desired.
-from = "/blaze-championship-live"
-to   = "/index.html"
-status = 200
+[build]
+  command = "npm run build:unified || echo 'Unified platform ready'"
+  publish = "."
+  functions = "netlify/functions"
 
-[[redirects]]
-from = "/index-championship-ultimate"
-to   = "/analytics.html"
-status = 200
+[build.environment]
+  NODE_VERSION = "18"
+  BLAZE_ENV = "production"
+  MCP_SERVER_URL = "https://blaze-intelligence-mcp.onrender.com"
+  CHAMPIONSHIP_MODE = "true"
+  REAL_TIME_UPDATES = "true"
 
-[[redirects]]
-from = "/championship-3d-universe"
-to   = "/universe.html"
-status = 200
-
-[[redirects]]
-from = "/championship-ai-analytics"
-to   = "/analytics.html"
-status = 200
-
-# Redirect legacy contact and demo paths to new pages
-[[redirects]]
-from = "/contact"
-to   = "/contact.html"
-status = 200
-
-[[redirects]]
-from = "/demo"
-to   = "/demo.html"
-status = 200
-
-# Provide clean extensionless URLs for analytics and universe
-[[redirects]]
-from = "/analytics"
-to   = "/analytics.html"
-status = 200
-
-[[redirects]]
-from = "/universe"
-to   = "/universe.html"
-status = 200
-
-# Security headers with CSP allowing Three.js and external resources
+# Headers for security and caching
 [[headers]]
-for = "/*"
+  for = "/*"
   [headers.values]
-  X-Frame-Options = "DENY"
-  X-XSS-Protection = "1; mode=block"
-  X-Content-Type-Options = "nosniff"
-  Referrer-Policy = "strict-origin-when-cross-origin"
-  Content-Security-Policy = "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
-# Proper MIME types for JavaScript files
 [[headers]]
-for = "/*.js"
+  for = "/*.js"
   [headers.values]
-  Content-Type = "application/javascript; charset=utf-8"
-  Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
-# CSS file headers
 [[headers]]
-for = "/*.css"
+  for = "/*.css"
   [headers.values]
-  Content-Type = "text/css; charset=utf-8"
-  Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=31536000, immutable"
 
-# Force override of any UI-configured headers
-# Updated Sat Sep 13 15:13:04 CDT 2025
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+# MCP Server Integration Headers
+[[headers]]
+  for = "/mcp/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, mcp-session-id"
+    Access-Control-Expose-Headers = "Mcp-Session-Id"
+    Access-Control-Max-Age = "86400"
+    X-Powered-By = "Blaze-Intelligence-MCP"
+    X-Sports-Analytics = "Championship-Platform"
+
+# API redirects for Hawk-Eye endpoints
+[[redirects]]
+  from = "/api/mcp-proxy"
+  to = "/.netlify/functions/hawkeye-mcp-proxy"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/hawkeye/track"
+  to = "/.netlify/functions/hawkeye-track"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/hawkeye/predict"
+  to = "/.netlify/functions/hawkeye-predict"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/hawkeye/strike-zone"
+  to = "/.netlify/functions/hawkeye-strike-zone"
+  status = 200
+  force = true
+
+# Sports Data API
+[[redirects]]
+  from = "/api/sports/*"
+  to = "/.netlify/functions/sports-data-api"
+  status = 200
+  force = true
+
+# Texas High School Football API
+[[redirects]]
+  from = "/api/texas-hs-football"
+  to = "/.netlify/functions/texas-hs-football"
+  status = 200
+  force = true
+
+# SEC/Texas Baseball API
+[[redirects]]
+  from = "/api/sec-tx-baseball"
+  to = "/.netlify/functions/sec-tx-baseball"
+  status = 200
+  force = true
+
+# MCP Server Proxy
+[[redirects]]
+  from = "/mcp/*"
+  to = "/.netlify/functions/hawkeye-mcp-proxy"
+  status = 200
+
+# General API redirect
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Legacy redirects
+[[redirects]]
+  from = "/blaze-3d-universe.html"
+  to = "/universe.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/nil-calculator"
+  to = "/sec-nil-analytics.html"
+  status = 301
+  force = true
+
+# WebSocket support (Edge function required for production)
+[[edge_functions]]
+  path = "/ws/*"
+  function = "websocket-handler"

@@ -1,0 +1,1579 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Dashboard | Blaze Intelligence</title>
+
+    <!-- Professional Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Blaze Intelligence Core Systems -->
+    <script src="../js/rti-fusion-engine.js"></script>
+    <script src="../js/character-assessment-engine.js"></script>
+    <script src="../js/professional-animations.js"></script>
+    <script src="../js/hawkeye-mcp-client.js"></script>
+    <script src="../js/hawkeye-3d-visualization.js"></script>
+
+    <style>
+        :root {
+            /* Brand Colors - Blaze Intelligence Professional Palette */
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --grizzly-teal: #00B2A9;
+            --neural-green: #00ff7f;
+            --championship-gold: #FFD700;
+            --executive-platinum: #E5E4E2;
+            --executive-graphite: #36454F;
+            --executive-pearl: #FAFAFA;
+
+            /* Executive Theme Colors */
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --bg-executive: #0f1419;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --text-executive: #c9d1d9;
+
+            /* Professional Spacing & Measurements */
+            --executive-radius: 16px;
+            --executive-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --transition-executive: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--bg-executive), var(--bg-primary), var(--bg-secondary));
+            color: var(--text-executive);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Executive Navigation Bar */
+        .executive-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 0 3rem;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            z-index: 10000;
+            box-shadow: var(--executive-shadow);
+        }
+
+        .executive-brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 4rem;
+            cursor: pointer;
+            transition: var(--transition-executive);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .executive-nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            margin-right: auto;
+        }
+
+        .executive-nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 0.8rem 1.6rem;
+            border-radius: 10px;
+            transition: var(--transition-executive);
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .executive-nav-link:hover, .executive-nav-link.active {
+            color: var(--championship-gold);
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.15), rgba(255, 215, 0, 0.1));
+            border-color: var(--primary-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(191, 87, 0, 0.2);
+        }
+
+        .executive-status-bar {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--neural-green);
+            box-shadow: 0 0 10px var(--neural-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Executive Dashboard Grid Layout */
+        .executive-dashboard {
+            margin-top: 80px;
+            padding: 2rem;
+            display: grid;
+            grid-template-areas:
+                "controls controls controls controls"
+                "primary-kpi secondary-kpi tertiary-kpi quaternary-kpi"
+                "analytics analytics performance performance"
+                "hawkeye hawkeye team-intel team-intel"
+                "realtime-charts realtime-charts nil-valuations character-assessment"
+                "live-feed live-feed insights insights";
+            grid-template-rows: 80px 200px 400px 350px 350px 300px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Dashboard Controls */
+        .dashboard-controls {
+            grid-area: controls;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--executive-radius);
+            padding: 1.5rem 2rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .time-selector {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(191, 87, 0, 0.4);
+        }
+
+        /* Enhanced KPI Cards */
+        .executive-kpi-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--executive-radius);
+            padding: 2rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: var(--executive-shadow);
+            transition: var(--transition-executive);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .executive-kpi-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-orange);
+            box-shadow: 0 20px 60px rgba(191, 87, 0, 0.3);
+        }
+
+        .primary-kpi { grid-area: primary-kpi; }
+        .secondary-kpi { grid-area: secondary-kpi; }
+        .tertiary-kpi { grid-area: tertiary-kpi; }
+        .quaternary-kpi { grid-area: quaternary-kpi; }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .kpi-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .kpi-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kpi-trend {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .kpi-trend.up {
+            background: rgba(0, 255, 127, 0.1);
+            color: var(--neural-green);
+        }
+
+        .kpi-trend.down {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+        }
+
+        .kpi-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .kpi-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .kpi-mini-chart {
+            height: 40px;
+            position: relative;
+        }
+
+        /* Dashboard Sections */
+        .dashboard-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--executive-radius);
+            padding: 2rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: var(--executive-shadow);
+            transition: var(--transition-executive);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-section:hover {
+            border-color: var(--primary-orange);
+            transform: translateY(-2px);
+        }
+
+        .analytics-section { grid-area: analytics; }
+        .performance-section { grid-area: performance; }
+        .hawkeye-section { grid-area: hawkeye; }
+        .team-intel-section { grid-area: team-intel; }
+        .realtime-charts-section { grid-area: realtime-charts; }
+        .nil-valuations-section { grid-area: nil-valuations; }
+        .character-assessment-section { grid-area: character-assessment; }
+        .live-feed-section { grid-area: live-feed; }
+        .insights-section { grid-area: insights; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            color: var(--primary-orange);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-small:hover {
+            background: rgba(191, 87, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* 3D Canvas Containers */
+        .canvas-container {
+            position: relative;
+            height: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        #analytics-3d-canvas,
+        #hawkeye-3d-canvas,
+        #performance-3d-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        .mini-chart-container {
+            position: relative;
+            height: 60px;
+        }
+
+        /* Team Intelligence Display */
+        .team-intelligence-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .team-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition-smooth);
+        }
+
+        .team-card:hover {
+            background: rgba(191, 87, 0, 0.1);
+            border-color: var(--primary-orange);
+            transform: translateY(-2px);
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .team-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .team-performance {
+            color: var(--neural-green);
+            font-weight: 600;
+        }
+
+        /* NIL Valuations Display */
+        .nil-valuations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .nil-card {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            transition: var(--transition-smooth);
+        }
+
+        .nil-card:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nil-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .nil-category {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* Character Assessment Display */
+        .character-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .character-metric {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .character-score {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--cardinal-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .character-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Live Feed */
+        .live-feed-container {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        .feed-item {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            border-left: 3px solid var(--neural-green);
+            transition: var(--transition-smooth);
+        }
+
+        .feed-item:hover {
+            background: rgba(0, 0, 0, 0.4);
+            transform: translateX(3px);
+        }
+
+        .feed-timestamp {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+        }
+
+        .feed-content {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        /* Strategic Insights */
+        .insights-container {
+            margin-top: 1rem;
+        }
+
+        .insight-item {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--championship-gold);
+        }
+
+        .insight-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .executive-dashboard {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-areas:
+                    "controls controls controls"
+                    "primary-kpi secondary-kpi tertiary-kpi"
+                    "quaternary-kpi analytics analytics"
+                    "performance performance hawkeye"
+                    "team-intel realtime-charts realtime-charts"
+                    "nil-valuations character-assessment insights"
+                    "live-feed live-feed live-feed";
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .executive-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-areas:
+                    "controls controls"
+                    "primary-kpi secondary-kpi"
+                    "tertiary-kpi quaternary-kpi"
+                    "analytics analytics"
+                    "performance hawkeye"
+                    "team-intel realtime-charts"
+                    "nil-valuations character-assessment"
+                    "insights insights"
+                    "live-feed live-feed";
+            }
+        }
+
+        @media (max-width: 768px) {
+            .executive-dashboard {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "controls"
+                    "primary-kpi"
+                    "secondary-kpi"
+                    "tertiary-kpi"
+                    "quaternary-kpi"
+                    "analytics"
+                    "performance"
+                    "hawkeye"
+                    "team-intel"
+                    "realtime-charts"
+                    "nil-valuations"
+                    "character-assessment"
+                    "insights"
+                    "live-feed";
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nil-valuations-grid,
+            .team-intelligence-grid,
+            .character-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading States */
+        .loading-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(191, 87, 0, 0.2);
+            border-top: 3px solid var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Executive Navigation -->
+    <nav class="executive-navbar">
+        <div class="executive-brand">
+            🔥 Blaze Intelligence
+        </div>
+
+        <div class="executive-nav-links">
+            <a href="/executive/" class="executive-nav-link">Executive Center</a>
+            <a href="/executive/dashboard.html" class="executive-nav-link active">Dashboard</a>
+            <a href="/executive/analytics.html" class="executive-nav-link">Analytics</a>
+            <a href="/executive/reports.html" class="executive-nav-link">Reports</a>
+            <a href="/" class="executive-nav-link">Platform Home</a>
+        </div>
+
+        <div class="executive-status-bar">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                RTI Engine
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" style="background: var(--championship-gold); box-shadow: 0 0 10px var(--championship-gold);"></div>
+                Hawk-Eye Live
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" style="background: var(--cardinal-blue); box-shadow: 0 0 10px var(--cardinal-blue);"></div>
+                Character AI
+            </div>
+        </div>
+    </nav>
+
+    <!-- Executive Dashboard -->
+    <main class="executive-dashboard">
+        <!-- Dashboard Controls -->
+        <section class="dashboard-controls">
+            <h1 class="dashboard-title">Executive Performance Dashboard</h1>
+            <div class="dashboard-actions">
+                <select class="time-selector">
+                    <option value="live">Live Data</option>
+                    <option value="1h">Last Hour</option>
+                    <option value="24h">Last 24 Hours</option>
+                    <option value="7d">Last 7 Days</option>
+                    <option value="30d">Last 30 Days</option>
+                </select>
+                <button class="refresh-btn" onclick="refreshDashboard()">🔄 Refresh</button>
+            </div>
+        </section>
+
+        <!-- Primary KPI Cards -->
+        <div class="executive-kpi-card primary-kpi">
+            <div class="kpi-header">
+                <div>
+                    <div class="kpi-icon">🏆</div>
+                    <div class="kpi-title">Championship Probability</div>
+                </div>
+                <div class="kpi-trend up">↗ +12.3%</div>
+            </div>
+            <div class="kpi-value">87.4%</div>
+            <div class="kpi-subtitle">Cardinals • Real-time analysis</div>
+            <div class="kpi-mini-chart">
+                <canvas id="championship-mini-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="executive-kpi-card secondary-kpi">
+            <div class="kpi-header">
+                <div>
+                    <div class="kpi-icon">🧠</div>
+                    <div class="kpi-title">Pattern Recognition</div>
+                </div>
+                <div class="kpi-trend up">↗ +8.7%</div>
+            </div>
+            <div class="kpi-value">98.1%</div>
+            <div class="kpi-subtitle">AI Analysis Accuracy</div>
+            <div class="kpi-mini-chart">
+                <canvas id="pattern-mini-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="executive-kpi-card tertiary-kpi">
+            <div class="kpi-header">
+                <div>
+                    <div class="kpi-icon">💰</div>
+                    <div class="kpi-title">NIL Portfolio Value</div>
+                </div>
+                <div class="kpi-trend up">↗ +23.4%</div>
+            </div>
+            <div class="kpi-value">$2.1M</div>
+            <div class="kpi-subtitle">Total managed valuations</div>
+            <div class="kpi-mini-chart">
+                <canvas id="nil-mini-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="executive-kpi-card quaternary-kpi">
+            <div class="kpi-header">
+                <div>
+                    <div class="kpi-icon">⚡</div>
+                    <div class="kpi-title">Response Time</div>
+                </div>
+                <div class="kpi-trend up">↗ -15ms</div>
+            </div>
+            <div class="kpi-value">&lt;87ms</div>
+            <div class="kpi-subtitle">Multimodal processing</div>
+            <div class="kpi-mini-chart">
+                <canvas id="response-mini-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Advanced Analytics Section -->
+        <section class="dashboard-section analytics-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    📊 Advanced Analytics Engine
+                </h2>
+                <div class="section-actions">
+                    <a href="/executive/analytics.html" class="btn-small">Deep Analysis</a>
+                    <button class="btn-small" onclick="exportAnalytics()">Export</button>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="analytics-3d-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="dashboard-section performance-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    ⚡ Performance Metrics
+                </h2>
+                <div class="section-actions">
+                    <button class="btn-small" onclick="toggleRealTime()">Real-Time</button>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="performance-3d-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Hawk-Eye Tracking -->
+        <section class="dashboard-section hawkeye-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    👁️ Hawk-Eye Precision Tracking
+                </h2>
+                <div class="section-actions">
+                    <a href="/hawkeye-innovations-dashboard.html" class="btn-small">Full View</a>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="hawkeye-3d-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Team Intelligence -->
+        <section class="dashboard-section team-intel-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    🏆 Team Intelligence Analysis
+                </h2>
+                <div class="section-actions">
+                    <a href="/cardinals-intelligence-dashboard.html" class="btn-small">Cardinals</a>
+                </div>
+            </div>
+            <div class="team-intelligence-grid">
+                <div class="team-card">
+                    <div class="team-name">Cardinals</div>
+                    <div class="team-stats">
+                        <span>MLB • 2025 Season</span>
+                        <span class="team-performance">94.2%</span>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-name">Titans</div>
+                    <div class="team-stats">
+                        <span>NFL • Season Performance</span>
+                        <span class="team-performance">89.7%</span>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-name">Longhorns</div>
+                    <div class="team-stats">
+                        <span>NCAA • Championship Track</span>
+                        <span class="team-performance">92.1%</span>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-name">Grizzlies</div>
+                    <div class="team-stats">
+                        <span>NBA • Playoff Positioning</span>
+                        <span class="team-performance">87.5%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-Time Charts -->
+        <section class="dashboard-section realtime-charts-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    📈 Real-Time Performance Charts
+                </h2>
+                <div class="section-actions">
+                    <button class="btn-small" onclick="changeChartView()">Switch View</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="realtime-performance-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- NIL Valuations -->
+        <section class="dashboard-section nil-valuations-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    💰 NIL Valuations Dashboard
+                </h2>
+                <div class="section-actions">
+                    <a href="/nil-calculator-advanced.html" class="btn-small">Calculate</a>
+                </div>
+            </div>
+            <div class="nil-valuations-grid">
+                <div class="nil-card">
+                    <div class="nil-value">$847K</div>
+                    <div class="nil-category">Star Quarterback</div>
+                </div>
+                <div class="nil-card">
+                    <div class="nil-value">$623K</div>
+                    <div class="nil-category">Elite Receiver</div>
+                </div>
+                <div class="nil-card">
+                    <div class="nil-value">$429K</div>
+                    <div class="nil-category">Top Pitcher</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Character Assessment -->
+        <section class="dashboard-section character-assessment-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    🧠 Character Assessment AI
+                </h2>
+                <div class="section-actions">
+                    <a href="/character-assessment.html" class="btn-small">Full Assessment</a>
+                </div>
+            </div>
+            <div class="character-metrics">
+                <div class="character-metric">
+                    <div class="character-score">92.8%</div>
+                    <div class="character-label">Leadership DNA</div>
+                </div>
+                <div class="character-metric">
+                    <div class="character-score">89.4%</div>
+                    <div class="character-label">Resilience Index</div>
+                </div>
+                <div class="character-metric">
+                    <div class="character-score">95.1%</div>
+                    <div class="character-label">Team Chemistry</div>
+                </div>
+                <div class="character-metric">
+                    <div class="character-score">91.7%</div>
+                    <div class="character-label">Pressure Response</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Data Feed -->
+        <section class="dashboard-section live-feed-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    📡 Live Intelligence Feed
+                </h2>
+                <div class="section-actions">
+                    <button class="btn-small" onclick="pauseLiveFeed()">Pause Feed</button>
+                </div>
+            </div>
+            <div class="live-feed-container" id="liveFeedContainer">
+                <div class="feed-item">
+                    <div class="feed-timestamp">2 minutes ago</div>
+                    <div class="feed-content">Cardinals bullpen performance metrics updated - 94.6% efficiency rating</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-timestamp">5 minutes ago</div>
+                    <div class="feed-content">Hawk-Eye tracking data: Strike zone accuracy improved by 2.3%</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-timestamp">8 minutes ago</div>
+                    <div class="feed-content">NIL market analysis: 15% increase in quarterback valuations</div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-timestamp">12 minutes ago</div>
+                    <div class="feed-content">Character assessment engine: New leadership patterns detected</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategic Insights -->
+        <section class="dashboard-section insights-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    🎯 Strategic Insights &amp; Recommendations
+                </h2>
+                <div class="section-actions">
+                    <button class="btn-small" onclick="generateReport()">Generate Report</button>
+                </div>
+            </div>
+            <div class="insights-container">
+                <div class="insight-item">
+                    <div class="insight-title">Championship Trajectory Alert</div>
+                    <div class="insight-description">Current performance metrics indicate 87.4% championship probability. Key factors: improved team cohesion (+12%) and clutch performance metrics (+15%).</div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-title">NIL Market Opportunity</div>
+                    <div class="insight-description">Quarterback valuations showing 23.4% growth potential. Recommended action: increase investment allocation in position-specific NIL opportunities.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global dashboard state
+        let dashboardState = {
+            realTimeMode: true,
+            liveFeedPaused: false,
+            refreshInterval: null,
+            chartInstances: {},
+            threeJSScenes: {}
+        };
+
+        // Initialize Executive Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔥 Initializing Executive Dashboard...');
+
+            // Initialize background particles
+            initializeParticles();
+
+            // Initialize all 3D visualizations
+            initialize3DVisualizations();
+
+            // Initialize all charts
+            initializeCharts();
+
+            // Start real-time updates
+            startRealTimeUpdates();
+
+            console.log('✅ Executive Dashboard fully loaded');
+        });
+
+        // Particles.js Background
+        function initializeParticles() {
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 30, density: { enable: true, value_area: 1200 } },
+                        color: { value: ['#BF5700', '#9BCBEB', '#FFD700'] },
+                        shape: { type: 'circle' },
+                        opacity: {
+                            value: 0.2,
+                            random: true,
+                            anim: { enable: true, speed: 1, opacity_min: 0.05, sync: false }
+                        },
+                        size: {
+                            value: 1.5,
+                            random: true,
+                            anim: { enable: true, speed: 2, size_min: 0.1, sync: false }
+                        },
+                        line_linked: {
+                            enable: true,
+                            distance: 250,
+                            color: '#BF5700',
+                            opacity: 0.05,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 0.8,
+                            direction: 'none',
+                            random: false,
+                            straight: false,
+                            out_mode: 'out',
+                            bounce: false
+                        }
+                    },
+                    interactivity: {
+                        detect_on: 'canvas',
+                        events: {
+                            onhover: { enable: false },
+                            onclick: { enable: false },
+                            resize: true
+                        }
+                    },
+                    retina_detect: true
+                });
+            }
+        }
+
+        // Initialize all 3D visualizations
+        function initialize3DVisualizations() {
+            initializeAnalytics3D();
+            initializePerformance3D();
+            initializeHawkEye3D();
+        }
+
+        // Analytics 3D Visualization
+        function initializeAnalytics3D() {
+            const canvas = document.getElementById('analytics-3d-canvas');
+            if (!canvas || typeof THREE === 'undefined') return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create neural network-style visualization
+            const nodeGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const nodes = [];
+            const connections = [];
+
+            // Create nodes in a 3D grid
+            for (let x = -3; x <= 3; x += 1.5) {
+                for (let y = -2; y <= 2; y += 1) {
+                    for (let z = -2; z <= 2; z += 1) {
+                        const material = new THREE.MeshBasicMaterial({
+                            color: new THREE.Color().setHSL(Math.random() * 0.1, 0.8, 0.6),
+                            transparent: true,
+                            opacity: 0.7
+                        });
+                        const node = new THREE.Mesh(nodeGeometry, material);
+                        node.position.set(x, y, z);
+                        scene.add(node);
+                        nodes.push(node);
+                    }
+                }
+            }
+
+            // Create connections
+            const connectionMaterial = new THREE.LineBasicMaterial({
+                color: 0x9BCBEB,
+                transparent: true,
+                opacity: 0.2
+            });
+
+            nodes.forEach((node, i) => {
+                if (i < nodes.length - 1 && Math.random() > 0.7) {
+                    const points = [node.position, nodes[i + 1].position];
+                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                    const line = new THREE.Line(geometry, connectionMaterial);
+                    scene.add(line);
+                    connections.push(line);
+                }
+            });
+
+            camera.position.z = 8;
+            camera.position.y = 2;
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Rotate entire scene
+                scene.rotation.y += 0.005;
+                scene.rotation.x += 0.002;
+
+                // Pulse nodes
+                nodes.forEach((node, index) => {
+                    const scale = 1 + Math.sin(Date.now() * 0.001 + index * 0.5) * 0.3;
+                    node.scale.setScalar(scale);
+                });
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+            dashboardState.threeJSScenes.analytics = { scene, camera, renderer };
+        }
+
+        // Performance 3D Visualization
+        function initializePerformance3D() {
+            const canvas = document.getElementById('performance-3d-canvas');
+            if (!canvas || typeof THREE === 'undefined') return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create performance bars
+            const bars = [];
+            const performanceData = [87.4, 94.2, 89.7, 92.1, 88.5, 91.3];
+
+            performanceData.forEach((value, index) => {
+                const height = (value / 100) * 5;
+                const geometry = new THREE.BoxGeometry(0.8, height, 0.8);
+                const material = new THREE.MeshBasicMaterial({
+                    color: new THREE.Color().setHSL(0.1 + (value / 100) * 0.3, 0.8, 0.6),
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const bar = new THREE.Mesh(geometry, material);
+                bar.position.x = (index - 2.5) * 1.5;
+                bar.position.y = height / 2;
+                scene.add(bar);
+                bars.push(bar);
+            });
+
+            camera.position.z = 10;
+            camera.position.y = 3;
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Animate bars
+                bars.forEach((bar, index) => {
+                    bar.rotation.y += 0.01;
+                    bar.material.color.setHSL(
+                        0.1 + Math.sin(Date.now() * 0.001 + index) * 0.1,
+                        0.8,
+                        0.6
+                    );
+                });
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+            dashboardState.threeJSScenes.performance = { scene, camera, renderer };
+        }
+
+        // Hawk-Eye 3D Visualization
+        function initializeHawkEye3D() {
+            const canvas = document.getElementById('hawkeye-3d-canvas');
+            if (!canvas || typeof THREE === 'undefined') return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create baseball trajectory
+            const trajectoryPoints = [];
+            for (let i = 0; i <= 100; i++) {
+                const t = i / 100;
+                const x = (t - 0.5) * 12;
+                const y = Math.sin(t * Math.PI) * 4 + 1;
+                const z = Math.cos(t * Math.PI * 3) * 2;
+                trajectoryPoints.push(new THREE.Vector3(x, y, z));
+            }
+
+            const trajectoryGeometry = new THREE.BufferGeometry().setFromPoints(trajectoryPoints);
+            const trajectoryMaterial = new THREE.LineBasicMaterial({
+                color: 0xFFD700,
+                linewidth: 3
+            });
+            const trajectory = new THREE.Line(trajectoryGeometry, trajectoryMaterial);
+            scene.add(trajectory);
+
+            // Baseball
+            const ballGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+            const ballMaterial = new THREE.MeshBasicMaterial({
+                color: 0xFFD700,
+                transparent: true,
+                opacity: 0.9
+            });
+            const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+            scene.add(ball);
+
+            // Strike zone
+            const strikePlane = new THREE.PlaneGeometry(1.5, 2);
+            const strikeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x9BCBEB,
+                transparent: true,
+                opacity: 0.2,
+                side: THREE.DoubleSide
+            });
+            const strikeZone = new THREE.Mesh(strikePlane, strikeMaterial);
+            strikeZone.position.x = 5;
+            scene.add(strikeZone);
+
+            camera.position.z = 8;
+            camera.position.y = 2;
+
+            let animationProgress = 0;
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Move ball along trajectory
+                animationProgress += 0.02;
+                if (animationProgress > 1) animationProgress = 0;
+
+                const pointIndex = Math.floor(animationProgress * trajectoryPoints.length);
+                const point = trajectoryPoints[pointIndex];
+                if (point) {
+                    ball.position.copy(point);
+                }
+
+                // Pulse strike zone
+                const scale = 1 + Math.sin(Date.now() * 0.002) * 0.1;
+                strikeZone.scale.setScalar(scale);
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+            dashboardState.threeJSScenes.hawkeye = { scene, camera, renderer };
+        }
+
+        // Initialize all charts
+        function initializeCharts() {
+            initializeMiniCharts();
+            initializeRealtimeChart();
+        }
+
+        // Initialize mini charts for KPI cards
+        function initializeMiniCharts() {
+            const miniChartConfigs = [
+                { id: 'championship-mini-chart', data: [82, 84, 85, 86, 87.4], color: '#FFD700' },
+                { id: 'pattern-mini-chart', data: [94, 95, 96, 97, 98.1], color: '#9BCBEB' },
+                { id: 'nil-mini-chart', data: [1.7, 1.8, 1.9, 2.0, 2.1], color: '#BF5700' },
+                { id: 'response-mini-chart', data: [102, 98, 95, 90, 87], color: '#00ff7f' }
+            ];
+
+            miniChartConfigs.forEach(config => {
+                const ctx = document.getElementById(config.id);
+                if (!ctx || typeof Chart === 'undefined') return;
+
+                dashboardState.chartInstances[config.id] = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['', '', '', '', ''],
+                        datasets: [{
+                            data: config.data,
+                            borderColor: config.color,
+                            backgroundColor: config.color + '20',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { display: false },
+                            y: { display: false }
+                        },
+                        elements: { point: { radius: 0 } }
+                    }
+                });
+            });
+        }
+
+        // Initialize real-time performance chart
+        function initializeRealtimeChart() {
+            const ctx = document.getElementById('realtime-performance-chart');
+            if (!ctx || typeof Chart === 'undefined') return;
+
+            dashboardState.chartInstances.realtime = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 20}, (_, i) => ''),
+                    datasets: [
+                        {
+                            label: 'Championship Probability',
+                            data: Array.from({length: 20}, () => 80 + Math.random() * 15),
+                            borderColor: '#FFD700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Pattern Recognition',
+                            data: Array.from({length: 20}, () => 90 + Math.random() * 8),
+                            borderColor: '#9BCBEB',
+                            backgroundColor: 'rgba(155, 203, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Character Assessment',
+                            data: Array.from({length: 20}, () => 85 + Math.random() * 10),
+                            borderColor: '#00ff7f',
+                            backgroundColor: 'rgba(0, 255, 127, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e0e6ed' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            min: 75,
+                            max: 100
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutCubic'
+                    }
+                }
+            });
+        }
+
+        // Start real-time updates
+        function startRealTimeUpdates() {
+            if (dashboardState.refreshInterval) {
+                clearInterval(dashboardState.refreshInterval);
+            }
+
+            dashboardState.refreshInterval = setInterval(() => {
+                if (dashboardState.realTimeMode) {
+                    updateKPIValues();
+                    updateRealtimeChart();
+                    updateLiveFeed();
+                }
+            }, 5000);
+        }
+
+        // Update KPI values with realistic variations
+        function updateKPIValues() {
+            const kpiUpdates = [
+                { selector: '.primary-kpi .kpi-value', baseValue: 87.4, variation: 0.3 },
+                { selector: '.secondary-kpi .kpi-value', baseValue: 98.1, variation: 0.1 },
+                { selector: '.tertiary-kpi .kpi-value', baseValue: 2.1, variation: 0.05, prefix: '$', suffix: 'M' },
+                { selector: '.quaternary-kpi .kpi-value', baseValue: 87, variation: 3, prefix: '<', suffix: 'ms' }
+            ];
+
+            kpiUpdates.forEach(update => {
+                const element = document.querySelector(update.selector);
+                if (element) {
+                    const variation = (Math.random() - 0.5) * update.variation;
+                    const newValue = update.baseValue + variation;
+                    const formattedValue = update.suffix === 'M' ? newValue.toFixed(1) :
+                                         update.suffix === 'ms' ? Math.floor(newValue) :
+                                         newValue.toFixed(1);
+
+                    element.textContent = `${update.prefix || ''}${formattedValue}${update.suffix || '%'}`;
+                }
+            });
+        }
+
+        // Update real-time chart
+        function updateRealtimeChart() {
+            const chart = dashboardState.chartInstances.realtime;
+            if (!chart) return;
+
+            chart.data.datasets.forEach(dataset => {
+                dataset.data.shift();
+                const baseValue = dataset.label.includes('Championship') ? 87.4 :
+                                dataset.label.includes('Pattern') ? 98.1 : 92.8;
+                const variation = (Math.random() - 0.5) * 2;
+                dataset.data.push(Math.max(75, Math.min(100, baseValue + variation)));
+            });
+
+            chart.update('none');
+        }
+
+        // Update live feed
+        function updateLiveFeed() {
+            if (dashboardState.liveFeedPaused) return;
+
+            const feedContainer = document.getElementById('liveFeedContainer');
+            if (!feedContainer) return;
+
+            const updates = [
+                'Real-time analytics engine performance optimized by 2.3%',
+                'Character assessment scan completed - leadership patterns detected',
+                'NIL valuation model updated with latest market data',
+                'Hawk-Eye tracking precision improved - strike zone accuracy +1.7%',
+                'Championship probability recalculated based on recent performance',
+                'Pattern recognition engine identified new predictive indicators',
+                'Team cohesion metrics updated - positive trend detected',
+                'Multi-modal processing latency reduced to sub-85ms',
+                'Executive dashboard metrics refreshed - all systems optimal',
+                'Strategic insights generated from latest performance data'
+            ];
+
+            const newUpdate = document.createElement('div');
+            newUpdate.className = 'feed-item';
+            newUpdate.innerHTML = `
+                <div class="feed-timestamp">Just now</div>
+                <div class="feed-content">${updates[Math.floor(Math.random() * updates.length)]}</div>
+            `;
+
+            feedContainer.insertBefore(newUpdate, feedContainer.firstChild);
+
+            // Keep only latest 6 items
+            while (feedContainer.children.length > 6) {
+                feedContainer.removeChild(feedContainer.lastChild);
+            }
+        }
+
+        // Dashboard control functions
+        function refreshDashboard() {
+            console.log('🔄 Refreshing dashboard...');
+            updateKPIValues();
+            updateRealtimeChart();
+            updateLiveFeed();
+
+            // Show brief loading indication
+            const refreshBtn = document.querySelector('.refresh-btn');
+            const originalText = refreshBtn.textContent;
+            refreshBtn.textContent = '🔄 Refreshing...';
+            refreshBtn.disabled = true;
+
+            setTimeout(() => {
+                refreshBtn.textContent = originalText;
+                refreshBtn.disabled = false;
+            }, 1500);
+        }
+
+        function toggleRealTime() {
+            dashboardState.realTimeMode = !dashboardState.realTimeMode;
+            const button = event.target;
+            button.textContent = dashboardState.realTimeMode ? 'Real-Time' : 'Paused';
+            button.style.background = dashboardState.realTimeMode ?
+                'linear-gradient(135deg, #00ff7f, #00B2A9)' :
+                'rgba(255, 71, 87, 0.2)';
+
+            if (dashboardState.realTimeMode) {
+                startRealTimeUpdates();
+            } else {
+                clearInterval(dashboardState.refreshInterval);
+            }
+        }
+
+        function pauseLiveFeed() {
+            dashboardState.liveFeedPaused = !dashboardState.liveFeedPaused;
+            const button = event.target;
+            button.textContent = dashboardState.liveFeedPaused ? 'Resume Feed' : 'Pause Feed';
+        }
+
+        function changeChartView() {
+            const chart = dashboardState.chartInstances.realtime;
+            if (!chart) return;
+
+            // Toggle between different chart types
+            chart.config.type = chart.config.type === 'line' ? 'bar' : 'line';
+            chart.update();
+        }
+
+        function exportAnalytics() {
+            console.log('📊 Exporting analytics data...');
+            // Simulate export functionality
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Exporting...';
+
+            setTimeout(() => {
+                button.textContent = 'Export Complete ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 1500);
+        }
+
+        function generateReport() {
+            console.log('📄 Generating strategic report...');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Generating...';
+
+            setTimeout(() => {
+                button.textContent = 'Report Ready ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 2000);
+        }
+
+        // Handle window resize for responsive design
+        window.addEventListener('resize', () => {
+            // Resize Three.js renderers
+            Object.values(dashboardState.threeJSScenes).forEach(scene => {
+                if (scene.renderer && scene.camera) {
+                    const canvas = scene.renderer.domElement;
+                    scene.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                    scene.camera.updateProjectionMatrix();
+                    scene.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                }
+            });
+
+            // Resize charts
+            Object.values(dashboardState.chartInstances).forEach(chart => {
+                chart.resize();
+            });
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (dashboardState.refreshInterval) {
+                clearInterval(dashboardState.refreshInterval);
+            }
+        });
+    </script>
+
+</body></html>

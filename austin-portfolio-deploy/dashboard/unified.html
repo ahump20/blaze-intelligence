@@ -1,0 +1,1781 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Sports Intelligence Dashboard | Blaze Intelligence</title>
+
+    <!-- Professional Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Blaze Intelligence Core Systems -->
+    <script src="../js/rti-fusion-engine.js"></script>
+    <script src="../js/character-assessment-engine.js"></script>
+    <script src="../js/professional-animations.js"></script>
+    <script src="../js/hawkeye-mcp-client.js"></script>
+    <script src="../js/hawkeye-3d-visualization.js"></script>
+
+    <style>
+        :root {
+            /* Brand Colors - Blaze Intelligence Professional Palette */
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --grizzly-teal: #00B2A9;
+            --neural-green: #00ff7f;
+            --championship-gold: #FFD700;
+            --executive-platinum: #E5E4E2;
+            --executive-graphite: #36454F;
+            --executive-pearl: #FAFAFA;
+
+            /* Dashboard Theme Colors */
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #0f1419;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --text-tertiary: #c9d1d9;
+
+            /* Professional Spacing & Measurements */
+            --dashboard-radius: 18px;
+            --dashboard-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            --transition-dashboard: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-primary), var(--bg-secondary));
+            color: var(--text-tertiary);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Unified Navigation Bar */
+        .unified-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(25px);
+            border-bottom: 3px solid var(--primary-orange);
+            padding: 0 3rem;
+            height: 85px;
+            display: flex;
+            align-items: center;
+            z-index: 10000;
+            box-shadow: var(--dashboard-shadow);
+        }
+
+        .unified-brand {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 4rem;
+            cursor: pointer;
+            transition: var(--transition-dashboard);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .unified-brand:hover {
+            transform: scale(1.05);
+            filter: brightness(1.3);
+        }
+
+        .unified-nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-right: auto;
+        }
+
+        .unified-nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            transition: var(--transition-dashboard);
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .unified-nav-link:hover, .unified-nav-link.active {
+            color: var(--championship-gold);
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.2), rgba(255, 215, 0, 0.15));
+            border-color: var(--primary-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.3);
+        }
+
+        .unified-status-bar {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--neural-green);
+            box-shadow: 0 0 12px var(--neural-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        /* Unified Dashboard Layout */
+        .unified-dashboard {
+            margin-top: 85px;
+            padding: 2rem;
+            display: grid;
+            grid-template-areas:
+                "control-center control-center control-center control-center"
+                "live-metrics live-metrics performance-overview performance-overview"
+                "hawkeye-tracking hawkeye-tracking championship-analytics championship-analytics"
+                "nil-dashboard character-assessment team-intelligence strategic-insights"
+                "real-time-feed real-time-feed data-visualization data-visualization";
+            grid-template-rows: 120px 300px 400px 350px 350px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Control Center */
+        .control-center {
+            grid-area: control-center;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.15), rgba(255, 215, 0, 0.1));
+            border-radius: var(--dashboard-radius);
+            padding: 2rem 3rem;
+            border: 2px solid rgba(191, 87, 0, 0.3);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--dashboard-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-center::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M 8 0 L 0 0 0 8" fill="none" stroke="rgba(191,87,0,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .control-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .control-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .control-actions {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .control-selector {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .control-selector:hover {
+            border-color: var(--primary-orange);
+            background: rgba(191, 87, 0, 0.1);
+        }
+
+        .btn-unified {
+            background: linear-gradient(135deg, var(--cardinal-blue), var(--grizzly-teal));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-dashboard);
+            font-size: 1rem;
+        }
+
+        .btn-unified:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(155, 203, 235, 0.4);
+        }
+
+        /* Dashboard Sections */
+        .dashboard-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--dashboard-radius);
+            padding: 2.5rem;
+            border: 2px solid rgba(155, 203, 235, 0.2);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--dashboard-shadow);
+            transition: var(--transition-dashboard);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-section:hover {
+            border-color: var(--primary-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(191, 87, 0, 0.3);
+        }
+
+        .live-metrics { grid-area: live-metrics; }
+        .performance-overview { grid-area: performance-overview; }
+        .hawkeye-tracking { grid-area: hawkeye-tracking; }
+        .championship-analytics { grid-area: championship-analytics; }
+        .nil-dashboard { grid-area: nil-dashboard; }
+        .character-assessment { grid-area: character-assessment; }
+        .team-intelligence { grid-area: team-intelligence; }
+        .strategic-insights { grid-area: strategic-insights; }
+        .real-time-feed { grid-area: real-time-feed; }
+        .data-visualization { grid-area: data-visualization; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.3rem;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-section {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+            border-radius: 10px;
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            color: var(--primary-orange);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-section:hover {
+            background: rgba(191, 87, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Live Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .metric-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            background: rgba(191, 87, 0, 0.1);
+            border-color: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--championship-gold));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-trend {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .metric-trend.positive {
+            background: rgba(0, 255, 127, 0.1);
+            color: var(--neural-green);
+        }
+
+        .metric-trend.negative {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+        }
+
+        /* 3D Canvas Containers */
+        .canvas-container {
+            position: relative;
+            height: 280px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+        }
+
+        .canvas-container canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        .large-chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        /* Team Intelligence Display */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .team-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .team-card:hover {
+            background: rgba(191, 87, 0, 0.1);
+            border-color: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+        }
+
+        .team-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-performance {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--neural-green);
+        }
+
+        .team-sport {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* NIL Dashboard Display */
+        .nil-display {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .nil-value-large {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--championship-gold), var(--primary-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .nil-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .nil-factor {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .nil-factor-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .nil-factor-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Character Assessment Display */
+        .character-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .character-metric {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            transition: var(--transition-smooth);
+        }
+
+        .character-metric:hover {
+            background: rgba(155, 203, 235, 0.1);
+            border-color: var(--cardinal-blue);
+        }
+
+        .character-score {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--cardinal-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .character-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Real-Time Feed */
+        .feed-container {
+            max-height: 280px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        .feed-item {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--neural-green);
+            transition: var(--transition-smooth);
+        }
+
+        .feed-item:hover {
+            background: rgba(0, 0, 0, 0.4);
+            transform: translateX(5px);
+        }
+
+        .feed-timestamp {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feed-content {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .feed-priority {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .feed-priority.high {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        .feed-priority.medium {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        .feed-priority.low {
+            background: rgba(0, 255, 127, 0.2);
+            color: var(--neural-green);
+        }
+
+        /* Strategic Insights */
+        .insights-container {
+            margin-top: 1rem;
+        }
+
+        .insight-item {
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--championship-gold);
+            transition: var(--transition-smooth);
+        }
+
+        .insight-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .insight-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+        }
+
+        .insight-content {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .insight-confidence {
+            font-size: 0.8rem;
+            color: var(--neural-green);
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1600px) {
+            .unified-dashboard {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-areas:
+                    "control-center control-center control-center"
+                    "live-metrics live-metrics performance-overview"
+                    "hawkeye-tracking championship-analytics championship-analytics"
+                    "nil-dashboard character-assessment team-intelligence"
+                    "strategic-insights real-time-feed real-time-feed"
+                    "data-visualization data-visualization data-visualization";
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .unified-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-areas:
+                    "control-center control-center"
+                    "live-metrics performance-overview"
+                    "hawkeye-tracking championship-analytics"
+                    "nil-dashboard character-assessment"
+                    "team-intelligence strategic-insights"
+                    "real-time-feed data-visualization";
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .team-grid,
+            .character-metrics,
+            .nil-breakdown {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .unified-dashboard {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "control-center"
+                    "live-metrics"
+                    "performance-overview"
+                    "hawkeye-tracking"
+                    "championship-analytics"
+                    "nil-dashboard"
+                    "character-assessment"
+                    "team-intelligence"
+                    "strategic-insights"
+                    "real-time-feed"
+                    "data-visualization";
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .unified-navbar {
+                padding: 0 1rem;
+                height: 70px;
+            }
+
+            .unified-nav-links {
+                display: none;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .control-center {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Loading States */
+        .loading-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(191, 87, 0, 0.2);
+            border-top: 4px solid var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.04;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Unified Navigation -->
+    <nav class="unified-navbar">
+        <div class="unified-brand">
+            🔥 Blaze Intelligence
+        </div>
+
+        <div class="unified-nav-links">
+            <a href="/" class="unified-nav-link">Platform Home</a>
+            <a href="/executive/" class="unified-nav-link">Executive Center</a>
+            <a href="/dashboard/unified.html" class="unified-nav-link active">Unified Dashboard</a>
+            <a href="/3d/visualization.html" class="unified-nav-link">3D Visualization</a>
+        </div>
+
+        <div class="unified-status-bar">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                RTI Live
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" style="background: var(--championship-gold); box-shadow: 0 0 12px var(--championship-gold);"></div>
+                Hawk-Eye Active
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" style="background: var(--cardinal-blue); box-shadow: 0 0 12px var(--cardinal-blue);"></div>
+                AI Models Running
+            </div>
+        </div>
+    </nav>
+
+    <!-- Unified Dashboard -->
+    <main class="unified-dashboard">
+        <!-- Control Center -->
+        <section class="control-center">
+            <div class="control-content">
+                <h1 class="control-title">Unified Sports Intelligence Dashboard</h1>
+                <p class="control-subtitle">Real-time championship analytics across all teams and platforms</p>
+            </div>
+            <div class="control-actions">
+                <select class="control-selector" id="teamSelector">
+                    <option value="all" selected="">All Teams</option>
+                    <option value="cardinals">Cardinals (MLB)</option>
+                    <option value="titans">Titans (NFL)</option>
+                    <option value="longhorns">Longhorns (NCAA)</option>
+                    <option value="grizzlies">Grizzlies (NBA)</option>
+                </select>
+                <select class="control-selector" id="timeSelector">
+                    <option value="live" selected="">Live Data</option>
+                    <option value="1h">Last Hour</option>
+                    <option value="24h">Last 24 Hours</option>
+                    <option value="7d">Last 7 Days</option>
+                </select>
+                <button class="btn-unified" onclick="refreshDashboard()">🔄 Refresh All</button>
+            </div>
+        </section>
+
+        <!-- Live Metrics -->
+        <section class="dashboard-section live-metrics">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        📊 Live Performance Metrics
+                    </h2>
+                    <div class="section-subtitle">Real-time championship indicators across all platforms</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="exportMetrics()">Export</button>
+                </div>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">87.4%</div>
+                    <div class="metric-label">Championship Probability</div>
+                    <div class="metric-trend positive">↗ +12.3%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">94.6%</div>
+                    <div class="metric-label">Pattern Recognition</div>
+                    <div class="metric-trend positive">↗ +8.7%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">92.8%</div>
+                    <div class="metric-label">Character Assessment</div>
+                    <div class="metric-trend positive">↗ +15.2%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">&lt;87ms</div>
+                    <div class="metric-label">Response Time</div>
+                    <div class="metric-trend positive">↗ -15ms</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Overview -->
+        <section class="dashboard-section performance-overview">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        ⚡ Performance Overview
+                    </h2>
+                    <div class="section-subtitle">Multi-dimensional performance tracking and analysis</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="toggleRealTime()">Real-Time</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="performance-overview-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Hawk-Eye Tracking -->
+        <section class="dashboard-section hawkeye-tracking">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        👁️ Hawk-Eye Precision Tracking
+                    </h2>
+                    <div class="section-subtitle">Sub-millimeter trajectory analysis and strike zone validation</div>
+                </div>
+                <div class="section-actions">
+                    <a href="/hawkeye-innovations-dashboard.html" class="btn-section">Full Dashboard</a>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="hawkeye-3d-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Championship Analytics -->
+        <section class="dashboard-section championship-analytics">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🏆 Championship Analytics Engine
+                    </h2>
+                    <div class="section-subtitle">Advanced championship probability modeling and prediction</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="runChampionshipAnalysis()">Analyze</button>
+                </div>
+            </div>
+            <div class="large-chart-container">
+                <canvas id="championship-analytics-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- NIL Dashboard -->
+        <section class="dashboard-section nil-dashboard">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        💰 NIL Valuation Dashboard
+                    </h2>
+                    <div class="section-subtitle">Name, Image, Likeness market intelligence</div>
+                </div>
+                <div class="section-actions">
+                    <a href="/nil-calculator-advanced.html" class="btn-section">Calculator</a>
+                </div>
+            </div>
+            <div class="nil-display">
+                <div class="nil-value-large">$2.1M</div>
+                <div class="nil-breakdown">
+                    <div class="nil-factor">
+                        <div class="nil-factor-value">92%</div>
+                        <div class="nil-factor-label">Performance Score</div>
+                    </div>
+                    <div class="nil-factor">
+                        <div class="nil-factor-value">78%</div>
+                        <div class="nil-factor-label">Market Influence</div>
+                    </div>
+                    <div class="nil-factor">
+                        <div class="nil-factor-value">85%</div>
+                        <div class="nil-factor-label">Social Engagement</div>
+                    </div>
+                    <div class="nil-factor">
+                        <div class="nil-factor-value">89%</div>
+                        <div class="nil-factor-label">Championship DNA</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Character Assessment -->
+        <section class="dashboard-section character-assessment">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🧠 Character Assessment AI
+                    </h2>
+                    <div class="section-subtitle">Micro-expression analysis and leadership pattern detection</div>
+                </div>
+                <div class="section-actions">
+                    <a href="/character-assessment.html" class="btn-section">Full Assessment</a>
+                </div>
+            </div>
+            <div class="character-metrics">
+                <div class="character-metric">
+                    <div class="character-score">92.8%</div>
+                    <div class="character-label">Leadership DNA</div>
+                </div>
+                <div class="character-metric">
+                    <div class="character-score">89.4%</div>
+                    <div class="character-label">Resilience Index</div>
+                </div>
+                <div class="character-metric">
+                    <div class="character-score">95.1%</div>
+                    <div class="character-label">Team Chemistry</div>
+                </div>
+                <div class="character-metric">
+                    <div class="character-score">91.7%</div>
+                    <div class="character-label">Pressure Response</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Intelligence -->
+        <section class="dashboard-section team-intelligence">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🏆 Team Intelligence Analysis
+                    </h2>
+                    <div class="section-subtitle">Multi-sport championship tracking and performance analysis</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="analyzeAllTeams()">Analyze All</button>
+                </div>
+            </div>
+            <div class="team-grid">
+                <div class="team-card" onclick="openTeamDashboard('cardinals')">
+                    <div class="team-name">Cardinals</div>
+                    <div class="team-stats">
+                        <div class="team-sport">MLB • 2025 Season</div>
+                        <div class="team-performance">94.2%</div>
+                    </div>
+                </div>
+                <div class="team-card" onclick="openTeamDashboard('titans')">
+                    <div class="team-name">Titans</div>
+                    <div class="team-stats">
+                        <div class="team-sport">NFL • Season Performance</div>
+                        <div class="team-performance">89.7%</div>
+                    </div>
+                </div>
+                <div class="team-card" onclick="openTeamDashboard('longhorns')">
+                    <div class="team-name">Longhorns</div>
+                    <div class="team-stats">
+                        <div class="team-sport">NCAA • Championship Track</div>
+                        <div class="team-performance">92.1%</div>
+                    </div>
+                </div>
+                <div class="team-card" onclick="openTeamDashboard('grizzlies')">
+                    <div class="team-name">Grizzlies</div>
+                    <div class="team-stats">
+                        <div class="team-sport">NBA • Playoff Positioning</div>
+                        <div class="team-performance">87.5%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategic Insights -->
+        <section class="dashboard-section strategic-insights">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🎯 Strategic Intelligence
+                    </h2>
+                    <div class="section-subtitle">AI-generated strategic insights and recommendations</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="generateInsights()">Generate</button>
+                </div>
+            </div>
+            <div class="insights-container">
+                <div class="insight-item">
+                    <div class="insight-title">Championship Trajectory Alert</div>
+                    <div class="insight-content">Current performance metrics indicate 87.4% championship probability. Key factors: improved team cohesion (+12%) and clutch performance metrics (+15%).</div>
+                    <div class="insight-confidence">Confidence: 94.6%</div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-title">NIL Market Opportunity</div>
+                    <div class="insight-content">Machine learning models predict 23.4% growth in quarterback NIL valuations. Recommended action: increase investment allocation in position-specific opportunities.</div>
+                    <div class="insight-confidence">Confidence: 91.7%</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-Time Intelligence Feed -->
+        <section class="dashboard-section real-time-feed">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        📡 Real-Time Intelligence Feed
+                    </h2>
+                    <div class="section-subtitle">Live updates from all systems and platforms</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="pauseFeed()">Pause Feed</button>
+                </div>
+            </div>
+            <div class="feed-container" id="realTimeFeed">
+                <div class="feed-item">
+                    <div class="feed-timestamp">2 minutes ago</div>
+                    <div class="feed-content">
+                        Cardinals bullpen performance metrics updated - 94.6% efficiency rating
+                        <span class="feed-priority high">High Priority</span>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-timestamp">5 minutes ago</div>
+                    <div class="feed-content">
+                        Hawk-Eye tracking data: Strike zone accuracy improved by 2.3%
+                        <span class="feed-priority medium">Medium Priority</span>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-timestamp">8 minutes ago</div>
+                    <div class="feed-content">
+                        NIL market analysis: 15% increase in quarterback valuations
+                        <span class="feed-priority low">Low Priority</span>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-timestamp">12 minutes ago</div>
+                    <div class="feed-content">
+                        Character assessment engine: New leadership patterns detected
+                        <span class="feed-priority medium">Medium Priority</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Visualization -->
+        <section class="dashboard-section data-visualization">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        📈 Advanced Data Visualization
+                    </h2>
+                    <div class="section-subtitle">Multi-dimensional performance correlation and trend analysis</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="switchVisualization()">Switch View</button>
+                </div>
+            </div>
+            <div class="large-chart-container">
+                <canvas id="data-visualization-chart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global dashboard state
+        let dashboardState = {
+            currentTeam: 'all',
+            timeRange: 'live',
+            realTimeMode: true,
+            feedPaused: false,
+            chartInstances: {},
+            threeJSScenes: {},
+            updateInterval: null
+        };
+
+        // Initialize Unified Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔥 Initializing Unified Sports Intelligence Dashboard...');
+
+            // Initialize background particles
+            initializeParticles();
+
+            // Initialize all visualizations
+            initializeAll3DVisualizations();
+
+            // Initialize all charts
+            initializeAllCharts();
+
+            // Set up control event listeners
+            initializeControls();
+
+            // Start real-time updates
+            startRealTimeUpdates();
+
+            console.log('✅ Unified Dashboard fully loaded');
+        });
+
+        // Particles.js Background
+        function initializeParticles() {
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 40, density: { enable: true, value_area: 2500 } },
+                        color: { value: ['#BF5700', '#9BCBEB', '#FFD700'] },
+                        shape: { type: 'circle' },
+                        opacity: {
+                            value: 0.15,
+                            random: true,
+                            anim: { enable: true, speed: 0.8, opacity_min: 0.02, sync: false }
+                        },
+                        size: {
+                            value: 1.2,
+                            random: true,
+                            anim: { enable: true, speed: 1.5, size_min: 0.1, sync: false }
+                        },
+                        line_linked: {
+                            enable: true,
+                            distance: 250,
+                            color: '#BF5700',
+                            opacity: 0.04,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 0.6,
+                            direction: 'none',
+                            random: false,
+                            straight: false,
+                            out_mode: 'out',
+                            bounce: false
+                        }
+                    },
+                    interactivity: {
+                        detect_on: 'canvas',
+                        events: {
+                            onhover: { enable: false },
+                            onclick: { enable: false },
+                            resize: true
+                        }
+                    },
+                    retina_detect: true
+                });
+            }
+        }
+
+        // Initialize all 3D visualizations
+        function initializeAll3DVisualizations() {
+            initializeHawkEye3D();
+        }
+
+        // Hawk-Eye 3D Visualization
+        function initializeHawkEye3D() {
+            const canvas = document.getElementById('hawkeye-3d-canvas');
+            if (!canvas || typeof THREE === 'undefined') return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create baseball trajectory
+            const trajectoryPoints = [];
+            for (let i = 0; i <= 100; i++) {
+                const t = i / 100;
+                const x = (t - 0.5) * 12;
+                const y = Math.sin(t * Math.PI) * 4 + 1;
+                const z = Math.cos(t * Math.PI * 3) * 2;
+                trajectoryPoints.push(new THREE.Vector3(x, y, z));
+            }
+
+            const trajectoryGeometry = new THREE.BufferGeometry().setFromPoints(trajectoryPoints);
+            const trajectoryMaterial = new THREE.LineBasicMaterial({
+                color: 0xFFD700,
+                linewidth: 3
+            });
+            const trajectory = new THREE.Line(trajectoryGeometry, trajectoryMaterial);
+            scene.add(trajectory);
+
+            // Baseball
+            const ballGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+            const ballMaterial = new THREE.MeshBasicMaterial({
+                color: 0xFFFFFF,
+                transparent: true,
+                opacity: 0.9
+            });
+            const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+            scene.add(ball);
+
+            // Strike zone
+            const strikePlane = new THREE.PlaneGeometry(1.5, 2);
+            const strikeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x9BCBEB,
+                transparent: true,
+                opacity: 0.3,
+                side: THREE.DoubleSide
+            });
+            const strikeZone = new THREE.Mesh(strikePlane, strikeMaterial);
+            strikeZone.position.x = 5;
+            scene.add(strikeZone);
+
+            camera.position.z = 8;
+            camera.position.y = 2;
+
+            let animationProgress = 0;
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Move ball along trajectory
+                animationProgress += 0.015;
+                if (animationProgress > 1) animationProgress = 0;
+
+                const pointIndex = Math.floor(animationProgress * trajectoryPoints.length);
+                const point = trajectoryPoints[pointIndex];
+                if (point) {
+                    ball.position.copy(point);
+                }
+
+                // Pulse strike zone
+                const scale = 1 + Math.sin(Date.now() * 0.002) * 0.1;
+                strikeZone.scale.setScalar(scale);
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+            dashboardState.threeJSScenes.hawkeye = { scene, camera, renderer };
+        }
+
+        // Initialize all charts
+        function initializeAllCharts() {
+            initializePerformanceOverviewChart();
+            initializeChampionshipAnalyticsChart();
+            initializeDataVisualizationChart();
+        }
+
+        // Performance Overview Chart
+        function initializePerformanceOverviewChart() {
+            const ctx = document.getElementById('performance-overview-chart');
+            if (!ctx || typeof Chart === 'undefined') return;
+
+            dashboardState.chartInstances.performance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                    datasets: [
+                        {
+                            label: 'Championship Probability',
+                            data: Array.from({length: 24}, () => 80 + Math.random() * 15),
+                            borderColor: '#FFD700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Pattern Recognition',
+                            data: Array.from({length: 24}, () => 90 + Math.random() * 8),
+                            borderColor: '#9BCBEB',
+                            backgroundColor: 'rgba(155, 203, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Character Assessment',
+                            data: Array.from({length: 24}, () => 85 + Math.random() * 10),
+                            borderColor: '#00ff7f',
+                            backgroundColor: 'rgba(0, 255, 127, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e0e6ed' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            min: 75,
+                            max: 100
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutCubic'
+                    }
+                }
+            });
+        }
+
+        // Championship Analytics Chart
+        function initializeChampionshipAnalyticsChart() {
+            const ctx = document.getElementById('championship-analytics-chart');
+            if (!ctx || typeof Chart === 'undefined') return;
+
+            dashboardState.chartInstances.championship = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Performance Index',
+                        'Character DNA',
+                        'Team Chemistry',
+                        'Clutch Factor',
+                        'Leadership Score',
+                        'Resilience Index',
+                        'Pattern Recognition',
+                        'Decision Velocity'
+                    ],
+                    datasets: [
+                        {
+                            label: 'Cardinals',
+                            data: [94, 92, 89, 96, 91, 88, 93, 90],
+                            backgroundColor: 'rgba(255, 215, 0, 0.2)',
+                            borderColor: '#FFD700',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#FFD700',
+                            pointBorderColor: '#FFD700',
+                            pointRadius: 6
+                        },
+                        {
+                            label: 'Titans',
+                            data: [89, 87, 92, 88, 94, 90, 86, 91],
+                            backgroundColor: 'rgba(155, 203, 235, 0.2)',
+                            borderColor: '#9BCBEB',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#9BCBEB',
+                            pointBorderColor: '#9BCBEB',
+                            pointRadius: 6
+                        },
+                        {
+                            label: 'Longhorns',
+                            data: [92, 94, 88, 90, 89, 95, 91, 87],
+                            backgroundColor: 'rgba(191, 87, 0, 0.2)',
+                            borderColor: '#BF5700',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#BF5700',
+                            pointBorderColor: '#BF5700',
+                            pointRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e0e6ed' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#e0e6ed', font: { size: 12 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Data Visualization Chart
+        function initializeDataVisualizationChart() {
+            const ctx = document.getElementById('data-visualization-chart');
+            if (!ctx || typeof Chart === 'undefined') return;
+
+            dashboardState.chartInstances.dataViz = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Championship Teams',
+                            data: Array.from({length: 8}, () => ({
+                                x: 85 + Math.random() * 15,
+                                y: 80 + Math.random() * 20
+                            })),
+                            backgroundColor: '#FFD700',
+                            borderColor: '#FFD700',
+                            pointRadius: 10,
+                            pointHoverRadius: 15
+                        },
+                        {
+                            label: 'High Performance Teams',
+                            data: Array.from({length: 12}, () => ({
+                                x: 70 + Math.random() * 25,
+                                y: 65 + Math.random() * 25
+                            })),
+                            backgroundColor: '#9BCBEB',
+                            borderColor: '#9BCBEB',
+                            pointRadius: 8,
+                            pointHoverRadius: 12
+                        },
+                        {
+                            label: 'Developing Teams',
+                            data: Array.from({length: 15}, () => ({
+                                x: 50 + Math.random() * 30,
+                                y: 45 + Math.random() * 30
+                            })),
+                            backgroundColor: '#00B2A9',
+                            borderColor: '#00B2A9',
+                            pointRadius: 6,
+                            pointHoverRadius: 10
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e0e6ed' }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Performance vs Championship Probability Matrix',
+                            color: '#e0e6ed',
+                            font: { size: 16 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Performance Index',
+                                color: '#e0e6ed'
+                            },
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Championship Probability (%)',
+                                color: '#e0e6ed'
+                            },
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize controls
+        function initializeControls() {
+            document.getElementById('teamSelector').addEventListener('change', (e) => {
+                dashboardState.currentTeam = e.target.value;
+                refreshDashboardData();
+            });
+
+            document.getElementById('timeSelector').addEventListener('change', (e) => {
+                dashboardState.timeRange = e.target.value;
+                refreshDashboardData();
+            });
+        }
+
+        // Start real-time updates
+        function startRealTimeUpdates() {
+            if (dashboardState.updateInterval) {
+                clearInterval(dashboardState.updateInterval);
+            }
+
+            dashboardState.updateInterval = setInterval(() => {
+                if (dashboardState.realTimeMode) {
+                    updateMetrics();
+                    updateCharts();
+                    updateRealTimeFeed();
+                }
+            }, 5000);
+        }
+
+        // Update metrics
+        function updateMetrics() {
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                if (metric.textContent.includes('%')) {
+                    const currentValue = parseFloat(metric.textContent);
+                    const variation = (Math.random() - 0.5) * 0.5;
+                    const newValue = Math.max(80, Math.min(100, currentValue + variation));
+                    metric.textContent = newValue.toFixed(1) + '%';
+                } else if (metric.textContent.includes('ms')) {
+                    const currentValue = parseInt(metric.textContent.replace(/[^0-9]/g, ''));
+                    const variation = Math.floor((Math.random() - 0.5) * 5);
+                    const newValue = Math.max(70, Math.min(100, currentValue + variation));
+                    metric.textContent = `<${newValue}ms`;
+                }
+            });
+        }
+
+        // Update charts
+        function updateCharts() {
+            const performanceChart = dashboardState.chartInstances.performance;
+            if (performanceChart) {
+                performanceChart.data.datasets.forEach(dataset => {
+                    dataset.data.shift();
+                    const baseValue = dataset.label.includes('Championship') ? 87.4 :
+                                    dataset.label.includes('Pattern') ? 94.6 : 92.8;
+                    const variation = (Math.random() - 0.5) * 2;
+                    dataset.data.push(Math.max(75, Math.min(100, baseValue + variation)));
+                });
+                performanceChart.update('none');
+            }
+        }
+
+        // Update real-time feed
+        function updateRealTimeFeed() {
+            if (dashboardState.feedPaused) return;
+
+            const feedContainer = document.getElementById('realTimeFeed');
+            if (!feedContainer) return;
+
+            const updates = [
+                { content: 'Real-time analytics engine performance optimized by 2.3%', priority: 'low' },
+                { content: 'Championship probability recalculated - Cardinals trending up', priority: 'high' },
+                { content: 'Character assessment scan completed with 98.2% accuracy', priority: 'medium' },
+                { content: 'NIL valuation model updated with latest market data', priority: 'medium' },
+                { content: 'Hawk-Eye tracking precision improved - strike zone accuracy +1.7%', priority: 'low' },
+                { content: 'Pattern recognition engine identified new predictive indicators', priority: 'high' },
+                { content: 'Team cohesion metrics updated - positive trend detected', priority: 'medium' }
+            ];
+
+            const randomUpdate = updates[Math.floor(Math.random() * updates.length)];
+            const newItem = document.createElement('div');
+            newItem.className = 'feed-item';
+            newItem.innerHTML = `
+                <div class="feed-timestamp">Just now</div>
+                <div class="feed-content">
+                    ${randomUpdate.content}
+                    <span class="feed-priority ${randomUpdate.priority}">${randomUpdate.priority.charAt(0).toUpperCase() + randomUpdate.priority.slice(1)} Priority</span>
+                </div>
+            `;
+
+            feedContainer.insertBefore(newItem, feedContainer.firstChild);
+
+            // Keep only latest 6 items
+            while (feedContainer.children.length > 6) {
+                feedContainer.removeChild(feedContainer.lastChild);
+            }
+        }
+
+        // Control functions
+        function refreshDashboard() {
+            console.log('🔄 Refreshing unified dashboard...');
+            updateMetrics();
+            updateCharts();
+            updateRealTimeFeed();
+
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '🔄 Refreshing...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                button.textContent = '✅ Refreshed';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 2000);
+            }, 2000);
+        }
+
+        function refreshDashboardData() {
+            console.log(`📊 Updating dashboard for team: ${dashboardState.currentTeam}, timeRange: ${dashboardState.timeRange}`);
+            // Update all visualizations based on new filters
+            updateMetrics();
+            updateCharts();
+        }
+
+        function exportMetrics() {
+            console.log('📊 Exporting unified metrics...');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Exporting...';
+
+            setTimeout(() => {
+                button.textContent = 'Export Complete ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 1500);
+        }
+
+        function toggleRealTime() {
+            dashboardState.realTimeMode = !dashboardState.realTimeMode;
+            const button = event.target;
+            button.textContent = dashboardState.realTimeMode ? 'Real-Time' : 'Paused';
+            button.style.background = dashboardState.realTimeMode ?
+                'linear-gradient(135deg, #00ff7f, #00B2A9)' :
+                'rgba(255, 71, 87, 0.2)';
+
+            if (dashboardState.realTimeMode) {
+                startRealTimeUpdates();
+            } else {
+                clearInterval(dashboardState.updateInterval);
+            }
+        }
+
+        function runChampionshipAnalysis() {
+            console.log('🏆 Running championship analysis...');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Analyzing...';
+
+            setTimeout(() => {
+                button.textContent = 'Analysis Complete ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 3000);
+        }
+
+        function analyzeAllTeams() {
+            console.log('🔍 Analyzing all teams...');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Analyzing...';
+
+            setTimeout(() => {
+                button.textContent = 'Analysis Complete ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 2500);
+        }
+
+        function generateInsights() {
+            console.log('🎯 Generating strategic insights...');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Generating...';
+
+            setTimeout(() => {
+                button.textContent = 'Insights Ready ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 2000);
+        }
+
+        function pauseFeed() {
+            dashboardState.feedPaused = !dashboardState.feedPaused;
+            const button = event.target;
+            button.textContent = dashboardState.feedPaused ? 'Resume Feed' : 'Pause Feed';
+        }
+
+        function switchVisualization() {
+            const chart = dashboardState.chartInstances.dataViz;
+            if (chart) {
+                chart.config.type = chart.config.type === 'scatter' ? 'bubble' : 'scatter';
+                chart.update();
+            }
+        }
+
+        function openTeamDashboard(team) {
+            console.log(`🏆 Opening ${team} dashboard...`);
+            const urls = {
+                cardinals: '/cardinals-intelligence-dashboard.html',
+                titans: '#titans-dashboard',
+                longhorns: '#longhorns-dashboard',
+                grizzlies: '#grizzlies-dashboard'
+            };
+            window.open(urls[team] || '#', '_blank');
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            // Resize Three.js renderers
+            Object.values(dashboardState.threeJSScenes).forEach(scene => {
+                if (scene.renderer && scene.camera) {
+                    const canvas = scene.renderer.domElement;
+                    scene.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                    scene.camera.updateProjectionMatrix();
+                    scene.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                }
+            });
+
+            // Resize charts
+            Object.values(dashboardState.chartInstances).forEach(chart => {
+                chart.resize();
+            });
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (dashboardState.updateInterval) {
+                clearInterval(dashboardState.updateInterval);
+            }
+        });
+    </script>
+
+</body></html>

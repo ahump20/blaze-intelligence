@@ -1,0 +1,28 @@
+{
+    "name": "hawkeye-innovations-mcp",
+    "version": "1.0.0",
+    "description": "Hawk-Eye Innovations MCP server for advanced ball tracking and sports analytics",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "node --watch index.js"
+    },
+    "keywords": [
+        "mcp",
+        "hawk-eye",
+        "sports",
+        "tracking",
+        "baseball",
+        "football"
+    ],
+    "author": "Austin Humphrey",
+    "license": "MIT",
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^0.5.0",
+        "zod": "^3.25.76"
+    },
+    "engines": {
+        "node": ">=18"
+    }
+}

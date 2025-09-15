@@ -1,0 +1,85 @@
+# Render.com Production Deployment Configuration
+# Blaze Intelligence MCP Server - Championship Infrastructure
+
+services:
+  - type: web
+    name: blaze-intelligence-mcp
+    env: node
+    plan: starter # Upgrade to standard for production
+    region: oregon # US West for optimal latency
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+
+    # Auto-scaling configuration
+    autoDeploy: true
+
+    # Environment variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      - key: CHAMPIONSHIP_MODE
+        value: "true"
+
+      - key: PORT
+        value: "10000"
+
+      - key: JWT_SECRET
+        generateValue: true
+
+      # Sports API Keys (add these in Render dashboard)
+      - key: MLB_API_KEY
+        sync: false
+
+      - key: ESPN_API_KEY
+        sync: false
+
+      - key: PERFECT_GAME_API_KEY
+        sync: false
+
+      # Redis Configuration (optional)
+      - key: REDIS_URL
+        sync: false
+
+    # Disk storage for logs
+    disk:
+      name: logs
+      mountPath: /opt/render/project/src/logs
+      sizeGB: 1
+
+    # Custom domains (configure after deployment)
+    domains:
+      - hawkeye-mcp.blaze-intelligence.com
+
+    # Health check configuration
+    healthCheck:
+      httpPath: /health
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+
+    # Resource limits
+    scaling:
+      minInstances: 1
+      maxInstances: 5
+      targetCPUPercent: 70
+      targetMemoryPercent: 80
+
+# Database (optional - for future scaling)
+databases:
+  - name: blaze-intelligence-db
+    databaseName: blaze_intelligence
+    user: blaze_user
+    plan: starter # Free tier
+    region: oregon
+    version: "15"
+
+# Redis (optional - for caching and real-time features)
+# Uncomment when ready for Redis scaling
+# - type: redis
+#   name: blaze-intelligence-cache
+#   plan: starter
+#   region: oregon
+#   maxmemoryPolicy: allkeys-lru

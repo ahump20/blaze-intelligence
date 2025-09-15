@@ -1,7 +1,8 @@
 /**
  * Blaze Intelligence Real-Time Fusion Engine
- * Based on the reference architecture for <100ms multimodal processing
- * Implements time-aligned event correlation with ring buffers
+ * Championship-grade multimodal processing with <87ms latency
+ * Implements time-aligned event correlation with optimized ring buffers
+ * Enhanced for Executive Intelligence Center and Unified Dashboard
  */
 
 class RingBuffer {

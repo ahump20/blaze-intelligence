@@ -1,0 +1,52 @@
+{
+    "name": "hawkeye-innovations-mcp",
+    "version": "1.0.0",
+    "description": "Hawk-Eye Innovations MCP server for advanced ball tracking and sports analytics",
+    "author": "Austin Humphrey",
+    "github": "https://github.com/ahump20/BI",
+    "domain": "blaze-intelligence.netlify.app",
+    "server": {
+        "command": "node",
+        "args": ["index.js"],
+        "transport": "stdio"
+    },
+    "tools": {
+        "trackBall": {
+            "description": "Triangulates ball position and velocity from multi-camera inputs",
+            "params": {
+                "cameras": "Array of camera calibration objects",
+                "measurements": "Array of pixel coordinates for each camera"
+            }
+        },
+        "predictTrajectory": {
+            "description": "Predicts flight path, landing point, time and maximum height",
+            "params": {
+                "position": "Starting position (x,y,z)",
+                "velocity": "Velocity vector (vx,vy,vz)",
+                "spin": "Ball spin (radians per second)"
+            }
+        },
+        "analyzeStrikeZone": {
+            "description": "Determines the strike-zone zone number and probability of a strike",
+            "params": {
+                "plateX": "Horizontal position at plate (m)",
+                "plateY": "Vertical position at plate (m)",
+                "plateZ": "Depth position across plate (m)"
+            }
+        },
+        "txHsFootballSchedule": {
+            "description": "Returns upcoming games for Texas high-school teams",
+            "params": {
+                "school": "High-school identifier or name",
+                "date": "Optional date filter (YYYY-MM-DD)"
+            }
+        },
+        "secTxBaseballSchedule": {
+            "description": "Returns baseball schedule for SEC/TX teams",
+            "params": {
+                "team": "Optional team identifier (e.g., TEXAS)",
+                "season": "Season year (e.g., 2025)"
+            }
+        }
+    }
+}

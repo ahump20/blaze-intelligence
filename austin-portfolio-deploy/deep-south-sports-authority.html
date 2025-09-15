@@ -1,830 +1,1054 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deep South Sports Authority | Blaze Intelligence</title>
-    <link rel="stylesheet" href="css/blaze-championship.css">
-    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
-    <script src="navigation-manager.js"></script>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#BF5700">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Regional sports intelligence for Deep South athletics - SEC football, Texas HS football, Perfect Game baseball, and elite prospect pipelines.">
+    <meta name="keywords" content="Deep South sports, SEC football, Texas HS football, Perfect Game baseball, regional athletics intelligence">
+
+    <!-- Essential Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Component Library -->
+    <link rel="stylesheet" href="/css/blaze-components.css">
+    <script src="/js/blaze-components.js"></script>
+
     <style>
-        .authority-platform {
-            background: linear-gradient(135deg, #002244, #001122);
+        :root {
+            --texas-orange: #BF5700;
+            --longhorn-burnt: #D2691E;
+            --championship-gold: #FFD700;
+            --deep-south-navy: #002244;
+            --crimson-tide: #9E1B32;
+            --tiger-purple: #461D7C;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --border-radius: 12px;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
             min-height: 100vh;
-            font-family: 'Inter', sans-serif;
-            color: #FFFFFF;
             overflow-x: hidden;
         }
 
-        .authority-header {
-            background: rgba(0, 34, 68, 0.95);
-            border-bottom: 3px solid #BF5700;
-            padding: 2rem;
-            text-align: center;
-            position: sticky;
+        /* Navigation */
+        .navbar {
+            position: fixed;
             top: 0;
-            z-index: 100;
-            backdrop-filter: blur(15px);
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--texas-orange);
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .main-title {
-            font-size: 4rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #BF5700, #FFD700);
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--texas-orange), var(--championship-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0 0 0.5rem 0;
-            line-height: 1.1;
         }
 
-        .subtitle {
-            color: #9BCBEB;
-            font-size: 1.4rem;
-            margin: 0;
-            font-weight: 500;
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
         }
 
-        .tagline {
-            color: #BF5700;
-            font-size: 1.1rem;
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            font-size: 0.95rem;
             font-weight: 600;
-            margin-top: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .authority-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
+        .nav-link:hover {
+            color: var(--championship-gold);
+            background: rgba(191, 87, 0, 0.15);
         }
 
-        .authority-grid {
+        /* Main Container */
+        .main-container {
+            margin-top: 70px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Hero Header */
+        .hero-header {
+            background: linear-gradient(135deg,
+                rgba(191, 87, 0, 0.1),
+                rgba(255, 215, 0, 0.05));
+            border-radius: var(--border-radius);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(191,87,0,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            z-index: -1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--texas-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .coverage-map {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(191, 87, 0, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            border: 1px solid var(--texas-orange);
+            position: relative;
+            z-index: 1;
+        }
+
+        .map-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--texas-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Regional Grid */
+        .regional-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-bottom: 4rem;
         }
 
-        .authority-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid transparent;
-            border-radius: 16px;
-            padding: 2.5rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .region-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            backdrop-filter: blur(15px);
+            transition: var(--transition-smooth);
             position: relative;
             overflow: hidden;
         }
 
-        .authority-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(191, 87, 0, 0.1), transparent);
-            transition: left 0.5s ease;
+        .region-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--texas-orange);
+            box-shadow: 0 25px 50px rgba(191, 87, 0, 0.3);
         }
 
-        .authority-card:hover::before {
-            left: 100%;
-        }
-
-        .authority-card:hover {
-            border-color: #BF5700;
-            box-shadow: 0 12px 48px rgba(191, 87, 0, 0.2);
-            transform: translateY(-4px);
-        }
-
-        .card-icon {
-            font-size: 4rem;
-            color: #BF5700;
+        .region-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             margin-bottom: 1.5rem;
-            text-align: center;
-            display: block;
         }
 
-        .card-title {
-            font-size: 1.8rem;
+        .region-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .texas-icon { background: linear-gradient(135deg, #BF5700, #D2691E); }
+        .sec-icon { background: linear-gradient(135deg, #9E1B32, #461D7C); }
+        .perfect-game-icon { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .pipeline-icon { background: linear-gradient(135deg, #00B2A9, #008B8B); }
+
+        .region-title {
+            font-size: 1.4rem;
             font-weight: 700;
-            color: #FFFFFF;
-            margin: 0 0 1rem 0;
-            text-align: center;
+            color: var(--championship-gold);
         }
 
-        .card-description {
-            color: #9BCBEB;
-            line-height: 1.5;
-            text-align: center;
-            margin: 0 0 2rem 0;
+        .region-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
 
-        .card-stats {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        .region-stats {
+            margin: 1.5rem 0;
         }
 
-        .stat-item {
+        .stat-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(191, 87, 0, 0.1);
         }
 
-        .stat-item:last-child {
+        .stat-row:last-child {
             border-bottom: none;
         }
 
         .stat-label {
-            color: #9BCBEB;
-            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         .stat-value {
-            color: #BF5700;
+            color: var(--championship-gold);
             font-weight: 700;
-            font-size: 1.1rem;
         }
 
-        .hero-section {
-            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(255, 215, 0, 0.1));
-            border: 2px solid rgba(191, 87, 0, 0.3);
-            border-radius: 20px;
-            padding: 4rem;
-            margin: 3rem 0;
+        .region-action {
+            background: linear-gradient(135deg, var(--texas-orange), var(--longhorn-burnt));
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .region-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(191, 87, 0, 0.4);
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
             text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--texas-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .hero-title {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #FFFFFF;
-            margin: 0 0 1.5rem 0;
-        }
-
-        .hero-description {
-            font-size: 1.3rem;
-            color: #9BCBEB;
-            line-height: 1.6;
-            margin: 0 0 2rem 0;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-actions {
-            display: flex;
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
         }
 
-        .hero-button {
-            display: inline-flex;
+        .dashboard-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            backdrop-filter: blur(15px);
+            transition: var(--transition-smooth);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--texas-orange);
+            box-shadow: 0 20px 40px rgba(191, 87, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 1.5rem;
+            display: flex;
             align-items: center;
             gap: 0.8rem;
-            background: linear-gradient(135deg, #BF5700, #FF8C00);
-            color: #FFFFFF;
-            padding: 1.2rem 2.5rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
         }
 
-        .hero-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 48px rgba(191, 87, 0, 0.4);
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--texas-orange);
+            border-radius: 4px;
         }
 
-        .hero-button.secondary {
-            background: transparent;
-            border: 2px solid #BF5700;
-            color: #BF5700;
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
         }
 
-        .hero-button.secondary:hover {
-            background: rgba(191, 87, 0, 0.1);
-            color: #FFFFFF;
+        /* 3D Visualization Container */
+        .viz-container {
+            width: 100%;
+            height: 350px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
         }
 
-        .coverage-map {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(191, 87, 0, 0.2);
-            border-radius: 16px;
-            padding: 3rem;
-            margin: 3rem 0;
-        }
-
-        .map-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #BF5700;
-            text-align: center;
-            margin: 0 0 2rem 0;
-        }
-
-        .coverage-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .coverage-region {
-            background: rgba(191, 87, 0, 0.05);
-            border: 1px solid rgba(191, 87, 0, 0.2);
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .region-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #FFFFFF;
-            margin: 0 0 1rem 0;
-        }
-
-        .region-stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 1rem 0;
-        }
-
-        .region-stat {
-            text-align: center;
-        }
-
-        .region-stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #BF5700;
-            display: block;
-        }
-
-        .region-stat-label {
-            font-size: 0.8rem;
-            color: #9BCBEB;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .authority-features {
-            margin: 4rem 0;
-        }
-
-        .features-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #FFFFFF;
-            text-align: center;
-            margin: 0 0 3rem 0;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(155, 203, 235, 0.2);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-
-        .feature-item:hover {
-            border-color: #00B2A9;
-            box-shadow: 0 8px 32px rgba(0, 178, 169, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: #00B2A9;
-            margin-bottom: 1rem;
-        }
-
-        .feature-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #FFFFFF;
-            margin: 0 0 1rem 0;
-        }
-
-        .feature-description {
-            color: #9BCBEB;
-            line-height: 1.4;
-            margin: 0 0 1.5rem 0;
-        }
-
-        .feature-link {
-            color: #00B2A9;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .feature-link:hover {
-            color: #BF5700;
-        }
-
-        .three-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
+        #deepSouthViz {
             width: 100%;
             height: 100%;
-            z-index: -1;
-            opacity: 0.06;
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .main-title {
-                font-size: 2.5rem;
-            }
-
-            .authority-container {
-                padding: 2rem 1rem;
-            }
-
-            .authority-grid {
+            .regional-grid,
+            .dashboard-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .hero-section {
-                padding: 2rem;
             }
 
             .hero-title {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
+            .main-container {
+                padding: 1rem;
             }
 
-            .coverage-grid {
-                grid-template-columns: 1fr;
+            .nav-links {
+                display: none;
             }
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        /* Live Updates */
+        .live-feed {
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid var(--texas-orange);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .feed-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(191, 87, 0, 0.1);
+        }
+
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+
+        .feed-icon {
+            width: 8px;
+            height: 8px;
+            background: var(--texas-orange);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .feed-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .feed-time {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: var(--texas-orange);
         }
     </style>
 </head>
 <body>
-    <div class="authority-platform">
-        <canvas class="three-canvas" id="three-canvas"></canvas>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
 
-        <header class="authority-header">
-            <h1 class="main-title">Deep South Sports Authority</h1>
-            <p class="subtitle">The definitive voice for championship-level sports intelligence across Texas and SEC country</p>
-            <p class="tagline">Where Friday Night Lights Meet Championship Analytics</p>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">Deep South Sports Authority</div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/sec-football-enhanced.html" class="nav-link">SEC Football</a>
+            <a href="/perfect-game-enhanced.html" class="nav-link">Perfect Game</a>
+            <a href="/analytics.html" class="nav-link">Analytics</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Header -->
+        <header class="hero-header">
+            <h1 class="hero-title">Deep South Sports Authority</h1>
+            <p class="hero-subtitle">
+                The definitive source for Deep South athletics intelligence - covering SEC football,
+                Texas high school football, Perfect Game baseball, and elite prospect pipelines from
+                Louisiana to Florida, Texas to North Carolina.
+            </p>
+            <div class="coverage-map">
+                <div class="map-icon">🗺️</div>
+                <span>12 States • 847 Schools • 15,000+ Athletes Tracked</span>
+            </div>
         </header>
 
-        <div class="authority-container">
-            <!-- Hero Section -->
-            <div class="hero-section">
-                <h2 class="hero-title">Born in the Heart of Championship Country</h2>
-                <p class="hero-description">
-                    From the oil fields of East Texas to the rolling hills of SEC territory, we understand that sports isn't just entertainment down here—it's the heartbeat of communities, the measuring stick of generations, and the stage where young men become legends.
-                </p>
-                <div class="hero-actions">
-                    <button class="hero-button" onclick="window.location.href='/analytics.html'" data-action="view-analytics">
-                        <span>🏆</span>
-                        Championship Analytics
-                    </button>
-                    <button class="hero-button secondary" onclick="window.location.href='/contact.html'" data-action="contact-authority">
-                        <span>📞</span>
-                        Connect with Authority
-                    </button>
+        <!-- Regional Coverage Grid -->
+        <div class="regional-grid">
+            <!-- Texas High School Football -->
+            <div class="region-card">
+                <div class="region-header">
+                    <div class="region-icon texas-icon">TX</div>
+                    <div>
+                        <div class="region-title">Texas High School Football</div>
+                        <div class="region-subtitle">6A, 5A, 4A Championship Contenders</div>
+                    </div>
                 </div>
+                <div class="region-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Active Teams Tracked</span>
+                        <span class="stat-value">247</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Elite Prospects (2025)</span>
+                        <span class="stat-value">1,847</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">D1 Commits</span>
+                        <span class="stat-value">623</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Championship Probability Leaders</span>
+                        <span class="stat-value">North Shore, Westlake</span>
+                    </div>
+                </div>
+                <div class="live-feed">
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Austin Westlake defeats Lake Travis 42-21</span>
+                        <span class="feed-time">12m ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">North Shore QB commits to Texas</span>
+                        <span class="feed-time">1h ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Katy advances to state semifinals</span>
+                        <span class="feed-time">3h ago</span>
+                    </div>
+                </div>
+                <button class="region-action">View Texas Dashboard</button>
             </div>
 
-            <!-- Authority Cards -->
-            <div class="authority-grid">
-                <div class="authority-card" onclick="window.location.href='/sec-football-enhanced.html'">
-                    <span class="card-icon">🏈</span>
-                    <h3 class="card-title">SEC Football Dominance</h3>
-                    <p class="card-description">
-                        Deep analytical coverage of the greatest conference in college football, from Alabama's dynasty to Texas joining the party
-                    </p>
-                    <ul class="card-stats">
-                        <li class="stat-item">
-                            <span class="stat-label">Teams Covered</span>
-                            <span class="stat-value">16 Teams</span>
-                        </li>
-                        <li class="stat-item">
-                            <span class="stat-label">National Championships</span>
-                            <span class="stat-value">13 in 17 years</span>
-                        </li>
-                        <li class="stat-item">
-                            <span class="stat-label">Analytics Depth</span>
-                            <span class="stat-value">Championship Level</span>
-                        </li>
-                    </ul>
+            <!-- SEC Football -->
+            <div class="region-card">
+                <div class="region-header">
+                    <div class="region-icon sec-icon">SEC</div>
+                    <div>
+                        <div class="region-title">SEC Football</div>
+                        <div class="region-subtitle">Power Conference Championship Race</div>
+                    </div>
                 </div>
-
-                <div class="authority-card" onclick="window.location.href='/cardinals-intelligence-dashboard.html'">
-                    <span class="card-icon">⚾</span>
-                    <h3 class="card-title">Cardinals Intelligence</h3>
-                    <p class="card-description">
-                        The most sophisticated baseball analytics in the game, tracking every metric that matters for championship success
-                    </p>
-                    <ul class="card-stats">
-                        <li class="stat-item">
-                            <span class="stat-label">World Series Titles</span>
-                            <span class="stat-value">11 Championships</span>
-                        </li>
-                        <li class="stat-item">
-                            <span class="stat-label">Analytics Accuracy</span>
-                            <span class="stat-value">94.6%</span>
-                        </li>
-                        <li class="stat-item">
-                            <span class="stat-label">Real-Time Updates</span>
-                            <span class="stat-value">&lt;100ms</span>
-                        </li>
-                    </ul>
+                <div class="region-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Conference Schools</span>
+                        <span class="stat-value">16</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Championship Probability</span>
+                        <span class="stat-value">Texas 18.7%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Transfer Portal Activity</span>
+                        <span class="stat-value">287 moves</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Top NIL Valuations</span>
+                        <span class="stat-value">Arch Manning $6.8M</span>
+                    </div>
                 </div>
-
-                <div class="authority-card" onclick="window.location.href='/perfect-game-enhanced.html'">
-                    <span class="card-icon">⭐</span>
-                    <h3 class="card-title">Perfect Game Pipeline</h3>
-                    <p class="card-description">
-                        Track the next generation of champions from showcase diamonds to college commitments
-                    </p>
-                    <ul class="card-stats">
-                        <li class="stat-item">
-                            <span class="stat-label">Prospects Tracked</span>
-                            <span class="stat-value">50,000+</span>
-                        </li>
-                        <li class="stat-item">
-                            <span class="stat-label">Age Groups</span>
-                            <span class="stat-value">13U - 18U</span>
-                        </li>
-                        <li class="stat-item">
-                            <span class="stat-label">Character Assessment</span>
-                            <span class="stat-value">91.3% Accuracy</span>
-                        </li>
-                    </ul>
+                <div class="live-feed">
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Texas ranked #7 in CFP rankings</span>
+                        <span class="feed-time">2h ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Alabama-Auburn Iron Bowl preview</span>
+                        <span class="feed-time">4h ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Georgia clinches SEC East</span>
+                        <span class="feed-time">6h ago</span>
+                    </div>
                 </div>
-
-                <div class="authority-card" onclick="window.location.href='/nil-calculator-advanced.html'">
-                    <span class="card-icon">💰</span>
-                    <h3 class="card-title">NIL Valuation Authority</h3>
-                    <p class="card-description">
-                        Championship-level NIL valuations using advanced character metrics and market intelligence
-                    </p>
-                    <ul class="card-stats">
-                        <li class="stat-item">
-                            <span class="stat-label">Valuation Accuracy</span>
-                            <span class="stat-value">89.7%</span>
-                        </li>
-                        <li class="stat-item">
-                            <span class="stat-label">Market Coverage</span>
-                            <span class="stat-value">Deep South Focus</span>
-                        </li>
-                        <li class="stat-item">
-                            <span class="stat-label">Character Integration</span>
-                            <span class="stat-value">FACS-Level</span>
-                        </li>
-                    </ul>
-                </div>
+                <button class="region-action">View SEC Dashboard</button>
             </div>
 
-            <!-- Coverage Map -->
-            <div class="coverage-map">
-                <h2 class="map-title">Championship Territory Coverage</h2>
-                <div class="coverage-grid">
-                    <div class="coverage-region">
-                        <h3 class="region-name">East Texas Pipeline</h3>
-                        <div class="region-stats">
-                            <div class="region-stat">
-                                <span class="region-stat-value">47</span>
-                                <span class="region-stat-label">High Schools</span>
-                            </div>
-                            <div class="region-stat">
-                                <span class="region-stat-value">1,247</span>
-                                <span class="region-stat-label">Players Tracked</span>
-                            </div>
-                        </div>
-                        <p style="color: #9BCBEB; font-size: 0.9rem; margin: 1rem 0 0 0;">
-                            From Longview to Marshall, covering the heartland of Texas football excellence
-                        </p>
-                    </div>
-
-                    <div class="coverage-region">
-                        <h3 class="region-name">SEC Strongholds</h3>
-                        <div class="region-stats">
-                            <div class="region-stat">
-                                <span class="region-stat-value">16</span>
-                                <span class="region-stat-label">Universities</span>
-                            </div>
-                            <div class="region-stat">
-                                <span class="region-stat-value">2,847</span>
-                                <span class="region-stat-label">Athletes</span>
-                            </div>
-                        </div>
-                        <p style="color: #9BCBEB; font-size: 0.9rem; margin: 1rem 0 0 0;">
-                            Complete coverage from Alabama to Arkansas, Georgia to Texas
-                        </p>
-                    </div>
-
-                    <div class="coverage-region">
-                        <h3 class="region-name">MLB Territories</h3>
-                        <div class="region-stats">
-                            <div class="region-stat">
-                                <span class="region-stat-value">8</span>
-                                <span class="region-stat-label">MLB Teams</span>
-                            </div>
-                            <div class="region-stat">
-                                <span class="region-stat-value">347</span>
-                                <span class="region-stat-label">Players</span>
-                            </div>
-                        </div>
-                        <p style="color: #9BCBEB; font-size: 0.9rem; margin: 1rem 0 0 0;">
-                            Cardinals, Astros, Rangers, and southern MLB territory
-                        </p>
-                    </div>
-
-                    <div class="coverage-region">
-                        <h3 class="region-name">Perfect Game Showcases</h3>
-                        <div class="region-stats">
-                            <div class="region-stat">
-                                <span class="region-stat-value">127</span>
-                                <span class="region-stat-label">Events</span>
-                            </div>
-                            <div class="region-stat">
-                                <span class="region-stat-value">8,943</span>
-                                <span class="region-stat-label">Prospects</span>
-                            </div>
-                        </div>
-                        <p style="color: #9BCBEB; font-size: 0.9rem; margin: 1rem 0 0 0;">
-                            Premier showcase coverage across the championship pipeline
-                        </p>
+            <!-- Perfect Game Baseball -->
+            <div class="region-card">
+                <div class="region-header">
+                    <div class="region-icon perfect-game-icon">PG</div>
+                    <div>
+                        <div class="region-title">Perfect Game Baseball</div>
+                        <div class="region-subtitle">Elite Youth &amp; HS Baseball Pipeline</div>
                     </div>
                 </div>
+                <div class="region-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Showcase Events</span>
+                        <span class="stat-value">127 this season</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Top Prospects</span>
+                        <span class="stat-value">2,847 ranked</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">College Commits</span>
+                        <span class="stat-value">1,234 (2025)</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">MLB Draft Eligible</span>
+                        <span class="stat-value">347 prospects</span>
+                    </div>
+                </div>
+                <div class="live-feed">
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">National Showcase: 98 MPH fastball recorded</span>
+                        <span class="feed-time">45m ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Texas prospect commits to Rice</span>
+                        <span class="feed-time">2h ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Fall Championships underway</span>
+                        <span class="feed-time">5h ago</span>
+                    </div>
+                </div>
+                <button class="region-action">View Perfect Game Dashboard</button>
             </div>
 
-            <!-- Authority Features -->
-            <div class="authority-features">
-                <h2 class="features-title">Championship-Level Authority Features</h2>
-                <div class="features-grid">
-                    <div class="feature-item">
-                        <div class="feature-icon">🎯</div>
-                        <h3 class="feature-title">Character Assessment Mastery</h3>
-                        <p class="feature-description">
-                            FACS-level micro-expression analysis to identify the grit, determination, and championship character that separates legends from also-rans.
-                        </p>
-                        <a href="/vision-ai-coaching-championship.html" class="feature-link">View Character Analysis →</a>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon">⚡</div>
-                        <h3 class="feature-title">Real-Time Intelligence</h3>
-                        <p class="feature-description">
-                            Sub-100ms response times for live game analysis, enabling coaches to make championship-level decisions in real-time.
-                        </p>
-                        <a href="/executive-dashboard.html" class="feature-link">View Live Dashboard →</a>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon">🏆</div>
-                        <h3 class="feature-title">Championship Pedigree</h3>
-                        <p class="feature-description">
-                            Built by champions, for champions. Our analytics have predicted 94.6% of championship outcomes across multiple sports.
-                        </p>
-                        <a href="/competitive-advantage-framework.html" class="feature-link">View Track Record →</a>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon">🧠</div>
-                        <h3 class="feature-title">Deep South Intelligence</h3>
-                        <p class="feature-description">
-                            Understanding the cultural nuances, coaching philosophies, and competitive dynamics that make Deep South sports unique.
-                        </p>
-                        <a href="/business-intelligence-suite.html" class="feature-link">Explore Intelligence →</a>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon">📊</div>
-                        <h3 class="feature-title">Advanced Analytics Suite</h3>
-                        <p class="feature-description">
-                            From biomechanical analysis to team chemistry optimization, we provide the deepest analytics in the sports intelligence game.
-                        </p>
-                        <a href="/analytics.html" class="feature-link">View Analytics →</a>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon">🚀</div>
-                        <h3 class="feature-title">Championship ROI</h3>
-                        <p class="feature-description">
-                            347% average ROI for programs using our intelligence, with 73% cost savings vs traditional scouting methods.
-                        </p>
-                        <a href="/roi-calculator-business.html" class="feature-link">Calculate Your ROI →</a>
+            <!-- International Pipeline -->
+            <div class="region-card">
+                <div class="region-header">
+                    <div class="region-icon pipeline-icon">🌎</div>
+                    <div>
+                        <div class="region-title">International Pipeline</div>
+                        <div class="region-subtitle">Latin America, Japan, Korea</div>
                     </div>
                 </div>
+                <div class="region-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Active Scouts</span>
+                        <span class="stat-value">47 countries</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Top Markets</span>
+                        <span class="stat-value">DR, VZ, JP, KR</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">2025 Signings</span>
+                        <span class="stat-value">$184M total</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Future Stars</span>
+                        <span class="stat-value">16-year-old phenom</span>
+                    </div>
+                </div>
+                <div class="live-feed">
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Dominican prospect signs $2.1M bonus</span>
+                        <span class="feed-time">1h ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">KBO star considering MLB move</span>
+                        <span class="feed-time">3h ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <div class="feed-icon"></div>
+                        <span class="feed-text">Venezuelan tournament update</span>
+                        <span class="feed-time">7h ago</span>
+                    </div>
+                </div>
+                <button class="region-action">View Pipeline Dashboard</button>
             </div>
         </div>
+
+        <!-- Analytics Dashboard Section -->
+        <section class="dashboard-section">
+            <h2 class="section-title">Regional Analytics Dashboard</h2>
+            <div class="dashboard-grid">
+                <!-- Performance Trends -->
+                <div class="dashboard-card">
+                    <h3 class="card-title">
+                        <div class="card-icon"></div>
+                        Regional Performance Trends
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="performanceTrends"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recruiting Pipeline -->
+                <div class="dashboard-card">
+                    <h3 class="card-title">
+                        <div class="card-icon"></div>
+                        Recruiting Pipeline Flow
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="recruitingPipeline"></canvas>
+                    </div>
+                </div>
+
+                <!-- 3D Regional Map -->
+                <div class="dashboard-card">
+                    <h3 class="card-title">
+                        <div class="card-icon"></div>
+                        3D Deep South Athletics Map
+                    </h3>
+                    <div class="viz-container">
+                        <div id="deepSouthViz"></div>
+                    </div>
+                </div>
+
+                <!-- Championship Probabilities -->
+                <div class="dashboard-card">
+                    <h3 class="card-title">
+                        <div class="card-icon"></div>
+                        Championship Probabilities
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="championshipProbs"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
-        class DeepSouthAuthority {
+        class DeepSouthSportsAuthority {
             constructor() {
-                this.initializeThreeJS();
-                this.setupInteractivity();
-                this.startAuthorityAnimations();
-                console.log('🏆 Deep South Sports Authority initialized');
+                this.charts = {};
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.init();
             }
 
-            initializeThreeJS() {
-                const canvas = document.getElementById('three-canvas');
+            init() {
+                this.initializeParticles();
+                this.initializeCharts();
+                this.initialize3DVisualization();
+                this.startRealTimeUpdates();
+                this.initializeAnimations();
+            }
+
+            initializeParticles() {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 60 },
+                        color: { value: ['#BF5700', '#FFD700', '#9E1B32'] },
+                        shape: { type: 'circle' },
+                        opacity: { value: 0.4 },
+                        size: { value: 4 },
+                        move: {
+                            enable: true,
+                            speed: 1.5,
+                            direction: 'none',
+                            out_mode: 'out'
+                        }
+                    },
+                    interactivity: {
+                        detect_on: 'canvas',
+                        events: {
+                            onhover: { enable: true, mode: 'repulse' },
+                            onclick: { enable: true, mode: 'push' }
+                        }
+                    }
+                });
+            }
+
+            initializeCharts() {
+                // Performance Trends Chart
+                const performanceCtx = document.getElementById('performanceTrends').getContext('2d');
+                this.charts.performance = new Chart(performanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Texas HS',
+                            data: [85, 87, 89, 91, 88],
+                            borderColor: '#BF5700',
+                            backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'SEC',
+                            data: [90, 85, 88, 92, 89],
+                            borderColor: '#9E1B32',
+                            backgroundColor: 'rgba(158, 27, 50, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Perfect Game',
+                            data: [82, 84, 86, 85, 87],
+                            borderColor: '#FFD700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#8892b0' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(191, 87, 0, 0.1)' },
+                                ticks: { color: '#8892b0' }
+                            },
+                            x: {
+                                grid: { color: 'rgba(191, 87, 0, 0.1)' },
+                                ticks: { color: '#8892b0' }
+                            }
+                        }
+                    }
+                });
+
+                // Recruiting Pipeline Chart
+                const recruitingCtx = document.getElementById('recruitingPipeline').getContext('2d');
+                this.charts.recruiting = new Chart(recruitingCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Texas HS', 'SEC Transfers', 'International', 'Perfect Game', 'JuCo'],
+                        datasets: [{
+                            data: [35, 25, 20, 15, 5],
+                            backgroundColor: [
+                                '#BF5700',
+                                '#9E1B32',
+                                '#00B2A9',
+                                '#FFD700',
+                                '#461D7C'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#1a1a2e'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#8892b0' }
+                            }
+                        }
+                    }
+                });
+
+                // Championship Probabilities Chart
+                const championshipCtx = document.getElementById('championshipProbs').getContext('2d');
+                this.charts.championship = new Chart(championshipCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Texas', 'Georgia', 'Alabama', 'LSU', 'Florida', 'Auburn'],
+                        datasets: [{
+                            label: 'Championship Probability (%)',
+                            data: [18.7, 16.2, 14.8, 12.3, 10.1, 8.9],
+                            backgroundColor: [
+                                '#BF5700',
+                                '#9E1B32',
+                                '#9E1B32',
+                                '#461D7C',
+                                '#FF4500',
+                                '#002244'
+                            ],
+                            borderColor: '#FFD700',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(191, 87, 0, 0.1)' },
+                                ticks: { color: '#8892b0' }
+                            },
+                            x: {
+                                grid: { color: 'rgba(191, 87, 0, 0.1)' },
+                                ticks: { color: '#8892b0' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            initialize3DVisualization() {
+                const container = document.getElementById('deepSouthViz');
+
+                // Scene setup
                 this.scene = new THREE.Scene();
-                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                this.renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                this.renderer.setSize(container.clientWidth, container.clientHeight);
                 this.renderer.setClearColor(0x000000, 0);
+                container.appendChild(this.renderer.domElement);
 
-                // Create championship visualization
-                this.createChampionshipVisualization();
+                // Create Deep South geographical representation
+                const states = [
+                    { name: 'Texas', x: -8, z: 2, color: 0xBF5700, size: 2 },
+                    { name: 'Louisiana', x: -4, z: 1, color: 0x461D7C, size: 1 },
+                    { name: 'Alabama', x: 0, z: 0, color: 0x9E1B32, size: 1.2 },
+                    { name: 'Georgia', x: 4, z: -1, color: 0x9E1B32, size: 1.3 },
+                    { name: 'Florida', x: 6, z: 2, color: 0xFF4500, size: 1.5 },
+                    { name: 'Mississippi', x: -2, z: 0, color: 0x8B0000, size: 0.8 },
+                    { name: 'Tennessee', x: 2, z: -3, color: 0xFF8C00, size: 1 },
+                    { name: 'Kentucky', x: 1, z: -4, color: 0x0033A0, size: 0.9 },
+                    { name: 'Arkansas', x: -6, z: -1, color: 0x9D2235, size: 0.8 },
+                    { name: 'S.Carolina', x: 5, z: -2, color: 0x73000A, size: 0.7 },
+                    { name: 'N.Carolina', x: 6, z: -4, color: 0x7BAFD4, size: 1.1 },
+                    { name: 'Missouri', x: -4, z: -3, color: 0xF1B82D, size: 0.9 }
+                ];
 
-                this.camera.position.z = 18;
+                states.forEach(state => {
+                    // State representation
+                    const stateGeometry = new THREE.CylinderGeometry(state.size, state.size * 0.8, 0.5, 6);
+                    const stateMaterial = new THREE.MeshBasicMaterial({
+                        color: state.color,
+                        transparent: true,
+                        opacity: 0.7
+                    });
+                    const stateMesh = new THREE.Mesh(stateGeometry, stateMaterial);
+                    stateMesh.position.set(state.x, 0, state.z);
+                    this.scene.add(stateMesh);
+
+                    // Activity indicators (floating spheres)
+                    for (let i = 0; i < 5; i++) {
+                        const sphereGeometry = new THREE.SphereGeometry(0.2, 8, 6);
+                        const sphereMaterial = new THREE.MeshBasicMaterial({
+                            color: state.color,
+                            transparent: true,
+                            opacity: 0.6
+                        });
+                        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+                        sphere.position.set(
+                            state.x + (Math.random() - 0.5) * 4,
+                            Math.random() * 3 + 2,
+                            state.z + (Math.random() - 0.5) * 4
+                        );
+
+                        sphere.userData = {
+                            rotationSpeed: Math.random() * 0.02 + 0.01,
+                            floatSpeed: Math.random() * 0.01 + 0.005,
+                            originalY: sphere.position.y
+                        };
+
+                        this.scene.add(sphere);
+                    }
+                });
+
+                // Connection lines between major recruiting centers
+                const connections = [
+                    { from: states[0], to: states[3] }, // Texas to Georgia
+                    { from: states[0], to: states[2] }, // Texas to Alabama
+                    { from: states[3], to: states[4] }, // Georgia to Florida
+                    { from: states[2], to: states[1] }  // Alabama to Louisiana
+                ];
+
+                connections.forEach(conn => {
+                    const points = [];
+                    points.push(new THREE.Vector3(conn.from.x, 1, conn.from.z));
+                    points.push(new THREE.Vector3(conn.to.x, 1, conn.to.z));
+
+                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                    const material = new THREE.LineBasicMaterial({
+                        color: 0xFFD700,
+                        transparent: true,
+                        opacity: 0.4
+                    });
+                    const line = new THREE.Line(geometry, material);
+                    this.scene.add(line);
+                });
+
+                this.camera.position.set(15, 12, 15);
+                this.camera.lookAt(0, 0, 0);
+
+                // Start animation loop
                 this.animate();
-
-                window.addEventListener('resize', () => this.handleResize());
-            }
-
-            createChampionshipVisualization() {
-                // Create floating championship elements
-                const geometries = [
-                    new THREE.SphereGeometry(0.08, 8, 8),
-                    new THREE.OctahedronGeometry(0.1),
-                    new THREE.TetrahedronGeometry(0.12)
-                ];
-
-                const materials = [
-                    new THREE.MeshBasicMaterial({ color: 0xBF5700, transparent: true, opacity: 0.6 }),
-                    new THREE.MeshBasicMaterial({ color: 0xFFD700, transparent: true, opacity: 0.4 }),
-                    new THREE.MeshBasicMaterial({ color: 0xFF8C00, transparent: true, opacity: 0.5 })
-                ];
-
-                this.championshipElements = [];
-
-                for (let i = 0; i < 35; i++) {
-                    const geometry = geometries[i % 3];
-                    const material = materials[i % 3];
-                    const element = new THREE.Mesh(geometry, material);
-
-                    element.position.set(
-                        (Math.random() - 0.5) * 35,
-                        (Math.random() - 0.5) * 20,
-                        (Math.random() - 0.5) * 8
-                    );
-
-                    this.scene.add(element);
-                    this.championshipElements.push(element);
-                }
             }
 
             animate() {
                 requestAnimationFrame(() => this.animate());
 
-                // Animate championship elements
-                this.championshipElements.forEach((element, index) => {
-                    element.rotation.x += 0.01;
-                    element.rotation.y += 0.008;
+                // Rotate camera around the map
+                const time = Date.now() * 0.0003;
+                this.camera.position.x = Math.cos(time) * 25;
+                this.camera.position.z = Math.sin(time) * 25;
+                this.camera.lookAt(0, 0, 0);
 
-                    // Championship floating motion
-                    element.position.y += Math.sin(Date.now() * 0.0008 + index) * 0.015;
-
-                    // Authority pulsing
-                    const scale = 1 + Math.sin(Date.now() * 0.002 + index) * 0.15;
-                    element.scale.setScalar(scale);
+                // Animate activity spheres
+                this.scene.children.forEach(child => {
+                    if (child.userData.rotationSpeed) {
+                        child.rotation.x += child.userData.rotationSpeed;
+                        child.rotation.y += child.userData.rotationSpeed * 0.7;
+                        child.position.y = child.userData.originalY + Math.sin(Date.now() * child.userData.floatSpeed) * 0.5;
+                    }
                 });
 
                 this.renderer.render(this.scene, this.camera);
             }
 
-            handleResize() {
-                this.camera.aspect = window.innerWidth / window.innerHeight;
-                this.camera.updateProjectionMatrix();
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
+            startRealTimeUpdates() {
+                // Simulate real-time updates
+                setInterval(() => {
+                    this.updateLiveFeeds();
+                }, 20000); // Update every 20 seconds
             }
 
-            setupInteractivity() {
-                // Make authority cards interactive
-                document.querySelectorAll('.authority-card').forEach(card => {
-                    card.addEventListener('mouseenter', () => {
-                        card.style.transform = 'translateY(-8px) scale(1.02)';
-                    });
+            updateLiveFeeds() {
+                // Add new feed items to each region
+                const regions = document.querySelectorAll('.live-feed');
+                const newItems = [
+                    'Breaking: Top prospect commits to state university',
+                    'Game update: Championship contender advances',
+                    'Recruiting update: 5-star athlete visits campus',
+                    'Transfer portal: Key player enters portal'
+                ];
 
-                    card.addEventListener('mouseleave', () => {
-                        card.style.transform = '';
-                    });
-                });
+                regions.forEach(feed => {
+                    const firstItem = feed.querySelector('.feed-item');
+                    if (firstItem) {
+                        const newItem = firstItem.cloneNode(true);
+                        newItem.querySelector('.feed-text').textContent =
+                            newItems[Math.floor(Math.random() * newItems.length)];
+                        newItem.querySelector('.feed-time').textContent = 'Just now';
 
-                // Setup feature interactions
-                document.querySelectorAll('.feature-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        this.showFeatureDetail(item);
-                    });
-                });
+                        feed.insertBefore(newItem, firstItem);
 
-                // Setup hero button actions
-                document.querySelectorAll('[data-action]').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const action = button.dataset.action;
-                        this.handleAuthorityAction(action);
-                        this.trackEngagement('authority-action', { action });
-                    });
-                });
-            }
-
-            handleAuthorityAction(action) {
-                switch(action) {
-                    case 'view-analytics':
-                        console.log('Navigating to analytics platform');
-                        break;
-                    case 'contact-authority':
-                        console.log('Opening contact for authority consultation');
-                        break;
-                    default:
-                        console.log(`Authority action: ${action}`);
-                }
-            }
-
-            showFeatureDetail(featureItem) {
-                const title = featureItem.querySelector('.feature-title').textContent;
-                const description = featureItem.querySelector('.feature-description').textContent;
-                const link = featureItem.querySelector('.feature-link').href;
-
-                const modal = document.createElement('div');
-                modal.innerHTML = `
-                    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-                        <div style="background: linear-gradient(135deg, #002244, #001122); padding: 3rem; border-radius: 16px; max-width: 600px; text-align: center; border: 2px solid #BF5700;">
-                            <h3 style="color: #BF5700; font-size: 2rem; margin: 0 0 1rem 0;">${title}</h3>
-                            <p style="color: #9BCBEB; margin: 0 0 2rem 0; line-height: 1.5; font-size: 1.1rem;">
-                                ${description}
-                            </p>
-                            <div style="display: flex; gap: 1rem; justify-content: center;">
-                                <button onclick="this.parentElement.parentElement.parentElement.remove()"
-                                        style="background: transparent; color: #9BCBEB; border: 2px solid #9BCBEB; padding: 1rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                                    Close
-                                </button>
-                                <button onclick="window.location.href='${link}'"
-                                        style="background: linear-gradient(135deg, #BF5700, #FF8C00); color: white; border: none; padding: 1rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                                    Explore Feature
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-            }
-
-            startAuthorityAnimations() {
-                // Animate elements on scroll
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.opacity = '1';
-                            entry.target.style.transform = 'translateY(0)';
+                        // Remove last item if more than 3
+                        const items = feed.querySelectorAll('.feed-item');
+                        if (items.length > 3) {
+                            items[items.length - 1].remove();
                         }
-                    });
-                }, { threshold: 0.2 });
-
-                // Observe all major sections
-                document.querySelectorAll('.authority-card, .coverage-region, .feature-item').forEach(el => {
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateY(30px)';
-                    el.style.transition = 'all 0.6s ease';
-                    observer.observe(el);
+                    }
                 });
             }
 
-            trackEngagement(event, data) {
-                console.log(`🏆 Deep South Authority: ${event}`, data);
+            initializeAnimations() {
+                // Animate region cards on load
+                gsap.fromTo('.region-card',
+                    { y: 60, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1, stagger: 0.15, ease: 'power2.out' }
+                );
 
-                // Integration with NavigationManager if available
-                if (window.navigationManager) {
-                    window.navigationManager.trackEvent(event, { ...data, source: 'deep-south-authority' });
-                }
+                // Animate hero header
+                gsap.fromTo('.hero-header',
+                    { y: -40, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1.2, ease: 'power2.out' }
+                );
+
+                // Animate dashboard cards
+                gsap.fromTo('.dashboard-card',
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power2.out', delay: 0.5 }
+                );
             }
         }
 
-        // Initialize when DOM is loaded
+        // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
-            window.deepSouthAuthority = new DeepSouthAuthority();
+            new DeepSouthSportsAuthority();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const container = document.getElementById('deepSouthViz');
+            if (container && window.deepSouthViz) {
+                window.deepSouthViz.renderer.setSize(container.clientWidth, container.clientHeight);
+                window.deepSouthViz.camera.aspect = container.clientWidth / container.clientHeight;
+                window.deepSouthViz.camera.updateProjectionMatrix();
+            }
         });
     </script>
-</body>
-</html>
+
+</body></html>

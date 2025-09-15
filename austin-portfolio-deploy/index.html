@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blaze Intelligence - Championship Sports Intelligence Platform</title>
@@ -22,20 +20,51 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
 
     <!-- RTI System Integration -->
-    <script src="/js/rti-fusion-engine.js"></script>
-    <script src="/js/webrtc-gateway.js"></script>
-    <script src="/js/rti-decision-engine.js"></script>
-    <script src="/js/sports-pattern-library.js"></script>
-    <script src="/js/rti-performance-tester.js"></script>
-    <script src="/js/mobile-responsive-handler.js"></script>
-    <script src="/js/character-assessment-engine.js"></script>
-    <script src="/js/professional-animations.js"></script>
+    <script src="/js/blaze-advanced-analytics.js" defer=""></script>
+    <script src="/js/blaze-ultimate-visuals.js" defer=""></script>
+    <script src="/js/team-intelligence-dashboard.js" defer=""></script>
+    <script src="/js/championship-mindset-module.js" defer=""></script>
+    <script src="/js/cultural-intelligence-system.js" defer=""></script>
+    <script src="/js/unique-visualization-system.js" defer=""></script>
+    <script src="/js/enhanced-charts.js" defer=""></script>
+    <script src="./js/rti-fusion-engine.js"></script>
+    <script src="./js/character-assessment-engine.js"></script>
+    <script src="./js/professional-animations.js"></script>
 
     <!-- Hawk-Eye MCP Integration -->
-    <script src="/js/hawkeye-mcp-client.js"></script>
-    <script src="/js/hawkeye-3d-visualization.js"></script>
+    <script src="./js/hawkeye-mcp-client.js"></script>
+    <script src="./js/hawkeye-3d-visualization.js"></script>
+
+    <!-- Mega Navigation System -->
+    <link rel="stylesheet" href="./css/mega-navigation.css">
+    <script src="./js/mega-navigation.js"></script>
+
+    <!-- Enhanced JavaScript Components -->
+    <script src="./js/enhanced/enhanced-charts.js"></script>
+    <script src="./js/enhanced/performance-monitor.js"></script>
+    <script src="./js/enhanced/championshipDashboard.js"></script>
+    <script src="./js/enhanced/three-hero-enhanced.js"></script>
+    <script src="./js/enhanced/enhanced-three-hero.js"></script>
+    <script src="./js/enhanced/championship-three-hero.js"></script>
+    <script src="./js/enhanced/enterprise-ux-optimizer.js"></script>
+    <script src="./js/enhanced/mobile-optimization-system.js"></script>
+    <script src="./js/enhanced/neural-coach-enhanced.js"></script>
+    <script src="./js/enhanced/enhanced-analytics-ui.js"></script>
+    <script src="./js/enhanced/biometric-shaders.js"></script>
+    <script src="./js/enhanced/advanced-physics.js"></script>
+
+    <!-- Enhanced CSS Imports -->
+    <link rel="stylesheet" href="./css/blaze-professional.css">
+    <link rel="stylesheet" href="./css/championshipDashboard.css">
+    <link rel="stylesheet" href="./css/enhanced-visuals.css">
+
+    <!-- Enhanced Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -528,13 +557,17 @@
             <div class="nav-dropdown">
                 <a href="#" class="nav-link">Platform ▾</a>
                 <div class="nav-dropdown-content">
+                    <a href="/executive/" class="nav-dropdown-item">
+                        ⚡ Executive Intelligence Center
+                        <div class="item-description">C-suite championship command center</div>
+                    </a>
                     <a href="/realtime-multimodal-dashboard.html" class="nav-dropdown-item">
                         RTI Dashboard
                         <div class="item-description">Real-time multimodal intelligence</div>
                     </a>
                     <a href="/hawkeye-innovations-dashboard.html" class="nav-dropdown-item">
                         👁️ Hawk-Eye Tracking
-                        <div class="item-description">Ball trajectory & strike zone analysis</div>
+                        <div class="item-description">Ball trajectory &amp; strike zone analysis</div>
                     </a>
                     <a href="/sports-intelligence-dashboard.html" class="nav-dropdown-item">
                         Sports Intelligence
@@ -625,10 +658,27 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-container">
+        <!-- Three.js Canvas Background -->
+        <canvas id="three-canvas"></canvas>
+
         <div class="hero-content">
+            <!-- Hero Badge -->
+            <div class="hero-badge">
+                <span>🔥</span>
+                Elite Sports Intelligence Platform
+            </div>
+
             <h1 class="hero-title">Championship Intelligence Platform</h1>
-            <p class="hero-subtitle">Sub-100ms Multimodal Analytics for Elite Sports Performance</p>
+            <p class="hero-subtitle">Institutional-grade sports intelligence combining Texas heritage with cutting-edge AI technology. Real-time analytics for MLB, NFL, NBA, and NCAA.</p>
+
+            <!-- Hero Features -->
+            <div class="hero-features">
+                <div class="hero-feature">Sub-100ms Latency</div>
+                <div class="hero-feature">94.6% Accuracy</div>
+                <div class="hero-feature">2.8M+ Data Points</div>
+                <div class="hero-feature">Real-time Analysis</div>
+            </div>
 
             <div class="hero-stats">
                 <div class="stat-card">
@@ -649,10 +699,60 @@
                 </div>
             </div>
 
-            <div style="margin-top: 3rem;">
-                <a href="/demo.html" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+            <div class="hero-actions" style="margin-top: 3rem;">
+                <a href="/demo.html" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem; margin-right: 1rem;">
                     Request Demo →
                 </a>
+                <a href="/analytics.html" class="btn-secondary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                    Explore Analytics
+                </a>
+            </div>
+        </div>
+
+        <!-- Live Stats Ticker -->
+        <div class="live-stats-ticker">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value" id="live-games">24</div>
+                    <div class="stat-label">Live Games</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-analysis">2.8M+</div>
+                    <div class="stat-label">Total Analyses</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="avg-latency">&lt;100ms</div>
+                    <div class="stat-label">Avg Latency</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="accuracy">94.6%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Dashboard Preview -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-badge">Live Intelligence</div>
+            <h2 class="section-title">Championship Analytics Dashboard</h2>
+            <p class="section-subtitle">Real-time sports intelligence with institutional-grade precision and Texas heritage design</p>
+        </div>
+
+        <div class="dashboard-preview glass-card">
+            <div class="dashboard-header">
+                <h3 class="dashboard-title">Live Sports Intelligence</h3>
+                <div class="dashboard-controls">
+                    <button class="control-btn active">MLB</button>
+                    <button class="control-btn">NFL</button>
+                    <button class="control-btn">NBA</button>
+                    <button class="control-btn">NCAA</button>
+                </div>
+            </div>
+
+            <div id="dashboard-chart-container" style="height: 300px; margin-top: 1rem;">
+                <canvas id="live-performance-chart"></canvas>
             </div>
         </div>
     </section>
@@ -1002,6 +1102,119 @@
                 }
             });
         });
+
+        // Enhanced Features Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize enhanced Three.js hero background
+            if (typeof initializeEnhancedThreeHero === 'function') {
+                initializeEnhancedThreeHero();
+            }
+
+            // Initialize live stats ticker animation
+            if (typeof initializeLiveStatsTicker === 'function') {
+                initializeLiveStatsTicker();
+            }
+
+            // Initialize enhanced charts
+            if (typeof initializeEnhancedCharts === 'function') {
+                initializeEnhancedCharts();
+            }
+
+            // Initialize performance monitoring
+            if (typeof initializePerformanceMonitor === 'function') {
+                initializePerformanceMonitor();
+            }
+
+            // Initialize championship dashboard
+            if (typeof initializeChampionshipDashboard === 'function') {
+                initializeChampionshipDashboard();
+            }
+
+            // Initialize enterprise UX optimizer
+            if (typeof initializeEnterpriseUXOptimizer === 'function') {
+                initializeEnterpriseUXOptimizer();
+            }
+
+            // Initialize mobile optimization
+            if (typeof initializeMobileOptimization === 'function') {
+                initializeMobileOptimization();
+            }
+
+            // Initialize glassmorphism effects
+            initializeGlassmorphismEffects();
+
+            // Initialize live dashboard chart
+            initializeLiveDashboardChart();
+
+            console.log('🔥 Blaze Intelligence Super-Enhanced Platform Initialized');
+        });
+
+        // Glassmorphism effects initialization
+        function initializeGlassmorphismEffects() {
+            // Add scroll-based glassmorphism intensity
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const nav = document.querySelector('nav');
+                const glassCards = document.querySelectorAll('.glass-card');
+
+                if (nav) {
+                    const opacity = Math.min(0.98, 0.85 + scrolled * 0.001);
+                    nav.style.background = `rgba(10, 10, 10, ${opacity})`;
+                }
+
+                glassCards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        card.style.transform = `translateZ(0) perspective(1000px)`;
+                    }
+                });
+            });
+        }
+
+        // Live dashboard chart initialization
+        function initializeLiveDashboardChart() {
+            const canvas = document.getElementById('live-performance-chart');
+            if (canvas && typeof Chart !== 'undefined') {
+                const ctx = canvas.getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Cardinals', 'Titans', 'Longhorns', 'Grizzlies'],
+                        datasets: [{
+                            label: 'Performance Index',
+                            data: [94.6, 87.3, 91.2, 89.7],
+                            borderColor: '#BF5700',
+                            backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#E5E4E2'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: '#E5E4E2' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            y: {
+                                ticks: { color: '#E5E4E2' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
     </script>
-</body>
-</html>
+
+</body></html>

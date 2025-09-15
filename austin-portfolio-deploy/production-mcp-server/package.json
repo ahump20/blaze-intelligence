@@ -1,0 +1,50 @@
+{
+  "name": "blaze-intelligence-mcp-server",
+  "version": "2.0.0",
+  "description": "Blaze Intelligence Production MCP Server - Championship Sports Analytics Platform",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build": "echo 'Production build complete'",
+    "test": "node test/test-endpoints.js"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "compression": "^1.7.4",
+    "rate-limiter-flexible": "^2.4.1",
+    "node-cron": "^3.0.3",
+    "axios": "^1.6.0",
+    "ws": "^8.14.2",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "redis": "^4.6.7",
+    "winston": "^3.10.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "mcp",
+    "sports-analytics",
+    "blaze-intelligence",
+    "hawk-eye",
+    "mlb",
+    "sec-football",
+    "real-time-data"
+  ],
+  "author": "Austin Humphrey <ahump20@outlook.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahump20/blaze-intelligence-mcp"
+  }
+}

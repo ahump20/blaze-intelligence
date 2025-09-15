@@ -1,0 +1,998 @@
+/**
+ * Blaze Intelligence Component Styles
+ * Professional championship-level UI components
+ */
+
+:root {
+    /* Brand Colors */
+    --blaze-primary-orange: #BF5700;
+    --blaze-cardinal-blue: #9BCBEB;
+    --blaze-deep-navy: #002244;
+    --blaze-grizzly-teal: #00B2A9;
+    --blaze-neural-green: #00ff7f;
+    --blaze-championship-gold: #FFD700;
+    --blaze-executive-platinum: #E5E4E2;
+    --blaze-executive-graphite: #36454F;
+
+    /* Backgrounds */
+    --blaze-bg-primary: #0a0e27;
+    --blaze-bg-secondary: #1a1a2e;
+    --blaze-bg-executive: #0f1419;
+
+    /* Text */
+    --blaze-text-primary: #e0e6ed;
+    --blaze-text-secondary: #8892b0;
+    --blaze-text-executive: #c9d1d9;
+
+    /* Spacing */
+    --blaze-spacing-xs: 0.25rem;
+    --blaze-spacing-sm: 0.5rem;
+    --blaze-spacing-md: 1rem;
+    --blaze-spacing-lg: 1.5rem;
+    --blaze-spacing-xl: 2rem;
+    --blaze-spacing-2xl: 3rem;
+
+    /* Transitions */
+    --blaze-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --blaze-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --blaze-transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Shadows */
+    --blaze-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
+    --blaze-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.3);
+    --blaze-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
+    --blaze-shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --blaze-shadow-glow: 0 0 30px rgba(191, 87, 0, 0.3);
+
+    /* Border Radius */
+    --blaze-radius-sm: 4px;
+    --blaze-radius-md: 8px;
+    --blaze-radius-lg: 12px;
+    --blaze-radius-xl: 16px;
+    --blaze-radius-full: 9999px;
+}
+
+/* ========================================
+   CARDS
+   ======================================== */
+
+.blaze-card {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: var(--blaze-radius-xl);
+    padding: var(--blaze-spacing-xl);
+    border: 1px solid rgba(155, 203, 235, 0.2);
+    backdrop-filter: blur(15px);
+    box-shadow: var(--blaze-shadow-lg);
+    transition: var(--blaze-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.blaze-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blaze-primary-orange), var(--blaze-championship-gold));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.blaze-card:hover::before {
+    opacity: 1;
+}
+
+.blaze-card.interactive:hover {
+    transform: translateY(-5px);
+    border-color: var(--blaze-primary-orange);
+    box-shadow: 0 15px 50px rgba(191, 87, 0, 0.3);
+}
+
+.blaze-card--kpi {
+    background: linear-gradient(135deg, rgba(191, 87, 0, 0.05), rgba(0, 0, 0, 0.4));
+}
+
+.blaze-card--feature {
+    background: linear-gradient(135deg, rgba(155, 203, 235, 0.05), rgba(0, 0, 0, 0.4));
+}
+
+.blaze-card--team {
+    background: linear-gradient(135deg, rgba(0, 178, 169, 0.05), rgba(0, 0, 0, 0.4));
+}
+
+.blaze-card--nil {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(0, 0, 0, 0.4));
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--blaze-spacing-md);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--blaze-spacing-md);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--blaze-text-primary);
+    margin: 0;
+}
+
+.card-subtitle {
+    font-size: 0.9rem;
+    color: var(--blaze-text-secondary);
+    margin-bottom: var(--blaze-spacing-lg);
+}
+
+.card-value {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--blaze-championship-gold), var(--blaze-primary-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: var(--blaze-spacing-md);
+}
+
+.card-change {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--blaze-radius-md);
+    font-weight: 600;
+}
+
+.card-change.positive {
+    background: rgba(0, 255, 127, 0.1);
+    color: var(--blaze-neural-green);
+}
+
+.card-change.negative {
+    background: rgba(255, 71, 87, 0.1);
+    color: #ff4757;
+}
+
+.card-content {
+    color: var(--blaze-text-secondary);
+    line-height: 1.6;
+}
+
+.card-actions {
+    display: flex;
+    gap: var(--blaze-spacing-sm);
+    margin-top: var(--blaze-spacing-lg);
+}
+
+.card-action-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: var(--blaze-radius-md);
+    background: rgba(191, 87, 0, 0.1);
+    border: 1px solid rgba(191, 87, 0, 0.3);
+    color: var(--blaze-primary-orange);
+    text-decoration: none;
+    transition: var(--blaze-transition-fast);
+}
+
+.card-action-btn:hover {
+    background: rgba(191, 87, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   FORMS
+   ======================================== */
+
+.blaze-form {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--blaze-radius-xl);
+    padding: var(--blaze-spacing-2xl);
+    border: 1px solid rgba(155, 203, 235, 0.2);
+}
+
+.form-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--blaze-text-primary);
+    margin-bottom: var(--blaze-spacing-xl);
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--blaze-spacing-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--blaze-spacing-sm);
+}
+
+.form-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--blaze-text-primary);
+}
+
+.form-label .required {
+    color: var(--blaze-primary-orange);
+    margin-left: 0.25rem;
+}
+
+.form-input,
+.form-select {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--blaze-radius-md);
+    padding: 0.75rem 1rem;
+    color: var(--blaze-text-primary);
+    font-size: 1rem;
+    transition: var(--blaze-transition-fast);
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--blaze-primary-orange);
+    box-shadow: 0 0 0 2px rgba(191, 87, 0, 0.2);
+}
+
+.form-input::placeholder {
+    color: var(--blaze-text-secondary);
+    opacity: 0.6;
+}
+
+.form-range-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--blaze-spacing-md);
+}
+
+.form-range {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.form-range::-webkit-slider-track {
+    background: rgba(255, 255, 255, 0.1);
+    height: 6px;
+    border-radius: var(--blaze-radius-full);
+}
+
+.form-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blaze-primary-orange), var(--blaze-championship-gold));
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.form-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.form-range-value {
+    min-width: 3rem;
+    text-align: center;
+    font-weight: 600;
+    color: var(--blaze-championship-gold);
+}
+
+.form-helper {
+    font-size: 0.85rem;
+    color: var(--blaze-text-secondary);
+    font-style: italic;
+}
+
+.form-error {
+    font-size: 0.85rem;
+    color: #ff4757;
+    display: none;
+}
+
+.form-group.error .form-error {
+    display: block;
+}
+
+.form-group.error .form-input {
+    border-color: #ff4757;
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--blaze-spacing-md);
+    margin-top: var(--blaze-spacing-xl);
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-success {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--blaze-radius-md);
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: var(--blaze-transition);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--blaze-primary-orange), var(--blaze-championship-gold));
+    color: white;
+    box-shadow: 0 6px 20px rgba(191, 87, 0, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(191, 87, 0, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--blaze-text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--blaze-primary-orange);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff4757, #ff6b6b);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--blaze-neural-green), #00d68f);
+    color: var(--blaze-bg-primary);
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ========================================
+   MODALS
+   ======================================== */
+
+.blaze-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--blaze-transition);
+}
+
+.blaze-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.modal-dialog {
+    position: relative;
+    background: var(--blaze-bg-executive);
+    border-radius: var(--blaze-radius-xl);
+    border: 1px solid rgba(191, 87, 0, 0.3);
+    box-shadow: var(--blaze-shadow-xl);
+    max-width: 90%;
+    max-height: 90vh;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: var(--blaze-transition);
+}
+
+.blaze-modal.active .modal-dialog {
+    transform: scale(1);
+}
+
+.blaze-modal--small .modal-dialog { max-width: 400px; }
+.blaze-modal--medium .modal-dialog { max-width: 600px; }
+.blaze-modal--large .modal-dialog { max-width: 900px; }
+.blaze-modal--fullscreen .modal-dialog {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+}
+
+.modal-header {
+    padding: var(--blaze-spacing-xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--blaze-text-primary);
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--blaze-text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: var(--blaze-transition-fast);
+}
+
+.modal-close:hover {
+    color: var(--blaze-primary-orange);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: var(--blaze-spacing-xl);
+    max-height: calc(90vh - 200px);
+    overflow-y: auto;
+}
+
+.modal-footer {
+    padding: var(--blaze-spacing-xl);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--blaze-spacing-md);
+}
+
+/* ========================================
+   TABLES
+   ======================================== */
+
+.blaze-table-container {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--blaze-radius-xl);
+    padding: var(--blaze-spacing-xl);
+    overflow: hidden;
+}
+
+.table-controls {
+    margin-bottom: var(--blaze-spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-search-input {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--blaze-radius-md);
+    padding: 0.5rem 1rem;
+    color: var(--blaze-text-primary);
+    min-width: 250px;
+}
+
+.blaze-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.blaze-table thead {
+    background: rgba(191, 87, 0, 0.1);
+}
+
+.blaze-table th {
+    text-align: left;
+    padding: var(--blaze-spacing-md);
+    font-weight: 600;
+    color: var(--blaze-cardinal-blue);
+    border-bottom: 2px solid rgba(191, 87, 0, 0.3);
+}
+
+.blaze-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.blaze-table th.sortable:hover {
+    color: var(--blaze-primary-orange);
+}
+
+.sort-icon {
+    margin-left: 0.5rem;
+    opacity: 0.3;
+}
+
+.blaze-table tbody tr {
+    transition: var(--blaze-transition-fast);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.blaze-table tbody tr:hover {
+    background: rgba(191, 87, 0, 0.05);
+}
+
+.blaze-table td {
+    padding: var(--blaze-spacing-md);
+    color: var(--blaze-text-primary);
+}
+
+.table-pagination {
+    margin-top: var(--blaze-spacing-lg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--blaze-spacing-lg);
+}
+
+.pagination-prev,
+.pagination-next {
+    padding: 0.5rem 1rem;
+    background: rgba(191, 87, 0, 0.1);
+    border: 1px solid rgba(191, 87, 0, 0.3);
+    border-radius: var(--blaze-radius-md);
+    color: var(--blaze-primary-orange);
+    cursor: pointer;
+    transition: var(--blaze-transition-fast);
+}
+
+.pagination-prev:hover,
+.pagination-next:hover {
+    background: rgba(191, 87, 0, 0.2);
+}
+
+.pagination-info {
+    color: var(--blaze-text-secondary);
+}
+
+/* ========================================
+   PROGRESS INDICATORS
+   ======================================== */
+
+.blaze-progress {
+    width: 100%;
+}
+
+.progress-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--blaze-text-primary);
+    margin-bottom: var(--blaze-spacing-sm);
+}
+
+.progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+    height: 8px;
+    border-radius: var(--blaze-radius-full);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blaze-primary-orange), var(--blaze-championship-gold));
+    border-radius: var(--blaze-radius-full);
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: var(--blaze-spacing-sm);
+}
+
+.progress-value {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* Circle Progress */
+.blaze-progress--circle {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.blaze-progress--circle svg {
+    transform: rotate(-90deg);
+}
+
+.blaze-progress--circle .progress-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--blaze-championship-gold);
+}
+
+/* Steps Progress */
+.progress-steps {
+    display: flex;
+    align-items: center;
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--blaze-text-secondary);
+    transition: var(--blaze-transition);
+}
+
+.progress-step.active .step-circle {
+    background: linear-gradient(135deg, var(--blaze-primary-orange), var(--blaze-championship-gold));
+    border-color: var(--blaze-primary-orange);
+    color: white;
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 var(--blaze-spacing-sm);
+}
+
+.progress-step.active .step-line {
+    background: linear-gradient(90deg, var(--blaze-primary-orange), var(--blaze-championship-gold));
+}
+
+/* ========================================
+   ALERTS & NOTIFICATIONS
+   ======================================== */
+
+.blaze-alert {
+    padding: var(--blaze-spacing-md) var(--blaze-spacing-lg);
+    border-radius: var(--blaze-radius-md);
+    display: flex;
+    align-items: center;
+    gap: var(--blaze-spacing-md);
+    margin-bottom: var(--blaze-spacing-md);
+    transition: var(--blaze-transition);
+    transform: translateX(400px);
+    opacity: 0;
+}
+
+.blaze-alert.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.blaze-alert.dismissing {
+    transform: translateX(400px);
+    opacity: 0;
+}
+
+.blaze-alert--info {
+    background: rgba(155, 203, 235, 0.1);
+    border: 1px solid var(--blaze-cardinal-blue);
+}
+
+.blaze-alert--success {
+    background: rgba(0, 255, 127, 0.1);
+    border: 1px solid var(--blaze-neural-green);
+}
+
+.blaze-alert--warning {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid var(--blaze-championship-gold);
+}
+
+.blaze-alert--error {
+    background: rgba(255, 71, 87, 0.1);
+    border: 1px solid #ff4757;
+}
+
+.alert-icon {
+    font-size: 1.5rem;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--blaze-text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.alert-message {
+    font-size: 0.9rem;
+    color: var(--blaze-text-secondary);
+    margin: 0;
+}
+
+.alert-close {
+    background: none;
+    border: none;
+    color: var(--blaze-text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: var(--blaze-transition-fast);
+}
+
+.alert-close:hover {
+    color: var(--blaze-text-primary);
+}
+
+/* Position classes for notifications */
+.position-top-right {
+    position: fixed;
+    top: var(--blaze-spacing-xl);
+    right: var(--blaze-spacing-xl);
+    z-index: 30000;
+}
+
+.position-top-left {
+    position: fixed;
+    top: var(--blaze-spacing-xl);
+    left: var(--blaze-spacing-xl);
+    z-index: 30000;
+}
+
+.position-bottom-right {
+    position: fixed;
+    bottom: var(--blaze-spacing-xl);
+    right: var(--blaze-spacing-xl);
+    z-index: 30000;
+}
+
+.position-bottom-left {
+    position: fixed;
+    bottom: var(--blaze-spacing-xl);
+    left: var(--blaze-spacing-xl);
+    z-index: 30000;
+}
+
+/* ========================================
+   TOOLTIPS
+   ======================================== */
+
+.blaze-tooltip {
+    position: absolute;
+    background: var(--blaze-bg-executive);
+    color: var(--blaze-text-primary);
+    padding: var(--blaze-spacing-sm) var(--blaze-spacing-md);
+    border-radius: var(--blaze-radius-md);
+    border: 1px solid rgba(191, 87, 0, 0.3);
+    font-size: 0.85rem;
+    white-space: nowrap;
+    z-index: 40000;
+    pointer-events: none;
+    animation: tooltip-appear 0.3s ease;
+}
+
+@keyframes tooltip-appear {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   CHARTS
+   ======================================== */
+
+.blaze-chart-container {
+    position: relative;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--blaze-radius-lg);
+    padding: var(--blaze-spacing-lg);
+}
+
+.chart-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--blaze-text-primary);
+    margin-bottom: var(--blaze-spacing-md);
+}
+
+.chart-status {
+    position: absolute;
+    top: var(--blaze-spacing-md);
+    right: var(--blaze-spacing-md);
+    padding: 0.25rem 0.75rem;
+    background: rgba(0, 255, 127, 0.1);
+    color: var(--blaze-neural-green);
+    border: 1px solid var(--blaze-neural-green);
+    border-radius: var(--blaze-radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+[data-animate-on-scroll] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: var(--blaze-transition-slow);
+}
+
+[data-animate-on-scroll].animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+    :root {
+        --blaze-spacing-xl: 1.5rem;
+        --blaze-spacing-2xl: 2rem;
+    }
+
+    .blaze-table-container.responsive {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --blaze-spacing-lg: 1rem;
+        --blaze-spacing-xl: 1.25rem;
+        --blaze-spacing-2xl: 1.5rem;
+    }
+
+    .blaze-card {
+        padding: var(--blaze-spacing-lg);
+    }
+
+    .card-value {
+        font-size: 2rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .modal-dialog {
+        max-width: 95%;
+        margin: var(--blaze-spacing-md);
+    }
+
+    .table-controls {
+        flex-direction: column;
+        gap: var(--blaze-spacing-md);
+    }
+
+    .table-search-input {
+        width: 100%;
+    }
+
+    .position-top-right,
+    .position-top-left,
+    .position-bottom-right,
+    .position-bottom-left {
+        left: var(--blaze-spacing-md);
+        right: var(--blaze-spacing-md);
+    }
+}
+
+/* ========================================
+   UTILITIES
+   ======================================== */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-1 { margin-top: var(--blaze-spacing-sm); }
+.mt-2 { margin-top: var(--blaze-spacing-md); }
+.mt-3 { margin-top: var(--blaze-spacing-lg); }
+.mt-4 { margin-top: var(--blaze-spacing-xl); }
+
+.mb-1 { margin-bottom: var(--blaze-spacing-sm); }
+.mb-2 { margin-bottom: var(--blaze-spacing-md); }
+.mb-3 { margin-bottom: var(--blaze-spacing-lg); }
+.mb-4 { margin-bottom: var(--blaze-spacing-xl); }
+
+.p-1 { padding: var(--blaze-spacing-sm); }
+.p-2 { padding: var(--blaze-spacing-md); }
+.p-3 { padding: var(--blaze-spacing-lg); }
+.p-4 { padding: var(--blaze-spacing-xl); }
+
+.flex { display: flex; }
+.flex-column { flex-direction: column; }
+.align-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: var(--blaze-spacing-sm); }
+.gap-2 { gap: var(--blaze-spacing-md); }
+.gap-3 { gap: var(--blaze-spacing-lg); }
+
+.hidden { display: none; }
+.visible { visibility: visible; }
+.invisible { visibility: hidden; }
+
+.fade-in {
+    animation: fade-in 0.5s ease;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-up {
+    animation: slide-up 0.5s ease;
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

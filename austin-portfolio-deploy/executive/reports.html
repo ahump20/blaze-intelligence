@@ -1,0 +1,1267 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Reports | Blaze Intelligence</title>
+
+    <!-- Professional Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Blaze Intelligence Core Systems -->
+    <script src="../js/rti-fusion-engine.js"></script>
+    <script src="../js/character-assessment-engine.js"></script>
+    <script src="../js/professional-animations.js"></script>
+
+    <style>
+        :root {
+            /* Brand Colors - Blaze Intelligence Professional Palette */
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --grizzly-teal: #00B2A9;
+            --neural-green: #00ff7f;
+            --championship-gold: #FFD700;
+            --executive-platinum: #E5E4E2;
+            --executive-graphite: #36454F;
+            --executive-pearl: #FAFAFA;
+
+            /* Executive Theme Colors */
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --bg-executive: #0f1419;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --text-executive: #c9d1d9;
+
+            /* Professional Spacing & Measurements */
+            --executive-radius: 16px;
+            --executive-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --transition-executive: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--bg-executive), var(--bg-primary), var(--bg-secondary));
+            color: var(--text-executive);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Executive Navigation Bar */
+        .executive-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 0 3rem;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            z-index: 10000;
+            box-shadow: var(--executive-shadow);
+        }
+
+        .executive-brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 4rem;
+            cursor: pointer;
+            transition: var(--transition-executive);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .executive-nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            margin-right: auto;
+        }
+
+        .executive-nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 0.8rem 1.6rem;
+            border-radius: 10px;
+            transition: var(--transition-executive);
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .executive-nav-link:hover, .executive-nav-link.active {
+            color: var(--championship-gold);
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.15), rgba(255, 215, 0, 0.1));
+            border-color: var(--primary-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(191, 87, 0, 0.2);
+        }
+
+        /* Reports Dashboard Layout */
+        .reports-dashboard {
+            margin-top: 80px;
+            padding: 2rem;
+            display: grid;
+            grid-template-areas:
+                "header header header header"
+                "summary summary filters filters"
+                "performance-report performance-report championship-report championship-report"
+                "nil-report character-report analytics-report strategic-report"
+                "automated-reports automated-reports custom-reports custom-reports";
+            grid-template-rows: 100px 200px 400px 350px 300px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Reports Header */
+        .reports-header {
+            grid-area: header;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--executive-radius);
+            padding: 2rem 3rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--executive-shadow);
+        }
+
+        .reports-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reports-actions {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .btn-reports {
+            background: linear-gradient(135deg, var(--cardinal-blue), var(--grizzly-teal));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-executive);
+            font-size: 0.9rem;
+        }
+
+        .btn-reports:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(155, 203, 235, 0.4);
+        }
+
+        /* Reports Sections */
+        .reports-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--executive-radius);
+            padding: 2.5rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: var(--executive-shadow);
+            transition: var(--transition-executive);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reports-section:hover {
+            border-color: var(--primary-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(191, 87, 0, 0.3);
+        }
+
+        .summary-section { grid-area: summary; }
+        .filters-section { grid-area: filters; }
+        .performance-report { grid-area: performance-report; }
+        .championship-report { grid-area: championship-report; }
+        .nil-report { grid-area: nil-report; }
+        .character-report { grid-area: character-report; }
+        .analytics-report { grid-area: analytics-report; }
+        .strategic-report { grid-area: strategic-report; }
+        .automated-reports { grid-area: automated-reports; }
+        .custom-reports { grid-area: custom-reports; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.3rem;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-section {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            color: var(--primary-orange);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-section:hover {
+            background: rgba(191, 87, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Executive Summary */
+        .summary-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .summary-metric {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition-smooth);
+        }
+
+        .summary-metric:hover {
+            background: rgba(191, 87, 0, 0.1);
+            border-color: var(--primary-orange);
+            transform: translateY(-2px);
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Filters Section */
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .filter-group {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .filter-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Report Cards */
+        .report-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-card:hover {
+            background: rgba(155, 203, 235, 0.1);
+            border-color: var(--cardinal-blue);
+            transform: translateY(-3px);
+        }
+
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--championship-gold));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .report-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .report-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--cardinal-blue);
+        }
+
+        .report-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .report-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .report-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .report-frequency {
+            color: var(--neural-green);
+            font-weight: 600;
+        }
+
+        /* Automated Reports */
+        .automated-reports-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .automated-report-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 127, 0.2);
+            transition: var(--transition-smooth);
+        }
+
+        .automated-report-item:hover {
+            background: rgba(0, 255, 127, 0.1);
+            border-color: var(--neural-green);
+            transform: translateY(-2px);
+        }
+
+        .auto-report-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--neural-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .auto-report-schedule {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .auto-report-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--neural-green);
+            box-shadow: 0 0 10px var(--neural-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Custom Reports */
+        .custom-reports-builder {
+            margin-top: 1rem;
+        }
+
+        .report-builder-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .builder-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+        }
+
+        .builder-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .builder-option {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .builder-option:hover {
+            background: rgba(191, 87, 0, 0.1);
+        }
+
+        .builder-checkbox {
+            width: 18px;
+            height: 18px;
+            background: var(--primary-orange);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .builder-label {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .reports-dashboard {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-areas:
+                    "header header header"
+                    "summary filters filters"
+                    "performance-report championship-report championship-report"
+                    "nil-report character-report analytics-report"
+                    "strategic-report automated-reports automated-reports"
+                    "custom-reports custom-reports custom-reports";
+            }
+
+            .summary-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .automated-reports-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .reports-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-areas:
+                    "header header"
+                    "summary filters"
+                    "performance-report championship-report"
+                    "nil-report character-report"
+                    "analytics-report strategic-report"
+                    "automated-reports automated-reports"
+                    "custom-reports custom-reports";
+            }
+        }
+
+        @media (max-width: 768px) {
+            .reports-dashboard {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "header"
+                    "summary"
+                    "filters"
+                    "performance-report"
+                    "championship-report"
+                    "nil-report"
+                    "character-report"
+                    "analytics-report"
+                    "strategic-report"
+                    "automated-reports"
+                    "custom-reports";
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .summary-metrics,
+            .filters-grid,
+            .automated-reports-grid,
+            .builder-options {
+                grid-template-columns: 1fr;
+            }
+
+            .reports-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Loading States */
+        .loading-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(191, 87, 0, 0.2);
+            border-top: 3px solid var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.03;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Executive Navigation -->
+    <nav class="executive-navbar">
+        <div class="executive-brand">
+            🔥 Blaze Intelligence
+        </div>
+
+        <div class="executive-nav-links">
+            <a href="/executive/" class="executive-nav-link">Executive Center</a>
+            <a href="/executive/dashboard.html" class="executive-nav-link">Dashboard</a>
+            <a href="/executive/analytics.html" class="executive-nav-link">Analytics</a>
+            <a href="/executive/reports.html" class="executive-nav-link active">Reports</a>
+            <a href="/" class="executive-nav-link">Platform Home</a>
+        </div>
+    </nav>
+
+    <!-- Reports Dashboard -->
+    <main class="reports-dashboard">
+        <!-- Reports Header -->
+        <section class="reports-header">
+            <div>
+                <h1 class="reports-title">Executive Reports Center</h1>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">Automated intelligence reports and custom analytics for championship decision making</p>
+            </div>
+            <div class="reports-actions">
+                <button class="btn-reports" onclick="generateExecutiveReport()">📊 Generate Report</button>
+                <button class="btn-reports" onclick="scheduleReport()">⏰ Schedule Report</button>
+            </div>
+        </section>
+
+        <!-- Executive Summary -->
+        <section class="reports-section summary-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        📈 Executive Summary
+                    </h2>
+                    <div class="section-subtitle">Key performance indicators and strategic insights</div>
+                </div>
+            </div>
+            <div class="summary-metrics">
+                <div class="summary-metric">
+                    <div class="summary-value">87.4%</div>
+                    <div class="summary-label">Championship Probability</div>
+                </div>
+                <div class="summary-metric">
+                    <div class="summary-value">$2.1M</div>
+                    <div class="summary-label">NIL Portfolio Value</div>
+                </div>
+                <div class="summary-metric">
+                    <div class="summary-value">94.6%</div>
+                    <div class="summary-label">Analytics Accuracy</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report Filters -->
+        <section class="reports-section filters-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🎯 Report Filters
+                    </h2>
+                    <div class="section-subtitle">Customize report parameters and scope</div>
+                </div>
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <div class="filter-label">Time Range</div>
+                    <select class="filter-select" id="timeRange">
+                        <option value="7d">Last 7 Days</option>
+                        <option value="30d" selected="">Last 30 Days</option>
+                        <option value="90d">Last 90 Days</option>
+                        <option value="1y">Last Year</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-label">Team Focus</div>
+                    <select class="filter-select" id="teamFocus">
+                        <option value="all" selected="">All Teams</option>
+                        <option value="cardinals">Cardinals</option>
+                        <option value="titans">Titans</option>
+                        <option value="longhorns">Longhorns</option>
+                        <option value="grizzlies">Grizzlies</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-label">Report Type</div>
+                    <select class="filter-select" id="reportType">
+                        <option value="comprehensive" selected="">Comprehensive</option>
+                        <option value="performance">Performance Only</option>
+                        <option value="analytics">Analytics Only</option>
+                        <option value="strategic">Strategic Only</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-label">Output Format</div>
+                    <select class="filter-select" id="outputFormat">
+                        <option value="pdf" selected="">PDF Report</option>
+                        <option value="excel">Excel Workbook</option>
+                        <option value="powerpoint">PowerPoint Deck</option>
+                        <option value="dashboard">Live Dashboard</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Report -->
+        <section class="reports-section performance-report">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        ⚡ Performance Intelligence Report
+                    </h2>
+                    <div class="section-subtitle">Comprehensive performance analytics and trend analysis</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="generatePerformanceReport()">Generate</button>
+                    <button class="btn-section" onclick="downloadReport('performance')">Download</button>
+                </div>
+            </div>
+            <div class="report-card" onclick="openReport('performance')">
+                <div class="report-icon">⚡</div>
+                <div class="report-title">Performance Intelligence Report</div>
+                <div class="report-description">
+                    Detailed analysis of team performance metrics, individual player statistics, and championship probability modeling with predictive insights.
+                </div>
+                <div class="report-stats">
+                    <span>Last Generated: 2 hours ago</span>
+                    <span class="report-frequency">Daily</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Championship Analysis Report -->
+        <section class="reports-section championship-report">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🏆 Championship Analysis Report
+                    </h2>
+                    <div class="section-subtitle">Championship probability and strategic pathway analysis</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="generateChampionshipReport()">Generate</button>
+                    <button class="btn-section" onclick="downloadReport('championship')">Download</button>
+                </div>
+            </div>
+            <div class="report-card" onclick="openReport('championship')">
+                <div class="report-icon">🏆</div>
+                <div class="report-title">Championship Pathway Analysis</div>
+                <div class="report-description">
+                    Strategic analysis of championship probability factors, including character assessment, performance trends, and competitive positioning insights.
+                </div>
+                <div class="report-stats">
+                    <span>Last Generated: 4 hours ago</span>
+                    <span class="report-frequency">Weekly</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- NIL Valuation Report -->
+        <section class="reports-section nil-report">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        💰 NIL Valuation Report
+                    </h2>
+                    <div class="section-subtitle">Name, Image, Likeness market analysis and portfolio optimization</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="generateNILReport()">Generate</button>
+                </div>
+            </div>
+            <div class="report-card" onclick="openReport('nil')">
+                <div class="report-icon">💰</div>
+                <div class="report-title">NIL Market Intelligence</div>
+                <div class="report-description">
+                    Comprehensive NIL valuation analysis with market trends, portfolio optimization recommendations, and investment opportunities.
+                </div>
+                <div class="report-stats">
+                    <span>Last Generated: 6 hours ago</span>
+                    <span class="report-frequency">Bi-weekly</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Character Assessment Report -->
+        <section class="reports-section character-report">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🧠 Character Assessment Report
+                    </h2>
+                    <div class="section-subtitle">Championship DNA and leadership analysis</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="generateCharacterReport()">Generate</button>
+                </div>
+            </div>
+            <div class="report-card" onclick="openReport('character')">
+                <div class="report-icon">🧠</div>
+                <div class="report-title">Character DNA Analysis</div>
+                <div class="report-description">
+                    Advanced micro-expression analysis and behavioral pattern assessment for championship mentality identification and development.
+                </div>
+                <div class="report-stats">
+                    <span>Last Generated: 8 hours ago</span>
+                    <span class="report-frequency">Weekly</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Analytics Report -->
+        <section class="reports-section analytics-report">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        📊 Advanced Analytics Report
+                    </h2>
+                    <div class="section-subtitle">Deep learning insights and predictive modeling results</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="generateAnalyticsReport()">Generate</button>
+                </div>
+            </div>
+            <div class="report-card" onclick="openReport('analytics')">
+                <div class="report-icon">📊</div>
+                <div class="report-title">ML Analytics Intelligence</div>
+                <div class="report-description">
+                    Machine learning model outputs, pattern recognition insights, and advanced statistical analysis with predictive recommendations.
+                </div>
+                <div class="report-stats">
+                    <span>Last Generated: 3 hours ago</span>
+                    <span class="report-frequency">Daily</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategic Recommendations Report -->
+        <section class="reports-section strategic-report">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🎯 Strategic Intelligence Report
+                    </h2>
+                    <div class="section-subtitle">Executive recommendations and action items</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="generateStrategicReport()">Generate</button>
+                </div>
+            </div>
+            <div class="report-card" onclick="openReport('strategic')">
+                <div class="report-icon">🎯</div>
+                <div class="report-title">Strategic Action Plan</div>
+                <div class="report-description">
+                    AI-generated strategic recommendations, priority action items, and executive decision support with ROI projections.
+                </div>
+                <div class="report-stats">
+                    <span>Last Generated: 12 hours ago</span>
+                    <span class="report-frequency">Weekly</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Automated Reports -->
+        <section class="reports-section automated-reports">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🤖 Automated Report Schedule
+                    </h2>
+                    <div class="section-subtitle">Scheduled intelligence reports and automated delivery</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="configureAutomation()">Configure</button>
+                </div>
+            </div>
+            <div class="automated-reports-grid">
+                <div class="automated-report-item">
+                    <div class="auto-report-name">Daily Performance Digest</div>
+                    <div class="auto-report-schedule">Every day at 7:00 AM</div>
+                    <div class="auto-report-status">
+                        <div class="status-dot"></div>
+                        <span>Active</span>
+                    </div>
+                </div>
+                <div class="automated-report-item">
+                    <div class="auto-report-name">Weekly Championship Analysis</div>
+                    <div class="auto-report-schedule">Every Monday at 9:00 AM</div>
+                    <div class="auto-report-status">
+                        <div class="status-dot"></div>
+                        <span>Active</span>
+                    </div>
+                </div>
+                <div class="automated-report-item">
+                    <div class="auto-report-name">Monthly Strategic Review</div>
+                    <div class="auto-report-schedule">First Monday of each month</div>
+                    <div class="auto-report-status">
+                        <div class="status-dot"></div>
+                        <span>Active</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Report Builder -->
+        <section class="reports-section custom-reports">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        🔧 Custom Report Builder
+                    </h2>
+                    <div class="section-subtitle">Build tailored reports with specific metrics and insights</div>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-section" onclick="buildCustomReport()">Build Report</button>
+                </div>
+            </div>
+            <div class="custom-reports-builder">
+                <div class="report-builder-section">
+                    <div class="builder-title">Select Metrics</div>
+                    <div class="builder-options">
+                        <div class="builder-option" onclick="toggleOption(this)">
+                            <div class="builder-checkbox">✓</div>
+                            <div class="builder-label">Championship Probability</div>
+                        </div>
+                        <div class="builder-option" onclick="toggleOption(this)">
+                            <div class="builder-checkbox">✓</div>
+                            <div class="builder-label">Performance Analytics</div>
+                        </div>
+                        <div class="builder-option" onclick="toggleOption(this)">
+                            <div class="builder-checkbox"></div>
+                            <div class="builder-label">Character Assessment</div>
+                        </div>
+                        <div class="builder-option" onclick="toggleOption(this)">
+                            <div class="builder-checkbox">✓</div>
+                            <div class="builder-label">NIL Valuations</div>
+                        </div>
+                        <div class="builder-option" onclick="toggleOption(this)">
+                            <div class="builder-checkbox"></div>
+                            <div class="builder-label">Predictive Models</div>
+                        </div>
+                        <div class="builder-option" onclick="toggleOption(this)">
+                            <div class="builder-checkbox">✓</div>
+                            <div class="builder-label">Strategic Insights</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global reports state
+        let reportsState = {
+            selectedOptions: new Set(['championship-probability', 'performance-analytics', 'nil-valuations', 'strategic-insights']),
+            currentFilters: {
+                timeRange: '30d',
+                teamFocus: 'all',
+                reportType: 'comprehensive',
+                outputFormat: 'pdf'
+            }
+        };
+
+        // Initialize Executive Reports
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔥 Initializing Executive Reports Center...');
+
+            // Initialize background particles
+            initializeParticles();
+
+            // Initialize filter event listeners
+            initializeFilters();
+
+            console.log('✅ Executive Reports Center fully loaded');
+        });
+
+        // Particles.js Background
+        function initializeParticles() {
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 20, density: { enable: true, value_area: 1800 } },
+                        color: { value: ['#BF5700', '#9BCBEB', '#FFD700'] },
+                        shape: { type: 'circle' },
+                        opacity: {
+                            value: 0.1,
+                            random: true,
+                            anim: { enable: true, speed: 0.6, opacity_min: 0.01, sync: false }
+                        },
+                        size: {
+                            value: 0.8,
+                            random: true,
+                            anim: { enable: true, speed: 1, size_min: 0.1, sync: false }
+                        },
+                        line_linked: {
+                            enable: true,
+                            distance: 400,
+                            color: '#BF5700',
+                            opacity: 0.02,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 0.3,
+                            direction: 'none',
+                            random: false,
+                            straight: false,
+                            out_mode: 'out',
+                            bounce: false
+                        }
+                    },
+                    interactivity: {
+                        detect_on: 'canvas',
+                        events: {
+                            onhover: { enable: false },
+                            onclick: { enable: false },
+                            resize: true
+                        }
+                    },
+                    retina_detect: true
+                });
+            }
+        }
+
+        // Initialize filter event listeners
+        function initializeFilters() {
+            ['timeRange', 'teamFocus', 'reportType', 'outputFormat'].forEach(filterId => {
+                const filter = document.getElementById(filterId);
+                if (filter) {
+                    filter.addEventListener('change', (e) => {
+                        reportsState.currentFilters[filterId] = e.target.value;
+                        console.log(`Filter ${filterId} changed to: ${e.target.value}`);
+                    });
+                }
+            });
+        }
+
+        // Report generation functions
+        function generateExecutiveReport() {
+            console.log('📊 Generating executive report...');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '📊 Generating...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                button.textContent = '✅ Report Ready';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                    // Simulate opening report
+                    window.open('#executive-report', '_blank');
+                }, 2000);
+            }, 3000);
+        }
+
+        function scheduleReport() {
+            console.log('⏰ Opening report scheduler...');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏰ Configuring...';
+
+            setTimeout(() => {
+                button.textContent = '✅ Schedule Set';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 1500);
+        }
+
+        function generatePerformanceReport() {
+            console.log('⚡ Generating performance report...');
+            simulateReportGeneration('Performance Intelligence Report');
+        }
+
+        function generateChampionshipReport() {
+            console.log('🏆 Generating championship analysis...');
+            simulateReportGeneration('Championship Pathway Analysis');
+        }
+
+        function generateNILReport() {
+            console.log('💰 Generating NIL valuation report...');
+            simulateReportGeneration('NIL Market Intelligence Report');
+        }
+
+        function generateCharacterReport() {
+            console.log('🧠 Generating character assessment...');
+            simulateReportGeneration('Character DNA Analysis Report');
+        }
+
+        function generateAnalyticsReport() {
+            console.log('📊 Generating analytics report...');
+            simulateReportGeneration('ML Analytics Intelligence Report');
+        }
+
+        function generateStrategicReport() {
+            console.log('🎯 Generating strategic recommendations...');
+            simulateReportGeneration('Strategic Action Plan Report');
+        }
+
+        function simulateReportGeneration(reportName) {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Generating...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                button.textContent = 'Complete ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 2000);
+
+                // Show success notification
+                showNotification(`${reportName} generated successfully!`);
+            }, 2000 + Math.random() * 2000);
+        }
+
+        function downloadReport(reportType) {
+            console.log(`📥 Downloading ${reportType} report...`);
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Downloading...';
+
+            setTimeout(() => {
+                button.textContent = 'Downloaded ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+
+                // Simulate file download
+                const link = document.createElement('a');
+                link.href = '#';
+                link.download = `${reportType}-report-${new Date().toISOString().split('T')[0]}.pdf`;
+                link.click();
+            }, 1500);
+        }
+
+        function openReport(reportType) {
+            console.log(`📖 Opening ${reportType} report...`);
+            // Simulate opening report in new tab
+            window.open(`#${reportType}-report-detail`, '_blank');
+            showNotification(`Opening ${reportType} report...`);
+        }
+
+        function configureAutomation() {
+            console.log('🤖 Configuring automation settings...');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Configuring...';
+
+            setTimeout(() => {
+                button.textContent = 'Configured ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }, 1500);
+        }
+
+        function buildCustomReport() {
+            console.log('🔧 Building custom report...');
+            const selectedMetrics = Array.from(reportsState.selectedOptions);
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Building...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                button.textContent = 'Report Built ✓';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 2000);
+
+                showNotification(`Custom report built with ${selectedMetrics.length} metrics!`);
+            }, 2500);
+        }
+
+        function toggleOption(element) {
+            const checkbox = element.querySelector('.builder-checkbox');
+            const label = element.querySelector('.builder-label');
+            const optionKey = label.textContent.toLowerCase().replace(/\s+/g, '-');
+
+            if (checkbox.textContent === '✓') {
+                checkbox.textContent = '';
+                reportsState.selectedOptions.delete(optionKey);
+            } else {
+                checkbox.textContent = '✓';
+                reportsState.selectedOptions.add(optionKey);
+            }
+
+            console.log('Selected options:', Array.from(reportsState.selectedOptions));
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 8px 25px rgba(191, 87, 0, 0.4);
+                z-index: 10001;
+                font-weight: 600;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Update filters based on selection
+        function updateReportFilters() {
+            console.log('Current filters:', reportsState.currentFilters);
+            // This would typically trigger report data refresh
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            // Handle any responsive adjustments if needed
+        });
+    </script>
+
+</body></html>
