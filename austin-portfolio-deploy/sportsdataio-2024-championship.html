@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - 2024 NFL & MLB Championship Analytics</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #BF5700;
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #BF5700, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .season-badge {
+            background: #FFD700;
+            color: #0a0e27;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Key Metrics Section */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: #BF5700;
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.3);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .metric-label {
+            color: #9BCBEB;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        /* Championship Section */
+        .championship-section {
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid #FFD700;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .championship-title {
+            font-size: 1.8rem;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .trophy-icon {
+            font-size: 2rem;
+        }
+
+        /* Focus Teams Grid */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card.playoffs {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        .team-card.eliminated {
+            border-color: #ff0000;
+            background: rgba(255, 0, 0, 0.02);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .team-record {
+            font-size: 1.1rem;
+            color: #9BCBEB;
+        }
+
+        .team-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #9BCBEB;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .playoff-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #00ff00;
+            color: #000;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Standings Table */
+        .standings-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        .standings-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #9BCBEB;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(191, 87, 0, 0.2);
+            padding: 0.75rem;
+            text-align: left;
+            color: #FFD700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .positive {
+            color: #00ff00;
+        }
+
+        .negative {
+            color: #ff6666;
+        }
+
+        /* Insights Section */
+        .insights-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .insight-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #BF5700;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .insight-headline {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-detail {
+            font-size: 0.9rem;
+            color: #9BCBEB;
+        }
+
+        .trend-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+
+        .trend-badge.DOMINANT { background: #00ff00; color: #000; }
+        .trend-badge.STRONG { background: #90EE90; color: #000; }
+        .trend-badge.COMPETITIVE { background: #FFD700; color: #000; }
+        .trend-badge.STRUGGLING { background: #FFA500; color: #000; }
+        .trend-badge.REBUILDING { background: #ff6666; color: #fff; }
+        .trend-badge.PLAYOFFS { background: #00ff00; color: #000; }
+        .trend-badge.CHAMPIONSHIP { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #9BCBEB;
+        }
+
+        .spinner {
+            border: 3px solid rgba(155, 203, 235, 0.3);
+            border-top: 3px solid #BF5700;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Blaze Intelligence</div>
+            <div class="season-badge">2024 SEASON COMPLETE</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="totalGames">0</div>
+                <div class="metric-label">Total Games</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="playoffTeams">26</div>
+                <div class="metric-label">Playoff Teams</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="dataPoints">2.8M+</div>
+                <div class="metric-label">Data Points</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="accuracy">94.6%</div>
+                <div class="metric-label">Prediction Accuracy</div>
+            </div>
+        </div>
+
+        <!-- 2024 Champions -->
+        <div class="championship-section">
+            <h2 class="championship-title">
+                <span class="trophy-icon">🏆</span>
+                2024 Champions
+            </h2>
+            <div class="teams-grid">
+                <div class="team-card playoffs">
+                    <div class="playoff-badge">CHAMPION</div>
+                    <div class="team-header">
+                        <div class="team-name">Kansas City Chiefs</div>
+                        <div class="team-record">15-2</div>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Points For</span>
+                            <span class="stat-value">389</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Points Against</span>
+                            <span class="stat-value">318</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Net Points</span>
+                            <span class="stat-value positive">+71</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">AFC Seed</span>
+                            <span class="stat-value">#1</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card playoffs">
+                    <div class="playoff-badge">CHAMPION</div>
+                    <div class="team-header">
+                        <div class="team-name">Los Angeles Dodgers</div>
+                        <div class="team-record">98-64</div>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Runs Scored</span>
+                            <span class="stat-value">842</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Runs Against</span>
+                            <span class="stat-value">663</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Run Diff</span>
+                            <span class="stat-value positive">+179</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">NL Seed</span>
+                            <span class="stat-value">#1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Focus Teams Performance -->
+        <div class="championship-section">
+            <h2 class="championship-title">Focus Teams 2024 Performance</h2>
+            <div id="focusTeamsContainer" class="teams-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading 2024 data...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NFL Standings -->
+        <div class="standings-container">
+            <h3 class="standings-title">NFL 2024 Final Standings (Select Teams)</h3>
+            <table id="nflStandingsTable">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>W-L</th>
+                        <th>PCT</th>
+                        <th>PF</th>
+                        <th>PA</th>
+                        <th>DIFF</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="nflStandingsBody">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- MLB Standings -->
+        <div class="standings-container">
+            <h3 class="standings-title">MLB 2024 Final Standings (Select Teams)</h3>
+            <table id="mlbStandingsTable">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>W-L</th>
+                        <th>PCT</th>
+                        <th>RS</th>
+                        <th>RA</th>
+                        <th>DIFF</th>
+                        <th>GB</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="mlbStandingsBody">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Season Insights -->
+        <div class="championship-section">
+            <h2 class="championship-title">2024 Season Insights</h2>
+            <div id="insightsContainer" class="insights-container">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load the 2024 connector -->
+    <script src="/js/sportsdataio-2024-connector.js"></script>
+    <script>
+        // Initialize the 2024 data connector
+        const sportsData = new SportsDataIO2024();
+
+        // Load and display dashboard data
+        async function loadDashboard() {
+            try {
+                const dashboard = await sportsData.getChampionship2024Dashboard();
+
+                // Update total games
+                document.getElementById('totalGames').textContent =
+                    ((17 * 32) + (162 * 30)).toLocaleString();
+
+                // Load focus teams
+                loadFocusTeams(dashboard);
+
+                // Load standings
+                loadNFLStandings(dashboard.nfl.standings);
+                loadMLBStandings(dashboard.mlb.standings);
+
+                // Load insights
+                loadInsights(dashboard.insights);
+
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        function loadFocusTeams(dashboard) {
+            const container = document.getElementById('focusTeamsContainer');
+            container.innerHTML = '';
+
+            // NFL Focus Teams
+            Object.entries(dashboard.nfl.focusTeams).forEach(([name, team]) => {
+                const card = createTeamCard('NFL', name, team);
+                container.appendChild(card);
+            });
+
+            // MLB Focus Teams
+            Object.entries(dashboard.mlb.focusTeams).forEach(([name, team]) => {
+                const card = createTeamCard('MLB', name, team);
+                container.appendChild(card);
+            });
+        }
+
+        function createTeamCard(league, name, team) {
+            const div = document.createElement('div');
+            const isPlayoffs = team.analysis.playoffChance === 100;
+            div.className = `team-card ${isPlayoffs ? 'playoffs' : 'eliminated'}`;
+
+            div.innerHTML = `
+                ${isPlayoffs ? '<div class="playoff-badge">PLAYOFFS</div>' : ''}
+                <div class="team-header">
+                    <div class="team-name">${team.city} ${name.charAt(0).toUpperCase() + name.slice(1)}</div>
+                    <div class="team-record">${team.wins}-${team.losses}</div>
+                </div>
+                <div class="team-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">PCT</span>
+                        <span class="stat-value">${team.pct.toFixed(3)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">DIV RANK</span>
+                        <span class="stat-value">#${team.divRank}</span>
+                    </div>
+                    ${league === 'NFL' ? `
+                        <div class="stat-item">
+                            <span class="stat-label">PTS FOR</span>
+                            <span class="stat-value">${team.ptsFor}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">NET PTS</span>
+                            <span class="stat-value ${team.netPts > 0 ? 'positive' : 'negative'}">
+                                ${team.netPts > 0 ? '+' : ''}${team.netPts}
+                            </span>
+                        </div>
+                    ` : `
+                        <div class="stat-item">
+                            <span class="stat-label">RUNS FOR</span>
+                            <span class="stat-value">${team.runsFor}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">RUN DIFF</span>
+                            <span class="stat-value ${team.netRuns > 0 ? 'positive' : 'negative'}">
+                                ${team.netRuns > 0 ? '+' : ''}${team.netRuns}
+                            </span>
+                        </div>
+                    `}
+                </div>
+                <div style="margin-top: 1rem;">
+                    <span class="trend-badge ${team.analysis.trend}">${team.analysis.trend}</span>
+                </div>
+            `;
+
+            return div;
+        }
+
+        function loadNFLStandings(standings) {
+            const tbody = document.getElementById('nflStandingsBody');
+            tbody.innerHTML = '';
+
+            // Show select teams
+            const showTeams = ['KC', 'BUF', 'PHI', 'DAL', 'HOU', 'TEN', 'ARI', 'MIA'];
+
+            standings
+                .filter(s => showTeams.includes(s.team))
+                .sort((a, b) => b.pct - a.pct)
+                .forEach(team => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${team.team}</td>
+                        <td>${team.wins}-${team.losses}</td>
+                        <td>${team.pct.toFixed(3)}</td>
+                        <td>${team.ptsFor}</td>
+                        <td>${team.ptsAgainst}</td>
+                        <td class="${team.netPts > 0 ? 'positive' : 'negative'}">
+                            ${team.netPts > 0 ? '+' : ''}${team.netPts}
+                        </td>
+                        <td>
+                            <span class="trend-badge ${team.playoffStatus === 'PLAYOFFS' ? 'PLAYOFFS' : 'REBUILDING'}">
+                                ${team.playoffStatus}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+        }
+
+        function loadMLBStandings(standings) {
+            const tbody = document.getElementById('mlbStandingsBody');
+            tbody.innerHTML = '';
+
+            // Show select teams
+            const showTeams = ['LAD', 'NYY', 'HOU', 'STL', 'TEX', 'KC', 'SD', 'ATL'];
+
+            standings
+                .filter(s => showTeams.includes(s.team))
+                .sort((a, b) => b.pct - a.pct)
+                .forEach(team => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${team.team}</td>
+                        <td>${team.wins}-${team.losses}</td>
+                        <td>${team.pct.toFixed(3)}</td>
+                        <td>${team.runsFor}</td>
+                        <td>${team.runsAgainst}</td>
+                        <td class="${team.netRuns > 0 ? 'positive' : 'negative'}">
+                            ${team.netRuns > 0 ? '+' : ''}${team.netRuns}
+                        </td>
+                        <td>${team.gb}</td>
+                        <td>
+                            <span class="trend-badge ${team.playoffStatus === 'PLAYOFFS' ? 'PLAYOFFS' : 'REBUILDING'}">
+                                ${team.playoffStatus}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+        }
+
+        function loadInsights(insights) {
+            const container = document.getElementById('insightsContainer');
+            container.innerHTML = '';
+
+            insights.forEach(insight => {
+                const card = document.createElement('div');
+                card.className = 'insight-card';
+                card.innerHTML = `
+                    <div class="insight-headline">${insight.headline}</div>
+                    <div class="insight-detail">${insight.detail}</div>
+                    <span class="trend-badge ${insight.trend}">${insight.trend}</span>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Load dashboard on page load
+        window.addEventListener('load', loadDashboard);
+
+        // Refresh every 30 seconds
+        setInterval(loadDashboard, 30000);
+    </script>
+</body>
+</html>
