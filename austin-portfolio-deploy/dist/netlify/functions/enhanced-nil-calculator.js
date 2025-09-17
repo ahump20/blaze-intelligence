@@ -4,7 +4,7 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import { calculateNILValue } from './nil-calculator.js';
+import { calculateNILValue } from '../../BI/nil-calculator.js';
 
 const NIL_MARKET_DATA = {
   // Real NIL market benchmarks from public sources

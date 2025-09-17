@@ -46,7 +46,7 @@ htmlFiles.forEach(file => {
 console.log(`✓ Copied ${htmlFiles.length} HTML files`);
 
 // Copy directories
-const directories = ['css', 'js', 'images', 'api', 'icons', 'netlify', 'public'];
+const directories = ['css', 'js', 'images', 'api', 'api-unified', 'icons', 'netlify', 'public'];
 directories.forEach(dir => {
   const srcPath = path.join(__dirname, dir);
   const destPath = path.join(distPath, dir);
