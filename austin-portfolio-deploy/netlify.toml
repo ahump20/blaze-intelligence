@@ -12,8 +12,10 @@
   BLAZE_3D_URL = "https://blaze-3d.netlify.app"
 
 [functions]
-  directory = "netlify/functions"
+  directory = "api-unified"
   node_bundler = "esbuild"
+  [functions."*"]
+    included_files = ["data/**", "assets/**", "api/**"]
 
 # Headers for better performance and security
 [[headers]]
