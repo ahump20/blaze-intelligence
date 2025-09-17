@@ -1,0 +1,138 @@
+/* Specular Card Effects - Ray-tracing inspired, CSS-powered
+   Austin Humphrey - Premium feel without performance cost */
+
+.specular {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.04));
+  backdrop-filter: saturate(1.05);
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,.12));
+  transform-style: preserve-3d;
+  perspective: 800px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.specular::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255,255,255,.18),
+    rgba(255,255,255,0) 40%
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.specular:hover::after {
+  opacity: 1;
+}
+
+/* Subtle 3D tilt on hover */
+.specular:hover {
+  transform:
+    rotateX(calc((var(--my, 50) - 50) * 0.1deg))
+    rotateY(calc((var(--mx, 50) - 50) * -0.1deg))
+    translateZ(10px);
+}
+
+/* Special effects for KPI cards */
+.kpi-card.specular {
+  border: 1px solid rgba(191, 87, 0, 0.2);
+  background: linear-gradient(
+    135deg,
+    rgba(191, 87, 0, 0.03),
+    rgba(155, 203, 235, 0.02)
+  );
+}
+
+.kpi-card.specular::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(191, 87, 0, 0.5),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.kpi-card.specular:hover::before {
+  opacity: 1;
+  animation: scan 2s linear infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Executive Intelligence special treatment */
+.executive-card.specular {
+  border: 1px solid rgba(155, 203, 235, 0.3);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 34, 68, 0.6),
+    rgba(0, 178, 169, 0.1)
+  );
+}
+
+.executive-card.specular::after {
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(155, 203, 235, 0.3),
+    rgba(0, 178, 169, 0.1) 30%,
+    transparent 60%
+  );
+}
+
+/* Accessibility: Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .specular {
+    transition: none;
+  }
+
+  .specular::after,
+  .specular::before {
+    display: none;
+  }
+
+  .specular:hover {
+    transform: none;
+  }
+
+  @keyframes scan {
+    0%, 100% { transform: none; }
+  }
+}
+
+/* Kill switch for visual effects */
+:root[data-fx="off"] .specular::after,
+:root[data-fx="off"] .specular::before {
+  display: none;
+}
+
+:root[data-fx="off"] .specular {
+  transform: none !important;
+  filter: none;
+  backdrop-filter: none;
+}
+
+/* Performance optimization for mobile */
+@media (max-width: 768px) {
+  .specular::after {
+    display: none;
+  }
+
+  .specular {
+    transform: none !important;
+  }
+}
