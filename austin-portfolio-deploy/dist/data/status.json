@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-09-17T21:26:22.682Z",
+  "status": "ready",
+  "version": "3.0.0",
+  "apiEndpoints": [
+    "championship-dashboard",
+    "nil-valuation",
+    "character-assessment",
+    "team-performance",
+    "live-scores",
+    "player-stats",
+    "season-predictions",
+    "recruiting-analytics",
+    "sports-report-generator"
+  ],
+  "sportsDataIOIntegration": true,
+  "blazeTeams": [
+    "Cardinals",
+    "Titans",
+    "Grizzlies",
+    "Longhorns"
+  ]
+}

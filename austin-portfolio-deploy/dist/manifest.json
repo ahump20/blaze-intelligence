@@ -1,207 +1,21 @@
 {
-  "name": "Blaze Intelligence - Championship Sports Analytics",
-  "short_name": "Blaze Intel",
-  "description": "See the game. Shape the outcome. Professional-grade sports analytics platform.",
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "any",
+  "name": "Blaze Intelligence",
+  "short_name": "BlazeIntel",
+  "description": "Unified SportsDataIO Integration Platform",
   "theme_color": "#BF5700",
-  "background_color": "#0a0e27",
-  "lang": "en-US",
-  "scope": "/",
-  "categories": ["sports", "analytics", "ai", "productivity"],
-
+  "background_color": "#002244",
+  "display": "standalone",
+  "start_url": "/",
   "icons": [
     {
-      "src": "/images/brand/blaze-tagline.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/images/brand/blaze-hero.png",
-      "sizes": "1024x1024",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-192x192.png",
+      "src": "/images/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
+      "src": "/images/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
-  ],
-
-  "screenshots": [
-    {
-      "src": "/screenshots/desktop-dashboard.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "platform": "wide",
-      "label": "RTI Dashboard on Desktop"
-    },
-    {
-      "src": "/screenshots/mobile-dashboard.png",
-      "sizes": "360x640",
-      "type": "image/png",
-      "platform": "narrow",
-      "label": "Mobile RTI Interface"
-    }
-  ],
-
-  "shortcuts": [
-    {
-      "name": "Start Analysis",
-      "short_name": "Analyze",
-      "description": "Start real-time sports analysis",
-      "url": "/?action=analyze",
-      "icons": [{ "src": "/icons/shortcut-analyze.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Performance Metrics",
-      "short_name": "Metrics",
-      "description": "View performance dashboard",
-      "url": "/?action=metrics",
-      "icons": [{ "src": "/icons/shortcut-metrics.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Character Assessment",
-      "short_name": "Character",
-      "description": "Run character analysis",
-      "url": "/?action=character",
-      "icons": [{ "src": "/icons/shortcut-character.png", "sizes": "96x96" }]
-    }
-  ],
-
-  "related_applications": [
-    {
-      "platform": "webapp",
-      "url": "https://blaze-intelligence.netlify.app/manifest.json"
-    }
-  ],
-
-  "prefer_related_applications": false,
-
-  "protocol_handlers": [
-    {
-      "protocol": "web+blazerti",
-      "url": "/?action=protocol&data=%s"
-    }
-  ],
-
-  "share_target": {
-    "action": "/api/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url",
-      "files": [
-        {
-          "name": "videos",
-          "accept": ["video/mp4", "video/quicktime", "video/avi"]
-        },
-        {
-          "name": "images",
-          "accept": ["image/jpeg", "image/png", "image/webp"]
-        }
-      ]
-    }
-  },
-
-  "file_handlers": [
-    {
-      "action": "/handle-video",
-      "accept": {
-        "video/mp4": [".mp4"],
-        "video/quicktime": [".mov"],
-        "video/avi": [".avi"]
-      }
-    }
-  ],
-
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
-
-  "launch_handler": {
-    "client_mode": ["navigate-new", "navigate-existing"]
-  },
-
-  "permissions": [
-    "camera",
-    "microphone",
-    "accelerometer",
-    "gyroscope",
-    "magnetometer",
-    "notifications"
-  ],
-
-  "features": [
-    "WebRTC",
-    "WebGL",
-    "MediaDevices",
-    "Performance Observer",
-    "Service Worker",
-    "Push API",
-    "Background Sync"
-  ],
-
-  "capabilities": {
-    "real_time_analysis": {
-      "description": "Real-time multimodal sports analysis",
-      "latency_target": "sub_100ms"
-    },
-    "character_assessment": {
-      "description": "AI-powered character and grit assessment",
-      "accuracy_target": "85_percent"
-    },
-    "biomechanical_analysis": {
-      "description": "Advanced biomechanical pattern recognition",
-      "sports_supported": ["baseball", "football", "basketball"]
-    }
-  }
+  ]
 }

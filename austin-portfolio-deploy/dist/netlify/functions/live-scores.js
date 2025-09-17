@@ -1,6 +1,9 @@
 const axios = require('axios');
 
-// ESPN API endpoints (public, no auth required)
+// Import SportsDataIO client for real-time data
+const SportsDataIOClient = require('../../src/sportsdataio-client.js');
+
+// ESPN API endpoints (public, no auth required) - fallback source
 const ESPN_BASE = 'https://site.api.espn.com/apis/site/v2/sports';
 
 const ENDPOINTS = {
@@ -57,7 +60,46 @@ exports.handler = async (event) => {
             };
         }
 
-        // Fetch live data from ESPN
+        // Initialize SportsDataIO client first (primary source)
+        const sportsClient = new SportsDataIOClient(process.env.SPORTSDATAIO_API_KEY);
+        let liveData = null;
+
+        try {
+            // Try SportsDataIO first for live scores
+            liveData = await sportsClient.getLiveScores();
+
+            if (liveData && liveData.scores) {
+                // Filter by sport if specified
+                if (sport !== 'all' && liveData.scores[sport]) {
+                    return {
+                        statusCode: 200,
+                        headers,
+                        body: JSON.stringify({
+                            timestamp: liveData.timestamp,
+                            sport: sport,
+                            games: liveData.scores[sport],
+                            dataSource: 'SportsDataIO Live',
+                            blazeTeams: sportsClient.blazeTeams
+                        })
+                    };
+                }
+
+                // Return all sports data
+                return {
+                    statusCode: 200,
+                    headers,
+                    body: JSON.stringify({
+                        ...liveData,
+                        dataSource: 'SportsDataIO Live',
+                        blazeTeams: sportsClient.blazeTeams
+                    })
+                };
+            }
+        } catch (sportsDataError) {
+            console.log('SportsDataIO unavailable, falling back to ESPN:', sportsDataError.message);
+        }
+
+        // Fallback to ESPN API
         const response = await axios.get(ENDPOINTS[sport] || ENDPOINTS.mlb, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (compatible; BlazeIntelligence/1.0)'
