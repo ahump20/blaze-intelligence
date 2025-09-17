@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blaze RTI Dashboard | Real-Time Multimodal Intelligence</title>
@@ -13,13 +11,13 @@
     <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
 
     <!-- RTI Engine Scripts -->
-    <script src="/js/rti-fusion-engine.js" defer></script>
-    <script src="/js/webrtc-gateway.js" defer></script>
-    <script src="/js/rti-decision-engine.js" defer></script>
-    <script src="/js/character-assessment-engine.js" defer></script>
+    <script src="/js/rti-fusion-engine.js" defer=""></script>
+    <script src="/js/webrtc-gateway.js" defer=""></script>
+    <script src="/js/rti-decision-engine.js" defer=""></script>
+    <script src="/js/character-assessment-engine.js" defer=""></script>
 
     <style>
         :root {
@@ -382,7 +380,7 @@
                 <span class="status-badge">Waiting for connection</span>
             </div>
             <div class="stream-container">
-                <video id="video-stream" autoplay muted playsinline></video>
+                <video id="video-stream" autoplay="" muted="" playsinline=""></video>
                 <div class="overlay-data">
                     <h4 style="margin: 0 0 1rem 0; color: var(--burnt-orange);">Live Metrics</h4>
                     <div style="display: grid; gap: 0.5rem;">
@@ -493,5 +491,5 @@
             document.getElementById('object-count').textContent = objects;
         }, 2000);
     </script>
-</body>
-</html>
+
+</body></html>
