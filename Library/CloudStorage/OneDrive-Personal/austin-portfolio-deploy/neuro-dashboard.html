@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neurobiological Monitoring Dashboard • Blaze Intelligence</title>
+    <meta name="description" content="Revolutionary EEG-based athlete monitoring combining cognitive science with sports performance">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --tennessee-deep: #002244;
+            --grizzly-teal: #00B2A9;
+            --memphis-blue: #5D76A9;
+            --neural-green: #00FF88;
+            --neural-red: #FF3366;
+            --neural-yellow: #FFD700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0B0B0F;
+            color: #E5E7EB;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Neural particles background */
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .neural-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neural-green);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh) rotate(0deg); }
+            to { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 34, 68, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-bottom: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--neural-green);
+            border-radius: 20px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neural-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Dashboard grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* Panels */
+        .panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .panel:hover {
+            transform: translateY(-2px);
+            border-color: var(--cardinal-blue);
+            box-shadow: 0 10px 30px rgba(155, 203, 235, 0.1);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--cardinal-blue);
+        }
+
+        .panel-badge {
+            padding: 4px 10px;
+            background: linear-gradient(135deg, var(--memphis-blue), var(--grizzly-teal));
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* EEG Waveform container */
+        .eeg-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .waveform {
+            height: 80px;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .wave-label {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--grizzly-teal);
+            z-index: 2;
+        }
+
+        .wave-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Metrics grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .metric-card {
+            background: rgba(0, 34, 68, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--burnt-orange);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .metric-change {
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+
+        .metric-up {
+            color: var(--neural-green);
+        }
+
+        .metric-down {
+            color: var(--neural-red);
+        }
+
+        /* Player cards */
+        .player-card {
+            background: linear-gradient(135deg, rgba(93, 118, 169, 0.1), rgba(0, 0, 0, 0.2));
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .player-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--burnt-orange);
+        }
+
+        .flow-state {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .flow-optimal {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--neural-green);
+        }
+
+        .flow-good {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--neural-yellow);
+        }
+
+        .flow-stressed {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--neural-red);
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-top: 20px;
+        }
+
+        /* Austin signature */
+        .austin-signature {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(0, 0, 0, 0.2));
+            border-radius: 12px;
+        }
+
+        .signature-text {
+            color: var(--grizzly-teal);
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural background particles -->
+    <div class="neural-bg" id="neuralBg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Neurobiological Monitor™</div>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>LIVE MONITORING</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <div class="container">
+        <!-- Top Metrics Row -->
+        <div class="dashboard-grid">
+            <!-- EEG Waveforms Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Live EEG Patterns</h2>
+                    <span class="panel-badge">REAL-TIME</span>
+                </div>
+
+                <div class="eeg-container">
+                    <div class="waveform">
+                        <span class="wave-label">ALPHA</span>
+                        <canvas id="alphaWave" class="wave-canvas"></canvas>
+                    </div>
+                    <div class="waveform">
+                        <span class="wave-label">BETA</span>
+                        <canvas id="betaWave" class="wave-canvas"></canvas>
+                    </div>
+                    <div class="waveform">
+                        <span class="wave-label">GAMMA</span>
+                        <canvas id="gammaWave" class="wave-canvas"></canvas>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Focus Level</div>
+                        <div class="metric-value" id="focusLevel">87%</div>
+                        <div class="metric-change metric-up">↑ 3.2%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Stress Index</div>
+                        <div class="metric-value" id="stressIndex">32%</div>
+                        <div class="metric-change metric-down">↓ 5.1%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Flow State</div>
+                        <div class="metric-value" id="flowStateValue">78%</div>
+                        <div class="metric-change metric-up">↑ 2.4%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Recovery</div>
+                        <div class="metric-value" id="recoveryRate">91%</div>
+                        <div class="metric-change metric-up">↑ 1.8%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cognitive Performance Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Cognitive Performance Matrix</h2>
+                    <span class="panel-badge">AI ENHANCED</span>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="cognitiveRadar"></canvas>
+                </div>
+
+                <div class="metrics-grid" style="margin-top: 20px;">
+                    <div class="metric-card">
+                        <div class="metric-label">Decision Velocity</div>
+                        <div class="metric-value">182ms</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Pattern Recognition</div>
+                        <div class="metric-value">94%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Monitoring Section -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Athlete Cognitive States</h2>
+                <span class="panel-badge">MEMPHIS GRIZZLIES</span>
+            </div>
+
+            <div class="player-card">
+                <div class="player-header">
+                    <span class="player-name">Ja Morant</span>
+                    <span class="flow-state flow-optimal">OPTIMAL FLOW</span>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Mental Fortress</div>
+                        <div class="metric-value">92%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Court Vision IQ</div>
+                        <div class="metric-value">96%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Grit Factor</div>
+                        <div class="metric-value">98%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Clutch DNA</div>
+                        <div class="metric-value">89%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="player-card">
+                <div class="player-header">
+                    <span class="player-name">Jaren Jackson Jr.</span>
+                    <span class="flow-state flow-good">HIGH FOCUS</span>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Defensive IQ</div>
+                        <div class="metric-value">94%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Anticipation</div>
+                        <div class="metric-value">91%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Timing Precision</div>
+                        <div class="metric-value">88%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Recovery Rate</div>
+                        <div class="metric-value">85%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pressure Analytics Panel -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Real-Time Pressure Analytics</h2>
+                <span class="panel-badge">PREDICTIVE</span>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="pressureChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Austin's Signature -->
+        <div class="austin-signature">
+            <h3 style="color: var(--burnt-orange); margin-bottom: 10px;">
+                Neurobiological Monitoring System™
+            </h3>
+            <p class="signature-text">
+                "From Memphis Grit to Texas Innovation - Pioneering the intersection of cognitive science and athletic performance"
+            </p>
+            <p style="color: var(--cardinal-blue); margin-top: 15px;">
+                Developed by Austin Humphrey • Full Sail University
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Generate neural background particles
+        function createNeuralParticles() {
+            const bg = document.getElementById('neuralBg');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'neural-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                bg.appendChild(particle);
+            }
+        }
+
+        // Animate EEG waveforms
+        function animateWave(canvasId, frequency, amplitude, color) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            let phase = 0;
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+
+                for (let x = 0; x < canvas.width; x++) {
+                    const y = canvas.height / 2 +
+                             Math.sin((x * frequency) + phase) * amplitude +
+                             Math.sin((x * frequency * 2.3) + phase * 1.5) * (amplitude * 0.3) +
+                             (Math.random() - 0.5) * 5;
+
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+
+                ctx.stroke();
+                phase += 0.05;
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
+
+        // Initialize cognitive radar chart
+        function initCognitiveRadar() {
+            const ctx = document.getElementById('cognitiveRadar').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Decision Velocity',
+                        'Pattern Recognition',
+                        'Mental Fortress',
+                        'Adaptability',
+                        'Focus Consistency',
+                        'Pressure Response'
+                    ],
+                    datasets: [{
+                        label: 'Current State',
+                        data: [92, 94, 87, 85, 89, 91],
+                        backgroundColor: 'rgba(155, 203, 235, 0.2)',
+                        borderColor: '#9BCBEB',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#9BCBEB'
+                    }, {
+                        label: 'Peak Performance',
+                        data: [95, 98, 92, 90, 93, 94],
+                        backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                        borderColor: '#BF5700',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#BF5700'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#E5E7EB' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                            pointLabels: { color: '#9CA3AF' },
+                            ticks: { display: false },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize pressure chart
+        function initPressureChart() {
+            const ctx = document.getElementById('pressureChart').getContext('2d');
+
+            // Generate time labels for last 60 seconds
+            const labels = [];
+            for (let i = 60; i >= 0; i -= 5) {
+                labels.push(`-${i}s`);
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Pressure Index',
+                        data: [45, 52, 48, 61, 58, 72, 78, 82, 75, 68, 71, 65, 58],
+                        borderColor: '#BF5700',
+                        backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Cognitive Load',
+                        data: [38, 42, 45, 52, 48, 58, 62, 65, 61, 55, 52, 48, 45],
+                        borderColor: '#00B2A9',
+                        backgroundColor: 'rgba(0, 178, 169, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#E5E7EB' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#9CA3AF' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: '#9CA3AF' },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update live metrics
+        function updateMetrics() {
+            // Simulate live data updates
+            const focusLevel = document.getElementById('focusLevel');
+            const stressIndex = document.getElementById('stressIndex');
+            const flowStateValue = document.getElementById('flowStateValue');
+            const recoveryRate = document.getElementById('recoveryRate');
+
+            setInterval(() => {
+                // Update with slight variations
+                focusLevel.textContent = (85 + Math.random() * 10).toFixed(0) + '%';
+                stressIndex.textContent = (30 + Math.random() * 15).toFixed(0) + '%';
+                flowStateValue.textContent = (75 + Math.random() * 15).toFixed(0) + '%';
+                recoveryRate.textContent = (88 + Math.random() * 8).toFixed(0) + '%';
+            }, 3000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            createNeuralParticles();
+
+            // Start EEG animations
+            animateWave('alphaWave', 0.02, 20, '#00FF88');
+            animateWave('betaWave', 0.04, 15, '#FFD700');
+            animateWave('gammaWave', 0.06, 10, '#FF3366');
+
+            // Initialize charts
+            initCognitiveRadar();
+            initPressureChart();
+
+            // Start metric updates
+            updateMetrics();
+        });
+    </script>
+</body>
+</html>

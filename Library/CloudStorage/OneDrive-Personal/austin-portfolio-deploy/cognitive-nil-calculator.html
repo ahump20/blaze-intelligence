@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive NIL Valuation Calculator • Blaze Intelligence</title>
+    <meta name="description" content="Revolutionary NIL valuation combining performance metrics with neurobiological monitoring">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --grizzly-teal: #00B2A9;
+            --memphis-blue: #5D76A9;
+            --texas-navy: #003A72;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0B0B0F 0%, #1a1a2e 100%);
+            color: #E5E7EB;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #9CA3AF;
+            margin-bottom: 5px;
+        }
+
+        .from-athlete {
+            font-size: 0.9rem;
+            color: var(--grizzly-teal);
+            font-style: italic;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .panel h2 {
+            color: var(--cardinal-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cognitive-badge {
+            background: linear-gradient(135deg, var(--memphis-blue), var(--grizzly-teal));
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: white;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #D1D5DB;
+            font-size: 0.9rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            border-radius: 6px;
+            color: #E5E7EB;
+            font-size: 1rem;
+        }
+
+        .slider-group {
+            margin-bottom: 25px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #1F2937 0%, var(--grizzly-teal) 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--burnt-orange);
+            cursor: pointer;
+        }
+
+        .cognitive-metrics {
+            background: linear-gradient(135deg, rgba(93, 118, 169, 0.1), rgba(0, 178, 169, 0.1));
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .metric-name {
+            color: #9CA3AF;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: var(--cardinal-blue);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--texas-navy));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .results {
+            background: rgba(191, 87, 0, 0.1);
+            border: 2px solid var(--burnt-orange);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .valuation-amount {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .breakdown-item {
+            background: rgba(30, 41, 59, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .breakdown-label {
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .breakdown-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--grizzly-teal);
+        }
+
+        .memphis-note {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(93, 118, 169, 0.2), rgba(0, 0, 0, 0.2));
+            border-left: 3px solid var(--memphis-blue);
+            border-radius: 8px;
+        }
+
+        .memphis-note h3 {
+            color: var(--memphis-blue);
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .valuation-amount {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cognitive NIL Calculator™</h1>
+            <div class="subtitle">Neurobiological Monitoring Meets Market Valuation</div>
+            <div class="from-athlete">By Austin Humphrey • From Memphis Grit to Texas Innovation</div>
+        </header>
+
+        <div class="calculator-grid">
+            <!-- Traditional Metrics Panel -->
+            <div class="panel">
+                <h2>Performance Metrics</h2>
+
+                <div class="input-group">
+                    <label>Sport</label>
+                    <select id="sport">
+                        <option value="football">Football</option>
+                        <option value="basketball">Basketball</option>
+                        <option value="baseball">Baseball</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Competition Level</label>
+                    <select id="level">
+                        <option value="high-school">High School</option>
+                        <option value="college">College</option>
+                        <option value="elite">Elite/Professional Prospect</option>
+                    </select>
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>On-Field Performance</span>
+                        <span id="performanceValue">75%</span>
+                    </div>
+                    <input type="range" class="slider" id="performance" min="0" max="100" value="75">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Social Media Reach</span>
+                        <span id="socialValue">50%</span>
+                    </div>
+                    <input type="range" class="slider" id="social" min="0" max="100" value="50">
+                </div>
+
+                <div class="input-group">
+                    <label>Instagram Followers</label>
+                    <input type="number" id="followers" placeholder="e.g., 50000" value="50000">
+                </div>
+
+                <div class="input-group">
+                    <label>Market Size</label>
+                    <select id="market">
+                        <option value="small">Small Market</option>
+                        <option value="medium">Medium Market</option>
+                        <option value="large">Large Market (Texas/SEC)</option>
+                        <option value="memphis">Memphis Market</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Cognitive Metrics Panel -->
+            <div class="panel">
+                <h2>
+                    Cognitive Intelligence
+                    <span class="cognitive-badge">UNIQUE</span>
+                </h2>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Decision Velocity</span>
+                        <span id="decisionValue">80%</span>
+                    </div>
+                    <input type="range" class="slider" id="decision" min="0" max="100" value="80">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Pattern Recognition</span>
+                        <span id="patternValue">85%</span>
+                    </div>
+                    <input type="range" class="slider" id="pattern" min="0" max="100" value="85">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Mental Fortress (Pressure Response)</span>
+                        <span id="pressureValue">75%</span>
+                    </div>
+                    <input type="range" class="slider" id="pressure" min="0" max="100" value="75">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Adaptability Index</span>
+                        <span id="adaptValue">70%</span>
+                    </div>
+                    <input type="range" class="slider" id="adapt" min="0" max="100" value="70">
+                </div>
+
+                <div class="cognitive-metrics">
+                    <h3 style="color: var(--grizzly-teal); margin-bottom: 15px;">EEG Pattern Analysis</h3>
+                    <div class="metric-row">
+                        <span class="metric-name">Alpha Waves (Focus)</span>
+                        <span class="metric-value" id="alphaWaves">Optimal</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-name">Beta Waves (Alertness)</span>
+                        <span class="metric-value" id="betaWaves">Elevated</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-name">Flow State Probability</span>
+                        <span class="metric-value" id="flowState">83%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-name">Cognitive Load Capacity</span>
+                        <span class="metric-value" id="cognitiveLoad">87%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="calculate-btn" onclick="calculateNIL()">Calculate NIL Valuation</button>
+
+        <div class="results" id="results" style="display: none; margin-top: 30px;">
+            <div class="valuation-amount" id="totalValuation">$0</div>
+            <div style="color: #9CA3AF; margin-bottom: 20px;">Annual NIL Valuation</div>
+
+            <div class="breakdown">
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Base Value</div>
+                    <div class="breakdown-value" id="baseValue">$0</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Social Multiplier</div>
+                    <div class="breakdown-value" id="socialMultiplier">1.0x</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Performance Bonus</div>
+                    <div class="breakdown-value" id="performanceBonus">$0</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Cognitive Premium</div>
+                    <div class="breakdown-value" id="cognitivePremium">$0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="memphis-note">
+            <h3>The Memphis-to-Texas Philosophy</h3>
+            <p>This calculator represents my journey from Memphis "Grit 'n' Grind" athletics to Texas innovation.
+            By combining traditional performance metrics with neurobiological monitoring and cognitive assessment,
+            we're pioneering a new frontier in athlete valuation.</p>
+            <p style="margin-top: 10px; color: var(--grizzly-teal);">
+                "Don't just bounce back. Flourish under pressure." - Austin Humphrey
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Update slider values
+        document.querySelectorAll('.slider').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                const valueSpan = document.getElementById(e.target.id + 'Value');
+                if (valueSpan) {
+                    valueSpan.textContent = e.target.value + '%';
+                }
+                updateCognitiveMetrics();
+            });
+        });
+
+        function updateCognitiveMetrics() {
+            const decision = document.getElementById('decision').value;
+            const pattern = document.getElementById('pattern').value;
+            const pressure = document.getElementById('pressure').value;
+            const adapt = document.getElementById('adapt').value;
+
+            // Update EEG patterns based on cognitive scores
+            const avgCognitive = (parseInt(decision) + parseInt(pattern) + parseInt(pressure) + parseInt(adapt)) / 4;
+
+            document.getElementById('alphaWaves').textContent = avgCognitive > 80 ? 'Optimal' : avgCognitive > 60 ? 'Good' : 'Developing';
+            document.getElementById('betaWaves').textContent = pressure > 75 ? 'Elevated' : 'Normal';
+            document.getElementById('flowState').textContent = Math.round(avgCognitive * 0.9 + Math.random() * 10) + '%';
+            document.getElementById('cognitiveLoad').textContent = Math.round(avgCognitive + 5) + '%';
+        }
+
+        function calculateNIL() {
+            // Get values
+            const sport = document.getElementById('sport').value;
+            const level = document.getElementById('level').value;
+            const performance = document.getElementById('performance').value;
+            const social = document.getElementById('social').value;
+            const followers = parseInt(document.getElementById('followers').value) || 0;
+            const market = document.getElementById('market').value;
+
+            // Cognitive values (your unique differentiator)
+            const decision = document.getElementById('decision').value;
+            const pattern = document.getElementById('pattern').value;
+            const pressure = document.getElementById('pressure').value;
+            const adapt = document.getElementById('adapt').value;
+
+            // Base value calculation
+            let base = 10000; // Starting point
+
+            // Sport multipliers
+            const sportMultipliers = {
+                'football': 1.5,
+                'basketball': 1.3,
+                'baseball': 1.0
+            };
+
+            // Level multipliers
+            const levelMultipliers = {
+                'high-school': 0.3,
+                'college': 1.0,
+                'elite': 2.5
+            };
+
+            // Market multipliers
+            const marketMultipliers = {
+                'small': 0.7,
+                'medium': 1.0,
+                'large': 1.5,
+                'memphis': 1.2 // Special Memphis market factor
+            };
+
+            base *= sportMultipliers[sport] * levelMultipliers[level] * marketMultipliers[market];
+
+            // Performance bonus
+            const perfBonus = base * (performance / 100) * 2;
+
+            // Social multiplier based on followers
+            let socialMult = 1.0;
+            if (followers > 1000000) socialMult = 3.5;
+            else if (followers > 500000) socialMult = 2.8;
+            else if (followers > 100000) socialMult = 2.0;
+            else if (followers > 50000) socialMult = 1.5;
+            else if (followers > 10000) socialMult = 1.2;
+
+            // Cognitive premium (your unique innovation)
+            const cognitiveAvg = (parseInt(decision) + parseInt(pattern) + parseInt(pressure) + parseInt(adapt)) / 4;
+            const cognitivePrem = base * (cognitiveAvg / 100) * 1.5; // 1.5x multiplier for cognitive excellence
+
+            // Calculate total
+            const total = (base + perfBonus) * socialMult + cognitivePrem;
+
+            // Update display
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('totalValuation').textContent = '$' + Math.round(total).toLocaleString();
+            document.getElementById('baseValue').textContent = '$' + Math.round(base).toLocaleString();
+            document.getElementById('socialMultiplier').textContent = socialMult.toFixed(1) + 'x';
+            document.getElementById('performanceBonus').textContent = '$' + Math.round(perfBonus).toLocaleString();
+            document.getElementById('cognitivePremium').textContent = '$' + Math.round(cognitivePrem).toLocaleString();
+
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize cognitive metrics
+        updateCognitiveMetrics();
+    </script>
+</body>
+</html>
