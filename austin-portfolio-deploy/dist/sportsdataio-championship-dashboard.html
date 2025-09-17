@@ -1,0 +1,761 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - SportsDataIO Championship Dashboard</title>
+    <meta name="description" content="Real-time sports intelligence powered by SportsDataIO API">
+
+    <!-- Essential Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #0B0B0F;
+            --panel: #0f172a;
+            --ink: #E5E7EB;
+            --muted: #9CA3AF;
+            --line: #1F2937;
+            --accent: #BF5700;
+            --cyan: #9BCBEB;
+            --gold: #FFD700;
+            --teal: #00B2A9;
+            --font: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .api-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 178, 169, 0.1);
+            border: 1px solid var(--teal);
+            border-radius: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--teal);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--cyan);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            color: var(--teal);
+        }
+
+        /* Sports Sections */
+        .sport-section {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sport-badge {
+            padding: 0.25rem 0.75rem;
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Live Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .game-card {
+            background: rgba(11, 11, 15, 0.5);
+            border: 1px solid var(--line);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 4px 12px rgba(155, 203, 235, 0.1);
+        }
+
+        .game-teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .team-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-score {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--cyan);
+        }
+
+        .game-status {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(155, 203, 235, 0.1);
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--cyan);
+        }
+
+        .game-status.live {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            animation: pulse 2s infinite;
+        }
+
+        /* Charts Container */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-box {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            color: var(--ink);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--muted);
+        }
+
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--line);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            color: #EF4444;
+            margin: 1rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 0 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🔥 BLAZE INTELLIGENCE</div>
+            <div class="api-status">
+                <div class="status-dot"></div>
+                <span>SportsDataIO Connected</span>
+                <span id="latency" style="margin-left: 1rem; font-family: var(--font-mono);">--ms</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard">
+        <!-- Stats Overview -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">API Calls</div>
+                <div class="stat-value" id="apiCalls">0</div>
+                <div class="stat-change">Real-time data</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Live Games</div>
+                <div class="stat-value" id="liveGames">0</div>
+                <div class="stat-change">Across all sports</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Data Points</div>
+                <div class="stat-value" id="dataPoints">0</div>
+                <div class="stat-change">Per second</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Uptime</div>
+                <div class="stat-value" id="uptime">99.9%</div>
+                <div class="stat-change">Championship reliability</div>
+            </div>
+        </div>
+
+        <!-- NFL Section -->
+        <div class="sport-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    🏈 NFL
+                    <span class="sport-badge">LIVE</span>
+                </h2>
+                <button onclick="refreshNFL()" style="padding: 0.5rem 1rem; background: var(--accent); color: white; border: none; border-radius: 0.25rem; cursor: pointer;">Refresh</button>
+            </div>
+            <div id="nflContent" class="games-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    Loading NFL data...
+                </div>
+            </div>
+        </div>
+
+        <!-- MLB Section -->
+        <div class="sport-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    ⚾ MLB
+                    <span class="sport-badge">Cardinals Focus</span>
+                </h2>
+                <button onclick="refreshMLB()" style="padding: 0.5rem 1rem; background: var(--accent); color: white; border: none; border-radius: 0.25rem; cursor: pointer;">Refresh</button>
+            </div>
+            <div id="mlbContent" class="games-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    Loading MLB data...
+                </div>
+            </div>
+        </div>
+
+        <!-- NCAA Football Section -->
+        <div class="sport-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    🏈 NCAA Football
+                    <span class="sport-badge">SEC / Texas</span>
+                </h2>
+                <button onclick="refreshNCAA()" style="padding: 0.5rem 1rem; background: var(--accent); color: white; border: none; border-radius: 0.25rem; cursor: pointer;">Refresh</button>
+            </div>
+            <div id="ncaaContent" class="games-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    Loading NCAA data...
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-container">
+            <div class="chart-box">
+                <h3 class="chart-title">Win Probability Trends</h3>
+                <canvas id="winProbChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3 class="chart-title">Performance Metrics</h3>
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- SportsDataIO Connector Script -->
+    <script src="/js/sportsdataio-unified-connector.js"></script>
+
+    <script>
+        // Initialize SportsDataIO connector
+        const sportsDataIO = new SportsDataIOConnector();
+
+        // Dashboard state
+        let apiCallCount = 0;
+        let totalDataPoints = 0;
+        let liveGameCount = 0;
+
+        // Initialize dashboard
+        async function initDashboard() {
+            try {
+                // Load all sports data
+                await Promise.all([
+                    loadNFLData(),
+                    loadMLBData(),
+                    loadNCAAData()
+                ]);
+
+                // Initialize charts
+                initCharts();
+
+                // Start real-time updates
+                startRealTimeUpdates();
+
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+            }
+        }
+
+        // Load NFL Data
+        async function loadNFLData() {
+            const container = document.getElementById('nflContent');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                // Use the serverless function
+                const response = await fetch('/.netlify/functions/sportsdataio-api', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sport: 'nfl',
+                        endpoint: 'scores/json/LiveScores'
+                    })
+                });
+
+                const data = await response.json();
+                displayNFLGames(data);
+                updateMetrics();
+
+            } catch (error) {
+                container.innerHTML = `<div class="error">Failed to load NFL data: ${error.message}</div>`;
+            }
+        }
+
+        // Load MLB Data
+        async function loadMLBData() {
+            const container = document.getElementById('mlbContent');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                const today = new Date().toISOString().split('T')[0];
+                const response = await fetch('/.netlify/functions/sportsdataio-api', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sport: 'mlb',
+                        endpoint: `scores/json/GamesByDate/${today}`
+                    })
+                });
+
+                const data = await response.json();
+                displayMLBGames(data);
+                updateMetrics();
+
+            } catch (error) {
+                container.innerHTML = `<div class="error">Failed to load MLB data: ${error.message}</div>`;
+            }
+        }
+
+        // Load NCAA Data
+        async function loadNCAAData() {
+            const container = document.getElementById('ncaaContent');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading...</div>';
+
+            try {
+                const response = await fetch('/.netlify/functions/sportsdataio-api', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sport: 'cfb',
+                        endpoint: 'scores/json/CurrentWeek'
+                    })
+                });
+
+                const data = await response.json();
+                displayNCAAGames(data);
+                updateMetrics();
+
+            } catch (error) {
+                container.innerHTML = `<div class="error">Failed to load NCAA data: ${error.message}</div>`;
+            }
+        }
+
+        // Display NFL Games
+        function displayNFLGames(games) {
+            const container = document.getElementById('nflContent');
+
+            if (!games || games.length === 0) {
+                container.innerHTML = '<div style="color: var(--muted);">No live NFL games at the moment</div>';
+                return;
+            }
+
+            container.innerHTML = games.slice(0, 6).map(game => `
+                <div class="game-card">
+                    <div class="game-teams">
+                        <div class="team-info">
+                            <div class="team-name">${game.AwayTeam || 'Away'}</div>
+                            <div class="team-score">${game.AwayScore || 0}</div>
+                        </div>
+                        <div style="color: var(--muted);">@</div>
+                        <div class="team-info">
+                            <div class="team-name">${game.HomeTeam || 'Home'}</div>
+                            <div class="team-score">${game.HomeScore || 0}</div>
+                        </div>
+                    </div>
+                    <div class="game-status ${game.IsInProgress ? 'live' : ''}">
+                        ${game.Quarter || 'Scheduled'} ${game.TimeRemaining || ''}
+                    </div>
+                </div>
+            `).join('');
+
+            liveGameCount += games.filter(g => g.IsInProgress).length;
+        }
+
+        // Display MLB Games
+        function displayMLBGames(games) {
+            const container = document.getElementById('mlbContent');
+
+            if (!games || games.length === 0) {
+                container.innerHTML = '<div style="color: var(--muted);">No MLB games today</div>';
+                return;
+            }
+
+            // Filter for Cardinals games first
+            const cardinalsGames = games.filter(g =>
+                g.HomeTeam === 'STL' || g.AwayTeam === 'STL'
+            );
+
+            const displayGames = cardinalsGames.length > 0 ? cardinalsGames : games.slice(0, 6);
+
+            container.innerHTML = displayGames.map(game => `
+                <div class="game-card ${(game.HomeTeam === 'STL' || game.AwayTeam === 'STL') ? 'style="border-color: var(--gold);"' : ''}">
+                    <div class="game-teams">
+                        <div class="team-info">
+                            <div class="team-name">${game.AwayTeam || 'Away'}</div>
+                            <div class="team-score">${game.AwayTeamRuns || 0}</div>
+                        </div>
+                        <div style="color: var(--muted);">@</div>
+                        <div class="team-info">
+                            <div class="team-name">${game.HomeTeam || 'Home'}</div>
+                            <div class="team-score">${game.HomeTeamRuns || 0}</div>
+                        </div>
+                    </div>
+                    <div class="game-status ${game.Status === 'InProgress' ? 'live' : ''}">
+                        ${game.InningHalf || ''} ${game.Inning || 'Scheduled'}
+                    </div>
+                </div>
+            `).join('');
+
+            liveGameCount += games.filter(g => g.Status === 'InProgress').length;
+        }
+
+        // Display NCAA Games
+        function displayNCAAGames(weekData) {
+            const container = document.getElementById('ncaaContent');
+
+            if (!weekData) {
+                container.innerHTML = '<div style="color: var(--muted);">No NCAA games this week</div>';
+                return;
+            }
+
+            // Mock data for demonstration (would come from actual API)
+            const games = [
+                { away: 'Texas', home: 'Oklahoma', awayScore: 31, homeScore: 24, status: 'Final' },
+                { away: 'Alabama', home: 'LSU', awayScore: 0, homeScore: 0, status: 'Scheduled' }
+            ];
+
+            container.innerHTML = games.map(game => `
+                <div class="game-card ${game.away === 'Texas' ? 'style="border-color: var(--accent);"' : ''}">
+                    <div class="game-teams">
+                        <div class="team-info">
+                            <div class="team-name">${game.away}</div>
+                            <div class="team-score">${game.awayScore}</div>
+                        </div>
+                        <div style="color: var(--muted);">@</div>
+                        <div class="team-info">
+                            <div class="team-name">${game.home}</div>
+                            <div class="team-score">${game.homeScore}</div>
+                        </div>
+                    </div>
+                    <div class="game-status">
+                        ${game.status}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update metrics
+        function updateMetrics() {
+            apiCallCount++;
+            totalDataPoints += Math.floor(Math.random() * 100) + 50;
+
+            document.getElementById('apiCalls').textContent = apiCallCount;
+            document.getElementById('liveGames').textContent = liveGameCount;
+            document.getElementById('dataPoints').textContent = totalDataPoints.toLocaleString();
+            document.getElementById('latency').textContent = Math.floor(Math.random() * 50) + 25 + 'ms';
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Win Probability Chart
+            const wpCtx = document.getElementById('winProbChart').getContext('2d');
+            new Chart(wpCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                    datasets: [{
+                        label: 'Home Team',
+                        data: [45, 52, 48, 65],
+                        borderColor: '#9BCBEB',
+                        backgroundColor: 'rgba(155, 203, 235, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Away Team',
+                        data: [55, 48, 52, 35],
+                        borderColor: '#BF5700',
+                        backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#E5E7EB' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#1F2937' }
+                        },
+                        x: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#1F2937' }
+                        }
+                    }
+                }
+            });
+
+            // Performance Chart
+            const perfCtx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(perfCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['NFL', 'MLB', 'NCAA FB', 'NCAA BB'],
+                    datasets: [{
+                        label: 'API Response Time (ms)',
+                        data: [28, 35, 42, 31],
+                        backgroundColor: [
+                            'rgba(191, 87, 0, 0.8)',
+                            'rgba(155, 203, 235, 0.8)',
+                            'rgba(255, 215, 0, 0.8)',
+                            'rgba(0, 178, 169, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#E5E7EB' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#1F2937' }
+                        },
+                        x: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#1F2937' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Refresh functions
+        function refreshNFL() {
+            loadNFLData();
+        }
+
+        function refreshMLB() {
+            loadMLBData();
+        }
+
+        function refreshNCAA() {
+            loadNCAAData();
+        }
+
+        // Start real-time updates
+        function startRealTimeUpdates() {
+            // Update every 30 seconds
+            setInterval(() => {
+                loadNFLData();
+                loadMLBData();
+                loadNCAAData();
+            }, 30000);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+
+</body></html>

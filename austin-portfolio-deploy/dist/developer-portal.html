@@ -1,0 +1,830 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Portal - Blaze Intelligence API</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- External Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .developer-portal {
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .portal-header {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid #BF5700;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .portal-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .portal-logo h1 {
+            color: #BF5700;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(191, 87, 0, 0.2);
+            color: #BF5700;
+        }
+
+        .api-key-btn {
+            background: linear-gradient(135deg, #BF5700, #FF7A00);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .api-key-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(191, 87, 0, 0.3);
+        }
+
+        /* Main Content */
+        .portal-main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .portal-sidebar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: fit-content;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            color: #BF5700;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-links {
+            list-style: none;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-links a {
+            color: #cccccc;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-links a:hover,
+        .sidebar-links a.active {
+            background: rgba(191, 87, 0, 0.2);
+            color: #BF5700;
+        }
+
+        /* Content Area */
+        .portal-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: #BF5700;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+        }
+
+        /* API Cards */
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .api-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .api-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.2);
+        }
+
+        .api-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .api-card-title {
+            color: #BF5700;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .api-method {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .method-get { background: #00B2A9; color: white; }
+        .method-post { background: #BF5700; color: white; }
+        .method-put { background: #FFB000; color: white; }
+        .method-delete { background: #FF4444; color: white; }
+
+        /* Code Blocks */
+        .code-block {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        /* Tabs */
+        .tab-container {
+            margin: 2rem 0;
+        }
+
+        .tab-headers {
+            display: flex;
+            border-bottom: 2px solid rgba(191, 87, 0, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .tab-header {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            color: #cccccc;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-header.active {
+            color: #BF5700;
+            border-bottom-color: #BF5700;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* API Key Management */
+        .api-key-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .api-key-list {
+            margin-top: 1.5rem;
+        }
+
+        .api-key-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .key-info {
+            flex: 1;
+        }
+
+        .key-name {
+            color: #BF5700;
+            font-weight: 600;
+        }
+
+        .key-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .key-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #BF5700, #FF7A00);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #cccccc;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        .btn-danger {
+            background: #FF4444;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Rate Limiting */
+        .rate-limit-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .rate-limit-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .rate-limit-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #BF5700;
+        }
+
+        .rate-limit-label {
+            color: #cccccc;
+            margin-top: 0.5rem;
+        }
+
+        /* Sandbox */
+        .sandbox-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .sandbox-form {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            color: #BF5700;
+            font-weight: 600;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: white;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sandbox-response {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portal-main {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .header-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .api-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rate-limit-display {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <div class="developer-portal">
+        <!-- Header -->
+        <header class="portal-header">
+            <div class="header-content">
+                <div class="portal-logo">
+                    <h1>🚀 Blaze Intelligence API</h1>
+                </div>
+                <nav class="header-nav">
+                    <a href="#overview" class="nav-link">Overview</a>
+                    <a href="#authentication" class="nav-link">Authentication</a>
+                    <a href="#endpoints" class="nav-link">Endpoints</a>
+                    <a href="#sandbox" class="nav-link">Sandbox</a>
+                    <button class="api-key-btn" onclick="generateAPIKey()">Generate API Key</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="portal-main">
+            <!-- Sidebar Navigation -->
+            <aside class="portal-sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Getting Started</h3>
+                    <ul class="sidebar-links">
+                        <li><a href="#overview" class="sidebar-link active">Overview</a></li>
+                        <li><a href="#quickstart" class="sidebar-link">Quick Start</a></li>
+                        <li><a href="#authentication" class="sidebar-link">Authentication</a></li>
+                        <li><a href="#rate-limits" class="sidebar-link">Rate Limits</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">API Reference</h3>
+                    <ul class="sidebar-links">
+                        <li><a href="#analytics" class="sidebar-link">Analytics API</a></li>
+                        <li><a href="#predictions" class="sidebar-link">Predictions API</a></li>
+                        <li><a href="#player-data" class="sidebar-link">Player Data API</a></li>
+                        <li><a href="#team-stats" class="sidebar-link">Team Stats API</a></li>
+                        <li><a href="#nil-valuations" class="sidebar-link">NIL Valuations API</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">SDKs &amp; Tools</h3>
+                    <ul class="sidebar-links">
+                        <li><a href="#javascript-sdk" class="sidebar-link">JavaScript SDK</a></li>
+                        <li><a href="#python-sdk" class="sidebar-link">Python SDK</a></li>
+                        <li><a href="#postman" class="sidebar-link">Postman Collection</a></li>
+                        <li><a href="#sandbox" class="sidebar-link">API Sandbox</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Account</h3>
+                    <ul class="sidebar-links">
+                        <li><a href="#api-keys" class="sidebar-link">API Keys</a></li>
+                        <li><a href="#usage" class="sidebar-link">Usage &amp; Billing</a></li>
+                        <li><a href="#webhooks" class="sidebar-link">Webhooks</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="portal-content">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <h1 class="section-title">🚀 Blaze Intelligence API</h1>
+                    <p>Welcome to the most comprehensive sports intelligence API platform. Our enterprise-grade APIs provide real-time analytics, predictions, and insights for MLB, NFL, NBA, and NCAA sports.</p>
+
+                    <div class="api-grid">
+                        <div class="api-card">
+                            <div class="api-card-header">
+                                <h3 class="api-card-title">⚡ Real-Time Analytics</h3>
+                                <span class="api-method method-get">GET</span>
+                            </div>
+                            <p>Access live game statistics, player performance metrics, and team analytics with sub-100ms latency.</p>
+                        </div>
+
+                        <div class="api-card">
+                            <div class="api-card-header">
+                                <h3 class="api-card-title">🎯 AI Predictions</h3>
+                                <span class="api-method method-post">POST</span>
+                            </div>
+                            <p>Get AI-powered game predictions with 94.6% accuracy using our championship-caliber models.</p>
+                        </div>
+
+                        <div class="api-card">
+                            <div class="api-card-header">
+                                <h3 class="api-card-title">💰 NIL Valuations</h3>
+                                <span class="api-method method-get">GET</span>
+                            </div>
+                            <p>Calculate real-time NIL valuations with character assessment and micro-expression analysis.</p>
+                        </div>
+
+                        <div class="api-card">
+                            <div class="api-card-header">
+                                <h3 class="api-card-title">👁️ Vision AI</h3>
+                                <span class="api-method method-post">POST</span>
+                            </div>
+                            <p>Advanced computer vision for biomechanics analysis and coaching insights.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="section-subtitle">🏆 Championship Features</h2>
+                    <ul style="color: #cccccc; margin-left: 2rem;">
+                        <li><strong>Sub-100ms Response Times:</strong> Enterprise-grade performance</li>
+                        <li><strong>99.9% Uptime:</strong> Reliable infrastructure with global CDN</li>
+                        <li><strong>Real-time WebSocket Streams:</strong> Live data updates</li>
+                        <li><strong>Advanced Analytics:</strong> Pattern recognition and predictive modeling</li>
+                        <li><strong>Micro-expression Analysis:</strong> Character and grit assessment</li>
+                        <li><strong>SOC 2 Compliant:</strong> Enterprise security standards</li>
+                    </ul>
+                </section>
+
+                <!-- Quick Start Section -->
+                <section id="quickstart" class="content-section">
+                    <h1 class="section-title">⚡ Quick Start Guide</h1>
+                    <p>Get up and running with the Blaze Intelligence API in under 5 minutes.</p>
+
+                    <h2 class="section-subtitle">1. Get Your API Key</h2>
+                    <p>Sign up and generate your API key from the developer portal.</p>
+
+                    <div class="code-block">
+                        <pre><code class="language-bash"># Your API key will look like this:
+export BLAZE_API_KEY="bz_live_1234567890abcdef"</code></pre>
+                    </div>
+
+                    <h2 class="section-subtitle">2. Make Your First API Call</h2>
+                    <div class="tab-container">
+                        <div class="tab-headers">
+                            <div class="tab-header active" data-tab="curl">cURL</div>
+                            <div class="tab-header" data-tab="javascript">JavaScript</div>
+                            <div class="tab-header" data-tab="python">Python</div>
+                        </div>
+
+                        <div class="tab-content active" id="curl">
+                            <div class="code-block">
+                                <pre><code class="language-bash">curl -X GET "https://api.blaze-intelligence.com/v1/analytics/cardinals/latest" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json"</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="javascript">
+                            <div class="code-block">
+                                <pre><code class="language-javascript">const response = await fetch('https://api.blaze-intelligence.com/v1/analytics/cardinals/latest', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  }
+});
+
+const data = await response.json();
+console.log(data);</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="python">
+                            <div class="code-block">
+                                <pre><code class="language-python">import requests
+
+headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+}
+
+response = requests.get(
+    'https://api.blaze-intelligence.com/v1/analytics/cardinals/latest',
+    headers=headers
+)
+
+data = response.json()
+print(data)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-subtitle">3. Response Format</h2>
+                    <div class="code-block">
+                        <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "team": "Cardinals",
+    "league": "MLB",
+    "readiness": {
+      "overall": 87.3,
+      "offense": 89.1,
+      "defense": 85.5,
+      "pitching": 88.7
+    },
+    "predictions": {
+      "nextGame": {
+        "winProbability": 0.743,
+        "confidence": 0.946
+      }
+    },
+    "lastUpdated": "2024-01-15T20:30:00Z"
+  },
+  "timestamp": "2024-01-15T20:30:15Z",
+  "responseTime": "67ms"
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Authentication Section -->
+                <section id="authentication" class="content-section">
+                    <h1 class="section-title">🔐 Authentication</h1>
+                    <p>Blaze Intelligence API uses API keys for authentication. Include your API key in the Authorization header of every request.</p>
+
+                    <h2 class="section-subtitle">API Key Format</h2>
+                    <div class="code-block">
+                        <pre><code class="language-http">Authorization: Bearer bz_live_1234567890abcdef</code></pre>
+                    </div>
+
+                    <h2 class="section-subtitle">Environment Types</h2>
+                    <ul style="color: #cccccc; margin-left: 2rem;">
+                        <li><strong>Sandbox:</strong> <code>bz_test_</code> - For development and testing</li>
+                        <li><strong>Production:</strong> <code>bz_live_</code> - For live applications</li>
+                    </ul>
+
+                    <div class="api-key-section" id="api-keys">
+                        <h2 class="section-subtitle">Your API Keys</h2>
+                        <div class="api-key-list" id="apiKeysList">
+                            <!-- API keys will be loaded here -->
+                        </div>
+                        <button class="btn btn-primary" onclick="generateAPIKey()">+ Generate New Key</button>
+                    </div>
+                </section>
+
+                <!-- Rate Limits Section -->
+                <section id="rate-limits" class="content-section">
+                    <h1 class="section-title">⏱️ Rate Limits</h1>
+                    <p>Rate limits are enforced per API key and are based on your subscription tier.</p>
+
+                    <div class="rate-limit-display">
+                        <div class="rate-limit-card">
+                            <div class="rate-limit-value" id="requestsPerMinute">1000</div>
+                            <div class="rate-limit-label">Requests per Minute</div>
+                        </div>
+                        <div class="rate-limit-card">
+                            <div class="rate-limit-value" id="requestsPerDay">100000</div>
+                            <div class="rate-limit-label">Requests per Day</div>
+                        </div>
+                        <div class="rate-limit-card">
+                            <div class="rate-limit-value" id="concurrentRequests">50</div>
+                            <div class="rate-limit-label">Concurrent Requests</div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-subtitle">Rate Limit Headers</h2>
+                    <div class="code-block">
+                        <pre><code class="language-http">X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1609459200</code></pre>
+                    </div>
+                </section>
+
+                <!-- Analytics API Section -->
+                <section id="analytics" class="content-section">
+                    <h1 class="section-title">📊 Analytics API</h1>
+                    <p>Access comprehensive sports analytics and performance metrics.</p>
+
+                    <div class="api-grid">
+                        <div class="api-card">
+                            <div class="api-card-header">
+                                <h3 class="api-card-title">Team Analytics</h3>
+                                <span class="api-method method-get">GET</span>
+                            </div>
+                            <p><code>/v1/analytics/{team}/latest</code></p>
+                            <p>Get latest team performance metrics and readiness scores.</p>
+                        </div>
+
+                        <div class="api-card">
+                            <div class="api-card-header">
+                                <h3 class="api-card-title">Player Performance</h3>
+                                <span class="api-method method-get">GET</span>
+                            </div>
+                            <p><code>/v1/analytics/players/{playerId}</code></p>
+                            <p>Individual player statistics and performance trends.</p>
+                        </div>
+
+                        <div class="api-card">
+                            <div class="api-card-header">
+                                <h3 class="api-card-title">Game Analytics</h3>
+                                <span class="api-method method-get">GET</span>
+                            </div>
+                            <p><code>/v1/analytics/games/{gameId}</code></p>
+                            <p>Detailed game statistics and real-time metrics.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="section-subtitle">Example: Get Cardinals Latest Analytics</h2>
+                    <div class="code-block">
+                        <pre><code class="language-javascript">const response = await fetch('https://api.blaze-intelligence.com/v1/analytics/cardinals/latest', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+
+const analytics = await response.json();
+
+// Access readiness scores
+console.log(`Overall Readiness: ${analytics.data.readiness.overall}%`);
+console.log(`Offense Rating: ${analytics.data.readiness.offense}%`);
+console.log(`Pitching Rating: ${analytics.data.readiness.pitching}%`);</code></pre>
+                    </div>
+                </section>
+
+                <!-- API Sandbox Section -->
+                <section id="sandbox" class="content-section">
+                    <h1 class="section-title">🧪 API Sandbox</h1>
+                    <p>Test API endpoints directly from your browser. No coding required!</p>
+
+                    <div class="sandbox-container">
+                        <h2 class="section-subtitle">Interactive API Testing</h2>
+
+                        <form class="sandbox-form" id="sandboxForm">
+                            <div class="form-group">
+                                <label class="form-label">Endpoint</label>
+                                <select class="form-select" id="sandboxEndpoint">
+                                    <option value="/v1/analytics/cardinals/latest">Cardinals Latest Analytics</option>
+                                    <option value="/v1/predictions/cardinals/next-game">Cardinals Next Game Prediction</option>
+                                    <option value="/v1/nil/valuations/top-players">Top NIL Valuations</option>
+                                    <option value="/v1/vision/analyze">Vision AI Analysis</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">HTTP Method</label>
+                                <select class="form-select" id="sandboxMethod">
+                                    <option value="GET">GET</option>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="DELETE">DELETE</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Request Body (JSON)</label>
+                                <textarea class="form-textarea" id="sandboxBody" placeholder="{&quot;param&quot;: &quot;value&quot;}"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">🚀 Send Request</button>
+                        </form>
+
+                        <div class="sandbox-response" id="sandboxResponse" style="display: none;">
+                            <h3>Response:</h3>
+                            <pre><code id="responseBody"></code></pre>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/developer-portal-controller.js"></script>
+
+</body></html>

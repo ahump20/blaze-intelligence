@@ -1,0 +1,577 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze 3D Universe - Live Sports Intelligence with SportsDataIO</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            pointer-events: auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #BF5700, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #9BCBEB;
+            font-size: 1rem;
+        }
+
+        /* Live Data Panels */
+        .data-panel {
+            position: absolute;
+            background: rgba(10, 14, 39, 0.9);
+            border: 1px solid #BF5700;
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .panel-left {
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+        }
+
+        .panel-right {
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+        }
+
+        .panel-bottom {
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            max-width: 90%;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            color: #FFD700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .data-label {
+            color: #9BCBEB;
+            font-size: 0.9rem;
+        }
+
+        .data-value {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .game-card-3d {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-3d {
+            font-size: 1.5rem;
+            color: #FFD700;
+        }
+
+        .status-3d {
+            font-size: 0.8rem;
+            color: #9BCBEB;
+            text-align: center;
+        }
+
+        /* Controls */
+        .controls {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            pointer-events: auto;
+        }
+
+        .control-btn {
+            background: rgba(191, 87, 0, 0.3);
+            border: 1px solid #BF5700;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(191, 87, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .stats-orbit {
+            position: absolute;
+            top: 120px;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            pointer-events: auto;
+        }
+
+        .orbit-stat {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #FFD700;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .orbit-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .orbit-label {
+            font-size: 0.7rem;
+            color: #9BCBEB;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay -->
+    <div class="ui-overlay">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Blaze 3D Universe</div>
+            <div class="subtitle">Championship Sports Intelligence - Powered by SportsDataIO</div>
+        </div>
+
+        <!-- Orbiting Stats -->
+        <div class="stats-orbit">
+            <div class="orbit-stat">
+                <div class="orbit-value" id="liveGames3D">0</div>
+                <div class="orbit-label">LIVE</div>
+            </div>
+            <div class="orbit-stat" style="animation-delay: 0.5s;">
+                <div class="orbit-value" id="latency3D">--</div>
+                <div class="orbit-label">MS</div>
+            </div>
+            <div class="orbit-stat" style="animation-delay: 1s;">
+                <div class="orbit-value" id="accuracy3D">94.6</div>
+                <div class="orbit-label">%</div>
+            </div>
+        </div>
+
+        <!-- Left Panel - NFL -->
+        <div class="data-panel panel-left">
+            <div class="panel-title">
+                <span class="live-dot"></span>
+                NFL Live Scores
+            </div>
+            <div id="nflScores3D">
+                <!-- NFL scores will be populated here -->
+            </div>
+        </div>
+
+        <!-- Right Panel - MLB -->
+        <div class="data-panel panel-right">
+            <div class="panel-title">
+                <span class="live-dot"></span>
+                MLB Cardinals Focus
+            </div>
+            <div id="mlbScores3D">
+                <!-- MLB scores will be populated here -->
+            </div>
+        </div>
+
+        <!-- Bottom Panel - NCAA -->
+        <div class="data-panel panel-bottom">
+            <div class="panel-title">
+                <span class="live-dot"></span>
+                NCAA Football - Texas &amp; SEC
+            </div>
+            <div id="ncaaScores3D" style="display: flex; gap: 1rem; overflow-x: auto;">
+                <!-- NCAA scores will be populated here -->
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="control-btn" onclick="toggleRotation()">Toggle Rotation</button>
+            <button class="control-btn" onclick="changeView()">Change View</button>
+            <button class="control-btn" onclick="refreshData()">Refresh Data</button>
+        </div>
+    </div>
+
+    <!-- Three.js and SportsDataIO Integration -->
+    <script>
+        // Three.js Scene Setup
+        let scene, camera, renderer, particleSystem;
+        let rotationEnabled = true;
+        let currentView = 0;
+
+        function initThreeJS() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            // Create central sphere (representing championship data hub)
+            const geometry = new THREE.SphereGeometry(3, 32, 32);
+            const material = new THREE.MeshPhongMaterial({
+                color: 0xBF5700,
+                emissive: 0xBF5700,
+                emissiveIntensity: 0.2,
+                wireframe: true
+            });
+            const sphere = scene.add(new THREE.Mesh(geometry, material));
+
+            // Add orbiting data points
+            const orbitRadius = 8;
+            const dataPoints = [];
+
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const pointGeometry = new THREE.OctahedronGeometry(0.5);
+                const pointMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xFFD700,
+                    emissive: 0xFFD700,
+                    emissiveIntensity: 0.5
+                });
+                const point = new THREE.Mesh(pointGeometry, pointMaterial);
+                point.position.x = Math.cos(angle) * orbitRadius;
+                point.position.z = Math.sin(angle) * orbitRadius;
+                point.userData = { angle, radius: orbitRadius };
+                scene.add(point);
+                dataPoints.push(point);
+            }
+
+            // Add particle system
+            const particleCount = 1000;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 50;
+                positions[i + 1] = (Math.random() - 0.5) * 50;
+                positions[i + 2] = (Math.random() - 0.5) * 50;
+            }
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0x9BCBEB,
+                size: 0.1,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            particleSystem = new THREE.Points(particles, particleMaterial);
+            scene.add(particleSystem);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xFFD700, 1, 100);
+            pointLight.position.set(10, 10, 10);
+            scene.add(pointLight);
+
+            // Camera position
+            camera.position.z = 20;
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                if (rotationEnabled) {
+                    sphere.rotation.x += 0.001;
+                    sphere.rotation.y += 0.002;
+
+                    // Orbit data points
+                    dataPoints.forEach((point, index) => {
+                        point.userData.angle += 0.01 * (1 + index * 0.1);
+                        point.position.x = Math.cos(point.userData.angle) * point.userData.radius;
+                        point.position.z = Math.sin(point.userData.angle) * point.userData.radius;
+                        point.position.y = Math.sin(point.userData.angle * 2) * 2;
+                        point.rotation.x += 0.02;
+                        point.rotation.y += 0.03;
+                    });
+
+                    particleSystem.rotation.y += 0.0005;
+                }
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // SportsDataIO Integration
+        class SportsDataIO3D {
+            constructor() {
+                this.apiKey = '6ca2adb39404482da5406f0a6cd7aa37';
+                this.cache = new Map();
+                this.cacheTimeout = 30000;
+            }
+
+            async fetchData(endpoint) {
+                const cacheKey = endpoint;
+                const cached = this.cache.get(cacheKey);
+
+                if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+                    return cached.data;
+                }
+
+                try {
+                    // For demo, using simulated data
+                    const data = this.getSimulatedData(endpoint);
+
+                    this.cache.set(cacheKey, {
+                        data,
+                        timestamp: Date.now()
+                    });
+
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    return null;
+                }
+            }
+
+            getSimulatedData(endpoint) {
+                if (endpoint.includes('nfl')) {
+                    return [
+                        { AwayTeam: 'TEN', HomeTeam: 'HOU', AwayScore: 21, HomeScore: 17, Status: 'Q3 8:45' },
+                        { AwayTeam: 'DAL', HomeTeam: 'NYG', AwayScore: 14, HomeScore: 14, Status: 'Halftime' },
+                        { AwayTeam: 'KC', HomeTeam: 'BUF', AwayScore: 28, HomeScore: 24, Status: 'Q4 2:00' }
+                    ];
+                } else if (endpoint.includes('mlb')) {
+                    return [
+                        { AwayTeam: 'STL', HomeTeam: 'CHC', AwayScore: 5, HomeScore: 3, Status: 'Top 7th' },
+                        { AwayTeam: 'MIL', HomeTeam: 'STL', AwayScore: 2, HomeScore: 4, Status: 'Bot 5th' }
+                    ];
+                } else if (endpoint.includes('ncaa')) {
+                    return [
+                        { AwayTeam: 'TEX', HomeTeam: 'OU', AwayScore: 35, HomeScore: 28, Status: 'Q4 5:00' },
+                        { AwayTeam: 'ALA', HomeTeam: 'LSU', AwayScore: 24, HomeScore: 21, Status: 'Q3 10:30' },
+                        { AwayTeam: 'UGA', HomeTeam: 'FLA', AwayScore: 31, HomeScore: 17, Status: 'Final' }
+                    ];
+                }
+                return [];
+            }
+
+            async updateDashboard() {
+                const startTime = Date.now();
+
+                const [nfl, mlb, ncaa] = await Promise.all([
+                    this.fetchData('nfl'),
+                    this.fetchData('mlb'),
+                    this.fetchData('ncaa')
+                ]);
+
+                const latency = Date.now() - startTime;
+
+                // Update stats
+                document.getElementById('liveGames3D').textContent =
+                    (nfl?.length || 0) + (mlb?.length || 0) + (ncaa?.length || 0);
+                document.getElementById('latency3D').textContent = latency;
+
+                // Update NFL panel
+                const nflContainer = document.getElementById('nflScores3D');
+                nflContainer.innerHTML = '';
+                nfl?.forEach(game => {
+                    nflContainer.innerHTML += this.createGameCard(game);
+                });
+
+                // Update MLB panel
+                const mlbContainer = document.getElementById('mlbScores3D');
+                mlbContainer.innerHTML = '';
+                mlb?.forEach(game => {
+                    mlbContainer.innerHTML += this.createGameCard(game);
+                });
+
+                // Update NCAA panel
+                const ncaaContainer = document.getElementById('ncaaScores3D');
+                ncaaContainer.innerHTML = '';
+                ncaa?.forEach(game => {
+                    ncaaContainer.innerHTML += `
+                        <div class="game-card-3d" style="min-width: 180px;">
+                            <div class="team-score">
+                                <span>${game.AwayTeam}</span>
+                                <span class="score-3d">${game.AwayScore}</span>
+                            </div>
+                            <div class="team-score">
+                                <span>${game.HomeTeam}</span>
+                                <span class="score-3d">${game.HomeScore}</span>
+                            </div>
+                            <div class="status-3d">${game.Status}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            createGameCard(game) {
+                return `
+                    <div class="game-card-3d">
+                        <div class="team-score">
+                            <span>${game.AwayTeam}</span>
+                            <span class="score-3d">${game.AwayScore}</span>
+                        </div>
+                        <div class="team-score">
+                            <span>${game.HomeTeam}</span>
+                            <span class="score-3d">${game.HomeScore}</span>
+                        </div>
+                        <div class="status-3d">${game.Status}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize
+        const sportsData3D = new SportsDataIO3D();
+
+        // Control functions
+        function toggleRotation() {
+            rotationEnabled = !rotationEnabled;
+        }
+
+        function changeView() {
+            currentView = (currentView + 1) % 3;
+            switch(currentView) {
+                case 0:
+                    camera.position.set(0, 0, 20);
+                    break;
+                case 1:
+                    camera.position.set(20, 10, 20);
+                    break;
+                case 2:
+                    camera.position.set(0, 30, 0);
+                    camera.lookAt(0, 0, 0);
+                    break;
+            }
+        }
+
+        function refreshData() {
+            sportsData3D.updateDashboard();
+        }
+
+        // Initialize everything
+        window.onload = () => {
+            initThreeJS();
+            sportsData3D.updateDashboard();
+
+            // Auto-refresh every 30 seconds
+            setInterval(() => {
+                sportsData3D.updateDashboard();
+            }, 30000);
+        };
+    </script>
+
+</body></html>

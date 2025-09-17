@@ -1,0 +1,242 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Blaze Intelligence WebSocket API Gateway with Lambda backend'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: production
+    Description: Environment name
+  
+  ProjectName:
+    Type: String
+    Default: blaze-intelligence
+    Description: Project name for resource naming
+
+Resources:
+  # WebSocket API Gateway
+  BlazeWebSocketAPI:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub '${ProjectName}-websocket-${Environment}'
+      ProtocolType: WEBSOCKET
+      RouteSelectionExpression: '$request.body.action'
+      Description: 'Blaze Intelligence WebSocket API for real-time sports data'
+
+  # Lambda Function for WebSocket handling
+  WebSocketFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-websocket-${Environment}'
+      Runtime: nodejs18.x
+      Handler: index.handler
+      Role: !GetAtt WebSocketFunctionRole.Arn
+      Timeout: 30
+      MemorySize: 512
+      Environment:
+        Variables:
+          ENVIRONMENT: !Ref Environment
+          PROJECT_NAME: !Ref ProjectName
+      Code:
+        ZipFile: |
+          const AWS = require('aws-sdk');
+          const apigateway = new AWS.ApiGatewayManagementApi({
+            endpoint: process.env.WEBSOCKET_ENDPOINT
+          });
+
+          exports.handler = async (event) => {
+            const { connectionId, routeKey, body } = event.requestContext || {};
+            
+            console.log('WebSocket event:', { connectionId, routeKey, body });
+            
+            try {
+              switch (routeKey) {
+                case '$connect':
+                  return handleConnect(connectionId);
+                case '$disconnect':
+                  return handleDisconnect(connectionId);
+                case 'subscribe':
+                  return handleSubscribe(connectionId, JSON.parse(event.body || '{}'));
+                case 'ping':
+                  return handlePing(connectionId);
+                default:
+                  return { statusCode: 400, body: 'Unknown route' };
+              }
+            } catch (error) {
+              console.error('WebSocket error:', error);
+              return { statusCode: 500, body: 'Internal server error' };
+            }
+          };
+
+          async function handleConnect(connectionId) {
+            console.log('Client connected:', connectionId);
+            return { statusCode: 200 };
+          }
+
+          async function handleDisconnect(connectionId) {
+            console.log('Client disconnected:', connectionId);
+            return { statusCode: 200 };
+          }
+
+          async function handleSubscribe(connectionId, data) {
+            const { streams } = data;
+            console.log('Client subscribed:', connectionId, streams);
+            
+            // Send welcome message
+            await sendMessage(connectionId, {
+              type: 'subscription_confirmed',
+              streams: streams || [],
+              timestamp: Date.now()
+            });
+            
+            return { statusCode: 200 };
+          }
+
+          async function handlePing(connectionId) {
+            await sendMessage(connectionId, {
+              type: 'pong',
+              timestamp: Date.now()
+            });
+            return { statusCode: 200 };
+          }
+
+          async function sendMessage(connectionId, data) {
+            try {
+              await apigateway.postToConnection({
+                ConnectionId: connectionId,
+                Data: JSON.stringify(data)
+              }).promise();
+            } catch (error) {
+              console.error('Send message error:', error);
+              throw error;
+            }
+          }
+
+  # IAM Role for Lambda
+  WebSocketFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-websocket-role-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: WebSocketPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - execute-api:ManageConnections
+                Resource: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${BlazeWebSocketAPI}/*/*'
+
+  # Lambda Permission for API Gateway
+  WebSocketFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref WebSocketFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${BlazeWebSocketAPI}/*/*'
+
+  # Routes
+  ConnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+      RouteKey: '$connect'
+      Target: !Sub 'integrations/${ConnectIntegration}'
+
+  DisconnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+      RouteKey: '$disconnect'
+      Target: !Sub 'integrations/${DisconnectIntegration}'
+
+  SubscribeRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+      RouteKey: 'subscribe'
+      Target: !Sub 'integrations/${DefaultIntegration}'
+
+  PingRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+      RouteKey: 'ping'
+      Target: !Sub 'integrations/${DefaultIntegration}'
+
+  # Integrations
+  ConnectIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WebSocketFunction.Arn}/invocations'
+
+  DisconnectIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WebSocketFunction.Arn}/invocations'
+
+  DefaultIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WebSocketFunction.Arn}/invocations'
+
+  # Deployment
+  WebSocketDeployment:
+    Type: AWS::ApiGatewayV2::Deployment
+    DependsOn:
+      - ConnectRoute
+      - DisconnectRoute
+      - SubscribeRoute
+      - PingRoute
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+
+  # Stage
+  WebSocketStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref BlazeWebSocketAPI
+      StageName: !Ref Environment
+      DeploymentId: !Ref WebSocketDeployment
+      Description: !Sub '${Environment} stage for Blaze Intelligence WebSocket API'
+
+  # CloudWatch Log Group
+  WebSocketLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectName}-websocket-${Environment}'
+      RetentionInDays: 30
+
+Outputs:
+  WebSocketURL:
+    Description: 'WebSocket URL'
+    Value: !Sub 'wss://${BlazeWebSocketAPI}.execute-api.${AWS::Region}.amazonaws.com/${Environment}'
+    Export:
+      Name: !Sub '${ProjectName}-websocket-url-${Environment}'
+
+  WebSocketAPIId:
+    Description: 'WebSocket API ID'
+    Value: !Ref BlazeWebSocketAPI
+    Export:
+      Name: !Sub '${ProjectName}-websocket-api-id-${Environment}'
+
+  LambdaFunctionArn:
+    Description: 'Lambda Function ARN'
+    Value: !GetAtt WebSocketFunction.Arn
+    Export:
+      Name: !Sub '${ProjectName}-websocket-lambda-arn-${Environment}'

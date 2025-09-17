@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressure Analytics Dashboard - Blaze Intelligence</title>
+    <link rel="stylesheet" href="/public/css/blaze-professional.css">
+    <link rel="stylesheet" href="/public/css/championshipDashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: #E6F1FF;
+            font-family: 'Inter', sans-serif;
+        }
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .dashboard-title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #BF5700, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        .metric-label {
+            color: #9BCBEB;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+        .pressure-zones {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .zone-card {
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .zone-green {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10B981;
+        }
+        .zone-yellow {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid #F59E0B;
+        }
+        .zone-red {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #EF4444;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Pressure Analytics Dashboard</h1>
+            <p>Real-time clutch performance metrics and pressure situation analysis</p>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Clutch Rating</div>
+                <div class="metric-value">92.3</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Pressure Index</div>
+                <div class="metric-value">8.7/10</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Heart Rate Variance</div>
+                <div class="metric-value">12%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Decision Speed</div>
+                <div class="metric-value">0.43s</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2 style="color: #BF5700; margin-bottom: 1rem;">Performance Under Pressure</h2>
+            <canvas id="pressureChart" width="400" height="200"></canvas>
+        </div>
+
+        <div class="pressure-zones">
+            <div class="zone-card zone-green">
+                <h3>Optimal Zone</h3>
+                <p>65% of decisions</p>
+            </div>
+            <div class="zone-card zone-yellow">
+                <h3>Elevated Zone</h3>
+                <p>25% of decisions</p>
+            </div>
+            <div class="zone-card zone-red">
+                <h3>Critical Zone</h3>
+                <p>10% of decisions</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="/app.html" style="color: #BF5700; text-decoration: none; font-size: 1.2rem;">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize pressure performance chart
+        const ctx = document.getElementById('pressureChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Q1', 'Q2', 'Q3', 'Q4', 'OT'],
+                datasets: [{
+                    label: 'Performance Score',
+                    data: [85, 88, 92, 95, 98],
+                    borderColor: '#BF5700',
+                    backgroundColor: 'rgba(191, 87, 0, 0.2)',
+                    tension: 0.4
+                }, {
+                    label: 'Pressure Level',
+                    data: [60, 70, 85, 95, 100],
+                    borderColor: '#FFD700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#E6F1FF'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: { color: '#E6F1FF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#E6F1FF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body></html>

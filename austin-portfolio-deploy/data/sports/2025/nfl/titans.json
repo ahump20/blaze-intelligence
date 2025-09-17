@@ -1,0 +1,267 @@
+{
+  "team": "Tennessee Titans",
+  "season": "2025",
+  "league": "NFL",
+  "division": "AFC South",
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "pct": ".000"
+  },
+  "standings": {
+    "division": "TBD",
+    "conference": "TBD",
+    "wildcard": "TBD"
+  },
+  "roster": {
+    "offense": [
+      {
+        "number": "8",
+        "name": "Will Levis",
+        "position": "QB",
+        "comp": 0,
+        "att": 0,
+        "yards": 0,
+        "td": 0,
+        "int": 0,
+        "rating": 0
+      },
+      {
+        "number": "22",
+        "name": "Derrick Henry",
+        "position": "RB",
+        "status": "Departed to BAL",
+        "replacement": "Tony Pollard"
+      },
+      {
+        "number": "20",
+        "name": "Tony Pollard",
+        "position": "RB",
+        "carries": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "32",
+        "name": "Tyjae Spears",
+        "position": "RB",
+        "carries": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "10",
+        "name": "DeAndre Hopkins",
+        "position": "WR",
+        "status": "Departed to KC",
+        "replacement": "Calvin Ridley"
+      },
+      {
+        "number": "0",
+        "name": "Calvin Ridley",
+        "position": "WR",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "16",
+        "name": "Treylon Burks",
+        "position": "WR",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "85",
+        "name": "Chigoziem Okonkwo",
+        "position": "TE",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "77",
+        "name": "Peter Skoronski",
+        "position": "LT",
+        "starts": 0,
+        "snaps": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "64",
+        "name": "Dillon Radunz",
+        "position": "LG",
+        "starts": 0,
+        "snaps": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "62",
+        "name": "Lloyd Cushenberry III",
+        "position": "C",
+        "starts": 0,
+        "snaps": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "75",
+        "name": "Daniel Brunskill",
+        "position": "RG",
+        "starts": 0,
+        "snaps": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "72",
+        "name": "Nicholas Petit-Frere",
+        "position": "RT",
+        "starts": 0,
+        "snaps": 0,
+        "pff_grade": 0
+      }
+    ],
+    "defense": [
+      {
+        "number": "98",
+        "name": "Jeffery Simmons",
+        "position": "DT",
+        "tackles": 0,
+        "sacks": 0,
+        "tfls": 0,
+        "qb_hits": 0
+      },
+      {
+        "number": "93",
+        "name": "T'Vondre Sweat",
+        "position": "DT",
+        "tackles": 0,
+        "sacks": 0,
+        "tfls": 0,
+        "qb_hits": 0
+      },
+      {
+        "number": "58",
+        "name": "Harold Landry III",
+        "position": "OLB",
+        "tackles": 0,
+        "sacks": 0,
+        "tfls": 0,
+        "qb_hits": 0
+      },
+      {
+        "number": "49",
+        "name": "Arden Key",
+        "position": "OLB",
+        "tackles": 0,
+        "sacks": 0,
+        "tfls": 0,
+        "qb_hits": 0
+      },
+      {
+        "number": "41",
+        "name": "Kenneth Murray Jr.",
+        "position": "ILB",
+        "tackles": 0,
+        "assists": 0,
+        "tfls": 0,
+        "int": 0
+      },
+      {
+        "number": "56",
+        "name": "Jack Gibbens",
+        "position": "ILB",
+        "tackles": 0,
+        "assists": 0,
+        "tfls": 0,
+        "int": 0
+      },
+      {
+        "number": "0",
+        "name": "L'Jarius Sneed",
+        "position": "CB",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "23",
+        "name": "Chidobe Awuzie",
+        "position": "CB",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "26",
+        "name": "Roger McCreary",
+        "position": "CB",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "31",
+        "name": "Amani Hooker",
+        "position": "S",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "37",
+        "name": "Jamal Adams",
+        "position": "S",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      }
+    ],
+    "special_teams": [
+      {
+        "number": "6",
+        "name": "Nick Folk",
+        "position": "K",
+        "fg_made": 0,
+        "fg_att": 0,
+        "pct": 0,
+        "long": 0
+      },
+      {
+        "number": "4",
+        "name": "Ryan Stonehouse",
+        "position": "P",
+        "punts": 0,
+        "avg": 0,
+        "inside_20": 0,
+        "touchbacks": 0
+      }
+    ],
+    "coaching_staff": {
+      "head_coach": "Brian Callahan",
+      "offensive_coordinator": "Nick Holz",
+      "defensive_coordinator": "Dennard Wilson",
+      "special_teams": "Colt Anderson"
+    }
+  },
+  "analytics": {
+    "offensive_dvoa": "TBD",
+    "defensive_dvoa": "TBD",
+    "special_teams_dvoa": "TBD",
+    "strength_of_schedule": "TBD",
+    "playoff_probability": "TBD",
+    "projected_wins": 7.5
+  },
+  "lastUpdated": "2025-09-15T23:47:56.252Z"
+}

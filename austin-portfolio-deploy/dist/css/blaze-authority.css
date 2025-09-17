@@ -1,0 +1,515 @@
+/**
+ * Blaze Authority CSS System
+ * The DCTF-Inspired Institutional Authority Styling Framework
+ *
+ * Positioning: "The Dave Campbell's Texas Football of Sports Analytics"
+ * Design Philosophy: Institutional Trust > Technological Innovation
+ */
+
+/* ===========================
+   1. INSTITUTIONAL COLOR SYSTEM
+   =========================== */
+:root {
+    /* Primary Authority Colors */
+    --authority-burnt-orange: #BF5700;  /* Texas heritage, primary brand */
+    --authority-cardinal: #C41E3A;      /* Cardinals legacy */
+    --authority-heritage-gold: #FEDB00; /* Championship excellence */
+    --authority-trust-blue: #002244;    /* Institutional depth */
+
+    /* SEC & Regional Colors */
+    --sec-crimson: #9E1B32;             /* Alabama/SEC authority */
+    --sec-purple: #461D7C;              /* LSU/championship purple */
+    --texas-legacy: #D2691E;            /* Longhorns burnt sienna */
+    --deep-south-navy: #1C2841;         /* Regional depth */
+
+    /* Institutional Neutrals */
+    --authority-black: #0a0a0a;         /* Premium black */
+    --institutional-gray: #36454F;      /* Professional gray */
+    --heritage-white: #FAFAFA;          /* Pure institutional white */
+    --legacy-silver: #C0C0C0;           /* Trophy silver */
+
+    /* Data & Analytics Colors */
+    --data-green: #00B2A9;              /* Success metrics */
+    --alert-red: #DC143C;               /* Critical alerts */
+    --prediction-blue: #4169E1;         /* Predictive intelligence */
+
+    /* Typography Scale - Newspaper-inspired */
+    --font-display: 'Playfair Display', 'Georgia', serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+    /* Authority Spacing System */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --space-xl: 4rem;
+    --space-xxl: 8rem;
+}
+
+/* ===========================
+   2. TYPOGRAPHY - INSTITUTIONAL AUTHORITY
+   =========================== */
+
+/* Headline Typography - DCTF Style */
+.authority-headline {
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--heritage-white);
+}
+
+.authority-headline--primary {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    background: linear-gradient(135deg, var(--authority-burnt-orange), var(--authority-heritage-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.authority-headline--secondary {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--heritage-white);
+}
+
+.authority-headline--tertiary {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--authority-heritage-gold);
+}
+
+/* Body Typography - Professional */
+.authority-text {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--heritage-white);
+}
+
+.authority-text--large {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.authority-text--body {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.authority-text--small {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Data Typography - Precision */
+.authority-data {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.authority-data--large {
+    font-size: 2rem;
+    color: var(--authority-heritage-gold);
+}
+
+.authority-data--metric {
+    font-size: 1.5rem;
+    color: var(--authority-burnt-orange);
+}
+
+.authority-data--label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===========================
+   3. LAYOUT COMPONENTS - INSTITUTIONAL
+   =========================== */
+
+/* Authority Container */
+.authority-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+}
+
+/* Authority Header - The Masthead */
+.authority-masthead {
+    background: var(--authority-black);
+    border-bottom: 3px solid var(--authority-burnt-orange);
+    padding: var(--space-md) 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(20px);
+    background: rgba(10, 10, 10, 0.95);
+}
+
+.authority-masthead__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.authority-masthead__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.authority-masthead__seal {
+    width: 50px;
+    height: 50px;
+    background: var(--authority-burnt-orange);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: white;
+    border: 2px solid var(--authority-heritage-gold);
+    box-shadow: 0 0 20px rgba(191, 87, 0, 0.3);
+}
+
+/* Trust Indicators */
+.authority-trust {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.authority-trust__stat {
+    text-align: center;
+}
+
+.authority-trust__value {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--authority-burnt-orange);
+    text-shadow: 0 0 10px rgba(191, 87, 0, 0.3);
+}
+
+.authority-trust__label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: var(--space-xs);
+}
+
+/* ===========================
+   4. CARDS & CONTAINERS - INSTITUTIONAL DESIGN
+   =========================== */
+
+/* Authority Card - Premium Feel */
+.authority-card {
+    background: rgba(26, 26, 26, 0.9);
+    border: 1px solid rgba(191, 87, 0, 0.2);
+    border-radius: 8px;
+    padding: var(--space-lg);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.authority-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--authority-burnt-orange), var(--authority-heritage-gold));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.authority-card:hover::before {
+    transform: scaleX(1);
+}
+
+.authority-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--authority-burnt-orange);
+    box-shadow: 0 10px 30px rgba(191, 87, 0, 0.2);
+}
+
+/* Championship Badge */
+.authority-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--authority-burnt-orange);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.authority-badge--elite {
+    background: linear-gradient(135deg, var(--authority-burnt-orange), var(--authority-heritage-gold));
+}
+
+.authority-badge--rising {
+    background: linear-gradient(135deg, var(--sec-purple), var(--prediction-blue));
+}
+
+/* ===========================
+   5. DATA VISUALIZATION - INSTITUTIONAL STYLE
+   =========================== */
+
+/* Metric Display */
+.authority-metric {
+    background: rgba(191, 87, 0, 0.1);
+    border-left: 3px solid var(--authority-burnt-orange);
+    padding: var(--space-md);
+    border-radius: 4px;
+}
+
+.authority-metric__value {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--authority-heritage-gold);
+}
+
+.authority-metric__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: var(--space-xs);
+}
+
+/* Progress Indicator */
+.authority-progress {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.authority-progress__bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--authority-burnt-orange), var(--authority-heritage-gold));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* ===========================
+   6. TABLES - NEWSPAPER STYLE
+   =========================== */
+
+.authority-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+}
+
+.authority-table__header {
+    background: rgba(191, 87, 0, 0.1);
+    border-bottom: 2px solid var(--authority-burnt-orange);
+}
+
+.authority-table__header th {
+    padding: var(--space-md);
+    text-align: left;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--authority-heritage-gold);
+}
+
+.authority-table__row {
+    border-bottom: 1px solid rgba(191, 87, 0, 0.1);
+    transition: background 0.2s ease;
+}
+
+.authority-table__row:hover {
+    background: rgba(191, 87, 0, 0.05);
+}
+
+.authority-table__cell {
+    padding: var(--space-md);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ===========================
+   7. BUTTONS - INSTITUTIONAL AUTHORITY
+   =========================== */
+
+.authority-button {
+    font-family: var(--font-body);
+    font-weight: 600;
+    padding: var(--space-md) var(--space-lg);
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+}
+
+.authority-button--primary {
+    background: linear-gradient(135deg, var(--authority-burnt-orange), var(--texas-legacy));
+    color: white;
+}
+
+.authority-button--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(191, 87, 0, 0.4);
+}
+
+.authority-button--secondary {
+    background: transparent;
+    color: var(--authority-burnt-orange);
+    border: 2px solid var(--authority-burnt-orange);
+}
+
+.authority-button--secondary:hover {
+    background: var(--authority-burnt-orange);
+    color: white;
+}
+
+/* ===========================
+   8. ANIMATIONS - INSTITUTIONAL PRESENCE
+   =========================== */
+
+@keyframes authority-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes authority-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes authority-slide-in {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.authority-animate-fade {
+    animation: authority-fade-in 0.8s ease-out;
+}
+
+.authority-animate-pulse {
+    animation: authority-pulse 2s infinite;
+}
+
+/* ===========================
+   9. UTILITY CLASSES
+   =========================== */
+
+/* Spacing */
+.authority-mt-xs { margin-top: var(--space-xs); }
+.authority-mt-sm { margin-top: var(--space-sm); }
+.authority-mt-md { margin-top: var(--space-md); }
+.authority-mt-lg { margin-top: var(--space-lg); }
+.authority-mt-xl { margin-top: var(--space-xl); }
+
+.authority-mb-xs { margin-bottom: var(--space-xs); }
+.authority-mb-sm { margin-bottom: var(--space-sm); }
+.authority-mb-md { margin-bottom: var(--space-md); }
+.authority-mb-lg { margin-bottom: var(--space-lg); }
+.authority-mb-xl { margin-bottom: var(--space-xl); }
+
+/* Text Alignment */
+.authority-text-center { text-align: center; }
+.authority-text-left { text-align: left; }
+.authority-text-right { text-align: right; }
+
+/* Display */
+.authority-flex { display: flex; }
+.authority-grid { display: grid; }
+.authority-block { display: block; }
+.authority-inline { display: inline; }
+
+/* ===========================
+   10. RESPONSIVE DESIGN
+   =========================== */
+
+@media (max-width: 1024px) {
+    .authority-container {
+        padding: 0 var(--space-md);
+    }
+
+    .authority-headline--primary {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .authority-masthead__content {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .authority-trust {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .authority-headline--primary {
+        font-size: 2rem;
+    }
+
+    .authority-card {
+        padding: var(--space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .authority-headline--primary {
+        font-size: 1.75rem;
+    }
+
+    .authority-button {
+        width: 100%;
+        padding: var(--space-md);
+    }
+}
+
+/* ===========================
+   11. PRINT STYLES - NEWSPAPER HERITAGE
+   =========================== */
+
+@media print {
+    .authority-masthead {
+        position: static;
+        border-bottom: 3px solid black;
+    }
+
+    .authority-card {
+        break-inside: avoid;
+        border: 1px solid black;
+    }
+
+    .authority-headline--primary {
+        color: black;
+        -webkit-text-fill-color: black;
+    }
+}

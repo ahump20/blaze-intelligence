@@ -1,0 +1,860 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | The Definitive Sports Authority</title>
+    <meta name="description" content="The Dave Campbell's Texas Football of sports analytics - establishing institutional trust in championship intelligence">
+
+    <!-- Authority-First Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <style>
+        /* DCTF-Inspired Authority Styling */
+        :root {
+            --burnt-orange: #BF5700;
+            --texas-legacy: #C41E3A;
+            --authority-black: #1a1a1a;
+            --institutional-gray: #36454F;
+            --trust-blue: #002244;
+            --heritage-gold: #FEDB00;
+            --champion-purple: #461D7C;
+            --sec-crimson: #9E1B32;
+            --data-green: #00B2A9;
+            --institutional-white: #FAFAFA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--institutional-white);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Institutional Header - DCTF Style */
+        .authority-header {
+            background: var(--authority-black);
+            border-bottom: 3px solid var(--burnt-orange);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(26, 26, 26, 0.95);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .authority-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .badge-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--burnt-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: white;
+            border: 2px solid var(--heritage-gold);
+        }
+
+        .authority-title h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .authority-subtitle {
+            font-size: 0.75rem;
+            color: var(--heritage-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+        }
+
+        .trust-indicators {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .trust-stat {
+            text-align: center;
+        }
+
+        .trust-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--burnt-orange);
+        }
+
+        .trust-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888;
+            margin-top: 0.25rem;
+        }
+
+        /* Hero Section - Institutional Authority Statement */
+        .authority-hero {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .heritage-statement {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--heritage-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .authority-description {
+            font-size: 1.25rem;
+            color: #ccc;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        /* Championship Prediction Center */
+        .prediction-center {
+            background: rgba(191, 87, 0, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 12px;
+            padding: 3rem;
+            margin: 0 auto 4rem;
+            max-width: 1400px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--burnt-orange);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--burnt-orange);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .predictions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .prediction-card {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .prediction-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--burnt-orange);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.2);
+        }
+
+        .prediction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .team-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            color: white;
+        }
+
+        .conference {
+            font-size: 0.75rem;
+            color: var(--heritage-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .confidence-badge {
+            background: var(--burnt-orange);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .prediction-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric {
+            background: rgba(191, 87, 0, 0.1);
+            padding: 0.75rem;
+            border-radius: 4px;
+            border-left: 3px solid var(--burnt-orange);
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--heritage-gold);
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #888;
+            margin-top: 0.25rem;
+        }
+
+        /* Authority Timeline */
+        .authority-timeline {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--burnt-orange);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 1.5rem;
+            background: rgba(26, 26, 26, 0.9);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .timeline-content.left {
+            text-align: right;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--burnt-orange);
+            border: 3px solid var(--authority-black);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--heritage-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-achievement {
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        /* Live Authority Feed */
+        .live-feed {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .feed-ticker {
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            overflow: hidden;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-right: 1rem;
+            border-right: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            gap: 4rem;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            white-space: nowrap;
+            color: #ccc;
+        }
+
+        .ticker-highlight {
+            color: var(--burnt-orange);
+            font-weight: 600;
+        }
+
+        /* Interactive Intelligence Map */
+        .intelligence-map {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+
+        .map-container {
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid var(--burnt-orange);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            min-height: 500px;
+        }
+
+        .region-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .region-card {
+            background: rgba(191, 87, 0, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .region-card:hover {
+            background: rgba(191, 87, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        .region-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--heritage-gold);
+        }
+
+        .region-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .stat-label {
+            color: #888;
+        }
+
+        .stat-value {
+            color: white;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Footer - Institutional Credibility */
+        .authority-footer {
+            background: var(--authority-black);
+            border-top: 3px solid var(--burnt-orange);
+            padding: 3rem 2rem;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .institutional-seal {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--heritage-gold);
+            margin-bottom: 1rem;
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .heritage-statement {
+                font-size: 2rem;
+            }
+
+            .predictions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-line {
+                display: none;
+            }
+
+            .region-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Authority Header -->
+    <header class="authority-header">
+        <div class="header-content">
+            <div class="authority-badge">
+                <div class="badge-icon">BI</div>
+                <div class="authority-title">
+                    <div class="authority-subtitle">Est. 2024</div>
+                    <h1>The Sports Intelligence Authority</h1>
+                </div>
+            </div>
+            <div class="trust-indicators">
+                <div class="trust-stat">
+                    <div class="trust-value">94.7%</div>
+                    <div class="trust-label">Accuracy</div>
+                </div>
+                <div class="trust-stat">
+                    <div class="trust-value">500+</div>
+                    <div class="trust-label">Programs</div>
+                </div>
+                <div class="trust-stat">
+                    <div class="trust-value">2.8M</div>
+                    <div class="trust-label">Data Points</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="authority-hero">
+        <h2 class="heritage-statement">The Definitive Source for Championship Intelligence</h2>
+        <p class="authority-description">
+            Just as Dave Campbell's Texas Football has been the unquestioned authority on Texas high school football for over six decades,
+            Blaze Intelligence establishes the same institutional trust in predictive sports analytics.
+        </p>
+    </section>
+
+    <!-- Live Authority Feed -->
+    <div class="live-feed">
+        <div class="feed-ticker">
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span style="color: white; font-weight: 600;">LIVE</span>
+            </div>
+            <div class="ticker-content">
+                <span class="ticker-item"><span class="ticker-highlight">TEXAS:</span> #7 in SEC, Arch Manning leads Heisman race</span>
+                <span class="ticker-item"><span class="ticker-highlight">ALABAMA:</span> 87.3% championship probability</span>
+                <span class="ticker-item"><span class="ticker-highlight">LSU:</span> Elite 2026 recruiting class forming</span>
+                <span class="ticker-item"><span class="ticker-highlight">GEORGIA:</span> Defense ranks #1 nationally</span>
+                <span class="ticker-item"><span class="ticker-highlight">TEXAS:</span> #7 in SEC, Arch Manning leads Heisman race</span>
+                <span class="ticker-item"><span class="ticker-highlight">ALABAMA:</span> 87.3% championship probability</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Championship Prediction Center -->
+    <div class="prediction-center">
+        <div class="section-header">
+            <div class="section-icon">🏆</div>
+            <h2 class="section-title">Championship Intelligence Center</h2>
+        </div>
+
+        <div class="predictions-grid">
+            <!-- Texas Longhorns -->
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <div class="team-info">
+                        <h3>Texas Longhorns</h3>
+                        <span class="conference">SEC West</span>
+                    </div>
+                    <span class="confidence-badge">HIGH</span>
+                </div>
+                <div class="prediction-metrics">
+                    <div class="metric">
+                        <div class="metric-value">87.3%</div>
+                        <div class="metric-label">Playoff Prob</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">#7</div>
+                        <div class="metric-label">National Rank</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$6.8M</div>
+                        <div class="metric-label">NIL Value</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">11-1</div>
+                        <div class="metric-label">Projected</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alabama -->
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <div class="team-info">
+                        <h3>Alabama Crimson Tide</h3>
+                        <span class="conference">SEC West</span>
+                    </div>
+                    <span class="confidence-badge">ELITE</span>
+                </div>
+                <div class="prediction-metrics">
+                    <div class="metric">
+                        <div class="metric-value">93.1%</div>
+                        <div class="metric-label">Playoff Prob</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">#2</div>
+                        <div class="metric-label">National Rank</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$8.2M</div>
+                        <div class="metric-label">NIL Value</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">12-0</div>
+                        <div class="metric-label">Projected</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LSU -->
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <div class="team-info">
+                        <h3>LSU Tigers</h3>
+                        <span class="conference">SEC West</span>
+                    </div>
+                    <span class="confidence-badge">RISING</span>
+                </div>
+                <div class="prediction-metrics">
+                    <div class="metric">
+                        <div class="metric-value">76.4%</div>
+                        <div class="metric-label">Playoff Prob</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">#11</div>
+                        <div class="metric-label">National Rank</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$5.4M</div>
+                        <div class="metric-label">NIL Value</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">10-2</div>
+                        <div class="metric-label">Projected</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authority Timeline -->
+    <section class="authority-timeline">
+        <div class="section-header">
+            <div class="section-icon">📊</div>
+            <h2 class="section-title">Building Institutional Authority</h2>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+
+            <div class="timeline-item">
+                <div class="timeline-content left">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-achievement">Founded with mission to become the DCTF of sports analytics</div>
+                </div>
+                <div class="timeline-dot"></div>
+                <div style="width: 45%"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div style="width: 45%"></div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-achievement">500+ programs trusting our championship predictions</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content left">
+                    <div class="timeline-year">2026</div>
+                    <div class="timeline-achievement">Projected: Recognized as THE authority for sports analytics</div>
+                </div>
+                <div class="timeline-dot"></div>
+                <div style="width: 45%"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regional Intelligence Map -->
+    <section class="intelligence-map">
+        <div class="section-header">
+            <div class="section-icon">🗺️</div>
+            <h2 class="section-title">Championship Intelligence Network</h2>
+        </div>
+
+        <div class="map-container">
+            <div class="region-grid">
+                <!-- Texas Region -->
+                <div class="region-card">
+                    <h3 class="region-name">Texas Command</h3>
+                    <div class="region-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">HS Programs:</span>
+                            <span class="stat-value">1,200+</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">D1 Commits:</span>
+                            <span class="stat-value">487</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">NIL Total:</span>
+                            <span class="stat-value">$142M</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Coverage:</span>
+                            <span class="stat-value">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEC East -->
+                <div class="region-card">
+                    <h3 class="region-name">SEC East Division</h3>
+                    <div class="region-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Programs:</span>
+                            <span class="stat-value">850+</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">D1 Commits:</span>
+                            <span class="stat-value">342</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">NIL Total:</span>
+                            <span class="stat-value">$98M</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Coverage:</span>
+                            <span class="stat-value">95%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEC West -->
+                <div class="region-card">
+                    <h3 class="region-name">SEC West Division</h3>
+                    <div class="region-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Programs:</span>
+                            <span class="stat-value">750+</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">D1 Commits:</span>
+                            <span class="stat-value">419</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">NIL Total:</span>
+                            <span class="stat-value">$156M</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Coverage:</span>
+                            <span class="stat-value">98%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="authority-footer">
+        <div class="footer-content">
+            <div class="institutional-seal">
+                BLAZE INTELLIGENCE™ | THE DEFINITIVE SPORTS AUTHORITY
+            </div>
+            <div class="copyright">
+                © 2025 Blaze Intelligence. Establishing institutional trust in sports analytics.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Real-time data simulation
+        function updateLiveMetrics() {
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                if (metric.textContent.includes('%')) {
+                    const base = parseFloat(metric.textContent);
+                    const variation = (Math.random() - 0.5) * 2;
+                    metric.textContent = (base + variation).toFixed(1) + '%';
+                }
+            });
+        }
+
+        // Simulate live updates every 5 seconds
+        setInterval(updateLiveMetrics, 5000);
+
+        // Add interactive hover effects
+        document.querySelectorAll('.prediction-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.borderColor = 'var(--heritage-gold)';
+                setTimeout(() => {
+                    this.style.borderColor = 'rgba(191, 87, 0, 0.3)';
+                }, 1000);
+            });
+        });
+
+        // Animate numbers on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 1s ease-in';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.prediction-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add fadeIn animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body></html>

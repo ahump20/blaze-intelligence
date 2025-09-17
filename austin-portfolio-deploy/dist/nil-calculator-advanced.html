@@ -1,0 +1,1025 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced NIL Calculator | Blaze Intelligence</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Calculate Name, Image, and Likeness valuations with championship-level accuracy. Real-time NIL assessment for college athletes with performance metrics and social engagement analysis.">
+    <meta name="keywords" content="NIL calculator, college athlete valuation, NCAA NIL, sports marketing value">
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <!-- Component Library -->
+    <link rel="stylesheet" href="/css/blaze-components.css">
+    <script src="/js/blaze-components.js"></script>
+
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --championship-gold: #FFD700;
+            --neural-green: #00ff7f;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(191, 87, 0, 0.1);
+            color: var(--championship-gold);
+        }
+
+        /* Main Container */
+        .calculator-container {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(255, 215, 0, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Calculator Layout */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            backdrop-filter: blur(15px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 2px rgba(191, 87, 0, 0.2);
+        }
+
+        .form-select option {
+            background: var(--bg-primary);
+        }
+
+        /* Range Slider */
+        .range-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .range-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .range-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+        }
+
+        .form-range {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        .form-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .form-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 100px;
+        }
+
+        .valuation-display {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(191, 87, 0, 0.05));
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .valuation-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .valuation-amount {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--championship-gold), var(--primary-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            transition: all 0.5s ease;
+        }
+
+        .valuation-range {
+            font-size: 1.1rem;
+            color: var(--cardinal-blue);
+        }
+
+        /* Breakdown Metrics */
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-orange);
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+        }
+
+        .metric-percentage {
+            font-size: 0.9rem;
+            color: var(--neural-green);
+            margin-top: 0.25rem;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-top: 2rem;
+        }
+
+        /* Calculate Button */
+        .calculate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(191, 87, 0, 0.3);
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Export Options */
+        .export-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .export-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background: rgba(155, 203, 235, 0.1);
+            border: 1px solid var(--cardinal-blue);
+            border-radius: 8px;
+            color: var(--cardinal-blue);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: rgba(155, 203, 235, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Market Comparisons */
+        .comparisons-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .comparison-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-item:hover {
+            background: rgba(191, 87, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .comparison-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .comparison-value {
+            font-weight: 700;
+            color: var(--championship-gold);
+        }
+
+        /* Loading State */
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(191, 87, 0, 0.2);
+            border-top: 3px solid var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-section {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .valuation-amount {
+                font-size: 3rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .export-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">🔥 Blaze Intelligence</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/analytics.html">Analytics</a>
+                <a href="/sec-nil-analytics.html">SEC NIL</a>
+                <a href="/pricing.html">Pricing</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Calculator Container -->
+    <div class="calculator-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Advanced NIL Calculator</h1>
+            <p class="hero-subtitle">Championship-level Name, Image, and Likeness valuation with real-time market analysis</p>
+        </section>
+
+        <!-- Calculator Grid -->
+        <div class="calculator-grid">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h2 class="section-title">
+                    📊 Athlete Profile
+                </h2>
+
+                <form id="nil-calculator-form">
+                    <!-- Sport Selection -->
+                    <div class="form-group">
+                        <label class="form-label" for="sport">Sport</label>
+                        <select class="form-select" id="sport" name="sport">
+                            <option value="football">Football</option>
+                            <option value="basketball">Basketball</option>
+                            <option value="baseball">Baseball</option>
+                            <option value="softball">Softball</option>
+                            <option value="track">Track &amp; Field</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Division -->
+                    <div class="form-group">
+                        <label class="form-label" for="division">Division</label>
+                        <select class="form-select" id="division" name="division">
+                            <option value="d1-power5">Division I - Power 5</option>
+                            <option value="d1-group5">Division I - Group of 5</option>
+                            <option value="d1-fcs">Division I - FCS</option>
+                            <option value="d2">Division II</option>
+                            <option value="d3">Division III</option>
+                            <option value="juco">Junior College</option>
+                        </select>
+                    </div>
+
+                    <!-- Position/Role -->
+                    <div class="form-group">
+                        <label class="form-label" for="position">Position/Role</label>
+                        <input type="text" class="form-input" id="position" name="position" placeholder="e.g., Quarterback, Point Guard, Pitcher">
+                    </div>
+
+                    <!-- Performance Metrics -->
+                    <div class="range-group">
+                        <div class="range-header">
+                            <label class="form-label">Performance Rating</label>
+                            <span class="range-value" id="performance-value">75%</span>
+                        </div>
+                        <input type="range" class="form-range" id="performance" name="performance" min="0" max="100" value="75">
+                    </div>
+
+                    <!-- Social Media Following -->
+                    <div class="form-group">
+                        <label class="form-label" for="followers">Social Media Followers</label>
+                        <input type="number" class="form-input" id="followers" name="followers" placeholder="Total followers across all platforms" min="0">
+                    </div>
+
+                    <!-- Engagement Rate -->
+                    <div class="range-group">
+                        <div class="range-header">
+                            <label class="form-label">Engagement Rate</label>
+                            <span class="range-value" id="engagement-value">5.0%</span>
+                        </div>
+                        <input type="range" class="form-range" id="engagement" name="engagement" min="0" max="20" value="5" step="0.1">
+                    </div>
+
+                    <!-- Market Size -->
+                    <div class="form-group">
+                        <label class="form-label" for="market">Market Size</label>
+                        <select class="form-select" id="market" name="market">
+                            <option value="major">Major Market (Top 10 City)</option>
+                            <option value="large">Large Market (Top 25 City)</option>
+                            <option value="medium">Medium Market (Top 50 City)</option>
+                            <option value="small">Small Market</option>
+                        </select>
+                    </div>
+
+                    <!-- Championship DNA Score -->
+                    <div class="range-group">
+                        <div class="range-header">
+                            <label class="form-label">Championship DNA™ Score</label>
+                            <span class="range-value" id="dna-value">80%</span>
+                        </div>
+                        <input type="range" class="form-range" id="dna" name="dna" min="0" max="100" value="80">
+                    </div>
+
+                    <!-- Calculate Button -->
+                    <button type="submit" class="calculate-btn">
+                        Calculate NIL Valuation
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <h2 class="section-title">
+                    💰 NIL Valuation
+                </h2>
+
+                <!-- Valuation Display -->
+                <div class="valuation-display">
+                    <div class="valuation-label">Estimated Annual Value</div>
+                    <div class="valuation-amount" id="valuation-amount">$0</div>
+                    <div class="valuation-range" id="valuation-range">Calculate to see range</div>
+                </div>
+
+                <!-- Breakdown Metrics -->
+                <div class="breakdown-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Performance</div>
+                        <div class="metric-value" id="performance-score">0</div>
+                        <div class="metric-percentage" id="performance-weight">0%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Social Reach</div>
+                        <div class="metric-value" id="social-score">0</div>
+                        <div class="metric-percentage" id="social-weight">0%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Market Value</div>
+                        <div class="metric-value" id="market-score">0</div>
+                        <div class="metric-percentage" id="market-weight">0%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Character</div>
+                        <div class="metric-value" id="character-score">0</div>
+                        <div class="metric-percentage" id="character-weight">0%</div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="chart-container">
+                    <canvas id="nil-breakdown-chart"></canvas>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div class="loading-spinner" id="loading-spinner"></div>
+
+                <!-- Export Options -->
+                <div class="export-section">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-primary);">Export Report</h3>
+                    <div class="export-buttons">
+                        <button class="export-btn" onclick="exportPDF()">
+                            📄 Export PDF
+                        </button>
+                        <button class="export-btn" onclick="exportCSV()">
+                            📊 Export CSV
+                        </button>
+                        <button class="export-btn" onclick="shareResults()">
+                            🔗 Share Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Comparisons -->
+        <div class="comparisons-section">
+            <h2 class="section-title">
+                📈 Market Comparisons
+            </h2>
+            <div class="comparison-list" id="comparison-list">
+                <div class="comparison-item">
+                    <span class="comparison-name">Average D1 Football QB</span>
+                    <span class="comparison-value">$289,000</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-name">Top 10% Basketball</span>
+                    <span class="comparison-value">$425,000</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-name">Elite Baseball Pitcher</span>
+                    <span class="comparison-value">$187,000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // NIL Calculator Logic
+        class NILCalculator {
+            constructor() {
+                this.form = document.getElementById('nil-calculator-form');
+                this.chart = null;
+                this.initializeEventListeners();
+                this.initializeChart();
+            }
+
+            initializeEventListeners() {
+                // Form submission
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.calculateNIL();
+                });
+
+                // Range slider updates
+                const rangeInputs = document.querySelectorAll('.form-range');
+                rangeInputs.forEach(input => {
+                    input.addEventListener('input', (e) => {
+                        this.updateRangeValue(e.target);
+                    });
+                });
+
+                // Sport-specific position updates
+                document.getElementById('sport').addEventListener('change', (e) => {
+                    this.updatePositionOptions(e.target.value);
+                });
+            }
+
+            updateRangeValue(input) {
+                const valueId = input.id + '-value';
+                const valueElement = document.getElementById(valueId);
+                if (valueElement) {
+                    if (input.id === 'engagement') {
+                        valueElement.textContent = input.value + '%';
+                    } else {
+                        valueElement.textContent = input.value + '%';
+                    }
+                }
+            }
+
+            updatePositionOptions(sport) {
+                const positionInput = document.getElementById('position');
+                const positions = {
+                    football: 'e.g., Quarterback, Running Back, Wide Receiver',
+                    basketball: 'e.g., Point Guard, Center, Forward',
+                    baseball: 'e.g., Pitcher, Catcher, Shortstop',
+                    softball: 'e.g., Pitcher, Catcher, Outfielder',
+                    track: 'e.g., Sprinter, Distance, Field Events',
+                    other: 'e.g., Position or specialty'
+                };
+                positionInput.placeholder = positions[sport] || positions.other;
+            }
+
+            calculateNIL() {
+                // Show loading
+                document.getElementById('loading-spinner').style.display = 'block';
+
+                // Get form data
+                const formData = new FormData(this.form);
+                const data = Object.fromEntries(formData);
+
+                // Simulate calculation delay
+                setTimeout(() => {
+                    const valuation = this.performCalculation(data);
+                    this.displayResults(valuation);
+                    this.updateChart(valuation);
+                    this.updateComparisons(data.sport, valuation.total);
+                    document.getElementById('loading-spinner').style.display = 'none';
+                }, 1500);
+            }
+
+            performCalculation(data) {
+                // Base values by sport and division
+                const sportMultipliers = {
+                    football: 1.5,
+                    basketball: 1.3,
+                    baseball: 1.0,
+                    softball: 0.8,
+                    track: 0.7,
+                    other: 0.6
+                };
+
+                const divisionMultipliers = {
+                    'd1-power5': 2.0,
+                    'd1-group5': 1.2,
+                    'd1-fcs': 0.8,
+                    'd2': 0.5,
+                    'd3': 0.3,
+                    'juco': 0.4
+                };
+
+                const marketMultipliers = {
+                    major: 1.5,
+                    large: 1.2,
+                    medium: 1.0,
+                    small: 0.7
+                };
+
+                // Base calculation
+                const baseValue = 50000;
+                const sportMultiplier = sportMultipliers[data.sport] || 1;
+                const divisionMultiplier = divisionMultipliers[data.division] || 1;
+                const marketMultiplier = marketMultipliers[data.market] || 1;
+
+                // Component calculations
+                const performanceValue = baseValue * (data.performance / 100) * 2;
+                const socialValue = this.calculateSocialValue(data.followers, data.engagement);
+                const marketValue = baseValue * marketMultiplier;
+                const characterValue = baseValue * (data.dna / 100) * 1.5;
+
+                // Total calculation
+                const subtotal = performanceValue + socialValue + marketValue + characterValue;
+                const total = subtotal * sportMultiplier * divisionMultiplier;
+
+                // Calculate range
+                const minRange = total * 0.85;
+                const maxRange = total * 1.15;
+
+                return {
+                    total: Math.round(total),
+                    min: Math.round(minRange),
+                    max: Math.round(maxRange),
+                    breakdown: {
+                        performance: Math.round(performanceValue),
+                        social: Math.round(socialValue),
+                        market: Math.round(marketValue),
+                        character: Math.round(characterValue)
+                    },
+                    weights: {
+                        performance: Math.round((performanceValue / subtotal) * 100),
+                        social: Math.round((socialValue / subtotal) * 100),
+                        market: Math.round((marketValue / subtotal) * 100),
+                        character: Math.round((characterValue / subtotal) * 100)
+                    }
+                };
+            }
+
+            calculateSocialValue(followers, engagement) {
+                const followersNum = parseInt(followers) || 0;
+                const engagementRate = parseFloat(engagement) || 0;
+
+                // Tiered calculation based on follower count
+                let baseRate = 0;
+                if (followersNum < 10000) {
+                    baseRate = 10;
+                } else if (followersNum < 50000) {
+                    baseRate = 15;
+                } else if (followersNum < 100000) {
+                    baseRate = 25;
+                } else if (followersNum < 500000) {
+                    baseRate = 50;
+                } else {
+                    baseRate = 100;
+                }
+
+                // Apply engagement multiplier
+                const engagementMultiplier = 1 + (engagementRate / 10);
+                return followersNum * baseRate * engagementMultiplier;
+            }
+
+            displayResults(valuation) {
+                // Animate valuation amount
+                const amountElement = document.getElementById('valuation-amount');
+                const rangeElement = document.getElementById('valuation-range');
+
+                // Format currency
+                const formatter = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+
+                // Animate the number
+                this.animateValue(amountElement, 0, valuation.total, 2000, formatter);
+
+                // Update range
+                rangeElement.textContent = `${formatter.format(valuation.min)} - ${formatter.format(valuation.max)}`;
+
+                // Update breakdown metrics
+                document.getElementById('performance-score').textContent = valuation.weights.performance;
+                document.getElementById('performance-weight').textContent = `${valuation.weights.performance}% weight`;
+
+                document.getElementById('social-score').textContent = valuation.weights.social;
+                document.getElementById('social-weight').textContent = `${valuation.weights.social}% weight`;
+
+                document.getElementById('market-score').textContent = valuation.weights.market;
+                document.getElementById('market-weight').textContent = `${valuation.weights.market}% weight`;
+
+                document.getElementById('character-score').textContent = valuation.weights.character;
+                document.getElementById('character-weight').textContent = `${valuation.weights.character}% weight`;
+            }
+
+            animateValue(element, start, end, duration, formatter) {
+                const startTimestamp = Date.now();
+                const step = () => {
+                    const timestamp = Date.now();
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const value = Math.floor(progress * (end - start) + start);
+                    element.textContent = formatter ? formatter.format(value) : value;
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+
+            initializeChart() {
+                const ctx = document.getElementById('nil-breakdown-chart');
+                if (!ctx || typeof Chart === 'undefined') return;
+
+                this.chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Performance', 'Social Reach', 'Market Value', 'Character'],
+                        datasets: [{
+                            data: [25, 25, 25, 25],
+                            backgroundColor: [
+                                'rgba(191, 87, 0, 0.8)',
+                                'rgba(155, 203, 235, 0.8)',
+                                'rgba(255, 215, 0, 0.8)',
+                                'rgba(0, 255, 127, 0.8)'
+                            ],
+                            borderColor: [
+                                '#BF5700',
+                                '#9BCBEB',
+                                '#FFD700',
+                                '#00ff7f'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#e0e6ed',
+                                    padding: 15
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.parsed + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            updateChart(valuation) {
+                if (!this.chart) return;
+
+                this.chart.data.datasets[0].data = [
+                    valuation.weights.performance,
+                    valuation.weights.social,
+                    valuation.weights.market,
+                    valuation.weights.character
+                ];
+
+                this.chart.update();
+            }
+
+            updateComparisons(sport, totalValue) {
+                const comparisons = {
+                    football: [
+                        { name: 'Average D1 QB', value: 289000 },
+                        { name: 'Elite RB', value: 425000 },
+                        { name: 'Top WR', value: 187000 }
+                    ],
+                    basketball: [
+                        { name: 'Average D1 Guard', value: 178000 },
+                        { name: 'Elite Center', value: 356000 },
+                        { name: 'Top Forward', value: 267000 }
+                    ],
+                    baseball: [
+                        { name: 'Average D1 Pitcher', value: 125000 },
+                        { name: 'Elite Shortstop', value: 189000 },
+                        { name: 'Top Catcher', value: 156000 }
+                    ],
+                    default: [
+                        { name: 'Average D1 Athlete', value: 185000 },
+                        { name: 'Top 10% Athlete', value: 425000 },
+                        { name: 'Elite Performer', value: 687000 }
+                    ]
+                };
+
+                const sportComparisons = comparisons[sport] || comparisons.default;
+                const comparisonList = document.getElementById('comparison-list');
+
+                const formatter = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+
+                comparisonList.innerHTML = sportComparisons.map(comp => {
+                    const difference = totalValue - comp.value;
+                    const percentDiff = ((difference / comp.value) * 100).toFixed(1);
+                    const indicator = difference > 0 ? '↗' : '↘';
+                    const color = difference > 0 ? '#00ff7f' : '#ff4757';
+
+                    return `
+                        <div class="comparison-item">
+                            <span class="comparison-name">${comp.name}</span>
+                            <span>
+                                <span class="comparison-value">${formatter.format(comp.value)}</span>
+                                <span style="color: ${color}; margin-left: 10px; font-size: 0.9rem;">
+                                    ${indicator} ${Math.abs(percentDiff)}%
+                                </span>
+                            </span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Export functions
+        function exportPDF() {
+            alert('PDF export would generate a professional NIL valuation report');
+        }
+
+        function exportCSV() {
+            alert('CSV export would download valuation data in spreadsheet format');
+        }
+
+        function shareResults() {
+            alert('Share link would create a unique URL to share valuation results');
+        }
+
+        // Initialize calculator on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const calculator = new NILCalculator();
+            console.log('🔥 NIL Calculator initialized');
+        });
+    </script>
+
+
+</body></html>

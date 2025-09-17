@@ -1,0 +1,879 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawk-Eye Innovations Demo - Blaze Intelligence</title>
+
+    <!-- Essential Meta Tags -->
+    <meta name="theme-color" content="#BF5700">
+    <meta name="description" content="Live demonstration of championship-level Hawk-Eye ball tracking with 340fps precision and ±2.6mm accuracy">
+    <meta name="keywords" content="hawk-eye tracking, ball tracking, sports analytics, texas football, sec baseball">
+
+    <!-- Essential Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --grizzly-teal: #00B2A9;
+            --neural-green: #00ff7f;
+            --championship-gold: #FFD700;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--deep-navy) 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 1200px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--cardinal-blue);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .spec-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .spec-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--neural-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Demo Section */
+        .demo-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .demo-panel {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .demo-panel h3 {
+            color: var(--primary-orange);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        /* Interactive Controls */
+        .control-panel {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 1px solid var(--grizzly-teal);
+        }
+
+        .control-row {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            align-items: center;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(191, 87, 0, 0.4);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        /* Visualization Area */
+        .viz-container {
+            height: 400px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 2px solid var(--cardinal-blue);
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        /* Results Display */
+        .results-display {
+            background: rgba(0, 255, 127, 0.1);
+            border: 1px solid var(--neural-green);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .results-title {
+            color: var(--neural-green);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-label {
+            color: var(--text-secondary);
+        }
+
+        .data-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-live {
+            background: var(--neural-green);
+            color: var(--bg-primary);
+        }
+
+        .status-processing {
+            background: var(--championship-gold);
+            color: var(--bg-primary);
+        }
+
+        .status-ready {
+            background: var(--cardinal-blue);
+            color: var(--bg-primary);
+        }
+
+        /* Sports Integration */
+        .sports-tabs {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .sport-tab {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid transparent;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .sport-tab.active {
+            border-color: var(--primary-orange);
+            background: rgba(191, 87, 0, 0.1);
+            color: var(--primary-orange);
+        }
+
+        .sport-tab:hover {
+            border-color: var(--cardinal-blue);
+        }
+
+        /* Performance Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(0, 178, 169, 0.1));
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--neural-green);
+            line-height: 1;
+        }
+
+        .metric-change {
+            font-size: 0.8rem;
+            color: var(--championship-gold);
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        .demo-footer {
+            background: var(--bg-secondary);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .contact-highlight {
+            color: var(--primary-orange);
+            font-weight: 700;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .control-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .sports-tabs {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Hawk-Eye Innovations</h1>
+            <p class="hero-subtitle">Championship-Level Ball Tracking &amp; Sports Intelligence</p>
+
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-value">340fps</div>
+                    <div class="spec-label">Tracking Rate</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">±2.6mm</div>
+                    <div class="spec-label">Precision</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">&lt;100ms</div>
+                    <div class="spec-label">Latency</div>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">99.5%</div>
+                    <div class="spec-label">Confidence</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo-section">
+        <h2 style="text-align: center; font-size: 3rem; color: var(--primary-orange); margin-bottom: 2rem;">Live Demonstration</h2>
+
+        <!-- Sport Selection -->
+        <div class="sports-tabs">
+            <div class="sport-tab active" data-sport="baseball">⚾ SEC Baseball</div>
+            <div class="sport-tab" data-sport="football">🏈 Texas HS Football</div>
+            <div class="sport-tab" data-sport="general">🎯 Ball Tracking</div>
+        </div>
+
+        <div class="demo-grid">
+            <!-- Ball Tracking Panel -->
+            <div class="demo-panel">
+                <h3>🎯 Ball Tracking System</h3>
+                <div class="viz-container" id="trackingViz">
+                    <canvas id="trackingCanvas"></canvas>
+                </div>
+                <div class="control-panel">
+                    <div class="control-row">
+                        <button class="demo-button" onclick="startTracking()">Start Tracking</button>
+                        <button class="demo-button" onclick="simulatePlay()">Simulate Play</button>
+                        <span class="status-indicator status-ready" id="trackingStatus">READY</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trajectory Prediction Panel -->
+            <div class="demo-panel">
+                <h3>📈 Trajectory Prediction</h3>
+                <div class="viz-container" id="trajectoryViz">
+                    <canvas id="trajectoryCanvas"></canvas>
+                </div>
+                <div class="control-panel">
+                    <div class="control-row">
+                        <button class="demo-button" onclick="predictTrajectory()">Predict Path</button>
+                        <button class="demo-button" onclick="analyzeStrikeZone()">Strike Zone</button>
+                        <span class="status-indicator status-live pulse" id="predictionStatus">LIVE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Display -->
+        <div class="results-display slide-up">
+            <div class="results-title">🔬 Real-Time Analysis Results</div>
+            <div class="data-row">
+                <span class="data-label">Ball Position (X, Y, Z):</span>
+                <span class="data-value" id="ballPosition">(0.0, 0.0, 0.0)</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Velocity (m/s):</span>
+                <span class="data-value" id="ballVelocity">0.0</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Confidence Level:</span>
+                <span class="data-value" id="confidenceLevel">99.5%</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Cameras Active:</span>
+                <span class="data-value" id="camerasActive">12/12</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Processing Latency:</span>
+                <span class="data-value" id="processingLatency">23ms</span>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">Tracking Accuracy</div>
+                <div class="metric-value">99.7%</div>
+                <div class="metric-change">↑ 0.2% from yesterday</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Strike Zone Precision</div>
+                <div class="metric-value">±2.6mm</div>
+                <div class="metric-change">MLB Championship Standard</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Data Points/Second</div>
+                <div class="metric-value">4,080</div>
+                <div class="metric-change">340fps × 12 cameras</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Client Savings</div>
+                <div class="metric-value">73%</div>
+                <div class="metric-change">vs. competitor solutions</div>
+            </div>
+        </div>
+
+        <!-- Sports Data Integration -->
+        <div class="demo-panel" style="grid-column: 1 / -1;">
+            <h3>🏆 Sports Data Integration</h3>
+            <div id="sportsData" class="results-display">
+                <div class="results-title">Loading Texas HS Football &amp; SEC Baseball Data...</div>
+            </div>
+            <div class="control-row" style="justify-content: center;">
+                <button class="demo-button" onclick="loadTexasHsData()">Texas HS Football</button>
+                <button class="demo-button" onclick="loadSecBaseballData()">SEC Baseball</button>
+                <button class="demo-button" onclick="loadLiveSchedule()">Live Schedules</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="demo-footer">
+        <div class="footer-content">
+            <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">Ready for Championship-Level Analytics?</h3>
+            <p class="contact-info">
+                Contact <span class="contact-highlight">Austin Humphrey</span> for client demonstrations
+            </p>
+            <p class="contact-info">
+                📧 <span class="contact-highlight">ahump20@outlook.com</span> |
+                📱 <span class="contact-highlight">(210) 273-5538</span>
+            </p>
+            <p style="color: var(--text-secondary); margin-top: 2rem; font-size: 0.9rem;">
+                Powered by Blaze Intelligence • Deep South Sports Authority • 67-80% Cost Savings vs Competitors
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Demo State Management
+        let demoState = {
+            isTracking: false,
+            currentSport: 'baseball',
+            ballPosition: { x: 0, y: 0, z: 0 },
+            ballVelocity: 0,
+            confidence: 99.5,
+            cameras: 12,
+            latency: 23
+        };
+
+        // Initialize Demo
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCanvases();
+            setupSportTabs();
+            startDataUpdates();
+        });
+
+        // Sport Tab Handling
+        function setupSportTabs() {
+            document.querySelectorAll('.sport-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    demoState.currentSport = this.dataset.sport;
+                    updateSportContent();
+                });
+            });
+        }
+
+        function updateSportContent() {
+            // Update content based on selected sport
+            console.log('Switched to sport:', demoState.currentSport);
+        }
+
+        // Canvas Initialization
+        function initializeCanvases() {
+            const trackingCanvas = document.getElementById('trackingCanvas');
+            const trajectoryCanvas = document.getElementById('trajectoryCanvas');
+
+            if (trackingCanvas) {
+                trackingCanvas.width = trackingCanvas.offsetWidth;
+                trackingCanvas.height = trackingCanvas.offsetHeight;
+                drawTrackingVisualization(trackingCanvas);
+            }
+
+            if (trajectoryCanvas) {
+                trajectoryCanvas.width = trajectoryCanvas.offsetWidth;
+                trajectoryCanvas.height = trajectoryCanvas.offsetHeight;
+                drawTrajectoryVisualization(trajectoryCanvas);
+            }
+        }
+
+        // Visualization Functions
+        function drawTrackingVisualization(canvas) {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Clear canvas
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw field/court
+            ctx.strokeStyle = '#9BCBEB';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(20, 20, width - 40, height - 40);
+
+            // Draw ball tracking points
+            for (let i = 0; i < 8; i++) {
+                const x = 50 + i * (width - 100) / 7;
+                const y = height / 2 + Math.sin(i * 0.5) * 50;
+
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = i === 7 ? '#00ff7f' : '#BF5700';
+                ctx.fill();
+
+                if (i > 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(prevX, prevY);
+                    ctx.lineTo(x, y);
+                    ctx.strokeStyle = '#FFD700';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+
+                var prevX = x;
+                var prevY = y;
+            }
+
+            // Draw camera positions
+            const cameraPositions = [
+                [30, 30], [width-30, 30], [30, height-30], [width-30, height-30]
+            ];
+
+            cameraPositions.forEach(([x, y]) => {
+                ctx.fillStyle = '#00B2A9';
+                ctx.fillRect(x-8, y-8, 16, 16);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '10px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('📹', x, y+3);
+            });
+        }
+
+        function drawTrajectoryVisualization(canvas) {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Clear canvas
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw trajectory curve
+            ctx.beginPath();
+            ctx.strokeStyle = '#00ff7f';
+            ctx.lineWidth = 3;
+
+            for (let i = 0; i <= 100; i++) {
+                const x = (i / 100) * (width - 60) + 30;
+                const y = height - 50 - Math.sin((i / 100) * Math.PI) * (height - 100) * 0.8;
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+
+            // Draw strike zone (if baseball)
+            if (demoState.currentSport === 'baseball') {
+                const szX = width - 80;
+                const szY = height - 150;
+                const szWidth = 40;
+                const szHeight = 80;
+
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(szX, szY, szWidth, szHeight);
+
+                ctx.fillStyle = '#FFD700';
+                ctx.font = '12px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('Strike Zone', szX + szWidth/2, szY + szHeight + 20);
+            }
+
+            // Draw prediction cone
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(255, 215, 0, 0.2)';
+            ctx.moveTo(30, height - 50);
+            ctx.lineTo(width - 60, height - 200);
+            ctx.lineTo(width - 60, height - 100);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Demo Functions
+        function startTracking() {
+            demoState.isTracking = !demoState.isTracking;
+            const status = document.getElementById('trackingStatus');
+            const button = event.target;
+
+            if (demoState.isTracking) {
+                status.textContent = 'TRACKING';
+                status.className = 'status-indicator status-live pulse';
+                button.textContent = 'Stop Tracking';
+                simulateRealtimeTracking();
+            } else {
+                status.textContent = 'READY';
+                status.className = 'status-indicator status-ready';
+                button.textContent = 'Start Tracking';
+            }
+        }
+
+        function simulatePlay() {
+            // Simulate a realistic play scenario
+            document.getElementById('trackingStatus').textContent = 'SIMULATING';
+            document.getElementById('trackingStatus').className = 'status-indicator status-processing';
+
+            // Animate ball movement
+            let frame = 0;
+            const animate = () => {
+                if (frame < 60) {
+                    updateBallPosition(frame);
+                    frame++;
+                    requestAnimationFrame(animate);
+                } else {
+                    document.getElementById('trackingStatus').textContent = 'COMPLETE';
+                    document.getElementById('trackingStatus').className = 'status-indicator status-ready';
+                }
+            };
+            animate();
+        }
+
+        function predictTrajectory() {
+            // Call the Hawk-Eye prediction API
+            fetch('/api/hawkeye/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    position: demoState.ballPosition,
+                    velocity: { x: 25.5, y: -8.2, z: 15.8 }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Trajectory prediction:', data);
+                updateTrajectoryDisplay(data);
+            })
+            .catch(error => console.error('Prediction error:', error));
+        }
+
+        function analyzeStrikeZone() {
+            // Call the Hawk-Eye strike zone API
+            fetch('/api/hawkeye/strike-zone', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pitchLocation: { x: 0.5, y: 0.1, z: 1.2 }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Strike zone analysis:', data);
+                updateStrikeZoneDisplay(data);
+            })
+            .catch(error => console.error('Strike zone error:', error));
+        }
+
+        // Sports Data Functions
+        function loadTexasHsData() {
+            fetch('/api/texas-hs-football?school=Allen%20Eagles')
+            .then(response => response.json())
+            .then(data => {
+                displaySportsData('Texas HS Football - Allen Eagles', data);
+            })
+            .catch(error => console.error('Texas HS data error:', error));
+        }
+
+        function loadSecBaseballData() {
+            fetch('/api/sec-tx-baseball?team=TEXAS&season=2025')
+            .then(response => response.json())
+            .then(data => {
+                displaySportsData('SEC Baseball - Texas Longhorns', data);
+            })
+            .catch(error => console.error('SEC baseball data error:', error));
+        }
+
+        function loadLiveSchedule() {
+            fetch('/api/sports/cardinals?endpoint=schedule')
+            .then(response => response.json())
+            .then(data => {
+                displaySportsData('Live MLB Schedule - Cardinals', data);
+            })
+            .catch(error => console.error('Live schedule error:', error));
+        }
+
+        function displaySportsData(title, data) {
+            const container = document.getElementById('sportsData');
+            container.innerHTML = `
+                <div class="results-title">🏆 ${title}</div>
+                <pre style="color: var(--text-primary); font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap;">
+${JSON.stringify(data, null, 2)}
+                </pre>
+            `;
+        }
+
+        // Utility Functions
+        function updateBallPosition(frame) {
+            const progress = frame / 60;
+            demoState.ballPosition = {
+                x: progress * 10,
+                y: 1.5 + Math.sin(progress * Math.PI) * 2,
+                z: progress * 15
+            };
+
+            demoState.ballVelocity = 35 - progress * 15;
+            demoState.confidence = 99.5 - Math.random() * 2;
+            demoState.latency = 20 + Math.random() * 10;
+
+            updateDisplayValues();
+        }
+
+        function updateDisplayValues() {
+            document.getElementById('ballPosition').textContent =
+                `(${demoState.ballPosition.x.toFixed(1)}, ${demoState.ballPosition.y.toFixed(1)}, ${demoState.ballPosition.z.toFixed(1)})`;
+            document.getElementById('ballVelocity').textContent =
+                demoState.ballVelocity.toFixed(1);
+            document.getElementById('confidenceLevel').textContent =
+                demoState.confidence.toFixed(1) + '%';
+            document.getElementById('processingLatency').textContent =
+                Math.round(demoState.latency) + 'ms';
+        }
+
+        function simulateRealtimeTracking() {
+            if (!demoState.isTracking) return;
+
+            // Update ball position with realistic movement
+            demoState.ballPosition.x += (Math.random() - 0.5) * 0.2;
+            demoState.ballPosition.y += (Math.random() - 0.5) * 0.1;
+            demoState.ballPosition.z += (Math.random() - 0.5) * 0.3;
+
+            demoState.ballVelocity = 30 + (Math.random() - 0.5) * 10;
+            demoState.confidence = 98.5 + Math.random() * 1.5;
+            demoState.latency = 20 + Math.random() * 15;
+
+            updateDisplayValues();
+
+            setTimeout(() => simulateRealtimeTracking(), 100);
+        }
+
+        function startDataUpdates() {
+            // Update display values periodically
+            setInterval(updateDisplayValues, 1000);
+        }
+
+        function updateTrajectoryDisplay(data) {
+            console.log('Updating trajectory display:', data);
+            // Re-draw trajectory canvas with prediction data
+            const canvas = document.getElementById('trajectoryCanvas');
+            if (canvas) {
+                drawTrajectoryVisualization(canvas);
+            }
+        }
+
+        function updateStrikeZoneDisplay(data) {
+            console.log('Updating strike zone display:', data);
+            // Update display with strike zone analysis
+        }
+    </script>
+
+</body></html>

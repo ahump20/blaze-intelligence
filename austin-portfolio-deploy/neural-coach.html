@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Coach AI - Blaze Intelligence</title>
+    <link rel="stylesheet" href="/public/css/neural-coach.css">
+    <link rel="stylesheet" href="/public/css/blaze-professional.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: #E6F1FF;
+            font-family: 'Inter', sans-serif;
+        }
+        .neural-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .neural-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .neural-title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #8B5CF6, #64FFDA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .coaching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .analysis-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        .video-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(139, 92, 246, 0.5);
+        }
+        .metrics-list {
+            list-style: none;
+            padding: 0;
+        }
+        .metric-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid #8B5CF6;
+            border-radius: 8px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8B5CF6, #64FFDA);
+            transition: width 0.5s ease;
+        }
+        .coaching-tip {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid #64FFDA;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .tip-icon {
+            color: #64FFDA;
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="neural-container">
+        <div class="neural-header">
+            <h1 class="neural-title">Neural Coach AI System</h1>
+            <p>Advanced biomechanical analysis and real-time coaching feedback</p>
+        </div>
+
+        <div class="coaching-grid">
+            <div class="analysis-panel">
+                <h2 style="color: #8B5CF6; margin-bottom: 1.5rem;">Video Analysis</h2>
+                <div class="video-section">
+                    <div style="text-align: center;">
+                        <p style="font-size: 3rem; margin-bottom: 1rem;">📹</p>
+                        <p>Drop video file here or click to upload</p>
+                        <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 1rem;">Supports MP4, MOV, AVI</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-panel">
+                <h2 style="color: #8B5CF6; margin-bottom: 1.5rem;">Performance Metrics</h2>
+                <ul class="metrics-list">
+                    <li class="metric-item">
+                        <div>Biomechanical Efficiency</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 87%;"></div>
+                        </div>
+                        <small style="color: #64FFDA;">87% optimal</small>
+                    </li>
+                    <li class="metric-item">
+                        <div>Movement Pattern Recognition</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 92%;"></div>
+                        </div>
+                        <small style="color: #64FFDA;">92% accuracy</small>
+                    </li>
+                    <li class="metric-item">
+                        <div>Micro-Expression Analysis</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%;"></div>
+                        </div>
+                        <small style="color: #64FFDA;">78% confidence</small>
+                    </li>
+                    <li class="metric-item">
+                        <div>Character Assessment Score</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 95%;"></div>
+                        </div>
+                        <small style="color: #64FFDA;">95% grit factor</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="coaching-tip">
+            <h3><span class="tip-icon">💡</span>AI Coaching Insight</h3>
+            <p>Your hip rotation timing is 0.03 seconds late during the power phase. Focus on initiating rotation earlier in the kinetic chain for 12-15% more power transfer.</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="/app.html" style="color: #BF5700; text-decoration: none; font-size: 1.2rem;">← Back to Dashboard</a>
+        </div>
+    </div>
+
+</body></html>

@@ -1,0 +1,59 @@
+{
+  "buildDate": "2025-09-15T12:10:54.302Z",
+  "platform": "Blaze Intelligence - Southern Sports Authority",
+  "sites": {
+    "primary": {
+      "name": "blaze-intelligence",
+      "description": "Primary sports analytics platform",
+      "features": [
+        "all-pages",
+        "full-dashboard",
+        "sports-data",
+        "pressure-analytics"
+      ]
+    },
+    "universe": {
+      "name": "blaze-3d",
+      "description": "3D sports intelligence platform",
+      "features": [
+        "3d-visualization",
+        "sports-intelligence",
+        "pressure-dashboard"
+      ]
+    },
+    "authority": {
+      "name": "blaze-intelligence-main",
+      "description": "Austin Humphrey sports authority",
+      "features": [
+        "expertise-focus",
+        "enterprise-services",
+        "manifesto"
+      ]
+    }
+  },
+  "features": {
+    "Austin Humphrey Authority": "Former Texas Longhorn #20 expertise",
+    "Real Sports Data": "NFL, MLB, NCAA integration",
+    "Pressure Analytics": "Championship-level insights",
+    "Mobile Optimized": "Responsive design across devices",
+    "Professional Grade": "Enterprise-ready platform"
+  },
+  "deployment": {
+    "method": "Static site deployment via Netlify",
+    "configuration": "netlify.toml + _redirects + Functions",
+    "routing": "Clean URLs with fallback support",
+    "performance": "Optimized assets with CDN delivery",
+    "apiIntegration": "SportsDataIO via Netlify Functions",
+    "multiSite": "Environment-specific SEO generation"
+  },
+  "navigation": {
+    "primary": "/ (Austin Humphrey landing)",
+    "dashboard": "/app (Sports analytics dashboard)",
+    "intelligence": "/sports-intelligence (Live analytics)",
+    "pressure": "/pressure-dashboard (Pressure analytics)",
+    "analytics": "/analytics (System metrics)",
+    "athlete": "/athlete-dashboard (Athlete portal)",
+    "manifesto": "/manifesto (Platform vision)",
+    "proof": "/proof (Credentials & proof)"
+  }
+}

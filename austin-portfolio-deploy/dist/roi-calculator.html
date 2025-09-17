@@ -1,0 +1,777 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator | Blaze Intelligence</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#BF5700">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Calculate your ROI with Blaze Intelligence. See how much you can save vs traditional scouting methods.">
+    <meta name="keywords" content="sports analytics ROI, cost savings calculator, scouting ROI, championship intelligence savings">
+
+    <!-- Essential Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --grizzly-teal: #00B2A9;
+            --championship-gold: #FFD700;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --border-radius: 12px;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            z-index: 10000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 3rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            color: var(--championship-gold);
+            background: rgba(191, 87, 0, 0.15);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            margin-top: 70px;
+            padding: 5rem 2rem 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(255, 215, 0, 0.05));
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Calculator */
+        .calculator-section {
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Input Panel */
+        .input-panel {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .panel-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--championship-gold);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+        }
+
+        .range-container {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .range-input {
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--championship-gold));
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .range-input::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--championship-gold);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .range-value {
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-orange);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition-smooth);
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--grizzly-teal);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-orange);
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            position: sticky;
+            top: 100px;
+        }
+
+        .results-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .cost-comparison {
+            margin-bottom: 2rem;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        .cost-item.blaze {
+            border-left-color: var(--grizzly-teal);
+        }
+
+        .cost-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .cost-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+        }
+
+        .cost-value.savings {
+            color: var(--grizzly-teal);
+        }
+
+        .savings-highlight {
+            background: linear-gradient(135deg, var(--grizzly-teal), var(--cardinal-blue));
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .savings-amount {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .savings-label {
+            color: white;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 2rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-orange);
+            border: 2px solid var(--primary-orange);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        /* Breakdown Section */
+        .breakdown-section {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .breakdown-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-orange);
+            margin-bottom: 3rem;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breakdown-card {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .breakdown-card h3 {
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .breakdown-list {
+            list-style: none;
+        }
+
+        .breakdown-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .calculator-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .results-panel {
+                position: static;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">🔥 Blaze Intelligence</div>
+        <div style="margin-left: auto;">
+            <a href="/" class="nav-link">← Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1 class="hero-title">ROI Calculator</h1>
+        <p class="hero-subtitle">Calculate your potential cost savings with Blaze Intelligence vs traditional scouting methods. See your championship-level ROI in real-time.</p>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="calculator-section">
+        <div class="calculator-container">
+            <!-- Input Panel -->
+            <div class="input-panel">
+                <h2 class="panel-title">Your Program Details</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Organization Type</label>
+                    <select class="form-select" id="orgType" onchange="calculateROI()">
+                        <option value="high-school">High School Program</option>
+                        <option value="college-d3">College - Division III</option>
+                        <option value="college-d2">College - Division II</option>
+                        <option value="college-d1" selected="">College - Division I</option>
+                        <option value="professional">Professional Team</option>
+                        <option value="youth">Youth Organization</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Number of Athletes</label>
+                    <div class="range-container">
+                        <input type="range" class="range-input" id="athleteCount" min="10" max="200" value="50" oninput="updateRangeValue('athleteCount'); calculateROI()">
+                        <div class="range-value" id="athleteCountValue">50 athletes</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Current Annual Scouting Budget</label>
+                    <div class="range-container">
+                        <input type="range" class="range-input" id="currentBudget" min="5000" max="100000" value="25000" step="1000" oninput="updateRangeValue('currentBudget'); calculateROI()">
+                        <div class="range-value" id="currentBudgetValue">$25,000</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Sports Programs</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="baseball" checked="" onchange="calculateROI()">
+                            <label for="baseball">Baseball</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="football" onchange="calculateROI()">
+                            <label for="football">Football</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="basketball" onchange="calculateROI()">
+                            <label for="basketball">Basketball</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="multi-sport" onchange="calculateROI()">
+                            <label for="multi-sport">Multi-Sport</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Current Evaluation Methods</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="manual-scouting" checked="" onchange="calculateROI()">
+                            <label for="manual-scouting">Manual Scouting</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="video-analysis" onchange="calculateROI()">
+                            <label for="video-analysis">Video Analysis</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="third-party-data" onchange="calculateROI()">
+                            <label for="third-party-data">Third-Party Data</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="spreadsheets" checked="" onchange="calculateROI()">
+                            <label for="spreadsheets">Spreadsheets/Manual</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="results-panel">
+                <h2 class="results-title">Your ROI Analysis</h2>
+
+                <div class="savings-highlight">
+                    <div class="savings-amount" id="totalSavings">$18,600</div>
+                    <div class="savings-label">Annual Savings with Blaze Intelligence</div>
+                </div>
+
+                <div class="cost-comparison">
+                    <div class="cost-item">
+                        <span class="cost-label">Current Annual Cost</span>
+                        <span class="cost-value" id="currentCost">$25,000</span>
+                    </div>
+                    <div class="cost-item blaze">
+                        <span class="cost-label">Blaze Intelligence Cost</span>
+                        <span class="cost-value" id="blazeCost">$6,400</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">ROI Percentage</span>
+                        <span class="cost-value savings" id="roiPercentage">74%</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="savingsChart"></canvas>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="/demo.html" class="btn-primary">Get Custom Demo</a>
+                    <a href="/pricing.html" class="btn-secondary">View Pricing</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cost Breakdown -->
+    <section class="breakdown-section">
+        <h2 class="breakdown-title">Cost Breakdown Analysis</h2>
+        <div class="breakdown-grid">
+            <!-- Traditional Costs -->
+            <div class="breakdown-card">
+                <h3>Traditional Scouting Costs</h3>
+                <ul class="breakdown-list" id="traditionalCosts">
+                    <li><span>Scout Salaries</span><span id="scoutSalaries">$15,000</span></li>
+                    <li><span>Travel Expenses</span><span id="travelExpenses">$4,000</span></li>
+                    <li><span>Event Fees</span><span id="eventFees">$2,000</span></li>
+                    <li><span>Video Equipment</span><span id="videoEquipment">$1,500</span></li>
+                    <li><span>Data Tools</span><span id="dataTools">$2,500</span></li>
+                </ul>
+            </div>
+
+            <!-- Blaze Intelligence Value -->
+            <div class="breakdown-card">
+                <h3>Blaze Intelligence Value</h3>
+                <ul class="breakdown-list">
+                    <li><span>Platform Subscription</span><span id="platformCost">$3,600</span></li>
+                    <li><span>Advanced Analytics</span><span>Included</span></li>
+                    <li><span>Character Assessment</span><span>Included</span></li>
+                    <li><span>Video Intelligence</span><span>Included</span></li>
+                    <li><span>24/7 Support</span><span>Included</span></li>
+                </ul>
+            </div>
+
+            <!-- Additional Benefits -->
+            <div class="breakdown-card">
+                <h3>Additional Benefits</h3>
+                <ul class="breakdown-list">
+                    <li><span>Time Savings</span><span>200+ hours/year</span></li>
+                    <li><span>Data Accuracy</span><span>94.6% vs 65%</span></li>
+                    <li><span>Response Time</span><span>&lt;100ms vs hours</span></li>
+                    <li><span>Coverage</span><span>24/7 vs limited</span></li>
+                    <li><span>Scalability</span><span>Unlimited athletes</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let savingsChart;
+
+        // Initialize the calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateROI();
+            initChart();
+        });
+
+        function updateRangeValue(inputId) {
+            const input = document.getElementById(inputId);
+            const valueDisplay = document.getElementById(inputId + 'Value');
+
+            if (inputId === 'athleteCount') {
+                valueDisplay.textContent = `${input.value} athletes`;
+            } else if (inputId === 'currentBudget') {
+                valueDisplay.textContent = `$${parseInt(input.value).toLocaleString()}`;
+            }
+        }
+
+        function calculateROI() {
+            // Get form values
+            const orgType = document.getElementById('orgType').value;
+            const athleteCount = parseInt(document.getElementById('athleteCount').value);
+            const currentBudget = parseInt(document.getElementById('currentBudget').value);
+
+            // Get selected sports
+            const sports = [];
+            if (document.getElementById('baseball').checked) sports.push('baseball');
+            if (document.getElementById('football').checked) sports.push('football');
+            if (document.getElementById('basketball').checked) sports.push('basketball');
+            if (document.getElementById('multi-sport').checked) sports.push('multi-sport');
+
+            // Calculate Blaze Intelligence cost based on organization type and athlete count
+            let blazeAnnualCost = 0;
+
+            // Base pricing calculation
+            if (athleteCount <= 20) {
+                blazeAnnualCost = 1188; // Scout plan annual
+            } else if (athleteCount <= 75) {
+                blazeAnnualCost = 2868; // Professional plan annual ($299 * 12 * 0.8 for annual discount)
+            } else {
+                blazeAnnualCost = 5752; // Championship plan annual ($599 * 12 * 0.8)
+            }
+
+            // Organization type multiplier
+            const orgMultipliers = {
+                'high-school': 0.8,
+                'college-d3': 1.0,
+                'college-d2': 1.2,
+                'college-d1': 1.5,
+                'professional': 2.0,
+                'youth': 0.7
+            };
+
+            blazeAnnualCost *= orgMultipliers[orgType] || 1.0;
+
+            // Sports program multiplier
+            if (sports.length > 1) {
+                blazeAnnualCost *= (1 + (sports.length - 1) * 0.3);
+            }
+
+            // Calculate traditional costs breakdown
+            const baseCost = currentBudget;
+            const scoutSalaries = Math.round(baseCost * 0.6);
+            const travelExpenses = Math.round(baseCost * 0.16);
+            const eventFees = Math.round(baseCost * 0.08);
+            const videoEquipment = Math.round(baseCost * 0.06);
+            const dataTools = Math.round(baseCost * 0.1);
+
+            // Calculate savings
+            const annualSavings = currentBudget - blazeAnnualCost;
+            const roiPercentage = Math.round((annualSavings / currentBudget) * 100);
+
+            // Update display
+            document.getElementById('currentCost').textContent = `$${currentBudget.toLocaleString()}`;
+            document.getElementById('blazeCost').textContent = `$${Math.round(blazeAnnualCost).toLocaleString()}`;
+            document.getElementById('totalSavings').textContent = `$${Math.round(annualSavings).toLocaleString()}`;
+            document.getElementById('roiPercentage').textContent = `${roiPercentage}%`;
+
+            // Update breakdown
+            document.getElementById('scoutSalaries').textContent = `$${scoutSalaries.toLocaleString()}`;
+            document.getElementById('travelExpenses').textContent = `$${travelExpenses.toLocaleString()}`;
+            document.getElementById('eventFees').textContent = `$${eventFees.toLocaleString()}`;
+            document.getElementById('videoEquipment').textContent = `$${videoEquipment.toLocaleString()}`;
+            document.getElementById('dataTools').textContent = `$${dataTools.toLocaleString()}`;
+            document.getElementById('platformCost').textContent = `$${Math.round(blazeAnnualCost).toLocaleString()}`;
+
+            // Update chart
+            updateChart(currentBudget, blazeAnnualCost, annualSavings);
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+
+            savingsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Blaze Intelligence Cost', 'Annual Savings'],
+                    datasets: [{
+                        data: [6400, 18600],
+                        backgroundColor: ['#BF5700', '#00B2A9'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e0e6ed',
+                                font: {
+                                    size: 12
+                                },
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(currentCost, blazeCost, savings) {
+            if (savingsChart) {
+                savingsChart.data.datasets[0].data = [blazeCost, savings];
+                savingsChart.update();
+            }
+        }
+
+        // Add smooth animations to number changes
+        function animateValue(elementId, start, end, duration) {
+            const element = document.getElementById(elementId);
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    current = end;
+                    clearInterval(timer);
+                }
+
+                if (elementId.includes('Percentage')) {
+                    element.textContent = Math.round(current) + '%';
+                } else {
+                    element.textContent = '$' + Math.round(current).toLocaleString();
+                }
+            }, 16);
+        }
+    </script>
+
+</body></html>

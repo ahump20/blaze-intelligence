@@ -1,0 +1,792 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC NIL Analytics | Blaze Intelligence</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Comprehensive SEC NIL analytics dashboard with real-time valuation tracking, conference comparisons, and championship impact analysis.">
+    <meta name="keywords" content="SEC NIL, college football analytics, NIL valuations, SEC sports data">
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --championship-gold: #FFD700;
+            --neural-green: #00ff7f;
+            --deep-navy: #002244;
+            --grizzly-teal: #00B2A9;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(191, 87, 0, 0.1);
+            color: var(--championship-gold);
+        }
+
+        /* Main Container */
+        .dashboard-container {
+            margin-top: 70px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold), var(--cardinal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Overview Panel */
+        .overview-panel {
+            grid-column: span 2;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            backdrop-filter: blur(15px);
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sec-schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .school-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .school-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--championship-gold));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .school-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .school-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-orange);
+            box-shadow: 0 15px 50px rgba(191, 87, 0, 0.3);
+        }
+
+        .school-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+        }
+
+        .school-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .school-stat {
+            text-align: center;
+        }
+
+        .school-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cardinal-blue);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .school-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-top: 0.25rem;
+        }
+
+        /* Live Rankings */
+        .rankings-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(15px);
+        }
+
+        .rankings-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--neural-green);
+            transition: all 0.3s ease;
+        }
+
+        .ranking-item:hover {
+            background: rgba(191, 87, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .rank-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-right: 1rem;
+            min-width: 40px;
+        }
+
+        .athlete-info {
+            flex: 1;
+        }
+
+        .athlete-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .athlete-school {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .nil-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--neural-green);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Analytics Section */
+        .analytics-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid rgba(155, 203, 235, 0.3);
+            backdrop-filter: blur(15px);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 1rem;
+        }
+
+        /* Market Trends */
+        .trends-section {
+            grid-column: span 2;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid rgba(0, 178, 169, 0.3);
+            backdrop-filter: blur(15px);
+        }
+
+        .trends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .trend-card {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .trend-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--grizzly-teal);
+        }
+
+        .trend-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--grizzly-teal);
+            margin-bottom: 1rem;
+        }
+
+        .trend-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .trend-change {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .positive { color: var(--neural-green); }
+        .negative { color: #ff4757; }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .overview-panel {
+                grid-column: span 1;
+            }
+
+            .trends-section {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(191, 87, 0, 0.2);
+            border-top: 2px solid var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Three.js Background */
+        #sec-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <canvas id="sec-background"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">🔥 Blaze Intelligence</a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/sports-intelligence-dashboard.html" class="nav-link">Sports Intelligence</a>
+            <a href="/sec-nil-analytics.html" class="nav-link active">SEC Analytics</a>
+            <a href="/nil-calculator-advanced.html" class="nav-link">NIL Calculator</a>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">SEC NIL Analytics</h1>
+            <p class="hero-subtitle">Championship-level analytics for Southeastern Conference athletic programs</p>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="stat-value" id="total-nil-value">$847M</div>
+                    <div class="stat-label">Total SEC NIL Value</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="stat-value" id="average-per-athlete">$289K</div>
+                    <div class="stat-label">Average Per Athlete</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="stat-value" id="sec-market-share">40.2%</div>
+                    <div class="stat-label">National Market Share</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- SEC Schools Overview -->
+            <section class="overview-panel">
+                <h2 class="panel-title">🏟️ SEC Program Analytics</h2>
+                <div class="sec-schools-grid" id="sec-schools-grid">
+                    <!-- Schools will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Live Rankings -->
+            <section class="rankings-panel">
+                <h2 class="panel-title">🏆 Top NIL Athletes</h2>
+                <div class="rankings-list" id="rankings-list">
+                    <!-- Rankings will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Analytics Charts -->
+            <section class="analytics-section">
+                <h2 class="panel-title">📊 Conference Analytics</h2>
+                <div class="chart-container">
+                    <canvas id="sec-analytics-chart"></canvas>
+                </div>
+            </section>
+
+            <!-- Market Trends -->
+            <section class="trends-section">
+                <h2 class="panel-title">📈 Market Trends &amp; Insights</h2>
+                <div class="trends-grid">
+                    <div class="trend-card">
+                        <div class="trend-title">Football NIL Growth</div>
+                        <div class="trend-value" id="football-growth">+23%</div>
+                        <div class="trend-change positive" id="football-change">↗ +$47M YoY</div>
+                    </div>
+                    <div class="trend-card">
+                        <div class="trend-title">Basketball Impact</div>
+                        <div class="trend-value" id="basketball-impact">+18%</div>
+                        <div class="trend-change positive" id="basketball-change">↗ +$28M YoY</div>
+                    </div>
+                    <div class="trend-card">
+                        <div class="trend-title">Social Media ROI</div>
+                        <div class="trend-value" id="social-roi">4.7x</div>
+                        <div class="trend-change positive" id="social-change">↗ Engagement Up</div>
+                    </div>
+                    <div class="trend-card">
+                        <div class="trend-title">Championship Impact</div>
+                        <div class="trend-value" id="championship-impact">+67%</div>
+                        <div class="trend-change positive" id="championship-change">↗ Title Game Effect</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // SEC Schools Data
+        const secSchoolsData = [
+            { name: 'Alabama', nilValue: 89.2, athletes: 156, avgDeal: 573000, championship: 94 },
+            { name: 'Georgia', nilValue: 78.5, athletes: 134, avgDeal: 586000, championship: 87 },
+            { name: 'LSU', nilValue: 72.1, athletes: 128, avgDeal: 563000, championship: 82 },
+            { name: 'Texas A&M', nilValue: 68.9, athletes: 142, avgDeal: 485000, championship: 78 },
+            { name: 'Florida', nilValue: 65.3, athletes: 139, avgDeal: 470000, championship: 75 },
+            { name: 'Auburn', nilValue: 58.7, athletes: 118, avgDeal: 497000, championship: 71 },
+            { name: 'Tennessee', nilValue: 56.4, athletes: 125, avgDeal: 451000, championship: 73 },
+            { name: 'Texas', nilValue: 89.8, athletes: 147, avgDeal: 611000, championship: 91 },
+            { name: 'Oklahoma', nilValue: 71.2, athletes: 132, avgDeal: 539000, championship: 84 },
+            { name: 'Arkansas', nilValue: 45.3, athletes: 108, avgDeal: 419000, championship: 68 },
+            { name: 'Kentucky', nilValue: 42.1, athletes: 97, avgDeal: 434000, championship: 65 },
+            { name: 'Ole Miss', nilValue: 47.8, athletes: 104, avgDeal: 460000, championship: 69 },
+            { name: 'Mississippi State', nilValue: 38.9, athletes: 92, avgDeal: 423000, championship: 62 },
+            { name: 'Missouri', nilValue: 35.7, athletes: 89, avgDeal: 401000, championship: 59 },
+            { name: 'South Carolina', nilValue: 39.4, athletes: 95, avgDeal: 415000, championship: 61 },
+            { name: 'Vanderbilt', nilValue: 28.9, athletes: 67, avgDeal: 431000, championship: 55 }
+        ];
+
+        // Top NIL Athletes Data
+        const topAthletes = [
+            { rank: 1, name: 'Quinn Ewers', school: 'Texas', position: 'QB', value: 2400000 },
+            { rank: 2, name: 'Jalen Milroe', school: 'Alabama', position: 'QB', value: 2100000 },
+            { rank: 3, name: 'Carson Beck', school: 'Georgia', position: 'QB', value: 1950000 },
+            { rank: 4, name: 'Nico Iamaleava', school: 'Tennessee', position: 'QB', value: 1780000 },
+            { rank: 5, name: 'Garrett Nussmeier', school: 'LSU', position: 'QB', value: 1650000 },
+            { rank: 6, name: 'DJ Lagway', school: 'Florida', position: 'QB', value: 1520000 },
+            { rank: 7, name: 'Jaxson Dart', school: 'Ole Miss', position: 'QB', value: 1450000 },
+            { rank: 8, name: 'KJ Jefferson', school: 'Arkansas', position: 'QB', value: 1350000 },
+            { rank: 9, name: 'Will Rogers', school: 'Mississippi State', position: 'QB', value: 1280000 },
+            { rank: 10, name: 'Brady Cook', school: 'Missouri', position: 'QB', value: 1150000 }
+        ];
+
+        // Initialize Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏆 Initializing SEC NIL Analytics Dashboard...');
+
+            initializeThreeJS();
+            populateSECSchools();
+            populateRankings();
+            initializeChart();
+            startLiveUpdates();
+
+            console.log('✅ SEC Analytics Dashboard initialized');
+        });
+
+        // Three.js Background
+        function initializeThreeJS() {
+            const canvas = document.getElementById('sec-background');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Create SEC-themed particles
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+
+            for (let i = 0; i < 200; i++) {
+                vertices.push(
+                    (Math.random() - 0.5) * 200,
+                    (Math.random() - 0.5) * 200,
+                    (Math.random() - 0.5) * 200
+                );
+
+                // SEC school colors
+                const colorChoice = Math.floor(Math.random() * 4);
+                switch(colorChoice) {
+                    case 0: colors.push(1, 0.4, 0); break;        // Orange (Texas)
+                    case 1: colors.push(0.5, 0, 0); break;        // Crimson (Alabama)
+                    case 2: colors.push(1, 0.84, 0); break;       // Gold
+                    case 3: colors.push(0, 0.2, 0.4); break;      // Navy
+                }
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
+
+            camera.position.z = 100;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                points.rotation.x += 0.001;
+                points.rotation.y += 0.002;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Populate SEC Schools
+        function populateSECSchools() {
+            const container = document.getElementById('sec-schools-grid');
+
+            secSchoolsData.forEach(school => {
+                const schoolCard = document.createElement('div');
+                schoolCard.className = 'school-card';
+                schoolCard.innerHTML = `
+                    <div class="school-name">${school.name}</div>
+                    <div class="school-stats">
+                        <div class="school-stat">
+                            <div class="school-stat-value">$${school.nilValue}M</div>
+                            <div class="school-stat-label">NIL Value</div>
+                        </div>
+                        <div class="school-stat">
+                            <div class="school-stat-value">${school.athletes}</div>
+                            <div class="school-stat-label">Athletes</div>
+                        </div>
+                        <div class="school-stat">
+                            <div class="school-stat-value">$${(school.avgDeal/1000).toFixed(0)}K</div>
+                            <div class="school-stat-label">Avg Deal</div>
+                        </div>
+                        <div class="school-stat">
+                            <div class="school-stat-value">${school.championship}%</div>
+                            <div class="school-stat-label">Championship DNA</div>
+                        </div>
+                    </div>
+                `;
+
+                schoolCard.addEventListener('click', () => {
+                    showSchoolDetails(school);
+                });
+
+                container.appendChild(schoolCard);
+            });
+        }
+
+        // Populate Rankings
+        function populateRankings() {
+            const container = document.getElementById('rankings-list');
+
+            topAthletes.forEach(athlete => {
+                const rankingItem = document.createElement('div');
+                rankingItem.className = 'ranking-item';
+                rankingItem.innerHTML = `
+                    <div class="rank-number">#${athlete.rank}</div>
+                    <div class="athlete-info">
+                        <div class="athlete-name">${athlete.name}</div>
+                        <div class="athlete-school">${athlete.school} • ${athlete.position}</div>
+                    </div>
+                    <div class="nil-value">$${(athlete.value/1000000).toFixed(1)}M</div>
+                `;
+                container.appendChild(rankingItem);
+            });
+        }
+
+        // Initialize Chart
+        function initializeChart() {
+            const ctx = document.getElementById('sec-analytics-chart');
+            if (!ctx || typeof Chart === 'undefined') return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Football', 'Basketball', 'Baseball', 'Softball', 'Track', 'Other'],
+                    datasets: [{
+                        label: 'NIL Value (Millions)',
+                        data: [485, 187, 89, 43, 28, 15],
+                        backgroundColor: [
+                            'rgba(191, 87, 0, 0.8)',
+                            'rgba(255, 215, 0, 0.8)',
+                            'rgba(155, 203, 235, 0.8)',
+                            'rgba(0, 255, 127, 0.8)',
+                            'rgba(0, 178, 169, 0.8)',
+                            'rgba(136, 146, 176, 0.8)'
+                        ],
+                        borderColor: [
+                            '#BF5700',
+                            '#FFD700',
+                            '#9BCBEB',
+                            '#00ff7f',
+                            '#00B2A9',
+                            '#8892b0'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e0e6ed' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#8892b0' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Show School Details
+        function showSchoolDetails(school) {
+            alert(`${school.name} NIL Analytics:\n\nTotal Value: $${school.nilValue}M\nAthletes: ${school.athletes}\nAverage Deal: $${school.avgDeal.toLocaleString()}\nChampionship DNA: ${school.championship}%`);
+        }
+
+        // Start Live Updates
+        function startLiveUpdates() {
+            setInterval(() => {
+                updateLiveData();
+            }, 30000); // Update every 30 seconds
+        }
+
+        // Update Live Data
+        function updateLiveData() {
+            // Simulate real-time data updates
+            const totalValue = document.getElementById('total-nil-value');
+            const avgPerAthlete = document.getElementById('average-per-athlete');
+            const marketShare = document.getElementById('sec-market-share');
+
+            // Add small random variations
+            const currentValue = parseFloat(totalValue.textContent.replace('$', '').replace('M', ''));
+            const variation = (Math.random() - 0.5) * 2; // ±1M variation
+            const newValue = Math.max(800, currentValue + variation);
+
+            totalValue.textContent = `$${newValue.toFixed(0)}M`;
+
+            console.log('📊 Live data updated');
+        }
+
+        // Analytics tracking
+        window.addEventListener('load', () => {
+            console.log('🔥 SEC NIL Analytics loaded successfully');
+        });
+    </script>
+
+</body></html>

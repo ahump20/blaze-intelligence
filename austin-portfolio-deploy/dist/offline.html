@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Offline</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        h1 { color: #BF5700; }
+        .tagline { color: #9BCBEB; font-size: 1.5rem; }
+    </style>
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <link rel="apple-touch-icon" href="/images/brand/blaze-tagline.png">
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <div>
+        <img src="https://res.cloudinary.com/418463612899497/image/fetch/f_auto,q_auto/https://blaze-intelligence.netlify.app/images/brand/blaze-tagline.png?_a=BBFAAAAA0" alt="Blaze Intelligence" style="max-width: 300px;" loading="lazy">
+        <h1>You're Offline</h1>
+        <p class="tagline">See the game. Shape the outcome.</p>
+        <p>Please check your connection and try again.</p>
+    </div>
+
+</body></html>

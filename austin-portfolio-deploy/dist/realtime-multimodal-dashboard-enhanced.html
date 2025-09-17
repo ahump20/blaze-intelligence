@@ -1,0 +1,793 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Intelligence Dashboard | Blaze Intelligence</title>
+    <meta name="description" content="Sub-100ms multimodal intelligence platform with real-time sports analytics">
+
+    <!-- Essential Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --cardinal-blue: #9BCBEB;
+            --neural-green: #00ff7f;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --glass-bg: rgba(26, 26, 46, 0.3);
+            --glass-border: rgba(191, 87, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Particles Background */
+        #particles-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--primary-orange);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .logo-text .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Status Indicators */
+        .status-grid {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.active { background: var(--neural-green); }
+        .status-dot.processing { background: var(--championship-gold); }
+        .status-dot.standby { background: var(--cardinal-blue); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Dashboard Grid */
+        .dashboard {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 2rem;
+        }
+
+        /* RTI Performance Monitor */
+        .rti-monitor {
+            grid-column: 1 / 3;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rti-monitor::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--championship-gold), var(--neural-green));
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .latency-display {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--neural-green);
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .latency-label {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Live Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-orange);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        /* 3D Visualization Panel */
+        .viz-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .viz-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Neural Network Visualization */
+        .neural-network {
+            grid-column: 1 / 4;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            min-height: 400px;
+        }
+
+        .network-canvas {
+            width: 100%;
+            height: 350px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Live Data Streams */
+        .data-streams {
+            grid-column: 1 / 3;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .stream-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(10, 14, 39, 0.4);
+            border-radius: 8px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .stream-item.active {
+            border-left-color: var(--neural-green);
+            background: rgba(0, 255, 127, 0.05);
+        }
+
+        .stream-label {
+            font-weight: 600;
+        }
+
+        .stream-value {
+            color: var(--championship-gold);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: var(--text-primary);
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .control-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .rti-monitor, .neural-network, .data-streams {
+                grid-column: 1;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 0 1rem;
+            }
+
+            .status-grid {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-bg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                <div class="logo-text">
+                    <h1>Real-Time Intelligence</h1>
+                    <div class="subtitle">Sub-100ms Multimodal Analytics</div>
+                </div>
+            </div>
+
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-dot active"></div>
+                    <span>Neural Engine</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot processing"></div>
+                    <span>Video Analysis</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot active"></div>
+                    <span>Pattern Recognition</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot standby"></div>
+                    <span>Decision Engine</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+        <!-- RTI Performance Monitor -->
+        <section class="rti-monitor">
+            <div class="section-title">
+                <h2>⚡ RTI Performance Monitor</h2>
+                <span style="color: var(--neural-green); font-size: 0.875rem;">● LIVE</span>
+            </div>
+
+            <div class="latency-display" id="latency-display">84.2</div>
+            <div class="latency-label">milliseconds average latency</div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="fps-counter">340</div>
+                    <div class="stat-label">FPS Processing</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="accuracy-score">94.6</div>
+                    <div class="stat-label">Accuracy %</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="data-points">2.8M</div>
+                    <div class="stat-label">Data Points</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="confidence">99.2</div>
+                    <div class="stat-label">Confidence %</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Visualization -->
+        <section class="viz-panel">
+            <div class="section-title">
+                <h2>🎯 Pattern Visualization</h2>
+            </div>
+            <div class="viz-container" id="pattern-viz"></div>
+        </section>
+
+        <!-- Neural Network Visualization -->
+        <section class="neural-network">
+            <div class="section-title">
+                <h2>🧠 Neural Network Activity</h2>
+                <select id="network-mode" style="background: rgba(10,14,39,0.6); color: var(--text-primary); border: 1px solid var(--glass-border); border-radius: 6px; padding: 0.5rem;">
+                    <option value="classification">Classification Layer</option>
+                    <option value="detection">Object Detection</option>
+                    <option value="tracking">Movement Tracking</option>
+                    <option value="prediction">Trajectory Prediction</option>
+                </select>
+            </div>
+            <canvas class="network-canvas" id="neural-canvas"></canvas>
+        </section>
+
+        <!-- Live Data Streams -->
+        <section class="data-streams">
+            <div class="section-title">
+                <h2>📊 Live Data Streams</h2>
+            </div>
+
+            <div class="stream-item active">
+                <span class="stream-label">Cardinals vs Brewers</span>
+                <span class="stream-value" id="cardinals-score">STL 4-2 MIL</span>
+            </div>
+
+            <div class="stream-item">
+                <span class="stream-label">Titans Performance</span>
+                <span class="stream-value" id="titans-stats">278 YDS | 3 TD</span>
+            </div>
+
+            <div class="stream-item active">
+                <span class="stream-label">Longhorns Ranking</span>
+                <span class="stream-value" id="longhorns-rank">#7 SEC</span>
+            </div>
+
+            <div class="stream-item">
+                <span class="stream-label">Grizzlies Tonight</span>
+                <span class="stream-value" id="grizzlies-game">vs LAL 8:00 PM</span>
+            </div>
+
+            <div class="stream-item active">
+                <span class="stream-label">Perfect Game Prospects</span>
+                <span class="stream-value" id="pg-prospects">127 Active</span>
+            </div>
+
+            <div class="stream-item">
+                <span class="stream-label">Character Assessment</span>
+                <span class="stream-value" id="character-queue">3 in Queue</span>
+            </div>
+        </section>
+
+        <!-- Control Panel -->
+        <section class="control-panel">
+            <div class="section-title">
+                <h2>⚙️ System Controls</h2>
+            </div>
+
+            <div class="control-section">
+                <label class="control-label">Analysis Mode</label>
+                <select class="control-input" id="analysis-mode">
+                    <option value="real-time">Real-Time Processing</option>
+                    <option value="batch">Batch Analysis</option>
+                    <option value="hybrid">Hybrid Mode</option>
+                </select>
+            </div>
+
+            <div class="control-section">
+                <label class="control-label">Confidence Threshold</label>
+                <input type="range" class="control-input" id="confidence-threshold" min="0.8" max="0.99" step="0.01" value="0.94">
+                <div style="text-align: center; color: var(--text-secondary); margin-top: 0.25rem;">
+                    <span id="threshold-display">94%</span>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <label class="control-label">Sports Focus</label>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="control-btn" style="flex: 1;" onclick="toggleSport('baseball')">⚾ MLB</button>
+                    <button class="control-btn" style="flex: 1;" onclick="toggleSport('football')">🏈 NFL</button>
+                </div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                    <button class="control-btn" style="flex: 1;" onclick="toggleSport('college')">🏈 NCAA</button>
+                    <button class="control-btn" style="flex: 1;" onclick="toggleSport('basketball')">🏀 NBA</button>
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="exportData()" style="margin-top: 1rem;">
+                📊 Export Analytics
+            </button>
+        </section>
+    </main>
+
+    <script>
+        // Initialize particles background
+        particlesJS('particles-bg', {
+            particles: {
+                number: { value: 50 },
+                color: { value: '#BF5700' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3 },
+                size: { value: 2 },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: 'none',
+                    random: true
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' }
+                }
+            }
+        });
+
+        // Real-time metrics simulation
+        let latencyValues = [];
+        let fps = 340;
+        let accuracy = 94.6;
+        let confidence = 99.2;
+
+        function updateMetrics() {
+            // Simulate realistic latency fluctuation
+            const newLatency = 80 + Math.random() * 20; // 80-100ms
+            latencyValues.push(newLatency);
+            if (latencyValues.length > 10) latencyValues.shift();
+
+            const avgLatency = latencyValues.reduce((a, b) => a + b, 0) / latencyValues.length;
+            document.getElementById('latency-display').textContent = avgLatency.toFixed(1);
+
+            // Update other metrics
+            fps = 340 + Math.floor(Math.random() * 20 - 10);
+            accuracy = 94.6 + (Math.random() * 0.8 - 0.4);
+            confidence = 99.2 + (Math.random() * 0.6 - 0.3);
+
+            document.getElementById('fps-counter').textContent = fps;
+            document.getElementById('accuracy-score').textContent = accuracy.toFixed(1);
+            document.getElementById('confidence').textContent = confidence.toFixed(1);
+
+            // Update stream items
+            updateStreamData();
+        }
+
+        function updateStreamData() {
+            const streams = document.querySelectorAll('.stream-item');
+            streams.forEach((stream, index) => {
+                if (Math.random() > 0.7) {
+                    stream.classList.toggle('active');
+                }
+            });
+        }
+
+        // 3D Pattern Visualization
+        let patternScene, patternCamera, patternRenderer;
+
+        function initPatternViz() {
+            const container = document.getElementById('pattern-viz');
+
+            patternScene = new THREE.Scene();
+            patternCamera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            patternRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+            patternRenderer.setSize(container.clientWidth, container.clientHeight);
+            patternRenderer.setClearColor(0x000000, 0);
+            container.appendChild(patternRenderer.domElement);
+
+            // Create pattern visualization
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0xBF5700,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.7
+            });
+
+            const sphere = new THREE.Mesh(geometry, material);
+            patternScene.add(sphere);
+
+            patternCamera.position.z = 3;
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                sphere.rotation.x += 0.01;
+                sphere.rotation.y += 0.02;
+                patternRenderer.render(patternScene, patternCamera);
+            }
+            animate();
+        }
+
+        // Neural Network Canvas
+        let neuralCtx;
+
+        function initNeuralCanvas() {
+            const canvas = document.getElementById('neural-canvas');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            neuralCtx = canvas.getContext('2d');
+
+            drawNeuralNetwork();
+        }
+
+        function drawNeuralNetwork() {
+            if (!neuralCtx) return;
+
+            const canvas = neuralCtx.canvas;
+            neuralCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw neural network visualization
+            const layers = [4, 6, 8, 6, 3];
+            const layerSpacing = canvas.width / (layers.length + 1);
+
+            layers.forEach((nodeCount, layerIndex) => {
+                const x = layerSpacing * (layerIndex + 1);
+                const nodeSpacing = canvas.height / (nodeCount + 1);
+
+                for (let i = 0; i < nodeCount; i++) {
+                    const y = nodeSpacing * (i + 1);
+
+                    // Draw node
+                    neuralCtx.beginPath();
+                    neuralCtx.arc(x, y, 8, 0, 2 * Math.PI);
+                    neuralCtx.fillStyle = `rgba(191, 87, 0, ${0.3 + Math.random() * 0.7})`;
+                    neuralCtx.fill();
+                    neuralCtx.strokeStyle = '#BF5700';
+                    neuralCtx.stroke();
+
+                    // Draw connections to next layer
+                    if (layerIndex < layers.length - 1) {
+                        const nextLayerNodes = layers[layerIndex + 1];
+                        const nextX = layerSpacing * (layerIndex + 2);
+                        const nextNodeSpacing = canvas.height / (nextLayerNodes + 1);
+
+                        for (let j = 0; j < nextLayerNodes; j++) {
+                            const nextY = nextNodeSpacing * (j + 1);
+
+                            neuralCtx.beginPath();
+                            neuralCtx.moveTo(x, y);
+                            neuralCtx.lineTo(nextX, nextY);
+                            neuralCtx.strokeStyle = `rgba(255, 215, 0, ${0.1 + Math.random() * 0.3})`;
+                            neuralCtx.lineWidth = 1;
+                            neuralCtx.stroke();
+                        }
+                    }
+                }
+            });
+
+            // Schedule next frame
+            setTimeout(drawNeuralNetwork, 100);
+        }
+
+        // Control functions
+        function toggleSport(sport) {
+            console.log(`Toggling sport: ${sport}`);
+            // In a real implementation, this would filter data streams
+        }
+
+        function exportData() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                latency: document.getElementById('latency-display').textContent,
+                fps: document.getElementById('fps-counter').textContent,
+                accuracy: document.getElementById('accuracy-score').textContent,
+                confidence: document.getElementById('confidence').textContent
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rti-analytics-export.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Confidence threshold slider
+        document.getElementById('confidence-threshold').addEventListener('input', (e) => {
+            const value = Math.round(e.target.value * 100);
+            document.getElementById('threshold-display').textContent = `${value}%`;
+        });
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            updateMetrics();
+            setInterval(updateMetrics, 2000);
+
+            setTimeout(() => {
+                initPatternViz();
+                initNeuralCanvas();
+            }, 100);
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (patternRenderer && patternCamera) {
+                const container = document.getElementById('pattern-viz');
+                patternCamera.aspect = container.clientWidth / container.clientHeight;
+                patternCamera.updateProjectionMatrix();
+                patternRenderer.setSize(container.clientWidth, container.clientHeight);
+            }
+
+            if (neuralCtx) {
+                const canvas = neuralCtx.canvas;
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+        });
+    </script>
+
+    <!-- Navigation Links -->
+    <div style="position: fixed; bottom: 2rem; right: 2rem; display: flex; gap: 1rem; z-index: 1000;">
+        <a href="/" style="padding: 0.75rem 1.5rem; background: rgba(191,87,0,0.2); border: 1px solid var(--primary-orange); border-radius: 25px; color: var(--text-primary); text-decoration: none; backdrop-filter: blur(10px);">← Home</a>
+        <a href="/hawkeye-innovations-dashboard.html" style="padding: 0.75rem 1.5rem; background: rgba(191,87,0,0.2); border: 1px solid var(--primary-orange); border-radius: 25px; color: var(--text-primary); text-decoration: none; backdrop-filter: blur(10px);">👁️ Hawk-Eye →</a>
+    </div>
+
+</body></html>

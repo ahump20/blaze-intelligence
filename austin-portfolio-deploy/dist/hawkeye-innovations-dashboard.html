@@ -1,0 +1,924 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawk-Eye Innovations Dashboard | Blaze Intelligence</title>
+    <meta name="description" content="Advanced ball tracking and trajectory analysis powered by Hawk-Eye technology">
+
+    <!-- Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/examples/js/controls/OrbitControls.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+
+    <!-- Hawk-Eye Integration Scripts -->
+    <script src="/js/hawkeye-mcp-client.js"></script>
+    <script src="/js/hawkeye-3d-visualization.js"></script>
+
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --cardinal-blue: #9BCBEB;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --success: #00ff00;
+            --error: #ff0000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(191, 87, 0, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--championship-gold);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 20px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Content */
+        .main-container {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Visualization Container */
+        .visualization-container {
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            min-height: 500px;
+        }
+
+        .viz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .viz-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .sport-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .sport-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(191, 87, 0, 0.2);
+            border: 1px solid rgba(191, 87, 0, 0.5);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sport-btn:hover {
+            background: rgba(191, 87, 0, 0.3);
+        }
+
+        .sport-btn.active {
+            background: var(--primary-orange);
+            border-color: var(--primary-orange);
+        }
+
+        #hawkeye-viz {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-unit {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-left: 0.25rem;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--error);
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(10, 14, 39, 0.5);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .control-slider {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .control-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Trajectory Analysis */
+        .trajectory-analysis {
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .analysis-item {
+            padding: 1rem;
+            background: rgba(10, 14, 39, 0.5);
+            border-radius: 8px;
+        }
+
+        .analysis-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .analysis-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--cardinal-blue);
+        }
+
+        /* Strike Zone Grid */
+        .strike-zone-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            width: 200px;
+            height: 200px;
+            margin: 1rem auto;
+            background: rgba(191, 87, 0, 0.2);
+            padding: 2px;
+            border-radius: 4px;
+        }
+
+        .zone-cell {
+            background: rgba(10, 14, 39, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .zone-cell.active {
+            background: var(--primary-orange);
+            color: white;
+        }
+
+        .zone-cell.strike {
+            background: rgba(0, 255, 0, 0.3);
+        }
+
+        .zone-cell.ball {
+            background: rgba(255, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--championship-gold);
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">👁️</div>
+                <div class="logo-text">Hawk-Eye Innovations</div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/realtime-multimodal-dashboard.html" class="nav-link">RTI Dashboard</a>
+                <a href="/video-intelligence-upload.html" class="nav-link">Video Analysis</a>
+                <a href="/api-docs.html" class="nav-link">API Docs</a>
+            </nav>
+
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>Live Tracking</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="dashboard-title">Hawk-Eye Ball Tracking System</h1>
+        <p class="dashboard-subtitle">Championship-level trajectory analysis with 2.6mm accuracy</p>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- 3D Visualization -->
+            <div class="visualization-container">
+                <div class="viz-header">
+                    <h2 class="viz-title">Live Ball Tracking</h2>
+                    <div class="sport-selector">
+                        <button class="sport-btn active" onclick="switchSport('baseball')">Baseball</button>
+                        <button class="sport-btn" onclick="switchSport('tennis')">Tennis</button>
+                        <button class="sport-btn" onclick="switchSport('football')">Football</button>
+                    </div>
+                </div>
+                <div id="hawkeye-3d-container" style="width: 100%; height: 500px; background: rgba(0,0,0,0.3); border-radius: 12px; overflow: hidden;"></div>
+            </div>
+
+            <!-- Stats Panel -->
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <div class="stat-label">Ball Velocity</div>
+                    <div>
+                        <span class="stat-value" id="velocity">0</span>
+                        <span class="stat-unit">mph</span>
+                    </div>
+                    <div class="stat-change positive">
+                        ↑ 2.3% from last pitch
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Spin Rate</div>
+                    <div>
+                        <span class="stat-value" id="spin">0</span>
+                        <span class="stat-unit">rpm</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Tracking Confidence</div>
+                    <div>
+                        <span class="stat-value" id="confidence">99.5</span>
+                        <span class="stat-unit">%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Cameras Active</div>
+                    <div>
+                        <span class="stat-value" id="cameras">10</span>
+                        <span class="stat-unit">/ 10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="dashboard-grid">
+            <div class="control-panel">
+                <h3>Simulation Controls</h3>
+
+                <div class="control-section">
+                    <label class="control-label">Initial Velocity (mph)</label>
+                    <input type="range" class="control-slider" id="velocity-slider" min="50" max="110" value="90" oninput="updateVelocity(this.value)">
+                    <input type="number" class="control-input" id="velocity-input" value="90" min="50" max="110" onchange="updateVelocity(this.value)">
+                </div>
+
+                <div class="control-section">
+                    <label class="control-label">Launch Angle (degrees)</label>
+                    <input type="range" class="control-slider" id="angle-slider" min="-10" max="50" value="15" oninput="updateAngle(this.value)">
+                    <input type="number" class="control-input" id="angle-input" value="15" min="-10" max="50" onchange="updateAngle(this.value)">
+                </div>
+
+                <div class="control-section">
+                    <label class="control-label">Spin Rate (rpm)</label>
+                    <input type="range" class="control-slider" id="spin-slider" min="0" max="3000" value="2400" oninput="updateSpin(this.value)">
+                    <input type="number" class="control-input" id="spin-input" value="2400" min="0" max="3000" onchange="updateSpin(this.value)">
+                </div>
+
+                <button class="control-btn" onclick="simulatePitch()">Simulate Pitch</button>
+            </div>
+
+            <!-- Trajectory Analysis -->
+            <div class="trajectory-analysis">
+                <h3>Trajectory Analysis</h3>
+
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <div class="analysis-label">Landing Point X</div>
+                        <div class="analysis-value" id="landing-x">0.0m</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Landing Point Y</div>
+                        <div class="analysis-value" id="landing-y">0.0m</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Flight Time</div>
+                        <div class="analysis-value" id="flight-time">0.0s</div>
+                    </div>
+                    <div class="analysis-item">
+                        <div class="analysis-label">Max Height</div>
+                        <div class="analysis-value" id="max-height">0.0m</div>
+                    </div>
+                </div>
+
+                <!-- Strike Zone (for baseball) -->
+                <div id="strike-zone-container" style="margin-top: 1.5rem;">
+                    <h4 style="text-align: center; margin-bottom: 0.5rem;">Strike Zone Analysis</h4>
+                    <div class="strike-zone-grid">
+                        <div class="zone-cell" data-zone="1">1</div>
+                        <div class="zone-cell" data-zone="2">2</div>
+                        <div class="zone-cell" data-zone="3">3</div>
+                        <div class="zone-cell" data-zone="4">4</div>
+                        <div class="zone-cell" data-zone="5">5</div>
+                        <div class="zone-cell" data-zone="6">6</div>
+                        <div class="zone-cell" data-zone="7">7</div>
+                        <div class="zone-cell" data-zone="8">8</div>
+                        <div class="zone-cell" data-zone="9">9</div>
+                    </div>
+                    <p style="text-align: center; margin-top: 0.5rem; color: var(--text-secondary);">
+                        Zone: <span id="zone-number" style="color: var(--championship-gold);">-</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Blaze Intelligence | Powered by Hawk-Eye Innovations Technology</p>
+        <div class="footer-links">
+            <a href="/api-docs.html" class="footer-link">API Documentation</a>
+            <a href="/contact.html" class="footer-link">Contact</a>
+            <a href="/privacy.html" class="footer-link">Privacy</a>
+            <a href="/terms.html" class="footer-link">Terms</a>
+        </div>
+    </footer>
+
+    <!-- Hawk-Eye Client Script -->
+    <script src="/js/hawkeye-client.js"></script>
+
+    <script>
+        // Initialize Hawk-Eye client
+        const hawkEye = new HawkEyeClient({
+            apiUrl: '/api/hawkeye',
+            wsUrl: 'wss://blaze-intelligence.netlify.app/ws/hawkeye'
+        });
+
+        // Initialize visualization
+        hawkEye.initVisualization('hawkeye-viz');
+
+        // Connect WebSocket for real-time updates
+        hawkEye.connectWebSocket().catch(console.error);
+
+        // Current sport
+        let currentSport = 'baseball';
+
+        // Simulation parameters
+        let simParams = {
+            velocity: 90,
+            angle: 15,
+            spin: 2400
+        };
+
+        // Switch sport
+        function switchSport(sport) {
+            currentSport = sport;
+
+            // Update button states
+            document.querySelectorAll('.sport-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide strike zone for baseball
+            const strikeZoneContainer = document.getElementById('strike-zone-container');
+            strikeZoneContainer.style.display = sport === 'baseball' ? 'block' : 'none';
+
+            // Recreate field
+            if (hawkEye.scene) {
+                // Clear existing field objects
+                while(hawkEye.scene.children.length > 0) {
+                    hawkEye.scene.remove(hawkEye.scene.children[0]);
+                }
+
+                // Recreate with new sport
+                hawkEye.createField(sport);
+                hawkEye.createBall();
+            }
+        }
+
+        // Update velocity
+        function updateVelocity(value) {
+            simParams.velocity = parseFloat(value);
+            document.getElementById('velocity-slider').value = value;
+            document.getElementById('velocity-input').value = value;
+            document.getElementById('velocity').textContent = value;
+        }
+
+        // Update angle
+        function updateAngle(value) {
+            simParams.angle = parseFloat(value);
+            document.getElementById('angle-slider').value = value;
+            document.getElementById('angle-input').value = value;
+        }
+
+        // Update spin
+        function updateSpin(value) {
+            simParams.spin = parseFloat(value);
+            document.getElementById('spin-slider').value = value;
+            document.getElementById('spin-input').value = value;
+            document.getElementById('spin').textContent = value;
+        }
+
+        // Simulate pitch/shot
+        async function simulatePitch() {
+            // Convert mph to m/s
+            const velocityMs = simParams.velocity * 0.44704;
+
+            // Calculate velocity components
+            const angleRad = simParams.angle * Math.PI / 180;
+            const velocity = {
+                x: velocityMs * Math.cos(angleRad),
+                y: 0,
+                z: velocityMs * Math.sin(angleRad)
+            };
+
+            // Starting position (pitcher's mound for baseball)
+            const position = currentSport === 'baseball'
+                ? { x: 0, y: 0, z: 0.25 }
+                : { x: 0, y: 0, z: 1 };
+
+            // Simulate camera readings
+            const cameraReadings = {};
+            for (let i = 1; i <= 10; i++) {
+                cameraReadings[`camera-${i}`] = {
+                    x: position.x + (Math.random() - 0.5) * 0.01,
+                    y: position.y + (Math.random() - 0.5) * 0.01,
+                    z: position.z + (Math.random() - 0.5) * 0.01
+                };
+            }
+
+            // Send to Hawk-Eye for tracking
+            hawkEye.sendTrackingData(cameraReadings);
+
+            // Predict trajectory
+            try {
+                const prediction = await hawkEye.predictTrajectory(position, velocity);
+
+                // Update analysis display
+                if (prediction && prediction.landingPoint) {
+                    document.getElementById('landing-x').textContent =
+                        prediction.landingPoint.x.toFixed(2) + 'm';
+                    document.getElementById('landing-y').textContent =
+                        prediction.landingPoint.y.toFixed(2) + 'm';
+
+                    // Calculate flight time
+                    const flightTime = (prediction.landingPoint.timestamp - position.timestamp) / 1000;
+                    document.getElementById('flight-time').textContent =
+                        flightTime.toFixed(2) + 's';
+
+                    // Find max height
+                    const maxHeight = Math.max(...prediction.positions.map(p => p.z));
+                    document.getElementById('max-height').textContent =
+                        maxHeight.toFixed(2) + 'm';
+                }
+
+                // For baseball, analyze strike zone
+                if (currentSport === 'baseball') {
+                    const strikeAnalysis = await hawkEye.analyzeStrikeZone(position);
+
+                    if (strikeAnalysis && strikeAnalysis.zone) {
+                        // Update zone display
+                        document.querySelectorAll('.zone-cell').forEach(cell => {
+                            cell.classList.remove('active', 'strike', 'ball');
+                        });
+
+                        const zoneCell = document.querySelector(`[data-zone="${strikeAnalysis.zone}"]`);
+                        if (zoneCell) {
+                            zoneCell.classList.add('active');
+                            zoneCell.classList.add(strikeAnalysis.isStrike ? 'strike' : 'ball');
+                        }
+
+                        document.getElementById('zone-number').textContent = strikeAnalysis.zone;
+                    }
+                }
+            } catch (error) {
+                console.error('Simulation error:', error);
+            }
+        }
+
+        // Set up real-time updates
+        hawkEye.on('trackingUpdate', (data) => {
+            // Update stats display
+            if (data.position && data.position.velocity) {
+                const speedMph = Math.sqrt(
+                    data.position.velocity.x ** 2 +
+                    data.position.velocity.y ** 2 +
+                    data.position.velocity.z ** 2
+                ) * 2.237; // Convert m/s to mph
+
+                document.getElementById('velocity').textContent = speedMph.toFixed(1);
+            }
+
+            if (data.prediction) {
+                document.getElementById('confidence').textContent =
+                    data.prediction.confidence.toFixed(1);
+            }
+        });
+
+        // Initialize with default values
+        updateVelocity(90);
+        updateSpin(2400);
+
+        // Live Hawk-Eye Integration Demo
+        async function startLiveDemo() {
+            if (!window.HawkEyeClient || !window.hawkEye3D) {
+                console.log('Waiting for Hawk-Eye components to load...');
+                setTimeout(startLiveDemo, 1000);
+                return;
+            }
+
+            try {
+                // Initialize the MCP client
+                await window.HawkEyeClient.initialize();
+                console.log('🎯 Live Hawk-Eye demo started');
+
+                // Demo pitch sequence every 5 seconds
+                setInterval(async () => {
+                    // Generate realistic baseball pitch data
+                    const pitchTypes = ['Fastball', 'Curveball', 'Slider', 'Changeup'];
+                    const pitchType = pitchTypes[Math.floor(Math.random() * pitchTypes.length)];
+
+                    // Simulate camera tracking data
+                    const cameras = [];
+                    for (let i = 0; i < 6; i++) {
+                        cameras.push({
+                            intrinsics: [800, 0, 320, 0, 800, 240, 0, 0, 1],
+                            extrinsics: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+                        });
+                    }
+
+                    // Generate realistic ball tracking measurements
+                    const measurements = cameras.map(() => [
+                        300 + Math.random() * 400,  // x pixel
+                        200 + Math.random() * 280   // y pixel
+                    ]);
+
+                    // Call Hawk-Eye tracking
+                    const trackingResult = await window.HawkEyeClient.trackBall(cameras, measurements);
+
+                    if (trackingResult) {
+                        // Generate realistic pitch velocity based on type
+                        let velocity = { vx: 0, vy: 0, vz: 40 };
+                        let spinRate = 2200;
+
+                        switch (pitchType) {
+                            case 'Fastball':
+                                velocity.vz = 42 + Math.random() * 4; // 94-102 mph
+                                spinRate = 2400 + Math.random() * 400;
+                                break;
+                            case 'Curveball':
+                                velocity.vz = 32 + Math.random() * 4; // 72-80 mph
+                                velocity.vy = -2 - Math.random() * 2;
+                                spinRate = 2800 + Math.random() * 600;
+                                break;
+                            case 'Slider':
+                                velocity.vz = 36 + Math.random() * 4; // 80-88 mph
+                                velocity.vx = 1 + Math.random() * 2;
+                                spinRate = 2600 + Math.random() * 400;
+                                break;
+                            case 'Changeup':
+                                velocity.vz = 29 + Math.random() * 4; // 65-73 mph
+                                spinRate = 1800 + Math.random() * 400;
+                                break;
+                        }
+
+                        // Predict trajectory
+                        const trajectoryResult = await window.HawkEyeClient.predictTrajectory(
+                            { x: 0, y: 2, z: -18.44 }, // Release point
+                            velocity,
+                            spinRate
+                        );
+
+                        // Analyze strike zone
+                        const plateX = (Math.random() - 0.5) * 0.6; // ±0.3m from center
+                        const plateY = 0.5 + Math.random() * 0.8;   // Height range
+                        const plateZ = -0.2 + Math.random() * 0.4;  // Depth range
+
+                        const strikeZoneResult = await window.HawkEyeClient.analyzeStrikeZone(
+                            plateX, plateY, plateZ
+                        );
+
+                        // Update live stats
+                        const speedMph = Math.sqrt(velocity.vx ** 2 + velocity.vy ** 2 + velocity.vz ** 2) * 2.237;
+                        document.getElementById('velocity').textContent = speedMph.toFixed(1);
+                        document.getElementById('spin').textContent = spinRate.toFixed(0);
+                        document.getElementById('confidence').textContent = (trackingResult.confidence * 100).toFixed(1);
+
+                        // Add pitch type indicator
+                        let pitchTypeElement = document.getElementById('pitch-type');
+                        if (!pitchTypeElement) {
+                            // Create pitch type display if it doesn't exist
+                            const statsPanel = document.querySelector('.stats-panel');
+                            const newStatCard = document.createElement('div');
+                            newStatCard.className = 'stat-card';
+                            newStatCard.innerHTML = `
+                                <div class="stat-label">Pitch Type</div>
+                                <div>
+                                    <span class="stat-value" id="pitch-type">${pitchType}</span>
+                                </div>
+                            `;
+                            statsPanel.appendChild(newStatCard);
+                        } else {
+                            pitchTypeElement.textContent = pitchType;
+                        }
+
+                        // Add strike zone result
+                        let zoneElement = document.getElementById('strike-zone-result');
+                        if (!zoneElement && strikeZoneResult) {
+                            const statsPanel = document.querySelector('.stats-panel');
+                            const newStatCard = document.createElement('div');
+                            newStatCard.className = 'stat-card';
+                            newStatCard.innerHTML = `
+                                <div class="stat-label">Strike Zone</div>
+                                <div>
+                                    <span class="stat-value" id="strike-zone-result">Zone ${strikeZoneResult.zone}</span>
+                                </div>
+                                <div class="stat-change ${strikeZoneResult.strikeProbability > 0.5 ? 'positive' : 'negative'}">
+                                    ${(strikeZoneResult.strikeProbability * 100).toFixed(1)}% Strike
+                                </div>
+                            `;
+                            statsPanel.appendChild(newStatCard);
+                        } else if (zoneElement && strikeZoneResult) {
+                            zoneElement.textContent = `Zone ${strikeZoneResult.zone}`;
+                        }
+
+                        console.log(`🏆 ${pitchType}: ${speedMph.toFixed(1)} mph, Zone ${strikeZoneResult?.zone || 'N/A'}`);
+                    }
+                }, 5000); // New pitch every 5 seconds
+
+            } catch (error) {
+                console.error('Live demo error:', error);
+            }
+        }
+
+        // Start live demo when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(startLiveDemo, 2000); // Give components time to load
+        });
+    </script>
+
+</body></html>

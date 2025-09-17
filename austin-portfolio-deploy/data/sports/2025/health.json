@@ -1,0 +1,11 @@
+{
+  "status": "healthy",
+  "timestamp": "2025-09-15T23:53:35.081Z",
+  "services": {
+    "mlb": "operational",
+    "nfl": "operational",
+    "nba": "operational",
+    "ncaa": "operational",
+    "perfectGame": "operational"
+  }
+}

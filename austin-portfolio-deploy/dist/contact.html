@@ -1,0 +1,787 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Blaze Intelligence</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#BF5700">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Get in touch with Blaze Intelligence. Contact our championship sports analytics team for demos, support, and partnerships.">
+    <meta name="keywords" content="contact sports analytics, Blaze Intelligence support, championship intelligence team">
+
+    <!-- Essential Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --grizzly-teal: #00B2A9;
+            --championship-gold: #FFD700;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --border-radius: 12px;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            z-index: 10000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 3rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            color: var(--championship-gold);
+            background: rgba(191, 87, 0, 0.15);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            margin-top: 70px;
+            padding: 5rem 2rem 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(255, 215, 0, 0.05));
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Contact Methods Grid */
+        .contact-section {
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .contact-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            transition: var(--transition-smooth);
+            text-align: center;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--championship-gold);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.1);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .contact-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-detail {
+            display: block;
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .contact-detail:hover {
+            color: var(--championship-gold);
+        }
+
+        .contact-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Contact Form */
+        .form-section {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4rem 2rem;
+            margin: 3rem 0;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-form {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--championship-gold);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-orange);
+            margin-bottom: 3rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            text-align: center;
+            transition: var(--transition-smooth);
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--grizzly-teal);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 auto 1.5rem;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .team-role {
+            color: var(--primary-orange);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .team-contact {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .team-contact a {
+            color: var(--cardinal-blue);
+            text-decoration: none;
+        }
+
+        .team-contact a:hover {
+            color: var(--championship-gold);
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, var(--grizzly-teal), var(--cardinal-blue));
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Office Hours */
+        .hours-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .hours-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-bottom: 2rem;
+        }
+
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hours-card {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        .hours-label {
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hours-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">🔥 Blaze Intelligence</div>
+        <div style="margin-left: auto;">
+            <a href="/" class="nav-link">← Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1 class="hero-title">Get In Touch</h1>
+        <p class="hero-subtitle">Ready to elevate your sports program with championship-level intelligence? Our team is here to help you get started.</p>
+    </section>
+
+    <!-- Contact Methods -->
+    <section class="contact-section">
+        <div class="contact-grid">
+            <!-- Sales & Demos -->
+            <div class="contact-card">
+                <div class="contact-icon">🚀</div>
+                <h3 class="contact-title">Sales &amp; Demos</h3>
+                <div class="contact-info">
+                    <a href="mailto:sales@blaze-intelligence.com" class="contact-detail">sales@blaze-intelligence.com</a>
+                    <a href="tel:+12102735538" class="contact-detail">(210) 273-5538</a>
+                </div>
+                <p class="contact-description">
+                    Schedule a personalized demo, get pricing information, or discuss enterprise solutions with our sales team.
+                </p>
+            </div>
+
+            <!-- Technical Support -->
+            <div class="contact-card">
+                <div class="contact-icon">🛠️</div>
+                <h3 class="contact-title">Technical Support</h3>
+                <div class="contact-info">
+                    <a href="mailto:support@blaze-intelligence.com" class="contact-detail">support@blaze-intelligence.com</a>
+                    <span class="contact-detail">24/7 Priority Support</span>
+                </div>
+                <p class="contact-description">
+                    Get help with platform features, integration issues, or technical questions from our support experts.
+                </p>
+            </div>
+
+            <!-- Partnerships -->
+            <div class="contact-card">
+                <div class="contact-icon">🤝</div>
+                <h3 class="contact-title">Partnerships</h3>
+                <div class="contact-info">
+                    <a href="mailto:partnerships@blaze-intelligence.com" class="contact-detail">partnerships@blaze-intelligence.com</a>
+                    <span class="contact-detail">Strategic Alliances</span>
+                </div>
+                <p class="contact-description">
+                    Explore partnership opportunities, integration possibilities, or discuss white-label solutions.
+                </p>
+            </div>
+
+            <!-- Media & Press -->
+            <div class="contact-card">
+                <div class="contact-icon">📰</div>
+                <h3 class="contact-title">Media &amp; Press</h3>
+                <div class="contact-info">
+                    <a href="mailto:press@blaze-intelligence.com" class="contact-detail">press@blaze-intelligence.com</a>
+                    <span class="contact-detail">Media Inquiries</span>
+                </div>
+                <p class="contact-description">
+                    Press releases, media kits, interview requests, and industry insights for journalists and analysts.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="form-section">
+        <div class="form-container">
+            <h2 class="form-title">Send Us a Message</h2>
+            <p class="form-subtitle">Have a specific question or need custom assistance? Fill out the form below and we'll get back to you within 2 business hours.</p>
+
+            <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name *</label>
+                        <input type="text" class="form-input" name="firstName" required="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name *</label>
+                        <input type="text" class="form-input" name="lastName" required="">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" class="form-input" name="email" required="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input" name="phone">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Organization</label>
+                        <input type="text" class="form-input" name="organization">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Inquiry Type *</label>
+                        <select class="form-select" name="inquiryType" required="">
+                            <option value="">Select inquiry type</option>
+                            <option value="demo">Demo Request</option>
+                            <option value="pricing">Pricing Information</option>
+                            <option value="support">Technical Support</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="media">Media Inquiry</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Subject *</label>
+                    <input type="text" class="form-input" name="subject" required="">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Message *</label>
+                    <textarea class="form-textarea" name="message" placeholder="Tell us how we can help you..." required=""></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    Send Message
+                </button>
+
+                <div class="success-message" id="successMessage">
+                    <h3 style="color: white; margin-bottom: 1rem;">Message Sent Successfully!</h3>
+                    <p style="color: white;">
+                        Thank you for contacting us. Our team will respond within 2 business hours.
+                    </p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <h2 class="team-title">Meet Our Team</h2>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">AH</div>
+                <h3 class="team-name">Austin Humphrey</h3>
+                <p class="team-role">Founder &amp; CEO</p>
+                <div class="team-contact">
+                    <a href="mailto:ahump20@outlook.com">ahump20@outlook.com</a><br>
+                    <a href="tel:+12102735538">(210) 273-5538</a>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">🏆</div>
+                <h3 class="team-name">Sales Team</h3>
+                <p class="team-role">Championship Solutions</p>
+                <div class="team-contact">
+                    <a href="mailto:sales@blaze-intelligence.com">sales@blaze-intelligence.com</a><br>
+                    Available for demos &amp; consultations
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">⚡</div>
+                <h3 class="team-name">Support Team</h3>
+                <p class="team-role">Technical Excellence</p>
+                <div class="team-contact">
+                    <a href="mailto:support@blaze-intelligence.com">support@blaze-intelligence.com</a><br>
+                    24/7 priority support available
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Office Hours -->
+    <section class="hours-section">
+        <h2 class="hours-title">Business Hours</h2>
+        <div class="hours-grid">
+            <div class="hours-card">
+                <div class="hours-label">Sales &amp; Demos</div>
+                <p style="color: var(--text-secondary);">
+                    Monday - Friday: 8:00 AM - 7:00 PM CT<br>
+                    Saturday: 10:00 AM - 4:00 PM CT<br>
+                    Sunday: By appointment
+                </p>
+            </div>
+
+            <div class="hours-card">
+                <div class="hours-label">Technical Support</div>
+                <p style="color: var(--text-secondary);">
+                    Professional &amp; Championship plans:<br>
+                    24/7 Priority Support<br>
+                    <br>
+                    Scout plan: Business hours support
+                </p>
+            </div>
+
+            <div class="hours-card">
+                <div class="hours-label">Emergency Contact</div>
+                <p style="color: var(--text-secondary);">
+                    Critical platform issues:<br>
+                    <a href="tel:+12102735538" style="color: var(--championship-gold);">(210) 273-5538</a><br>
+                    24/7 for Championship plan customers
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function submitContact(event) {
+            event.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('contactForm');
+            const successMessage = document.getElementById('successMessage');
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            // Collect form data
+            const formData = new FormData(form);
+            const contactRequest = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                organization: formData.get('organization'),
+                inquiryType: formData.get('inquiryType'),
+                subject: formData.get('subject'),
+                message: formData.get('message'),
+                timestamp: new Date().toISOString(),
+                source: 'contact-form'
+            };
+
+            // Simulate API call (replace with actual API endpoint)
+            setTimeout(() => {
+                console.log('Contact request submitted:', contactRequest);
+
+                // Hide form and show success message
+                form.style.display = 'none';
+                successMessage.classList.add('show');
+
+                // Optional: Send to actual backend
+                // fetch('/api/contact', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(contactRequest)
+                // });
+
+                // Reset form after delay
+                setTimeout(() => {
+                    form.style.display = 'block';
+                    successMessage.classList.remove('show');
+                    form.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                }, 5000);
+
+            }, 1500);
+        }
+
+        // Form validation and enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('contactForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+
+            // Add real-time validation
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.hasAttribute('required') && !this.value.trim()) {
+                        this.style.borderColor = '#ff4757';
+                    } else {
+                        this.style.borderColor = 'var(--grizzly-teal)';
+                    }
+                });
+
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = 'var(--championship-gold)';
+                });
+            });
+
+            // Email validation
+            const emailInput = form.querySelector('input[name="email"]');
+            emailInput.addEventListener('blur', function() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (this.value && !emailRegex.test(this.value)) {
+                    this.style.borderColor = '#ff4757';
+                } else if (this.value) {
+                    this.style.borderColor = 'var(--grizzly-teal)';
+                }
+            });
+
+            // Animate contact cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe contact cards
+            document.querySelectorAll('.contact-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+
+</body></html>

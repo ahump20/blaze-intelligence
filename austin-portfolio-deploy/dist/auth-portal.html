@@ -1,0 +1,744 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Championship Access - Blaze Intelligence</title>
+    <meta name="description" content="Access your championship-level sports analytics dashboard">
+
+    <!-- Three.js for background visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+
+    <style>
+        :root {
+            --blaze-orange: #BF5700;
+            --blaze-blue: #9BCBEB;
+            --blaze-navy: #002244;
+            --blaze-teal: #00B2A9;
+            --blaze-dark: #0a0e27;
+            --blaze-gold: #FFD700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--blaze-dark) 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Three.js background container */
+        #three-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        /* Main content */
+        .auth-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blaze-orange), var(--blaze-gold), var(--blaze-teal));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .auth-tab.active {
+            background: var(--blaze-orange);
+            color: white;
+            box-shadow: 0 4px 12px rgba(191, 87, 0, 0.3);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--blaze-orange);
+            box-shadow: 0 0 0 3px rgba(191, 87, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group select option {
+            background: var(--blaze-dark);
+            color: white;
+        }
+
+        .form-group small {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .checkbox-group a {
+            color: var(--blaze-orange);
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--blaze-orange), #d4620a);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(191, 87, 0, 0.4);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+
+        .auth-btn.loading {
+            pointer-events: none;
+        }
+
+        .auth-btn .btn-text {
+            transition: opacity 0.3s ease;
+        }
+
+        .auth-btn .btn-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .auth-btn.loading .btn-text {
+            opacity: 0;
+        }
+
+        .auth-btn.loading .btn-loading {
+            opacity: 1;
+        }
+
+        .auth-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .auth-links a {
+            color: var(--blaze-blue);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .auth-links a:hover {
+            color: var(--blaze-orange);
+        }
+
+        .error-message {
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fca5a5;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.2) !important;
+            border-color: rgba(34, 197, 94, 0.3) !important;
+            color: #86efac !important;
+        }
+
+        .features-preview {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .features-preview h3 {
+            color: var(--blaze-gold);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .features-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .feature-icon {
+            color: var(--blaze-orange);
+            font-weight: bold;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            .auth-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        /* Championship animations */
+        @keyframes championshipPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .championship-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--blaze-gold), var(--blaze-orange));
+            color: var(--blaze-dark);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            animation: championshipPulse 2s ease-in-out infinite;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Three.js Background -->
+    <div id="three-background"></div>
+
+    <!-- Championship Indicator -->
+    <div class="championship-indicator">
+        🏆 Championship Mode
+    </div>
+
+    <!-- Main Auth Container -->
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🏆 Blaze Intelligence</h1>
+                <p>Championship Sports Analytics Platform</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+                <button class="auth-tab" onclick="switchTab('signup')">Create Account</button>
+            </div>
+
+            <!-- Error/Success Messages -->
+            <div id="auth-message" class="error-message"></div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" name="email" placeholder="coach@example.com" required="">
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" placeholder="Enter your password" required="">
+                </div>
+
+                <button type="submit" class="auth-btn" id="login-btn">
+                    <span class="btn-text">Access Championship Dashboard</span>
+                    <span class="btn-loading">
+                        <div class="loading-spinner"></div>
+                    </span>
+                </button>
+
+                <div class="auth-links">
+                    <a href="#" onclick="showForgotPassword()">Forgot Password?</a>
+                    <a href="#" onclick="switchTab('signup')">Create Account</a>
+                </div>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signup-form" class="auth-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="signup-firstname">First Name</label>
+                        <input type="text" id="signup-firstname" name="firstName" placeholder="John" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-lastname">Last Name</label>
+                        <input type="text" id="signup-lastname" name="lastName" placeholder="Doe" required="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-email">Email Address</label>
+                    <input type="email" id="signup-email" name="email" placeholder="coach@example.com" required="">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" placeholder="Minimum 8 characters" required="">
+                    <small>Include letters, numbers, and special characters for best security</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-organization">Organization (Optional)</label>
+                    <input type="text" id="signup-organization" name="organization" placeholder="University, High School, Club">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-role">Your Role</label>
+                    <select id="signup-role" name="role" required="">
+                        <option value="">Select your role</option>
+                        <option value="coach">Coach</option>
+                        <option value="analyst">Sports Analyst</option>
+                        <option value="scout">Scout/Recruiter</option>
+                        <option value="administrator">Administrator</option>
+                        <option value="athlete">Athlete</option>
+                        <option value="parent">Parent/Guardian</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="signup-terms" name="terms" required="">
+                    <label for="signup-terms">
+                        I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and
+                        <a href="/privacy.html" target="_blank">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="auth-btn" id="signup-btn">
+                    <span class="btn-text">Join Championship Platform</span>
+                    <span class="btn-loading">
+                        <div class="loading-spinner"></div>
+                    </span>
+                </button>
+
+                <div class="auth-links">
+                    <a href="#" onclick="switchTab('login')">Already have an account? Sign In</a>
+                </div>
+            </form>
+
+            <!-- Features Preview -->
+            <div class="features-preview">
+                <h3>🎯 Championship Features</h3>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">⚾</span>
+                        <span>Real-time MLB Cardinals analytics</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🏈</span>
+                        <span>SEC Football &amp; Texas Longhorns intelligence</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🎯</span>
+                        <span>Hawk-Eye precision ball tracking (99.6% accuracy)</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🧠</span>
+                        <span>Character assessment &amp; championship DNA scoring</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <span>Perfect Game youth baseball pipeline</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔄</span>
+                        <span>Real-time WebSocket data streams</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth-manager.js"></script>
+    <script>
+        // Three.js Background Animation
+        function initThreeBackground() {
+            const container = document.getElementById('three-background');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            // Create neural network-like particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 200;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 10;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0xBF5700, // Blaze orange
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            // Create connecting lines
+            const linesGeometry = new THREE.BufferGeometry();
+            const linePositions = [];
+
+            for (let i = 0; i < particlesCount; i++) {
+                for (let j = i + 1; j < particlesCount; j++) {
+                    const distance = Math.sqrt(
+                        Math.pow(posArray[i * 3] - posArray[j * 3], 2) +
+                        Math.pow(posArray[i * 3 + 1] - posArray[j * 3 + 1], 2) +
+                        Math.pow(posArray[i * 3 + 2] - posArray[j * 3 + 2], 2)
+                    );
+
+                    if (distance < 2) {
+                        linePositions.push(posArray[i * 3], posArray[i * 3 + 1], posArray[i * 3 + 2]);
+                        linePositions.push(posArray[j * 3], posArray[j * 3 + 1], posArray[j * 3 + 2]);
+                    }
+                }
+            }
+
+            linesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+
+            const linesMaterial = new THREE.LineBasicMaterial({
+                color: 0x9BCBEB, // Blaze blue
+                transparent: true,
+                opacity: 0.3
+            });
+
+            const linesMesh = new THREE.LineSegments(linesGeometry, linesMaterial);
+            scene.add(linesMesh);
+
+            camera.position.z = 5;
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                particlesMesh.rotation.x += 0.001;
+                particlesMesh.rotation.y += 0.002;
+
+                linesMesh.rotation.x += 0.001;
+                linesMesh.rotation.y += 0.002;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
+
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`${tab}-form`).classList.add('active');
+
+            // Clear any error messages
+            hideMessage();
+        }
+
+        // Message handling
+        function showMessage(message, isError = true) {
+            const messageEl = document.getElementById('auth-message');
+            messageEl.textContent = message;
+            messageEl.className = isError ? 'error-message' : 'error-message success-message';
+            messageEl.style.display = 'block';
+        }
+
+        function hideMessage() {
+            const messageEl = document.getElementById('auth-message');
+            messageEl.style.display = 'none';
+        }
+
+        function showForgotPassword() {
+            showMessage('Please contact support for password reset: support@blaze-intelligence.com', false);
+        }
+
+        // Form handling
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const button = document.getElementById('login-btn');
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            button.classList.add('loading');
+            hideMessage();
+
+            try {
+                const result = await window.blazeAuth.login(email, password);
+
+                if (result.success) {
+                    showMessage('🏆 Login successful! Redirecting to championship dashboard...', false);
+                    setTimeout(() => {
+                        window.location.href = '/analytics.html';
+                    }, 1500);
+                } else {
+                    showMessage(result.error || 'Login failed. Please try again.');
+                }
+            } catch (error) {
+                showMessage('Authentication service error. Please try again.');
+            } finally {
+                button.classList.remove('loading');
+            }
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const button = document.getElementById('signup-btn');
+            const formData = new FormData(e.target);
+
+            const userData = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                organization: formData.get('organization'),
+                role: formData.get('role')
+            };
+
+            // Validate password
+            if (userData.password.length < 8) {
+                showMessage('Password must be at least 8 characters long.');
+                return;
+            }
+
+            button.classList.add('loading');
+            hideMessage();
+
+            try {
+                const result = await window.blazeAuth.signup(userData);
+
+                if (result.success) {
+                    showMessage('🏆 Account created successfully! Welcome to championship analytics!', false);
+                    setTimeout(() => {
+                        window.location.href = '/analytics.html';
+                    }, 1500);
+                } else {
+                    showMessage(result.error || 'Account creation failed. Please try again.');
+                }
+            } catch (error) {
+                showMessage('Registration service error. Please try again.');
+            } finally {
+                button.classList.remove('loading');
+            }
+        });
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeBackground();
+
+            // Check if user is already logged in
+            if (window.blazeAuth && window.blazeAuth.isAuthenticated()) {
+                window.location.href = '/analytics.html';
+            }
+        });
+    </script>
+
+</body></html>

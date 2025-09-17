@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Rankings - Blaze Intelligence</title>
+    <link rel="stylesheet" href="/public/css/blaze-professional.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: #E6F1FF;
+            font-family: 'Inter', sans-serif;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #BF5700, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .rankings-table {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: rgba(191, 87, 0, 0.2);
+            padding: 1rem;
+            text-align: left;
+            color: #FFD700;
+            font-weight: 600;
+        }
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        tr:hover {
+            background: rgba(191, 87, 0, 0.1);
+        }
+        .rank-badge {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #BF5700, #8B3A00);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+        }
+        .score {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(191, 87, 0, 0.2);
+            border: 1px solid #BF5700;
+            border-radius: 8px;
+            color: #E6F1FF;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #BF5700;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Championship Player Rankings</h1>
+            <p>AI-powered performance rankings across all sports</p>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active">All Sports</button>
+            <button class="filter-btn">MLB</button>
+            <button class="filter-btn">NFL</button>
+            <button class="filter-btn">NCAA</button>
+            <button class="filter-btn">Perfect Game</button>
+        </div>
+
+        <div class="rankings-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Team</th>
+                        <th>Position</th>
+                        <th>Performance Score</th>
+                        <th>Character Score</th>
+                        <th>Overall</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="rank-badge">1</span></td>
+                        <td>Nolan Arenado</td>
+                        <td>Cardinals</td>
+                        <td>3B</td>
+                        <td>96.5</td>
+                        <td>94.2</td>
+                        <td class="score">95.4</td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank-badge">2</span></td>
+                        <td>Ryan Tannehill</td>
+                        <td>Titans</td>
+                        <td>QB</td>
+                        <td>93.8</td>
+                        <td>95.1</td>
+                        <td class="score">94.5</td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank-badge">3</span></td>
+                        <td>Quinn Ewers</td>
+                        <td>Longhorns</td>
+                        <td>QB</td>
+                        <td>92.1</td>
+                        <td>93.8</td>
+                        <td class="score">93.0</td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank-badge">4</span></td>
+                        <td>Ja Morant</td>
+                        <td>Grizzlies</td>
+                        <td>PG</td>
+                        <td>94.7</td>
+                        <td>89.3</td>
+                        <td class="score">92.0</td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank-badge">5</span></td>
+                        <td>Jackson Holliday</td>
+                        <td>Perfect Game #1</td>
+                        <td>SS</td>
+                        <td>91.2</td>
+                        <td>92.5</td>
+                        <td class="score">91.9</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="/app.html" style="color: #BF5700; text-decoration: none; font-size: 1.2rem;">← Back to Dashboard</a>
+        </div>
+    </div>
+
+</body></html>

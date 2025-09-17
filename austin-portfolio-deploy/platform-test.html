@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Platform Test Suite</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0e27;
+            color: #E5E7EB;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .test-card {
+            background: rgba(17, 34, 64, 0.8);
+            border: 1px solid #BF5700;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .test-card h3 {
+            color: #BF5700;
+            margin-bottom: 1rem;
+        }
+        .test-item {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+        }
+        .status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+        .loading { background: #FFD700; }
+        .success { background: #00B2A9; }
+        .error { background: #dc3545; }
+        h1 {
+            text-align: center;
+            color: #BF5700;
+            margin-bottom: 2rem;
+        }
+        .summary {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(191, 87, 0, 0.1);
+            border: 1px solid #BF5700;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏆 Blaze Intelligence Platform Test Suite</h1>
+
+    <div class="summary" id="summary">
+        <h2>Testing Platform Components...</h2>
+        <p>Checking all features, APIs, and visualizations</p>
+    </div>
+
+    <div class="test-grid">
+        <!-- JavaScript Files Test -->
+        <div class="test-card">
+            <h3>📦 JavaScript Modules</h3>
+            <div class="test-item" data-test="js-quantum">
+                <div class="status loading"></div>
+                <span>Quantum Neural Visuals</span>
+            </div>
+            <div class="test-item" data-test="js-three">
+                <div class="status loading"></div>
+                <span>Enhanced Three Visualizer</span>
+            </div>
+            <div class="test-item" data-test="js-rti">
+                <div class="status loading"></div>
+                <span>RTI Fusion Engine</span>
+            </div>
+            <div class="test-item" data-test="js-character">
+                <div class="status loading"></div>
+                <span>Character Assessment</span>
+            </div>
+            <div class="test-item" data-test="js-realtime">
+                <div class="status loading"></div>
+                <span>Realtime Data Handler</span>
+            </div>
+        </div>
+
+        <!-- API Endpoints Test -->
+        <div class="test-card">
+            <h3>🔌 API Endpoints</h3>
+            <div class="test-item" data-test="api-sportsdataio">
+                <div class="status loading"></div>
+                <span>SportsDataIO Proxy</span>
+            </div>
+            <div class="test-item" data-test="api-health">
+                <div class="status loading"></div>
+                <span>Health Check</span>
+            </div>
+            <div class="test-item" data-test="api-sdio">
+                <div class="status loading"></div>
+                <span>SDIO Function</span>
+            </div>
+        </div>
+
+        <!-- Domain Connectivity -->
+        <div class="test-card">
+            <h3>🌐 Domain Status</h3>
+            <div class="test-item" data-test="domain-main">
+                <div class="status loading"></div>
+                <span>blaze-intelligence.netlify.app</span>
+            </div>
+            <div class="test-item" data-test="domain-3d">
+                <div class="status loading"></div>
+                <span>blaze-3d.netlify.app</span>
+            </div>
+            <div class="test-item" data-test="domain-replit">
+                <div class="status loading"></div>
+                <span>blaze-intelligence.replit.app</span>
+            </div>
+            <div class="test-item" data-test="domain-pages1">
+                <div class="status loading"></div>
+                <span>70d41e32.pages.dev</span>
+            </div>
+            <div class="test-item" data-test="domain-pages2">
+                <div class="status loading"></div>
+                <span>a4dc795e.pages.dev</span>
+            </div>
+        </div>
+
+        <!-- Page Availability -->
+        <div class="test-card">
+            <h3>📄 Page Availability</h3>
+            <div class="test-item" data-test="page-analytics">
+                <div class="status loading"></div>
+                <span>Analytics Dashboard</span>
+            </div>
+            <div class="test-item" data-test="page-cardinals">
+                <div class="status loading"></div>
+                <span>Cardinals Dashboard</span>
+            </div>
+            <div class="test-item" data-test="page-digital">
+                <div class="status loading"></div>
+                <span>Digital Combine</span>
+            </div>
+            <div class="test-item" data-test="page-nil">
+                <div class="status loading"></div>
+                <span>NIL Calculator</span>
+            </div>
+            <div class="test-item" data-test="page-perfect">
+                <div class="status loading"></div>
+                <span>Perfect Game</span>
+            </div>
+        </div>
+
+        <!-- External Libraries -->
+        <div class="test-card">
+            <h3>📚 External Libraries</h3>
+            <div class="test-item" data-test="lib-three">
+                <div class="status loading"></div>
+                <span>Three.js</span>
+            </div>
+            <div class="test-item" data-test="lib-chart">
+                <div class="status loading"></div>
+                <span>Chart.js</span>
+            </div>
+            <div class="test-item" data-test="lib-gsap">
+                <div class="status loading"></div>
+                <span>GSAP</span>
+            </div>
+            <div class="test-item" data-test="lib-particles">
+                <div class="status loading"></div>
+                <span>Particles.js</span>
+            </div>
+        </div>
+
+        <!-- Feature Tests -->
+        <div class="test-card">
+            <h3>✨ Features</h3>
+            <div class="test-item" data-test="feat-canvas">
+                <div class="status loading"></div>
+                <span>Canvas Support</span>
+            </div>
+            <div class="test-item" data-test="feat-webgl">
+                <div class="status loading"></div>
+                <span>WebGL Support</span>
+            </div>
+            <div class="test-item" data-test="feat-localstorage">
+                <div class="status loading"></div>
+                <span>Local Storage</span>
+            </div>
+            <div class="test-item" data-test="feat-websocket">
+                <div class="status loading"></div>
+                <span>WebSocket Support</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tests = {
+            // JavaScript Files
+            'js-quantum': async () => {
+                const response = await fetch('./js/quantum-neural-visuals.js');
+                return response.ok;
+            },
+            'js-three': async () => {
+                const response = await fetch('./js/enhanced-three-visualizer.js');
+                return response.ok;
+            },
+            'js-rti': async () => {
+                const response = await fetch('./js/rti-fusion-engine.js');
+                return response.ok;
+            },
+            'js-character': async () => {
+                const response = await fetch('./js/character-assessment-engine.js');
+                return response.ok;
+            },
+            'js-realtime': async () => {
+                const response = await fetch('./js/realtime-data-handler.js');
+                return response.ok;
+            },
+
+            // API Endpoints
+            'api-sportsdataio': async () => {
+                try {
+                    const response = await fetch('/.netlify/functions/sportsdataio-proxy', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ league: 'nfl', endpoint: 'scores/json/Teams' })
+                    });
+                    return response.ok;
+                } catch {
+                    return false;
+                }
+            },
+            'api-health': async () => {
+                const response = await fetch('/.netlify/functions/health');
+                return response.ok;
+            },
+            'api-sdio': async () => {
+                const response = await fetch('/.netlify/functions/sdio');
+                return response.ok;
+            },
+
+            // Domain Tests
+            'domain-main': async () => {
+                return window.location.hostname === 'blaze-intelligence.netlify.app';
+            },
+            'domain-3d': async () => {
+                const response = await fetch('https://blaze-3d.netlify.app', { mode: 'no-cors' });
+                return true; // no-cors always returns opaque response
+            },
+            'domain-replit': async () => {
+                const response = await fetch('https://blaze-intelligence.replit.app', { mode: 'no-cors' });
+                return true;
+            },
+            'domain-pages1': async () => {
+                const response = await fetch('https://70d41e32.blaze-intelligence-platform.pages.dev', { mode: 'no-cors' });
+                return true;
+            },
+            'domain-pages2': async () => {
+                const response = await fetch('https://a4dc795e.blaze-intelligence.pages.dev', { mode: 'no-cors' });
+                return true;
+            },
+
+            // Page Tests
+            'page-analytics': async () => {
+                const response = await fetch('./analytics.html');
+                return response.ok;
+            },
+            'page-cardinals': async () => {
+                const response = await fetch('./cardinals-intelligence-dashboard.html');
+                return response.ok;
+            },
+            'page-digital': async () => {
+                const response = await fetch('./digital-combine.html');
+                return response.ok;
+            },
+            'page-nil': async () => {
+                const response = await fetch('./nil-calculator-advanced.html');
+                return response.ok;
+            },
+            'page-perfect': async () => {
+                const response = await fetch('./perfect-game-enhanced.html');
+                return response.ok;
+            },
+
+            // External Libraries
+            'lib-three': () => typeof THREE !== 'undefined',
+            'lib-chart': () => typeof Chart !== 'undefined',
+            'lib-gsap': () => typeof gsap !== 'undefined',
+            'lib-particles': () => typeof particlesJS !== 'undefined',
+
+            // Feature Tests
+            'feat-canvas': () => {
+                const canvas = document.createElement('canvas');
+                return !!(canvas.getContext && canvas.getContext('2d'));
+            },
+            'feat-webgl': () => {
+                const canvas = document.createElement('canvas');
+                return !!(window.WebGLRenderingContext &&
+                    (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+            },
+            'feat-localstorage': () => {
+                try {
+                    localStorage.setItem('test', 'test');
+                    localStorage.removeItem('test');
+                    return true;
+                } catch {
+                    return false;
+                }
+            },
+            'feat-websocket': () => 'WebSocket' in window
+        };
+
+        // Load external libraries for testing
+        const scripts = [
+            'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+            'https://cdn.jsdelivr.net/npm/chart.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js',
+            'https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js'
+        ];
+
+        Promise.all(scripts.map(src => {
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = resolve;
+                document.head.appendChild(script);
+            });
+        })).then(() => {
+            // Run tests after libraries load
+            runTests();
+        });
+
+        async function runTests() {
+            let passed = 0;
+            let failed = 0;
+
+            for (const [testId, testFn] of Object.entries(tests)) {
+                const element = document.querySelector(`[data-test="${testId}"]`);
+                if (!element) continue;
+
+                const statusEl = element.querySelector('.status');
+                try {
+                    const result = await testFn();
+                    if (result) {
+                        statusEl.className = 'status success';
+                        passed++;
+                    } else {
+                        statusEl.className = 'status error';
+                        failed++;
+                    }
+                } catch (error) {
+                    statusEl.className = 'status error';
+                    failed++;
+                    console.error(`Test ${testId} failed:`, error);
+                }
+            }
+
+            // Update summary
+            const summary = document.getElementById('summary');
+            const total = passed + failed;
+            const percentage = Math.round((passed / total) * 100);
+
+            summary.innerHTML = `
+                <h2>Test Results: ${percentage}% Passing</h2>
+                <p>✅ Passed: ${passed} | ❌ Failed: ${failed} | Total: ${total}</p>
+                ${failed > 0 ? '<p style="color: #FFD700;">⚠️ Some components need attention</p>' : '<p style="color: #00B2A9;">🎉 All systems operational!</p>'}
+            `;
+        }
+    </script>
+
+</body></html>

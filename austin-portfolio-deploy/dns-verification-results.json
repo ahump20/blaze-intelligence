@@ -1,0 +1,52 @@
+{
+  "timestamp": "2025-09-15T21:50:20Z",
+  "summary": {
+    "verified": 6,
+    "pending": 1,
+    "failed": 0
+  },
+  "domains": [
+    {
+      "domain": "blaze-intelligence.replit.app",
+      "status": "verified",
+      "http_response": "HTTP/2 200 "
+    }
+,
+    {
+      "domain": "a4dc795e.blaze-intelligence.pages.dev",
+      "status": "verified",
+      "http_response": "HTTP/2 200 "
+    }
+,
+    {
+      "domain": "blaze-3d.netlify.app",
+      "status": "verified",
+      "http_response": "HTTP/2 200 "
+    }
+,
+    {
+      "domain": "new.express.adobe.com",
+      "status": "verified",
+      "http_response": "HTTP/2 200 "
+    }
+,
+    {
+      "domain": "70d41e32.blaze-intelligence-platform.pages.dev",
+      "status": "verified",
+      "http_response": "HTTP/2 200 "
+    }
+,
+    {
+      "domain": "j8r5k8b9jg.wixsite.com",
+      "status": "pending",
+      "http_response": "HTTP/2 404 "
+    }
+,
+    {
+      "domain": "blaze-intelligence.netlify.app",
+      "status": "verified",
+      "http_response": "HTTP/2 200 "
+    }
+
+  ]
+}

@@ -1,0 +1,1114 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze RTI Dashboard | Real-Time Multimodal Intelligence</title>
+
+    <!-- Core Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --blaze-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --neural-green: #00FF41;
+            --alert-red: #FF4444;
+            --deep-navy: #002244;
+            --sync-blue: #00B2A9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Inter', monospace;
+            background: #0a0e1a;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Main Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-rows: 60px 1fr;
+            height: 100vh;
+        }
+
+        /* Header with Latency Budget */
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            border-bottom: 2px solid var(--blaze-orange);
+        }
+
+        .title {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: auto;
+        }
+
+        .latency-budget {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .budget-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+        }
+
+        .budget-label {
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 0.25rem;
+        }
+
+        .budget-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .budget-value.healthy {
+            color: var(--neural-green);
+        }
+
+        .budget-value.warning {
+            color: var(--championship-gold);
+        }
+
+        .budget-value.critical {
+            color: var(--alert-red);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 60% 40%;
+            gap: 1rem;
+            padding: 1rem;
+            height: calc(100vh - 60px);
+        }
+
+        /* Video Section */
+        .video-section {
+            position: relative;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        #videoElement {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #overlayCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .control-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(191, 87, 0, 0.8);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .control-btn:hover {
+            background: rgba(191, 87, 0, 1);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Fusion Engine Status */
+        .fusion-status {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        .status-title {
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .sync-meters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sync-meter {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .meter-label {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-bottom: 0.5rem;
+        }
+
+        .meter-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .meter-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neural-green), var(--championship-gold));
+            transition: width 0.3s;
+        }
+
+        /* Pattern Feed */
+        .pattern-feed {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            overflow-y: auto;
+        }
+
+        .pattern-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid var(--championship-gold);
+        }
+
+        .pattern-item.multimodal {
+            border-left-color: var(--neural-green);
+        }
+
+        .pattern-item.vision {
+            border-left-color: var(--sync-blue);
+        }
+
+        .pattern-item.audio {
+            border-left-color: var(--championship-gold);
+        }
+
+        .pattern-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .pattern-name {
+            font-weight: 600;
+            color: var(--championship-gold);
+        }
+
+        .pattern-confidence {
+            color: var(--neural-green);
+            font-size: 0.9rem;
+        }
+
+        .pattern-time {
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        /* Decision Panel */
+        .decision-panel {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            grid-column: span 2;
+        }
+
+        .decision-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--neural-green);
+        }
+
+        .decision-item.high {
+            border-left-color: var(--alert-red);
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .decision-item.medium {
+            border-left-color: var(--championship-gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .decision-advice {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .decision-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        /* Ring Buffer Visualization */
+        .buffer-viz {
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buffer-items {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            padding: 0.5rem;
+            gap: 2px;
+        }
+
+        .buffer-item {
+            width: 4px;
+            height: 30px;
+            background: var(--neural-green);
+            border-radius: 2px;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .buffer-item.video {
+            background: var(--sync-blue);
+        }
+
+        .buffer-item.audio {
+            background: var(--championship-gold);
+        }
+
+        .buffer-item.recent {
+            opacity: 1;
+            height: 40px;
+        }
+
+        /* Audio Visualizer */
+        .audio-viz {
+            height: 100px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        #audioCanvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Metrics Display */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .metric-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--neural-green);
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 0.25rem;
+        }
+
+        /* Status Indicators */
+        .status-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            flex: 1;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.active {
+            background: var(--neural-green);
+        }
+
+        .status-dot.inactive {
+            background: #666;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header with Latency Budget -->
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <h1 class="title">🔥 Blaze RTI Dashboard</h1>
+                <nav style="display: flex; gap: 8px;">
+                    <a href="/" style="color: #BF5700; text-decoration: none; font-size: 10px; padding: 5px 8px; border-radius: 4px; background: rgba(191, 87, 0, 0.1); border: 1px solid rgba(191, 87, 0, 0.3); transition: all 0.3s ease; text-transform: uppercase; font-weight: 600;">🔥 RTI MAIN</a>
+                    <a href="/realtime-multimodal-dashboard.html" style="color: #00B2A9; text-decoration: none; font-size: 10px; padding: 5px 8px; border-radius: 4px; background: rgba(0, 178, 169, 0.2); border: 1px solid rgba(0, 178, 169, 0.5); text-transform: uppercase; font-weight: 600;">⚡ RTI ADVANCED</a>
+                    <a href="/sports-intelligence-dashboard.html" style="color: #FFD700; text-decoration: none; font-size: 10px; padding: 5px 8px; border-radius: 4px; background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.3); transition: all 0.3s ease; text-transform: uppercase; font-weight: 600;">🏆 SPORTS INTEL</a>
+                </nav>
+            </div>
+            <div class="latency-budget">
+                <div class="budget-item">
+                    <div class="budget-label">Video</div>
+                    <div id="videoLatency" class="budget-value healthy">25ms</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">Audio</div>
+                    <div id="audioLatency" class="budget-value healthy">51ms</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">Fusion</div>
+                    <div id="fusionLatency" class="budget-value healthy">7ms</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">Total</div>
+                    <div id="totalLatency" class="budget-value healthy">83ms</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">Sync Error</div>
+                    <div id="syncError" class="budget-value healthy">15ms</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Video Section -->
+            <div class="video-section">
+                <div class="video-container">
+                    <video id="videoElement" autoplay="" playsinline="" muted=""></video>
+                    <canvas id="overlayCanvas"></canvas>
+
+                    <div class="video-controls">
+                        <button id="startBtn" class="control-btn">Start Capture</button>
+                        <button id="stopBtn" class="control-btn" disabled="">Stop</button>
+                        <button id="switchBtn" class="control-btn" disabled="">Switch Camera</button>
+                        <span style="margin-left: auto; padding: 0.5rem;">
+                            FPS: <span id="fpsCounter">0</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fusion Engine Status -->
+            <div class="fusion-status">
+                <h3 class="status-title">⚡ Fusion Engine</h3>
+
+                <div class="status-row">
+                    <div class="status-indicator">
+                        <div id="webrtcStatus" class="status-dot inactive"></div>
+                        <span>WebRTC</span>
+                    </div>
+                    <div class="status-indicator">
+                        <div id="fusionStatus" class="status-dot inactive"></div>
+                        <span>Fusion</span>
+                    </div>
+                    <div class="status-indicator">
+                        <div id="decisionsStatus" class="status-dot inactive"></div>
+                        <span>Decisions</span>
+                    </div>
+                </div>
+
+                <div class="sync-meters">
+                    <div class="sync-meter">
+                        <div class="meter-label">A/V Sync Quality</div>
+                        <div id="avSyncValue" class="meter-value" style="color: var(--neural-green);">94%</div>
+                        <div class="meter-bar">
+                            <div id="avSyncBar" class="meter-fill" style="width: 94%;"></div>
+                        </div>
+                    </div>
+                    <div class="sync-meter">
+                        <div class="meter-label">Pattern Confidence</div>
+                        <div id="patternConfValue" class="meter-value" style="color: var(--championship-gold);">82%</div>
+                        <div class="meter-bar">
+                            <div id="patternConfBar" class="meter-fill" style="width: 82%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audio Visualizer -->
+                <div class="audio-viz">
+                    <canvas id="audioCanvas"></canvas>
+                </div>
+
+                <!-- Buffer Visualization -->
+                <div style="margin-top: 1rem;">
+                    <div class="meter-label">Ring Buffers (512 items)</div>
+                    <div class="buffer-viz">
+                        <div id="bufferItems" class="buffer-items">
+                            <!-- Buffer items will be added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div id="fusionCount" class="metric-value">0</div>
+                        <div class="metric-label">Fusions</div>
+                    </div>
+                    <div class="metric-box">
+                        <div id="unimodalCount" class="metric-value">0</div>
+                        <div class="metric-label">Unimodal</div>
+                    </div>
+                    <div class="metric-box">
+                        <div id="syncErrors" class="metric-value">0</div>
+                        <div class="metric-label">Sync Errors</div>
+                    </div>
+                    <div class="metric-box">
+                        <div id="decisionCount" class="metric-value">0</div>
+                        <div class="metric-label">Decisions</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern Feed -->
+            <div class="pattern-feed">
+                <h3 class="status-title">🎯 Pattern Recognition</h3>
+                <div id="patternList">
+                    <!-- Pattern items will be added here -->
+                </div>
+            </div>
+
+            <!-- Decision Panel -->
+            <div class="decision-panel">
+                <h3 class="status-title">🏆 Championship Decisions</h3>
+                <div id="decisionList">
+                    <!-- Decision items will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load RTI Components -->
+    <script src="/js/rti-fusion-engine.js"></script>
+    <script src="/js/webrtc-gateway.js"></script>
+    <script src="/js/rti-decision-engine.js"></script>
+
+    <script>
+        // Global RTI System
+        let rtiSystem = {
+            fusionEngine: null,
+            webrtcGateway: null,
+            decisionEngine: null,
+            visionModel: null,
+            audioContext: null,
+            isRunning: false,
+            frameCount: 0,
+            startTime: 0
+        };
+
+        // Initialize system
+        async function initializeRTI() {
+            console.log('🔥 Initializing Blaze RTI System...');
+
+            try {
+                // Initialize fusion engine with sports patterns
+                rtiSystem.fusionEngine = new RTIFusionEngine({
+                    windowMs: 120,
+                    syncToleranceMs: 60,
+                    fusionPollRateHz: 250
+                });
+
+                // Load sports pattern library
+                rtiSystem.fusionEngine.loadPatternLibrary(SPORTS_PATTERN_LIBRARY);
+
+                // Initialize decision engine
+                rtiSystem.decisionEngine = new RTIDecisionEngine({
+                    maxDecisionLatencyMs: 5,
+                    rateLimitMs: 1000,
+                    enableLLMExplanations: true
+                });
+
+                // Initialize WebRTC gateway
+                rtiSystem.webrtcGateway = new WebRTCGateway({
+                    maxLatency: 100
+                });
+
+                // Initialize TensorFlow.js vision model
+                rtiSystem.visionModel = await cocoSsd.load();
+                console.log('✅ Vision model loaded');
+
+                // Setup event handlers
+                setupEventHandlers();
+
+                // Update status
+                document.getElementById('fusionStatus').classList.add('active');
+
+                console.log('✅ RTI System initialized');
+
+            } catch (error) {
+                console.error('❌ RTI initialization failed:', error);
+            }
+        }
+
+        // Setup event handlers
+        function setupEventHandlers() {
+            // Fusion engine events
+            rtiSystem.fusionEngine.on('pattern', (pattern) => {
+                addPatternToFeed(pattern);
+                updateLatencyBudget();
+            });
+
+            // Decision engine events
+            rtiSystem.decisionEngine.on('decision', (decision) => {
+                addDecisionToPanel(decision);
+            });
+
+            // WebRTC gateway events
+            rtiSystem.webrtcGateway.on('videoFrame', async (frameData) => {
+                await processVideoFrame(frameData);
+            });
+
+            rtiSystem.webrtcGateway.on('audioChunk', (audioData) => {
+                processAudioChunk(audioData);
+            });
+
+            rtiSystem.webrtcGateway.on('connected', () => {
+                document.getElementById('webrtcStatus').classList.add('active');
+            });
+
+            rtiSystem.webrtcGateway.on('disconnected', () => {
+                document.getElementById('webrtcStatus').classList.remove('active');
+            });
+
+            // Pattern to decision pipeline
+            rtiSystem.fusionEngine.subscribe(async (event) => {
+                if (event.payload?.type === 'PatternEvent') {
+                    const decision = await rtiSystem.decisionEngine.processPatternEvent(event.payload);
+                    if (decision) {
+                        updateDecisionStatus();
+                    }
+                }
+            });
+        }
+
+        // Process video frame
+        async function processVideoFrame(frameData) {
+            const startTime = performance.now();
+
+            try {
+                // Run object detection
+                let detections = [];
+                if (frameData.data) {
+                    // Convert to image element for COCO-SSD
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    if (frameData.data instanceof ImageData) {
+                        canvas.width = frameData.width;
+                        canvas.height = frameData.height;
+                        ctx.putImageData(frameData.data, 0, 0);
+
+                        detections = await rtiSystem.visionModel.detect(canvas);
+                    } else if (frameData.data instanceof VideoFrame) {
+                        // Use video element
+                        const video = document.getElementById('videoElement');
+                        detections = await rtiSystem.visionModel.detect(video);
+                    }
+                }
+
+                // Create video features
+                const videoFeatures = {
+                    mono_ns: frameData.mono_ns,
+                    frame_id: frameData.frame_id,
+                    detections: detections.map(d => ({
+                        id: `det_${Math.random().toString(36).substr(2, 9)}`,
+                        label: d.class,
+                        conf: d.score,
+                        xc: (d.bbox[0] + d.bbox[2] / 2) / frameData.width,
+                        yc: (d.bbox[1] + d.bbox[3] / 2) / frameData.height,
+                        w: d.bbox[2] / frameData.width,
+                        h: d.bbox[3] / frameData.height
+                    }))
+                };
+
+                // Push to fusion engine
+                rtiSystem.fusionEngine.pushVideoFeatures(videoFeatures);
+
+                // Draw overlay
+                drawVideoOverlay(detections);
+
+                // Update metrics
+                const processingTime = performance.now() - startTime;
+                updateVideoLatency(processingTime);
+
+                // Update buffer visualization
+                updateBufferVisualization('video');
+
+            } catch (error) {
+                console.error('Video processing error:', error);
+            }
+        }
+
+        // Process audio chunk
+        function processAudioChunk(audioData) {
+            const startTime = performance.now();
+
+            try {
+                // Simple VAD using energy threshold
+                const energy = calculateAudioEnergy(audioData.data);
+                const vad = energy > 0.01;
+
+                // Mock ASR and keyword detection
+                const audioFeatures = {
+                    start_ns: audioData.start_ns,
+                    end_ns: audioData.end_ns,
+                    vad: vad,
+                    tokens_partial: vad ? generateMockTokens() : [],
+                    keywords: vad ? detectMockKeywords() : [],
+                    events: vad && Math.random() > 0.9 ? ['whistle'] : []
+                };
+
+                // Push to fusion engine
+                rtiSystem.fusionEngine.pushAudioFeatures(audioFeatures);
+
+                // Visualize audio
+                visualizeAudio(audioData.data);
+
+                // Update metrics
+                const processingTime = performance.now() - startTime;
+                updateAudioLatency(processingTime);
+
+                // Update buffer visualization
+                updateBufferVisualization('audio');
+
+            } catch (error) {
+                console.error('Audio processing error:', error);
+            }
+        }
+
+        // Calculate audio energy
+        function calculateAudioEnergy(audioData) {
+            if (!audioData || !audioData.length) return 0;
+
+            let sum = 0;
+            for (let i = 0; i < audioData.length; i++) {
+                sum += audioData[i] * audioData[i];
+            }
+            return Math.sqrt(sum / audioData.length);
+        }
+
+        // Generate mock tokens for demo
+        function generateMockTokens() {
+            const words = ['zone', 'switch', 'break', 'screen', 'defense', 'tempo', 'press'];
+            return Math.random() > 0.7 ? [words[Math.floor(Math.random() * words.length)]] : [];
+        }
+
+        // Detect mock keywords
+        function detectMockKeywords() {
+            const keywords = ['zone', 'switch', 'break', 'screen'];
+            return Math.random() > 0.8 ? [keywords[Math.floor(Math.random() * keywords.length)]] : [];
+        }
+
+        // Draw video overlay
+        function drawVideoOverlay(detections) {
+            const canvas = document.getElementById('overlayCanvas');
+            const ctx = canvas.getContext('2d');
+            const video = document.getElementById('videoElement');
+
+            if (!video.videoWidth || !video.videoHeight) return;
+
+            // Resize canvas to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw detections
+            ctx.strokeStyle = '#00FF41';
+            ctx.lineWidth = 2;
+            ctx.font = '14px JetBrains Mono';
+            ctx.fillStyle = '#00FF41';
+
+            detections.forEach(detection => {
+                const [x, y, width, height] = detection.bbox;
+
+                // Draw bounding box
+                ctx.strokeRect(x, y, width, height);
+
+                // Draw label
+                const label = `${detection.class} ${Math.round(detection.score * 100)}%`;
+                ctx.fillText(label, x, y - 5);
+            });
+        }
+
+        // Visualize audio waveform
+        function visualizeAudio(audioData) {
+            const canvas = document.getElementById('audioCanvas');
+            const ctx = canvas.getContext('2d');
+
+            if (!audioData) return;
+
+            // Resize canvas
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            // Clear canvas
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw waveform
+            const sliceWidth = canvas.width / audioData.length;
+            let x = 0;
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#FFD700';
+            ctx.beginPath();
+
+            for (let i = 0; i < audioData.length; i++) {
+                const v = audioData[i] * 0.5;
+                const y = (v + 1) * canvas.height / 2;
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            ctx.stroke();
+        }
+
+        // Add pattern to feed
+        function addPatternToFeed(pattern) {
+            const patternList = document.getElementById('patternList');
+            const item = document.createElement('div');
+            item.className = `pattern-item ${pattern.modality || 'multimodal'}`;
+
+            const confidence = Math.round((pattern.confidence || 0) * 100);
+            const time = new Date().toLocaleTimeString();
+
+            item.innerHTML = `
+                <div class="pattern-header">
+                    <span class="pattern-name">${pattern.name}</span>
+                    <span class="pattern-confidence">${confidence}%</span>
+                </div>
+                <div class="pattern-time">${time} - ${pattern.modality || 'multimodal'}</div>
+            `;
+
+            patternList.insertBefore(item, patternList.firstChild);
+
+            // Keep only last 10 items
+            while (patternList.children.length > 10) {
+                patternList.removeChild(patternList.lastChild);
+            }
+        }
+
+        // Add decision to panel
+        function addDecisionToPanel(decision) {
+            const decisionList = document.getElementById('decisionList');
+            const item = document.createElement('div');
+            item.className = `decision-item ${decision.urgency || 'medium'}`;
+
+            const time = new Date().toLocaleTimeString();
+            const confidence = Math.round((decision.confidence || 0) * 100);
+
+            item.innerHTML = `
+                <div class="decision-advice">${decision.advice}</div>
+                <div class="decision-meta">
+                    <span>Trigger: ${decision.trigger}</span>
+                    <span>Confidence: ${confidence}%</span>
+                    <span>Time: ${time}</span>
+                </div>
+            `;
+
+            decisionList.insertBefore(item, decisionList.firstChild);
+
+            // Keep only last 5 decisions
+            while (decisionList.children.length > 5) {
+                decisionList.removeChild(decisionList.lastChild);
+            }
+
+            // Update counter
+            const current = parseInt(document.getElementById('decisionCount').textContent);
+            document.getElementById('decisionCount').textContent = current + 1;
+        }
+
+        // Update latency budget display
+        function updateLatencyBudget() {
+            const metrics = rtiSystem.fusionEngine.getMetrics();
+
+            // Update fusion latency
+            const fusionLatency = Math.round(metrics.avgLatencyMs || 0);
+            updateLatencyDisplay('fusionLatency', fusionLatency, 10);
+
+            // Calculate total latency
+            const videoLat = parseFloat(document.getElementById('videoLatency').textContent) || 0;
+            const audioLat = parseFloat(document.getElementById('audioLatency').textContent) || 0;
+            const totalLat = Math.max(videoLat, audioLat) + fusionLatency;
+
+            updateLatencyDisplay('totalLatency', totalLat, 100);
+
+            // Update sync error
+            const syncError = Math.round(metrics.lastSyncErrorMs || 0);
+            updateLatencyDisplay('syncError', syncError, 100);
+        }
+
+        // Update latency display with color coding
+        function updateLatencyDisplay(elementId, value, threshold) {
+            const element = document.getElementById(elementId);
+            element.textContent = `${value}ms`;
+
+            element.className = 'budget-value';
+            if (value < threshold * 0.7) {
+                element.classList.add('healthy');
+            } else if (value < threshold) {
+                element.classList.add('warning');
+            } else {
+                element.classList.add('critical');
+            }
+        }
+
+        // Update video latency
+        function updateVideoLatency(processingTime) {
+            updateLatencyDisplay('videoLatency', Math.round(processingTime), 50);
+        }
+
+        // Update audio latency
+        function updateAudioLatency(processingTime) {
+            updateLatencyDisplay('audioLatency', Math.round(processingTime + 40), 100); // +40ms for window
+        }
+
+        // Update buffer visualization
+        function updateBufferVisualization(type) {
+            const container = document.getElementById('bufferItems');
+            const item = document.createElement('div');
+            item.className = `buffer-item ${type} recent`;
+
+            container.appendChild(item);
+
+            // Remove recent class after animation
+            setTimeout(() => {
+                item.classList.remove('recent');
+            }, 300);
+
+            // Keep only last 50 items
+            while (container.children.length > 50) {
+                container.removeChild(container.firstChild);
+            }
+        }
+
+        // Update various status indicators
+        function updateDecisionStatus() {
+            document.getElementById('decisionsStatus').classList.add('active');
+        }
+
+        // Start/Stop controls
+        async function startCapture() {
+            try {
+                // Initialize capture
+                await rtiSystem.webrtcGateway.initializeCapture();
+
+                // Create peer connection
+                await rtiSystem.webrtcGateway.createPeerConnection();
+
+                rtiSystem.isRunning = true;
+                rtiSystem.startTime = performance.now();
+
+                // Update UI
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+                document.getElementById('switchBtn').disabled = false;
+
+                // Start FPS counter
+                startFPSCounter();
+
+                console.log('✅ Capture started');
+
+            } catch (error) {
+                console.error('Failed to start capture:', error);
+                alert('Failed to start capture. Please check camera permissions.');
+            }
+        }
+
+        async function stopCapture() {
+            rtiSystem.isRunning = false;
+
+            await rtiSystem.webrtcGateway.destroy();
+
+            // Update UI
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('switchBtn').disabled = true;
+
+            // Clear status
+            document.getElementById('webrtcStatus').classList.remove('active');
+
+            console.log('❌ Capture stopped');
+        }
+
+        // FPS Counter
+        function startFPSCounter() {
+            let lastTime = performance.now();
+            let frameCount = 0;
+
+            function updateFPS() {
+                if (!rtiSystem.isRunning) return;
+
+                frameCount++;
+                const currentTime = performance.now();
+
+                if (currentTime - lastTime >= 1000) {
+                    const fps = Math.round(frameCount * 1000 / (currentTime - lastTime));
+                    document.getElementById('fpsCounter').textContent = fps;
+                    frameCount = 0;
+                    lastTime = currentTime;
+                }
+
+                requestAnimationFrame(updateFPS);
+            }
+
+            updateFPS();
+        }
+
+        // Update metrics periodically
+        function updateMetrics() {
+            const fusionMetrics = rtiSystem.fusionEngine?.getMetrics();
+            const decisionMetrics = rtiSystem.decisionEngine?.getMetrics();
+
+            if (fusionMetrics) {
+                document.getElementById('fusionCount').textContent = fusionMetrics.fusionCount;
+                document.getElementById('unimodalCount').textContent = fusionMetrics.unimodalCount;
+                document.getElementById('syncErrors').textContent = fusionMetrics.syncErrors;
+
+                // Update sync quality
+                const syncQuality = Math.max(0, 100 - (fusionMetrics.lastSyncErrorMs || 0));
+                document.getElementById('avSyncValue').textContent = `${Math.round(syncQuality)}%`;
+                document.getElementById('avSyncBar').style.width = `${syncQuality}%`;
+            }
+
+            // Schedule next update
+            setTimeout(updateMetrics, 1000);
+        }
+
+        // Event listeners
+        document.getElementById('startBtn').addEventListener('click', startCapture);
+        document.getElementById('stopBtn').addEventListener('click', stopCapture);
+
+        // Initialize on load
+        window.addEventListener('load', async () => {
+            await initializeRTI();
+            updateMetrics();
+        });
+
+        // Cleanup on unload
+        window.addEventListener('beforeunload', () => {
+            if (rtiSystem.webrtcGateway) {
+                rtiSystem.webrtcGateway.destroy();
+            }
+            if (rtiSystem.fusionEngine) {
+                rtiSystem.fusionEngine.destroy();
+            }
+            if (rtiSystem.decisionEngine) {
+                rtiSystem.decisionEngine.destroy();
+            }
+        });
+    </script>
+
+</body></html>

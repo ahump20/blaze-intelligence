@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://blaze-intelligence.netlify.app/sitemap.xml
+
+# Crawl-delay for bots
+Crawl-delay: 1
+
+# Disallow admin paths (if any)
+Disallow: /admin/
+Disallow: /.netlify/
+Disallow: /functions/

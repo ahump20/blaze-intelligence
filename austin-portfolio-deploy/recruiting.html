@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiting Intelligence - Blaze Intelligence</title>
+    <link rel="stylesheet" href="/public/css/blaze-professional.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: #E6F1FF;
+            font-family: 'Inter', sans-serif;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #BF5700, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pipeline-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .pipeline-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        .pipeline-title {
+            color: #BF5700;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .recruit-list {
+            list-style: none;
+            padding: 0;
+        }
+        .recruit-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(191, 87, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .recruit-item:hover {
+            background: rgba(191, 87, 0, 0.2);
+            transform: translateX(5px);
+        }
+        .recruit-name {
+            font-weight: 600;
+        }
+        .recruit-school {
+            font-size: 0.9rem;
+            color: #9BCBEB;
+        }
+        .rating {
+            display: flex;
+            gap: 2px;
+        }
+        .star {
+            color: #FFD700;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .stat-box {
+            background: rgba(191, 87, 0, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            color: #FFD700;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #9BCBEB;
+            margin-top: 0.5rem;
+        }
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(191, 87, 0, 0.2);
+            border: 1px solid #BF5700;
+            border-radius: 8px;
+            color: #E6F1FF;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: #BF5700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Recruiting Intelligence Platform</h1>
+            <p>AI-powered talent identification and development tracking</p>
+        </div>
+
+        <div class="filter-tabs">
+            <button class="tab-btn active">All Pipelines</button>
+            <button class="tab-btn">Texas HS</button>
+            <button class="tab-btn">Perfect Game</button>
+            <button class="tab-btn">Transfer Portal</button>
+            <button class="tab-btn">International</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value">847</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">156</div>
+                <div class="stat-label">5-Star Recruits</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">94.2%</div>
+                <div class="stat-label">Prediction Accuracy</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">$2.4M</div>
+                <div class="stat-label">Avg NIL Value</div>
+            </div>
+        </div>
+
+        <div class="pipeline-section">
+            <div class="pipeline-card">
+                <h2 class="pipeline-title">
+                    <span>🏈</span> Texas HS Football Pipeline
+                </h2>
+                <ul class="recruit-list">
+                    <li class="recruit-item">
+                        <div>
+                            <div class="recruit-name">Arch Manning</div>
+                            <div class="recruit-school">Isidore Newman HS</div>
+                        </div>
+                        <div class="rating">
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                        </div>
+                    </li>
+                    <li class="recruit-item">
+                        <div>
+                            <div class="recruit-name">DJ Lagway</div>
+                            <div class="recruit-school">Willis HS</div>
+                        </div>
+                        <div class="rating">
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                        </div>
+                    </li>
+                    <li class="recruit-item">
+                        <div>
+                            <div class="recruit-name">Johntay Cook II</div>
+                            <div class="recruit-school">DeSoto HS</div>
+                        </div>
+                        <div class="rating">
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pipeline-card">
+                <h2 class="pipeline-title">
+                    <span>⚾</span> Perfect Game Elite
+                </h2>
+                <ul class="recruit-list">
+                    <li class="recruit-item">
+                        <div>
+                            <div class="recruit-name">Dylan Crews</div>
+                            <div class="recruit-school">Lake Mary HS (FL)</div>
+                        </div>
+                        <div class="rating">
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                        </div>
+                    </li>
+                    <li class="recruit-item">
+                        <div>
+                            <div class="recruit-name">Paul Skenes</div>
+                            <div class="recruit-school">El Toro HS (CA)</div>
+                        </div>
+                        <div class="rating">
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                        </div>
+                    </li>
+                    <li class="recruit-item">
+                        <div>
+                            <div class="recruit-name">Wyatt Langford</div>
+                            <div class="recruit-school">Trenton HS (FL)</div>
+                        </div>
+                        <div class="rating">
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="/app.html" style="color: #BF5700; text-decoration: none; font-size: 1.2rem;">← Back to Dashboard</a>
+        </div>
+    </div>
+
+</body></html>

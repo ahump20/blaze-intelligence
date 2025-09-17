@@ -1,0 +1,70 @@
+{
+  "lastUpdate": "2025-09-15T23:47:56.252Z",
+  "teams": {
+    "mlb": {
+      "cardinals": {
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "pct": ".000",
+          "gb": "0"
+        },
+        "playoff_probability": "18.2%",
+        "key_players": [
+          "Paul Goldschmidt",
+          "Nolan Arenado",
+          "Willson Contreras"
+        ]
+      }
+    },
+    "nfl": {
+      "titans": {
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 0,
+          "pct": ".000"
+        },
+        "projected_wins": 7.5,
+        "key_players": [
+          "Will Levis",
+          "Calvin Ridley",
+          "Jeffery Simmons"
+        ]
+      }
+    },
+    "nba": {
+      "grizzlies": {
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "pct": ".000",
+          "gb": "0"
+        },
+        "playoff_probability": "75.3%",
+        "key_players": [
+          "Ja Morant",
+          "Desmond Bane",
+          "Jaren Jackson Jr."
+        ]
+      }
+    },
+    "ncaa": {
+      "longhorns": {
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "pct": ".000",
+          "conf_wins": 0,
+          "conf_losses": 0
+        },
+        "ranking": "Preseason #8",
+        "key_players": [
+          "Arch Manning",
+          "Kelvin Banks Jr.",
+          "Anthony Hill Jr."
+        ]
+      }
+    }
+  }
+}

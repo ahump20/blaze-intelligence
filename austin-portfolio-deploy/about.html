@@ -1,94 +1,810 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Blaze Intelligence</title>
+    <title>About Us - Blaze Intelligence | Championship Sports Analytics</title>
+    <meta name="description" content="Learn about Blaze Intelligence and Austin Humphrey's journey from athlete to analytics architect. Transforming sports performance through AI-powered intelligence.">
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <link rel="apple-touch-icon" href="/images/brand/blaze-tagline.png">
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            --primary-orange: #BF5700;
+            --burnt-orange: #BF5700;
             --championship-gold: #FFD700;
-            --bg-primary: #0a0e27;
-            --text-primary: #e0e6ed;
+            --cardinal-blue: #9BCBEB;
+            --data-green: #00B2A9;
+            --trust-navy: #002244;
+            --dark-bg: #0a0e27;
+            --light-bg: #1a1a2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: linear-gradient(135deg, #0a0e27, #1a1a2e);
-            color: #e0e6ed;
-            margin: 0;
-            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--light-bg) 100%);
+            color: #E5E7EB;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            padding: 1rem 2rem;
         }
 
-        .container {
-            text-align: center;
-            max-width: 800px;
-            padding: 2rem;
-        }
-
-        h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #BF5700, #FFD700);
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: #8892b0;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #BF5700, #FFD700);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 8px;
             text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
         }
 
         .nav-links {
-            margin-top: 3rem;
             display: flex;
             gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: #9CA3AF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--burnt-orange);
+        }
+
+        .nav-link.active {
+            color: var(--burnt-orange);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding-top: 120px;
+            padding-bottom: 60px;
+            position: relative;
+            text-align: center;
+        }
+
+        .hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #9CA3AF;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* Main Content */
+        .content-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #9CA3AF;
+            margin-bottom: 3rem;
+        }
+
+        /* Founder Section */
+        .founder-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: start;
+            margin-bottom: 4rem;
+        }
+
+        .founder-image {
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.2), rgba(255, 215, 0, 0.1));
+            border: 2px solid var(--burnt-orange);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .founder-icon {
+            font-size: 8rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .founder-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-top: 1rem;
+        }
+
+        .founder-title {
+            color: #9CA3AF;
+            margin-top: 0.5rem;
+        }
+
+        .founder-bio {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .bio-text {
+            color: #E5E7EB;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Athletic Journey */
+        .journey-timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 3rem 0;
+        }
+
+        .journey-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--burnt-orange), var(--championship-gold));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: rgba(17, 34, 64, 0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--burnt-orange);
+            border-radius: 50%;
+            border: 2px solid var(--dark-bg);
+        }
+
+        .timeline-year {
+            font-size: 0.9rem;
+            color: var(--championship-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            color: #9CA3AF;
+            line-height: 1.6;
+        }
+
+        /* Mission & Values */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .value-card {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--burnt-orange);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.3);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            color: var(--burnt-orange);
+            margin-bottom: 1rem;
+        }
+
+        .value-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+        }
+
+        .value-description {
+            color: #9CA3AF;
+            line-height: 1.6;
+        }
+
+        /* Expertise Section */
+        .expertise-section {
+            background: rgba(17, 34, 64, 0.3);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .expertise-item {
+            text-align: center;
+        }
+
+        .expertise-percentage {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .expertise-label {
+            color: #E5E7EB;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .expertise-sublabel {
+            color: #9CA3AF;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Team Focus */
+        .teams-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .team-card {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: scale(1.05);
+            border-color: var(--burnt-orange);
+        }
+
+        .team-logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-name {
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .team-league {
+            color: #9CA3AF;
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(255, 215, 0, 0.05));
+            border-radius: 16px;
+            margin: 4rem 0;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 2rem;
         }
 
-        .nav-links a {
-            color: #9BCBEB;
+        .btn {
+            padding: 1rem 2rem;
+            font-weight: 600;
+            border-radius: 8px;
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            display: inline-block;
+            cursor: pointer;
         }
 
-        .nav-links a:hover {
-            color: #FFD700;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--burnt-orange);
+            border: 2px solid var(--burnt-orange);
+        }
+
+        .btn-secondary:hover {
+            background: var(--burnt-orange);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(191, 87, 0, 0.2);
+            color: #9CA3AF;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .founder-section {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .expertise-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>About Us</h1>
-        <p>Learn about Blaze Intelligence and our mission.</p>
-        <a href="/" class="btn">Return to Home</a>
-
-        <div class="nav-links">
-            <a href="/realtime-multimodal-dashboard.html">RTI Dashboard</a>
-            <a href="/sports-intelligence-dashboard.html">Sports Intelligence</a>
-            <a href="/enhanced-index.html">Enhanced Platform</a>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="/" class="logo">🔥 Blaze Intelligence</a>
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/#platform-hub" class="nav-link">Platform Hub</a></li>
+                <li><a href="/#live-data" class="nav-link">Live Data</a></li>
+                <li><a href="/#analytics" class="nav-link">Analytics</a></li>
+                <li><a href="/about.html" class="nav-link active">About</a></li>
+                <li><a href="/#contact" class="nav-link">Contact</a></li>
+            </ul>
         </div>
-    </div>
+    </nav>
 
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <canvas id="hero-canvas" class="hero-canvas"></canvas>
+        <div class="hero-content">
+            <h1 class="hero-title">About Blaze Intelligence</h1>
+            <p class="hero-subtitle">From the playing field to the analytics field — transforming athletic experience into championship intelligence</p>
+        </div>
+    </section>
 
-</body></html>
+    <!-- Founder Section -->
+    <section class="content-section">
+        <h2 class="section-title">Meet Your Analytics Partner</h2>
+        <p class="section-subtitle">Where competitive experience meets cutting-edge technology</p>
+
+        <div class="founder-section">
+            <div class="founder-image">
+                <div class="founder-icon">🏆</div>
+                <div class="founder-name">Austin Humphrey</div>
+                <div class="founder-title">Founder & Chief Analytics Officer</div>
+            </div>
+
+            <div class="founder-bio">
+                <p class="bio-text">
+                    Austin Humphrey brings a unique perspective to sports analytics — one forged through years of competitive athletics and refined through professional success in high-performance business environments.
+                </p>
+                <p class="bio-text">
+                    Currently pursuing a Master's in Entertainment Business with a Sports Management focus at Full Sail University (GPA 3.8), Austin combines academic excellence with real-world experience. His journey from three-sport varsity athlete to top-performing business professional demonstrates the same competitive drive that powers Blaze Intelligence.
+                </p>
+                <p class="bio-text">
+                    At Northwestern Mutual, Austin achieved top 10% national performance ranking, earning the prestigious Power of 10 Award through systematic process optimization and data-driven strategies. Now as an Advertising Account Executive at Spectrum Reach, he develops comprehensive media strategies for professional sports organizations across Texas markets.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Athletic Journey -->
+    <section class="content-section">
+        <h2 class="section-title">The Athletic Foundation</h2>
+        <p class="section-subtitle">Every data point starts with lived experience</p>
+
+        <div class="journey-timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">2008</div>
+                <div class="timeline-title">Perfect Game Achievement</div>
+                <div class="timeline-description">
+                    Pitched a perfect game at age 12 in Boerne Youth Athletic Association competition, demonstrating early excellence under pressure
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-year">2009-2013</div>
+                <div class="timeline-title">Elite Travel Baseball</div>
+                <div class="timeline-description">
+                    Competed with South Texas Sliders and participated in Perfect Game showcases, facing top national competition and learning advanced analytics-driven player development
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-year">2010-2014</div>
+                <div class="timeline-title">Three-Sport Varsity Athlete</div>
+                <div class="timeline-description">
+                    Starting running back (#20) for Boerne Champion High School football, varsity baseball player, and track & field competitor (100m: 12.32 seconds)
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-year">2014-2020</div>
+                <div class="timeline-title">University of Texas at Austin</div>
+                <div class="timeline-description">
+                    Bachelor of Arts in International Relations & Global Studies with minors in Economics and European Studies. Built analytical frameworks for understanding complex systems
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-year">2023-Present</div>
+                <div class="timeline-title">Sports Analytics Innovation</div>
+                <div class="timeline-description">
+                    Researching and developing AI-assisted analytical frameworks for sports performance evaluation, integrating multiple AI platforms for comprehensive analysis
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Values -->
+    <section class="content-section">
+        <h2 class="section-title">Our Mission & Values</h2>
+        <p class="section-subtitle">Championship intelligence through integrity and innovation</p>
+
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">🎯</div>
+                <div class="value-title">Data-Driven Excellence</div>
+                <div class="value-description">
+                    Every decision backed by real data, not intuition. We transform raw statistics into actionable intelligence that drives championship performance.
+                </div>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">⚡</div>
+                <div class="value-title">Real-Time Intelligence</div>
+                <div class="value-description">
+                    Sub-100ms latency for live game decisions. When milliseconds matter, our platform delivers insights at the speed of sport.
+                </div>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">🛡️</div>
+                <div class="value-title">Integrity First</div>
+                <div class="value-description">
+                    Transparent methodologies and honest analysis. No black boxes, no inflated claims — just reliable intelligence you can trust.
+                </div>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">🔬</div>
+                <div class="value-title">Innovation at Scale</div>
+                <div class="value-description">
+                    Combining AI, computer vision, and biomechanical analysis to see what others miss. Pattern recognition meets championship mindset.
+                </div>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">🤝</div>
+                <div class="value-title">Player-First Philosophy</div>
+                <div class="value-description">
+                    Built by athletes, for athletes. We understand the game because we've played it at the highest levels.
+                </div>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">🏛️</div>
+                <div class="value-title">Deep South Authority</div>
+                <div class="value-description">
+                    The Dave Campbell's of sports analytics — institutional trust and heritage in Texas and SEC sports intelligence.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise Section -->
+    <section class="content-section">
+        <div class="expertise-section">
+            <h2 class="section-title">Core Competencies</h2>
+            <p class="section-subtitle">Proven expertise across sports business and analytics</p>
+
+            <div class="expertise-grid">
+                <div class="expertise-item">
+                    <div class="expertise-percentage">98%</div>
+                    <div class="expertise-label">Pattern Recognition</div>
+                    <div class="expertise-sublabel">Elite competitive analysis</div>
+                </div>
+
+                <div class="expertise-item">
+                    <div class="expertise-percentage">95%</div>
+                    <div class="expertise-label">Strategic Analysis</div>
+                    <div class="expertise-sublabel">Data-driven decisions</div>
+                </div>
+
+                <div class="expertise-item">
+                    <div class="expertise-percentage">90%</div>
+                    <div class="expertise-label">Financial Modeling</div>
+                    <div class="expertise-sublabel">ROI optimization</div>
+                </div>
+
+                <div class="expertise-item">
+                    <div class="expertise-percentage">Top 10%</div>
+                    <div class="expertise-label">Sales Performance</div>
+                    <div class="expertise-sublabel">National ranking achieved</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Focus -->
+    <section class="content-section">
+        <h2 class="section-title">Our Coverage Universe</h2>
+        <p class="section-subtitle">From Texas high school to professional leagues</p>
+
+        <div class="teams-showcase">
+            <div class="team-card">
+                <div class="team-logo">⚾</div>
+                <div class="team-name">St. Louis Cardinals</div>
+                <div class="team-league">MLB Focus Team</div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-logo">🏈</div>
+                <div class="team-name">Tennessee Titans</div>
+                <div class="team-league">NFL Focus Team</div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-logo">🤘</div>
+                <div class="team-name">Texas Longhorns</div>
+                <div class="team-league">NCAA Focus Program</div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-logo">🐻</div>
+                <div class="team-name">Memphis Grizzlies</div>
+                <div class="team-league">NBA Focus Team</div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-logo">🎯</div>
+                <div class="team-name">Perfect Game</div>
+                <div class="team-league">Elite Youth Baseball</div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-logo">⭐</div>
+                <div class="team-name">Texas HS Football</div>
+                <div class="team-league">Prep Pipeline</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="content-section">
+        <div class="cta-section">
+            <h2 class="cta-title">Ready to Transform Your Game?</h2>
+            <p style="color: #9CA3AF; font-size: 1.2rem; margin-bottom: 2rem;">
+                Join the championship intelligence revolution
+            </p>
+            <div class="cta-buttons">
+                <a href="/" class="btn btn-primary">View Live Platform</a>
+                <a href="/#contact" class="btn btn-secondary">Get in Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Blaze Intelligence. All rights reserved.</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            Deep South Sports Authority | Championship Analytics Platform
+        </p>
+    </footer>
+
+    <script>
+        // Three.js animated background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const canvas = document.getElementById('hero-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+
+        renderer.setSize(window.innerWidth, 400);
+        camera.position.z = 30;
+
+        // Create floating particles
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const colors = [];
+
+        for (let i = 0; i < 500; i++) {
+            vertices.push(
+                Math.random() * 100 - 50,
+                Math.random() * 100 - 50,
+                Math.random() * 100 - 50
+            );
+
+            const useOrange = Math.random() > 0.5;
+            if (useOrange) {
+                colors.push(0.75, 0.34, 0, 0.8); // Burnt orange
+            } else {
+                colors.push(1, 0.84, 0, 0.8); // Championship gold
+            }
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 4));
+
+        const material = new THREE.PointsMaterial({
+            size: 2,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+
+            particles.rotation.x += 0.001;
+            particles.rotation.y += 0.002;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, 400);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="/#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').replace('/', '');
+                if (targetId === '#') {
+                    window.location.href = '/';
+                } else {
+                    window.location.href = '/' + targetId;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

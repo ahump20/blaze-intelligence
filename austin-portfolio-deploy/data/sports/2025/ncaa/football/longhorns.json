@@ -1,0 +1,371 @@
+{
+  "team": "Texas Longhorns",
+  "season": "2025",
+  "league": "NCAA",
+  "conference": "SEC",
+  "division": "SEC",
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "pct": ".000",
+    "conf_wins": 0,
+    "conf_losses": 0
+  },
+  "rankings": {
+    "ap_poll": "Preseason #8",
+    "coaches_poll": "Preseason #7",
+    "cfp_ranking": "TBD",
+    "recruiting_rank": "#3 (2025 class)"
+  },
+  "roster": {
+    "offense": [
+      {
+        "number": "3",
+        "name": "Quinn Ewers",
+        "position": "QB",
+        "status": "NFL Draft",
+        "replacement": "Arch Manning"
+      },
+      {
+        "number": "16",
+        "name": "Arch Manning",
+        "position": "QB",
+        "comp": 0,
+        "att": 0,
+        "yards": 0,
+        "td": 0,
+        "int": 0,
+        "qbr": 0
+      },
+      {
+        "number": "18",
+        "name": "Trey Owens",
+        "position": "QB",
+        "comp": 0,
+        "att": 0,
+        "yards": 0,
+        "td": 0,
+        "int": 0,
+        "qbr": 0
+      },
+      {
+        "number": "5",
+        "name": "Jaydon Blue",
+        "position": "RB",
+        "carries": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "24",
+        "name": "Jerrick Gibson",
+        "position": "RB",
+        "carries": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "4",
+        "name": "Christian Clark",
+        "position": "RB",
+        "carries": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "1",
+        "name": "Isaiah Bond",
+        "position": "WR",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "7",
+        "name": "Matthew Golden",
+        "position": "WR",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "80",
+        "name": "Silas Bolden",
+        "position": "WR",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "11",
+        "name": "DeAndre Moore Jr.",
+        "position": "WR",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "84",
+        "name": "Gunnar Helm",
+        "position": "TE",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "88",
+        "name": "Juan Davis",
+        "position": "TE",
+        "rec": 0,
+        "yards": 0,
+        "avg": 0,
+        "td": 0
+      },
+      {
+        "number": "78",
+        "name": "Kelvin Banks Jr.",
+        "position": "LT",
+        "starts": 0,
+        "pancakes": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "75",
+        "name": "DJ Campbell",
+        "position": "LG",
+        "starts": 0,
+        "pancakes": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "50",
+        "name": "Jake Majors",
+        "position": "C",
+        "starts": 0,
+        "pancakes": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "77",
+        "name": "Hayden Conner",
+        "position": "RG",
+        "starts": 0,
+        "pancakes": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "73",
+        "name": "Cameron Williams",
+        "position": "RT",
+        "starts": 0,
+        "pancakes": 0,
+        "pff_grade": 0
+      }
+    ],
+    "defense": [
+      {
+        "number": "97",
+        "name": "Trey Moore",
+        "position": "DE",
+        "tackles": 0,
+        "sacks": 0,
+        "tfls": 0,
+        "qb_hits": 0
+      },
+      {
+        "number": "91",
+        "name": "Ethan Burke",
+        "position": "DE",
+        "tackles": 0,
+        "sacks": 0,
+        "tfls": 0,
+        "qb_hits": 0
+      },
+      {
+        "number": "95",
+        "name": "Alfred Collins",
+        "position": "DT",
+        "tackles": 0,
+        "sacks": 0,
+        "tfls": 0,
+        "qb_hits": 0
+      },
+      {
+        "number": "49",
+        "name": "Vernon Broughton",
+        "position": "DT",
+        "tackles": 0,
+        "sacks": 0,
+        "tfls": 0,
+        "qb_hits": 0
+      },
+      {
+        "number": "6",
+        "name": "Liona Lefau",
+        "position": "LB",
+        "tackles": 0,
+        "assists": 0,
+        "tfls": 0,
+        "int": 0
+      },
+      {
+        "number": "39",
+        "name": "Anthony Hill Jr.",
+        "position": "LB",
+        "tackles": 0,
+        "assists": 0,
+        "tfls": 0,
+        "int": 0
+      },
+      {
+        "number": "44",
+        "name": "David Gbenda",
+        "position": "LB",
+        "tackles": 0,
+        "assists": 0,
+        "tfls": 0,
+        "int": 0
+      },
+      {
+        "number": "27",
+        "name": "Malik Muhammad",
+        "position": "CB",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "2",
+        "name": "Jaylon Guilbeau",
+        "position": "CB",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "14",
+        "name": "Warren Roberson",
+        "position": "CB",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "8",
+        "name": "Derek Williams Jr.",
+        "position": "S",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      },
+      {
+        "number": "20",
+        "name": "Andrew Mukuba",
+        "position": "S",
+        "tackles": 0,
+        "pd": 0,
+        "int": 0,
+        "pff_grade": 0
+      }
+    ],
+    "special_teams": [
+      {
+        "number": "29",
+        "name": "Bert Auburn",
+        "position": "K",
+        "fg_made": 0,
+        "fg_att": 0,
+        "pct": 0,
+        "long": 0
+      },
+      {
+        "number": "41",
+        "name": "Isaac Pearson",
+        "position": "P",
+        "punts": 0,
+        "avg": 0,
+        "inside_20": 0,
+        "touchbacks": 0
+      }
+    ],
+    "coaching_staff": {
+      "head_coach": "Steve Sarkisian",
+      "offensive_coordinator": "Kyle Flood (OL) / AJ Milwee (QB)",
+      "defensive_coordinator": "Pete Kwiatkowski",
+      "special_teams": "Jeff Banks",
+      "notable_assistants": {
+        "rb_coach": "Tashard Choice",
+        "wr_coach": "Chris Jackson",
+        "db_coach": "Terry Joseph"
+      }
+    },
+    "recruiting": {
+      "class_2025": {
+        "rank": 3,
+        "five_stars": 3,
+        "four_stars": 18,
+        "three_stars": 4,
+        "total_commits": 25,
+        "avg_rating": 93.27,
+        "top_recruits": [
+          {
+            "name": "Kaliq Lockett",
+            "position": "WR",
+            "rating": "5-star",
+            "hometown": "Sachse, TX"
+          },
+          {
+            "name": "Jonah Williams",
+            "position": "OT",
+            "rating": "5-star",
+            "hometown": "Houston, TX"
+          },
+          {
+            "name": "Lance Jackson",
+            "position": "DT",
+            "rating": "5-star",
+            "hometown": "Texarkana, TX"
+          }
+        ]
+      }
+    }
+  },
+  "analytics": {
+    "sp_plus_rating": "TBD",
+    "fpi_rating": "TBD",
+    "sos_rank": "TBD",
+    "recruiting_score": 296.84,
+    "playoff_probability": "42.7%",
+    "projected_wins": 9.5
+  },
+  "nil_valuation": {
+    "total_roster_value": "$15.2M",
+    "top_nil_deals": [
+      {
+        "player": "Arch Manning",
+        "estimated_value": "$3.1M"
+      },
+      {
+        "player": "Kelvin Banks Jr.",
+        "estimated_value": "$800K"
+      },
+      {
+        "player": "Isaiah Bond",
+        "estimated_value": "$650K"
+      }
+    ]
+  },
+  "lastUpdated": "2025-09-15T23:47:56.252Z"
+}

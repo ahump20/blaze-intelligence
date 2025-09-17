@@ -1,0 +1,709 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence MCP - Championship Analytics Platform</title>
+
+    <!-- BLAZE::STYLE.v1 Championship Visual System -->
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --tennessee-deep: #002244;
+            --vancouver-teal: #00B2A9;
+            --platinum: #E5E4E2;
+            --graphite: #36454F;
+            --pearl: #FAFAFA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: var(--pearl);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 50%, rgba(191, 87, 0, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-content {
+            text-align: center;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange) 0%, #FFD700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 60px rgba(191, 87, 0, 0.5);
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--cardinal-blue);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        /* MCP Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--burnt-orange), #FFD700);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--burnt-orange);
+            box-shadow: 0 20px 40px rgba(191, 87, 0, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tool-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .tool-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-description {
+            color: var(--platinum);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .tool-endpoint {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--cardinal-blue);
+            word-break: break-all;
+        }
+
+        /* Live Dashboard */
+        .dashboard {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--vancouver-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .team-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(155, 203, 235, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(155, 203, 235, 0.3);
+        }
+
+        .team-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .team-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #FFD700;
+        }
+
+        .team-sport {
+            background: var(--burnt-orange);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .team-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-label {
+            color: var(--platinum);
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            color: var(--cardinal-blue);
+            font-weight: 600;
+        }
+
+        /* API Test Console */
+        .console {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 900px;
+        }
+
+        .console-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .console-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--burnt-orange);
+        }
+
+        .console-controls {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        select, button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(191, 87, 0, 0.5);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        select:hover, button:hover {
+            background: rgba(191, 87, 0, 0.2);
+            border-color: var(--burnt-orange);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--burnt-orange), #FF8C00);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(191, 87, 0, 0.4);
+        }
+
+        .console-output {
+            background: #000;
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #00ff00;
+        }
+
+        /* Status Indicators */
+        .status {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--burnt-orange);
+            border-radius: 30px;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            font-size: 0.875rem;
+            color: var(--cardinal-blue);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--burnt-orange);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem;
+            }
+
+            .team-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .status {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Status Indicator -->
+    <div class="status">
+        <div class="status-dot"></div>
+        <span class="status-text">MCP Server Active</span>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Blaze Intelligence MCP</h1>
+            <p class="hero-subtitle">Championship Sports Analytics Platform</p>
+            <p style="color: var(--platinum); font-size: 1.1rem; margin-bottom: 3rem;">
+                Model Context Protocol Server with SportsDataIO Integration<br>
+                Real-Time Analytics • NIL Valuations • Character Assessment
+            </p>
+        </div>
+    </section>
+
+    <!-- MCP Tools Grid -->
+    <section class="tools-grid">
+        <div class="tool-card">
+            <div class="tool-icon">🏆</div>
+            <h3 class="tool-title">Championship Dashboard</h3>
+            <p class="tool-description">Real-time championship sports data for Cardinals, Titans, Grizzlies, and Longhorns</p>
+            <div class="tool-endpoint">getChampionshipDashboard</div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-icon">📊</div>
+            <h3 class="tool-title">Team Performance</h3>
+            <p class="tool-description">Detailed performance metrics and advanced analytics for specific teams</p>
+            <div class="tool-endpoint">getTeamPerformance</div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-icon">⚡</div>
+            <h3 class="tool-title">Live Scores</h3>
+            <p class="tool-description">Real-time game scores and updates across all major sports</p>
+            <div class="tool-endpoint">getLiveScores</div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-icon">🎯</div>
+            <h3 class="tool-title">Player Stats</h3>
+            <p class="tool-description">Comprehensive player statistics and performance metrics</p>
+            <div class="tool-endpoint">getPlayerStats</div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-icon">💰</div>
+            <h3 class="tool-title">NIL Valuation</h3>
+            <p class="tool-description">Calculate Name, Image, Likeness valuations for college athletes</p>
+            <div class="tool-endpoint">getNILValuation</div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-icon">🔮</div>
+            <h3 class="tool-title">Season Predictions</h3>
+            <p class="tool-description">AI-powered season predictions and playoff probabilities</p>
+            <div class="tool-endpoint">getSeasonPredictions</div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-icon">🌟</div>
+            <h3 class="tool-title">Recruiting Analytics</h3>
+            <p class="tool-description">Perfect Game baseball and high school football recruiting intelligence</p>
+            <div class="tool-endpoint">getRecruitingAnalytics</div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-icon">🧠</div>
+            <h3 class="tool-title">Character Assessment</h3>
+            <p class="tool-description">Analyze player character traits and micro-expressions</p>
+            <div class="tool-endpoint">getCharacterAssessment</div>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-icon">📈</div>
+            <h3 class="tool-title">Sports Reports</h3>
+            <p class="tool-description">Generate comprehensive analytics reports in multiple formats</p>
+            <div class="tool-endpoint">generateSportsReport</div>
+        </div>
+    </section>
+
+    <!-- Live Championship Dashboard -->
+    <section class="dashboard">
+        <div class="dashboard-header">
+            <h2>Championship Teams Live</h2>
+            <p style="color: var(--platinum); font-size: 1.1rem;">Real-Time Performance Tracking</p>
+        </div>
+
+        <div class="team-cards" id="teamCards">
+            <!-- Cardinals -->
+            <div class="team-card">
+                <div class="team-header">
+                    <span class="team-name">Cardinals</span>
+                    <span class="team-sport">MLB</span>
+                </div>
+                <div class="team-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Record</span>
+                        <span class="stat-value" id="cardinals-record">Loading...</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Division</span>
+                        <span class="stat-value" id="cardinals-division">NL Central</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Win %</span>
+                        <span class="stat-value" id="cardinals-pct">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Titans -->
+            <div class="team-card">
+                <div class="team-header">
+                    <span class="team-name">Titans</span>
+                    <span class="team-sport">NFL</span>
+                </div>
+                <div class="team-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Record</span>
+                        <span class="stat-value" id="titans-record">Loading...</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Division</span>
+                        <span class="stat-value" id="titans-division">AFC South</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Points</span>
+                        <span class="stat-value" id="titans-points">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grizzlies -->
+            <div class="team-card">
+                <div class="team-header">
+                    <span class="team-name">Grizzlies</span>
+                    <span class="team-sport">NBA</span>
+                </div>
+                <div class="team-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Record</span>
+                        <span class="stat-value" id="grizzlies-record">Loading...</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Conference</span>
+                        <span class="stat-value" id="grizzlies-conf">Western</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Win %</span>
+                        <span class="stat-value" id="grizzlies-pct">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Longhorns -->
+            <div class="team-card">
+                <div class="team-header">
+                    <span class="team-name">Longhorns</span>
+                    <span class="team-sport">NCAA</span>
+                </div>
+                <div class="team-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Record</span>
+                        <span class="stat-value" id="longhorns-record">13-2</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Conference</span>
+                        <span class="stat-value" id="longhorns-conf">SEC</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Ranking</span>
+                        <span class="stat-value" id="longhorns-rank">#3 Final</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Test Console -->
+        <div class="console">
+            <div class="console-header">
+                <span class="console-title">🔧 MCP API Test Console</span>
+            </div>
+            <div class="console-controls">
+                <select id="toolSelect">
+                    <option value="getChampionshipDashboard">Championship Dashboard</option>
+                    <option value="getTeamPerformance">Team Performance</option>
+                    <option value="getNILValuation">NIL Valuation</option>
+                    <option value="getCharacterAssessment">Character Assessment</option>
+                </select>
+                <button onclick="testMCPTool()">Execute Tool</button>
+            </div>
+            <div class="console-output" id="consoleOutput">
+                Ready to test MCP tools...
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // BLAZE::SCRIPT.v1 - Championship MCP Integration
+        const MCP_ENDPOINT = '/api/blaze-intelligence-mcp';
+
+        // Test MCP Tool
+        async function testMCPTool() {
+            const tool = document.getElementById('toolSelect').value;
+            const output = document.getElementById('consoleOutput');
+
+            output.innerHTML = '<div class="loading"></div> Calling MCP server...';
+
+            try {
+                // Tool-specific arguments
+                const toolArgs = {
+                    getChampionshipDashboard: { sport: 'all', includeAnalytics: true },
+                    getTeamPerformance: { sport: 'mlb', teamKey: 'STL', season: '2024' },
+                    getNILValuation: {
+                        sport: 'football',
+                        stats: { touchdowns: 35, yards: 4500 },
+                        socialMedia: { instagram: 150000, twitter: 75000 }
+                    },
+                    getCharacterAssessment: {
+                        playerId: 'test-001',
+                        dataPoints: {
+                            clutchPerformance: 92,
+                            consistencyScore: 88,
+                            teamworkRating: 95
+                        }
+                    }
+                };
+
+                const response = await fetch(MCP_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tool,
+                        args: toolArgs[tool] || {}
+                    })
+                });
+
+                const result = await response.json();
+
+                output.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+
+                // Update dashboard if championship data
+                if (tool === 'getChampionshipDashboard' && result.success) {
+                    updateDashboard(result.data);
+                }
+
+            } catch (error) {
+                output.innerHTML = `<span style="color: #ff6b6b;">Error: ${error.message}</span>`;
+            }
+        }
+
+        // Update Dashboard with Live Data
+        function updateDashboard(data) {
+            if (data.featuredTeams) {
+                // Cardinals
+                if (data.featuredTeams.cardinals) {
+                    document.getElementById('cardinals-record').textContent =
+                        data.featuredTeams.cardinals.record || 'N/A';
+                    document.getElementById('cardinals-pct').textContent =
+                        data.featuredTeams.cardinals.winPercentage || 'N/A';
+                }
+
+                // Titans
+                if (data.featuredTeams.titans) {
+                    document.getElementById('titans-record').textContent =
+                        data.featuredTeams.titans.record || 'N/A';
+                    document.getElementById('titans-points').textContent =
+                        data.featuredTeams.titans.pointsFor || 'N/A';
+                }
+
+                // Grizzlies
+                if (data.featuredTeams.grizzlies) {
+                    document.getElementById('grizzlies-record').textContent =
+                        data.featuredTeams.grizzlies.record || 'N/A';
+                    document.getElementById('grizzlies-pct').textContent =
+                        data.featuredTeams.grizzlies.winPercentage || 'N/A';
+                }
+            }
+        }
+
+        // Load Championship Data on Page Load
+        async function loadChampionshipData() {
+            try {
+                const response = await fetch(MCP_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tool: 'getChampionshipDashboard',
+                        args: { sport: 'all' }
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    updateDashboard(result.data);
+                }
+            } catch (error) {
+                console.error('Failed to load championship data:', error);
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔥 Blaze Intelligence MCP Interface Loaded');
+            console.log('📊 SportsDataIO Integration Active');
+            console.log('🏆 Championship Teams: Cardinals, Titans, Grizzlies, Longhorns');
+
+            // Load initial data
+            loadChampionshipData();
+
+            // Refresh every 30 seconds
+            setInterval(loadChampionshipData, 30000);
+        });
+    </script>
+
+</body></html>

@@ -1,0 +1,189 @@
+{
+  "team": "Memphis Grizzlies",
+  "season": "2025-26",
+  "league": "NBA",
+  "conference": "Western",
+  "division": "Southwest",
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "pct": ".000",
+    "gb": "0"
+  },
+  "standings": {
+    "conference": "TBD",
+    "division": "TBD",
+    "playoff_seed": "TBD"
+  },
+  "roster": {
+    "starters": [
+      {
+        "number": "12",
+        "name": "Ja Morant",
+        "position": "PG",
+        "ppg": 25.1,
+        "apg": 8.1,
+        "rpg": 5.6,
+        "spg": 1.1,
+        "fg_pct": 0.474,
+        "three_pct": 0.273,
+        "per": 21.8
+      },
+      {
+        "number": "36",
+        "name": "Marcus Smart",
+        "position": "SG",
+        "ppg": 14.5,
+        "apg": 4.3,
+        "rpg": 2.7,
+        "spg": 1.5,
+        "fg_pct": 0.415,
+        "three_pct": 0.318,
+        "per": 13.2
+      },
+      {
+        "number": "0",
+        "name": "Desmond Bane",
+        "position": "SF",
+        "ppg": 23.7,
+        "apg": 5.5,
+        "rpg": 4.4,
+        "spg": 1,
+        "fg_pct": 0.479,
+        "three_pct": 0.384,
+        "per": 17.9
+      },
+      {
+        "number": "13",
+        "name": "Jaren Jackson Jr.",
+        "position": "PF",
+        "ppg": 22.5,
+        "rpg": 5.5,
+        "bpg": 1.6,
+        "spg": 1.2,
+        "fg_pct": 0.444,
+        "three_pct": 0.321,
+        "per": 19.2
+      },
+      {
+        "number": "17",
+        "name": "Zach Edey",
+        "position": "C",
+        "ppg": 9.8,
+        "rpg": 7.2,
+        "bpg": 1.8,
+        "fg_pct": 0.612,
+        "ft_pct": 0.651,
+        "per": 15.4
+      }
+    ],
+    "bench": [
+      {
+        "number": "22",
+        "name": "Derrick Rose",
+        "position": "PG",
+        "status": "Retired",
+        "replacement": "Scotty Pippen Jr."
+      },
+      {
+        "number": "1",
+        "name": "Scotty Pippen Jr.",
+        "position": "PG",
+        "ppg": 7.2,
+        "apg": 3.1,
+        "rpg": 2,
+        "fg_pct": 0.435,
+        "three_pct": 0.358
+      },
+      {
+        "number": "46",
+        "name": "John Konchar",
+        "position": "SG/SF",
+        "ppg": 5,
+        "rpg": 4,
+        "apg": 1.8,
+        "fg_pct": 0.474,
+        "three_pct": 0.358
+      },
+      {
+        "number": "45",
+        "name": "GG Jackson II",
+        "position": "PF",
+        "ppg": 14.6,
+        "rpg": 4.1,
+        "bpg": 0.7,
+        "fg_pct": 0.423,
+        "three_pct": 0.354
+      },
+      {
+        "number": "3",
+        "name": "Brandon Clarke",
+        "position": "PF/C",
+        "ppg": 10,
+        "rpg": 5.5,
+        "fg_pct": 0.655,
+        "ft_pct": 0.625
+      },
+      {
+        "number": "7",
+        "name": "Santi Aldama",
+        "position": "PF/C",
+        "ppg": 10.7,
+        "rpg": 4.8,
+        "apg": 2.3,
+        "fg_pct": 0.462,
+        "three_pct": 0.35
+      },
+      {
+        "number": "15",
+        "name": "Vince Williams Jr.",
+        "position": "SF",
+        "ppg": 10,
+        "rpg": 5.6,
+        "apg": 3.4,
+        "fg_pct": 0.442,
+        "three_pct": 0.374
+      },
+      {
+        "number": "30",
+        "name": "Jay Huff",
+        "position": "C",
+        "ppg": 4.5,
+        "rpg": 3.2,
+        "bpg": 1.2,
+        "fg_pct": 0.501,
+        "three_pct": 0.385
+      }
+    ],
+    "injured_reserve": [
+      {
+        "name": "Luke Kennard",
+        "position": "SG",
+        "injury": "TBD",
+        "expected_return": "TBD"
+      }
+    ],
+    "coaching_staff": {
+      "head_coach": "Taylor Jenkins",
+      "associate_hc": "Tuomas Iisalo",
+      "assistant_coaches": [
+        "Darko Rajakovic",
+        "Brad Jones",
+        "Vitaly Potapenko",
+        "Sonia Raman"
+      ],
+      "player_development": "Jason March"
+    }
+  },
+  "analytics": {
+    "offensive_rating": 112.3,
+    "defensive_rating": 109.8,
+    "net_rating": 2.5,
+    "pace": 99.2,
+    "true_shooting_pct": 0.567,
+    "effective_fg_pct": 0.532,
+    "playoff_probability": "75.3%",
+    "projected_wins": 48
+  },
+  "lastUpdated": "2025-09-15T23:47:56.252Z"
+}

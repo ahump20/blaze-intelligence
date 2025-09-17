@@ -1,0 +1,322 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-09-14T00:00:00Z",
+    "description": "Data source registry for Deep South Sports Authority platform",
+    "maintainer": "Austin Humphrey - Research Team"
+  },
+  "sources": {
+    "espn_cfb": {
+      "id": "espn_cfb",
+      "name": "ESPN College Football API",
+      "url": "https://www.espn.com/apis/devcenter/docs/",
+      "type": "API",
+      "category": "college_football",
+      "description": "Official ESPN college football statistics and game data",
+      "license": "Commercial API License",
+      "refreshCadence": "Real-time during games, daily aggregation",
+      "coverage": ["SEC", "Big 12", "Big Ten", "Pac-12", "ACC"],
+      "dataTypes": ["scores", "statistics", "player_data", "team_data"],
+      "reliability": "high",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "api@espn.com"
+    },
+    "ncaa_official": {
+      "id": "ncaa_official",
+      "name": "NCAA Official Statistics",
+      "url": "https://www.ncaa.org/sports/football/statistics",
+      "type": "Official",
+      "category": "college_football",
+      "description": "Official NCAA football statistics and records",
+      "license": "Public Domain",
+      "refreshCadence": "Daily during season",
+      "coverage": ["All NCAA Division I", "SEC", "Big 12"],
+      "dataTypes": ["official_statistics", "team_records", "player_records"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "statistics@ncaa.org"
+    },
+    "sec_network": {
+      "id": "sec_network",
+      "name": "SEC Network Data Feed",
+      "url": "https://www.secnetwork.com/data",
+      "type": "Conference",
+      "category": "college_football",
+      "description": "SEC Conference official statistics and insights",
+      "license": "Licensed Content",
+      "refreshCadence": "Real-time during games",
+      "coverage": ["All SEC Teams", "Championship Games"],
+      "dataTypes": ["conference_standings", "sec_statistics", "championship_data"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "data@secnetwork.com"
+    },
+    "big12_conference": {
+      "id": "big12_conference",
+      "name": "Big 12 Conference Data",
+      "url": "https://www.big12sports.com/statistics",
+      "type": "Conference",
+      "category": "college_football",
+      "description": "Official Big 12 Conference statistics and data",
+      "license": "Licensed Content",
+      "refreshCadence": "Real-time during games",
+      "coverage": ["All Big 12 Teams", "Conference Championships"],
+      "dataTypes": ["conference_standings", "team_statistics", "player_statistics"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "statistics@big12sports.com"
+    },
+    "perfect_game": {
+      "id": "perfect_game",
+      "name": "Perfect Game Database",
+      "url": "https://www.perfectgame.org/",
+      "type": "Private Database",
+      "category": "baseball",
+      "description": "Premier baseball scouting and tournament database",
+      "license": "Licensed Content",
+      "refreshCadence": "Real-time during tournaments",
+      "coverage": ["National Tournaments", "Prospect Rankings", "College Recruitment"],
+      "dataTypes": ["player_rankings", "tournament_results", "scouting_reports"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "data@perfectgame.org",
+      "expertValidation": "Austin Humphrey - Former Perfect Game Prospect"
+    },
+    "mlb_stats_api": {
+      "id": "mlb_stats_api",
+      "name": "MLB Stats API",
+      "url": "https://statsapi.mlb.com/docs/",
+      "type": "API",
+      "category": "baseball",
+      "description": "Official Major League Baseball statistics API",
+      "license": "MLB Official License",
+      "refreshCadence": "Real-time during games",
+      "coverage": ["All MLB Teams", "Minor League Systems"],
+      "dataTypes": ["game_data", "player_statistics", "team_statistics", "historical_data"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "api@mlb.com"
+    },
+    "fangraphs": {
+      "id": "fangraphs",
+      "name": "FanGraphs Baseball Analytics",
+      "url": "https://www.fangraphs.com/",
+      "type": "Analytics Platform",
+      "category": "baseball",
+      "description": "Advanced baseball analytics and sabermetrics",
+      "license": "Licensed Content",
+      "refreshCadence": "Daily aggregation",
+      "coverage": ["MLB", "Minor Leagues", "College Baseball"],
+      "dataTypes": ["advanced_metrics", "war_calculations", "projection_systems"],
+      "reliability": "high",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "data@fangraphs.com"
+    },
+    "nfl_api": {
+      "id": "nfl_api",
+      "name": "NFL Official API",
+      "url": "https://api.nfl.com/docs/",
+      "type": "API",
+      "category": "nfl",
+      "description": "Official National Football League statistics",
+      "license": "NFL Official License",
+      "refreshCadence": "Real-time during games",
+      "coverage": ["All NFL Teams", "NFL Combine", "Draft Data"],
+      "dataTypes": ["game_statistics", "player_data", "combine_results", "draft_data"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "api@nfl.com"
+    },
+    "sports_reference": {
+      "id": "sports_reference",
+      "name": "Sports Reference",
+      "url": "https://www.sports-reference.com/",
+      "type": "Database",
+      "category": "multi_sport",
+      "description": "Comprehensive sports statistics and historical data",
+      "license": "Licensed Content",
+      "refreshCadence": "Daily updates",
+      "coverage": ["NFL", "College Football", "MLB", "Basketball"],
+      "dataTypes": ["historical_statistics", "advanced_metrics", "team_data"],
+      "reliability": "high",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "data@sports-reference.com"
+    },
+    "injury_reports": {
+      "id": "injury_reports",
+      "name": "Official Injury Reports",
+      "url": "https://www.espn.com/college-football/injuries",
+      "type": "Aggregated",
+      "category": "multi_sport",
+      "description": "Aggregated injury reports from official team sources",
+      "license": "Public Information",
+      "refreshCadence": "Multiple times daily",
+      "coverage": ["College Football", "NFL", "MLB"],
+      "dataTypes": ["injury_status", "return_timelines", "impact_analysis"],
+      "reliability": "medium",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "sports@espn.com"
+    },
+    "texas_athletics": {
+      "id": "texas_athletics",
+      "name": "Texas Longhorns Athletics",
+      "url": "https://texassports.com/",
+      "type": "Official Team",
+      "category": "college_football",
+      "description": "Official University of Texas athletics data and statistics",
+      "license": "Public Information",
+      "refreshCadence": "Real-time during games",
+      "coverage": ["Texas Longhorns", "SEC Conference"],
+      "dataTypes": ["team_statistics", "player_profiles", "game_results"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "media@texassports.com",
+      "expertValidation": "Austin Humphrey - Former Texas Longhorn #20 Running Back"
+    },
+    "nil_market_data": {
+      "id": "nil_market_data",
+      "name": "NIL Market Intelligence",
+      "url": "https://www.on3.com/nil/",
+      "type": "Market Research",
+      "category": "nil_valuation",
+      "description": "Name, Image, Likeness market valuations and deal tracking",
+      "license": "Licensed Content",
+      "refreshCadence": "Weekly market updates",
+      "coverage": ["SEC", "Big 12", "National Market"],
+      "dataTypes": ["market_valuations", "deal_tracking", "brand_partnerships"],
+      "reliability": "medium",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "nil@on3.com"
+    },
+    "social_media_analytics": {
+      "id": "social_media_analytics",
+      "name": "Social Media Analytics",
+      "url": "https://analytics.twitter.com/",
+      "type": "Social Platform",
+      "category": "nil_valuation",
+      "description": "Social media engagement and influence metrics",
+      "license": "Platform APIs",
+      "refreshCadence": "Real-time",
+      "coverage": ["Twitter", "Instagram", "TikTok"],
+      "dataTypes": ["engagement_metrics", "follower_growth", "influence_scores"],
+      "reliability": "medium",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "api@twitter.com"
+    },
+    "austin_humphrey_db": {
+      "id": "austin_humphrey_db",
+      "name": "Austin Humphrey Athletic Database",
+      "url": "internal://austin-performance-data",
+      "type": "Internal",
+      "category": "athletic_performance",
+      "description": "Austin Humphrey's personal athletic performance and scouting database",
+      "license": "Proprietary",
+      "refreshCadence": "Historical data",
+      "coverage": ["Texas Football", "Perfect Game Baseball", "Athletic Performance"],
+      "dataTypes": ["performance_metrics", "scouting_reports", "athletic_insights"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "austin@deepsouthsports.com",
+      "expertValidation": "First-hand athletic experience and expertise"
+    },
+    "biomechanics_research": {
+      "id": "biomechanics_research",
+      "name": "Sports Biomechanics Research",
+      "url": "https://journals.humankinetics.com/",
+      "type": "Academic",
+      "category": "digital_combine",
+      "description": "Peer-reviewed sports biomechanics and performance research",
+      "license": "Academic License",
+      "refreshCadence": "Quarterly research updates",
+      "coverage": ["Athletic Performance", "Biomechanics", "Sports Science"],
+      "dataTypes": ["research_papers", "biomechanical_models", "performance_algorithms"],
+      "reliability": "high",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "research@humankinetics.com"
+    },
+    "nfl_combine_official": {
+      "id": "nfl_combine_official",
+      "name": "NFL Combine Official Results",
+      "url": "https://www.nfl.com/combine/",
+      "type": "Official",
+      "category": "digital_combine",
+      "description": "Official NFL Combine testing results and measurements",
+      "license": "NFL Official",
+      "refreshCadence": "Annual during combine season",
+      "coverage": ["NFL Draft Prospects", "Combine Measurements", "Pro Day Results"],
+      "dataTypes": ["combine_results", "measurements", "athletic_testing"],
+      "reliability": "highest",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "combine@nfl.com"
+    },
+    "weather_data": {
+      "id": "weather_data",
+      "name": "Weather Impact Data",
+      "url": "https://api.weather.gov/",
+      "type": "Government API",
+      "category": "environmental",
+      "description": "Weather conditions for game impact analysis",
+      "license": "Public Domain",
+      "refreshCadence": "Hourly updates",
+      "coverage": ["Stadium Locations", "Game Day Weather"],
+      "dataTypes": ["weather_conditions", "temperature", "wind_speed", "precipitation"],
+      "reliability": "high",
+      "lastVerified": "2025-09-14T00:00:00Z",
+      "contact": "api@weather.gov"
+    }
+  },
+  "sourceCategories": {
+    "college_football": {
+      "name": "College Football",
+      "description": "NCAA Division I football statistics and data",
+      "primarySources": ["espn_cfb", "ncaa_official", "sec_network", "big12_conference", "texas_athletics"]
+    },
+    "baseball": {
+      "name": "Baseball Analytics",
+      "description": "Professional and amateur baseball statistics",
+      "primarySources": ["perfect_game", "mlb_stats_api", "fangraphs"]
+    },
+    "nfl": {
+      "name": "National Football League",
+      "description": "Professional football statistics and data",
+      "primarySources": ["nfl_api", "sports_reference", "nfl_combine_official"]
+    },
+    "nil_valuation": {
+      "name": "NIL Market Intelligence",
+      "description": "Name, Image, Likeness market valuations",
+      "primarySources": ["nil_market_data", "social_media_analytics"]
+    },
+    "digital_combine": {
+      "name": "Athletic Performance Analysis",
+      "description": "Biomechanical and athletic performance data",
+      "primarySources": ["austin_humphrey_db", "biomechanics_research", "nfl_combine_official"]
+    },
+    "multi_sport": {
+      "name": "Multi-Sport Analytics",
+      "description": "Cross-sport statistics and advanced metrics",
+      "primarySources": ["sports_reference", "injury_reports"]
+    }
+  },
+  "qualityAssurance": {
+    "validationProtocols": [
+      "Cross-reference multiple sources for key statistics",
+      "Austin Humphrey expert validation for athletic performance metrics",
+      "Statistical significance testing for predictive models",
+      "Regular accuracy monitoring and model retraining"
+    ],
+    "refreshMonitoring": {
+      "alertThresholds": {
+        "realTime": "15 minutes",
+        "daily": "25 hours",
+        "weekly": "8 days"
+      },
+      "escalationProtocol": "Austin Humphrey - Research Team notification"
+    }
+  },
+  "complianceNotes": {
+    "ncaa": "All NCAA data usage complies with NCAA regulations and public information guidelines",
+    "nil": "NIL valuations are for informational purposes only and do not facilitate transactions",
+    "privacy": "No personal information beyond publicly available athletic statistics is collected",
+    "licensing": "All commercial data sources are properly licensed for platform usage"
+  }
+}

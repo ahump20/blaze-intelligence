@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Unified Championship Platform</title>
+    <meta name="description" content="Championship Sports Analytics Platform - Main Hub, 3D Universe, Intelligence Systems">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <!-- Babylon.js for 3D Background -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --tennessee-deep: #002244;
+            --vancouver-teal: #00B2A9;
+            --championship-gold: #FFD700;
+            --cardinals-red: #C41E3A;
+            --titans-navy: #0C2340;
+            --grizzlies-navy: #12173D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #002244 100%);
+            color: #E5E7EB;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 3D Canvas Background */
+        #renderCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 20px 60px rgba(191, 87, 0, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .main-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange) 0%, var(--championship-gold) 50%, var(--cardinal-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--cardinal-blue);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        /* Platform Grid */
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .platform-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .platform-card:nth-child(1) { animation-delay: 0.1s; }
+        .platform-card:nth-child(2) { animation-delay: 0.2s; }
+        .platform-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--burnt-orange), var(--championship-gold));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--burnt-orange);
+            box-shadow: 0 20px 60px rgba(191, 87, 0, 0.3);
+        }
+
+        .platform-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .platform-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 40px rgba(191, 87, 0, 0.3);
+        }
+
+        .platform-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .platform-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .platform-features li {
+            padding: 0.5rem 0;
+            color: var(--cardinal-blue);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .platform-features li::before {
+            content: '⚡';
+            position: absolute;
+            left: 0;
+        }
+
+        .platform-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--championship-gold);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
+
+        .platform-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--vancouver-teal));
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .platform-link:hover {
+            background: transparent;
+            border-color: var(--burnt-orange);
+            transform: translateX(4px);
+            box-shadow: 0 10px 40px rgba(191, 87, 0, 0.4);
+        }
+
+        /* Unified Features Section */
+        .unified-features {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .features-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, white 0%, var(--cardinal-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 34, 68, 0.4);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-4px);
+            background: rgba(191, 87, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-name {
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-detail {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Navigation Hub */
+        .nav-hub {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .nav-toggle {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(191, 87, 0, 0.4);
+        }
+
+        .nav-toggle:hover {
+            transform: scale(1.1) rotate(180deg);
+        }
+
+        .nav-toggle span {
+            width: 20px;
+            height: 2px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(155, 203, 235, 0.2);
+            border-radius: 16px;
+            padding: 1rem;
+            min-width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(191, 87, 0, 0.3);
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(155, 203, 235, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--cardinal-blue);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--burnt-orange);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .platform-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Background Canvas -->
+    <canvas id="renderCanvas"></canvas>
+
+    <!-- Navigation Hub -->
+    <div class="nav-hub">
+        <button class="nav-toggle" onclick="toggleNav()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-menu" id="navMenu">
+            <a href="https://blaze-intelligence.netlify.app/">🏆 Main Platform</a>
+            <a href="https://blaze-intelligence-main.netlify.app/">📊 Analytics Hub</a>
+            <a href="https://blaze-3d.netlify.app/">🌐 3D Universe</a>
+            <a href="#features">✨ Features</a>
+            <a href="/babylon-demo.html">🚀 Babylon Demo</a>
+            <a href="/contact.html">📧 Contact</a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">BI</div>
+            <h1 class="main-title">Blaze Intelligence</h1>
+            <p class="subtitle">Unified Championship Platform</p>
+            <p class="tagline">Three Platforms • One Vision • Infinite Possibilities</p>
+        </header>
+
+        <!-- Platform Grid -->
+        <div class="platforms-grid">
+            <!-- Main Platform -->
+            <div class="platform-card">
+                <div class="platform-icon">🏆</div>
+                <h2 class="platform-title">Main Intelligence Platform</h2>
+                <p class="platform-description">
+                    The flagship Blaze Intelligence platform featuring real-time sports analytics,
+                    AI-powered insights, and comprehensive data visualization for MLB, NFL, NBA, and NCAA.
+                </p>
+                <ul class="platform-features">
+                    <li>Real-time sports data integration</li>
+                    <li>Advanced NIL calculator</li>
+                    <li>Character assessment engine</li>
+                    <li>WebSocket live updates</li>
+                </ul>
+                <div class="platform-stats">
+                    <div class="stat">
+                        <div class="stat-value">94.6%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">2.8M+</div>
+                        <div class="stat-label">Data Points</div>
+                    </div>
+                </div>
+                <a href="https://blaze-intelligence.netlify.app/" class="platform-link" target="_blank">
+                    Launch Platform →
+                </a>
+            </div>
+
+            <!-- Analytics Hub -->
+            <div class="platform-card">
+                <div class="platform-icon">📊</div>
+                <h2 class="platform-title">Analytics & Intelligence Hub</h2>
+                <p class="platform-description">
+                    Deep-dive analytics dashboard with advanced metrics, predictive modeling,
+                    and comprehensive team performance analysis across all major sports leagues.
+                </p>
+                <ul class="platform-features">
+                    <li>Predictive analytics models</li>
+                    <li>Team performance tracking</li>
+                    <li>Player development metrics</li>
+                    <li>Historical data analysis</li>
+                </ul>
+                <div class="platform-stats">
+                    <div class="stat">
+                        <div class="stat-value"><100ms</div>
+                        <div class="stat-label">Latency</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Monitoring</div>
+                    </div>
+                </div>
+                <a href="https://blaze-intelligence-main.netlify.app/" class="platform-link" target="_blank">
+                    Open Analytics →
+                </a>
+            </div>
+
+            <!-- 3D Universe -->
+            <div class="platform-card">
+                <div class="platform-icon">🌐</div>
+                <h2 class="platform-title">3D Sports Universe</h2>
+                <p class="platform-description">
+                    Immersive 3D visualization platform with Babylon.js WebGPU ray tracing,
+                    procedural stadium generation, and interactive sports simulations.
+                </p>
+                <ul class="platform-features">
+                    <li>WebGPU ray tracing</li>
+                    <li>Procedural venue generation</li>
+                    <li>Ball physics simulation</li>
+                    <li>Interactive 3D dashboards</li>
+                </ul>
+                <div class="platform-stats">
+                    <div class="stat">
+                        <div class="stat-value">60fps</div>
+                        <div class="stat-label">Performance</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4K</div>
+                        <div class="stat-label">Resolution</div>
+                    </div>
+                </div>
+                <a href="https://blaze-3d.netlify.app/" class="platform-link" target="_blank">
+                    Enter Universe →
+                </a>
+            </div>
+        </div>
+
+        <!-- Unified Features -->
+        <div class="unified-features" id="features">
+            <h2 class="features-title">Unified Platform Capabilities</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-name">Real-Time Data</div>
+                    <div class="feature-detail">10-30 second updates</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-name">Sports Coverage</div>
+                    <div class="feature-detail">MLB, NFL, NBA, NCAA</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🏟️</div>
+                    <div class="feature-name">Venue Models</div>
+                    <div class="feature-detail">30+ stadiums</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📈</div>
+                    <div class="feature-name">Analytics</div>
+                    <div class="feature-detail">Advanced metrics</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-name">AI Models</div>
+                    <div class="feature-detail">GPT-4 + Claude</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💎</div>
+                    <div class="feature-name">Ray Tracing</div>
+                    <div class="feature-detail">WebGPU powered</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔬</div>
+                    <div class="feature-name">Character AI</div>
+                    <div class="feature-detail">Micro-expressions</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌟</div>
+                    <div class="feature-name">Perfect Game</div>
+                    <div class="feature-detail">Youth analytics</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/privacy.html">Privacy</a>
+                <a href="/terms.html">Terms</a>
+                <a href="/api-docs.html">API</a>
+            </div>
+            <p>&copy; 2025 Blaze Intelligence. All rights reserved.</p>
+            <p>Built with Championship Excellence in Texas 🏆</p>
+        </footer>
+    </div>
+
+    <!-- Babylon.js 3D Background -->
+    <script>
+        // Initialize Babylon.js background
+        const canvas = document.getElementById('renderCanvas');
+        const engine = new BABYLON.Engine(canvas, true, {
+            preserveDrawingBuffer: true,
+            stencil: true,
+            antialias: true
+        });
+
+        const createScene = () => {
+            const scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+
+            // Camera
+            const camera = new BABYLON.UniversalCamera('camera',
+                new BABYLON.Vector3(0, 5, -20), scene);
+            camera.setTarget(BABYLON.Vector3.Zero());
+            camera.attachControl(canvas, false);
+
+            // Light
+            const light = new BABYLON.HemisphericLight('light',
+                new BABYLON.Vector3(0, 1, 0), scene);
+            light.intensity = 0.7;
+            light.diffuse = new BABYLON.Color3(0.75, 0.34, 0);
+            light.groundColor = new BABYLON.Color3(0, 0.13, 0.27);
+
+            // Create floating particles
+            const particleSystem = new BABYLON.ParticleSystem('particles', 2000, scene);
+            particleSystem.emitter = BABYLON.Vector3.Zero();
+            particleSystem.minEmitBox = new BABYLON.Vector3(-50, -20, -50);
+            particleSystem.maxEmitBox = new BABYLON.Vector3(50, 20, 50);
+
+            // Particle colors - team colors
+            particleSystem.color1 = new BABYLON.Color4(0.75, 0.34, 0, 1); // Burnt Orange
+            particleSystem.color2 = new BABYLON.Color4(0.61, 0.8, 0.92, 1); // Cardinal Blue
+            particleSystem.colorDead = new BABYLON.Color4(0, 0, 0, 0);
+
+            particleSystem.minSize = 0.1;
+            particleSystem.maxSize = 0.5;
+            particleSystem.minLifeTime = 5;
+            particleSystem.maxLifeTime = 10;
+            particleSystem.emitRate = 100;
+            particleSystem.gravity = new BABYLON.Vector3(0, -0.5, 0);
+            particleSystem.direction1 = new BABYLON.Vector3(-1, 8, 1);
+            particleSystem.direction2 = new BABYLON.Vector3(1, 8, -1);
+            particleSystem.minEmitPower = 0.5;
+            particleSystem.maxEmitPower = 1;
+            particleSystem.updateSpeed = 0.01;
+
+            // Create particle texture
+            const particleTexture = new BABYLON.Texture.CreateFromBase64String(
+                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+                "particle", scene
+            );
+            particleSystem.particleTexture = particleTexture;
+            particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+            particleSystem.start();
+
+            // Create floating meshes
+            const createFloatingMesh = (name, position, color) => {
+                const mesh = BABYLON.MeshBuilder.CreateIcoSphere(name, {
+                    radius: 1,
+                    subdivisions: 2
+                }, scene);
+                mesh.position = position;
+
+                const material = new BABYLON.PBRMaterial(name + 'Mat', scene);
+                material.albedoColor = color;
+                material.emissiveColor = color;
+                material.emissiveIntensity = 0.5;
+                material.metallic = 0.3;
+                material.roughness = 0.4;
+                mesh.material = material;
+
+                // Animate
+                const animationY = new BABYLON.Animation(
+                    name + 'AnimY',
+                    'position.y',
+                    30,
+                    BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                    BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+                );
+
+                const keys = [
+                    { frame: 0, value: position.y },
+                    { frame: 60, value: position.y + 2 },
+                    { frame: 120, value: position.y }
+                ];
+
+                animationY.setKeys(keys);
+                mesh.animations.push(animationY);
+                scene.beginAnimation(mesh, 0, 120, true);
+
+                // Rotation
+                scene.registerBeforeRender(() => {
+                    mesh.rotation.y += 0.01;
+                    mesh.rotation.x += 0.005;
+                });
+
+                return mesh;
+            };
+
+            // Create multiple floating elements
+            createFloatingMesh('mesh1', new BABYLON.Vector3(-10, 0, 10),
+                new BABYLON.Color3(0.75, 0.34, 0)); // Burnt Orange
+            createFloatingMesh('mesh2', new BABYLON.Vector3(10, 2, 10),
+                new BABYLON.Color3(0.61, 0.8, 0.92)); // Cardinal Blue
+            createFloatingMesh('mesh3', new BABYLON.Vector3(0, -2, 15),
+                new BABYLON.Color3(1, 0.84, 0)); // Championship Gold
+
+            // Camera auto-rotation
+            scene.registerBeforeRender(() => {
+                camera.position.x = Math.sin(Date.now() * 0.0001) * 20;
+                camera.position.z = Math.cos(Date.now() * 0.0001) * 20 - 20;
+                camera.setTarget(BABYLON.Vector3.Zero());
+            });
+
+            return scene;
+        };
+
+        const scene = createScene();
+
+        engine.runRenderLoop(() => {
+            scene.render();
+        });
+
+        window.addEventListener('resize', () => {
+            engine.resize();
+        });
+
+        // Navigation toggle
+        function toggleNav() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
+
+        // Close nav when clicking outside
+        document.addEventListener('click', (e) => {
+            const navHub = document.querySelector('.nav-hub');
+            if (!navHub.contains(e.target)) {
+                document.getElementById('navMenu').classList.remove('active');
+            }
+        });
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

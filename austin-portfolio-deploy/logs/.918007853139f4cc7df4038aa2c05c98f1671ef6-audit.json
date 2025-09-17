@@ -1,0 +1,40 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/home/runner/workspace/logs/.918007853139f4cc7df4038aa2c05c98f1671ef6-audit.json",
+    "files": [
+        {
+            "date": 1757418663453,
+            "name": "/home/runner/workspace/logs/combined-2025-09-09.log",
+            "hash": "da745f5b7b83af3a8953655cb0a67c2acbea68b2d3c1dc5da10ac9df6ca9ae82"
+        },
+        {
+            "date": 1757519287634,
+            "name": "/home/runner/workspace/logs/combined-2025-09-10.log",
+            "hash": "f982a78e3ed06ca9e52e088e91d2b0edb4d975c6075d16aed27fe2b224dbac59"
+        },
+        {
+            "date": 1757556168193,
+            "name": "/home/runner/workspace/logs/combined-2025-09-11.log",
+            "hash": "1f7f639d4fe5b20717f038bae83e9b51dab59b7efdc04933426def39030c38bc"
+        },
+        {
+            "date": 1757722104329,
+            "name": "/home/runner/workspace/logs/combined-2025-09-13.log",
+            "hash": "661373307ce0414b7984d6a2ef6bd34f758ed9283df617bc6c113eb95332a8b7"
+        },
+        {
+            "date": 1757813330488,
+            "name": "/home/runner/workspace/logs/combined-2025-09-14.log",
+            "hash": "1e7600b2b3dcb63b2157b2880f4635c135339fde0015a2010fa3efb1b0ede01e"
+        },
+        {
+            "date": 1757899313431,
+            "name": "/home/runner/workspace/logs/combined-2025-09-15.log",
+            "hash": "60976836926eb84d1300ce73fdf193ae869862303e3620a6243e7c7b201ef524"
+        }
+    ],
+    "hashType": "sha256"
+}

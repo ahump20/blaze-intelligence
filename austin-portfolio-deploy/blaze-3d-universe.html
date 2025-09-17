@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze 3D Universe | Championship Sports Visualization</title>
+    <meta name="description" content="Immersive 3D sports visualization with Babylon.js WebGPU ray tracing and procedural stadium generation">
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+
+    <!-- Babylon.js -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Load Babylon Engine if available -->
+    <script src="/js/blaze-babylon-engine.js" defer></script>
+
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --cardinal-blue: #9BCBEB;
+            --data-green: #00B2A9;
+            --trust-navy: #002244;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #000;
+            color: #E5E7EB;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to bottom, rgba(10, 14, 39, 0.9) 0%, transparent 100%);
+            padding: 2rem;
+            pointer-events: auto;
+        }
+
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(191, 87, 0, 0.2);
+            border: 1px solid var(--burnt-orange);
+            border-radius: 8px;
+            color: var(--burnt-orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--burnt-orange);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .controls-panel {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(17, 34, 64, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            pointer-events: auto;
+            min-width: 300px;
+        }
+
+        .control-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--burnt-orange);
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stadium-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .stadium-btn {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 8px;
+            color: #E5E7EB;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .stadium-btn:hover {
+            background: rgba(191, 87, 0, 0.2);
+            border-color: var(--burnt-orange);
+            transform: translateY(-2px);
+        }
+
+        .stadium-btn.active {
+            background: var(--burnt-orange);
+            border-color: var(--burnt-orange);
+        }
+
+        .stats-panel {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            background: rgba(17, 34, 64, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            pointer-events: auto;
+            min-width: 250px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #9CA3AF;
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            color: var(--cardinal-blue);
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .visualization-mode {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            pointer-events: auto;
+        }
+
+        .mode-btn {
+            padding: 1rem 1.5rem;
+            background: rgba(191, 87, 0, 0.2);
+            border: 1px solid var(--burnt-orange);
+            border-radius: 8px;
+            color: var(--burnt-orange);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn:hover {
+            background: var(--burnt-orange);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .mode-btn.active {
+            background: var(--burnt-orange);
+            color: white;
+        }
+
+        .performance-monitor {
+            position: absolute;
+            top: 100px;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            pointer-events: auto;
+        }
+
+        .perf-item {
+            color: var(--data-green);
+            margin: 0.25rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .controls-panel {
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+                min-width: auto;
+            }
+
+            .stats-panel {
+                display: none;
+            }
+
+            .visualization-mode {
+                bottom: auto;
+                top: 100px;
+                right: 1rem;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+
+    <div class="ui-overlay">
+        <!-- Top Navigation -->
+        <div class="top-bar">
+            <div class="nav-header">
+                <div class="logo-section">
+                    <a href="/unified-platform-hub.html" class="back-btn">← Back to Hub</a>
+                    <h1>Blaze 3D Universe</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Panel -->
+        <div class="controls-panel">
+            <h3 class="control-title">Stadium Selection</h3>
+            <div class="control-group">
+                <label class="control-label">Choose Venue</label>
+                <div class="stadium-selector">
+                    <button class="stadium-btn active" onclick="loadStadium('busch')">Busch Stadium</button>
+                    <button class="stadium-btn" onclick="loadStadium('nissan')">Nissan Stadium</button>
+                    <button class="stadium-btn" onclick="loadStadium('dkr')">DKR Memorial</button>
+                    <button class="stadium-btn" onclick="loadStadium('fedex')">FedExForum</button>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Ray Tracing</label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: white;">
+                    <input type="checkbox" id="rayTracingToggle" checked>
+                    <span>Enabled (WebGPU)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <h3 class="control-title" style="margin-bottom: 1rem;">Performance</h3>
+            <div class="stat-item">
+                <span class="stat-label">FPS</span>
+                <span class="stat-value" id="fps">60</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Triangles</span>
+                <span class="stat-value" id="triangles">247K</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Draw Calls</span>
+                <span class="stat-value" id="drawCalls">142</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Textures</span>
+                <span class="stat-value" id="textures">34</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">RT Bounces</span>
+                <span class="stat-value" id="bounces">3</span>
+            </div>
+        </div>
+
+        <!-- Visualization Mode -->
+        <div class="visualization-mode">
+            <button class="mode-btn active" onclick="setMode('stadium')">Stadium View</button>
+            <button class="mode-btn" onclick="setMode('data')">Data Sphere</button>
+            <button class="mode-btn" onclick="setMode('neural')">Neural Network</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Babylon.js
+        const canvas = document.getElementById('renderCanvas');
+        const engine = new BABYLON.Engine(canvas, true, {
+            preserveDrawingBuffer: true,
+            stencil: true,
+            antialias: true
+        });
+
+        let scene;
+        let camera;
+        let currentMode = 'stadium';
+
+        const createScene = () => {
+            scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color4(0.02, 0.02, 0.08, 1);
+
+            // Camera
+            camera = new BABYLON.UniversalCamera('camera', new BABYLON.Vector3(0, 50, -100), scene);
+            camera.setTarget(new BABYLON.Vector3(0, 0, 0));
+            camera.attachControl(canvas, true);
+
+            // Lights
+            const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
+            light.intensity = 0.8;
+            light.diffuse = new BABYLON.Color3(1, 0.95, 0.9);
+            light.specular = new BABYLON.Color3(0.75, 0.34, 0);
+            light.groundColor = new BABYLON.Color3(0, 0.13, 0.27);
+
+            // Directional light for shadows
+            const dirLight = new BABYLON.DirectionalLight('dirLight',
+                new BABYLON.Vector3(-1, -2, 1), scene);
+            dirLight.intensity = 0.5;
+            dirLight.position = new BABYLON.Vector3(50, 100, -50);
+
+            // Create procedural baseball stadium
+            createBaseballStadium();
+
+            // Add particle system
+            createParticleSystem();
+
+            // Enable fog
+            scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
+            scene.fogColor = new BABYLON.Color3(0.02, 0.02, 0.08);
+            scene.fogDensity = 0.002;
+
+            return scene;
+        };
+
+        const createBaseballStadium = () => {
+            // Ground
+            const ground = BABYLON.MeshBuilder.CreateGround('ground', {
+                width: 200,
+                height: 200,
+                subdivisions: 32
+            }, scene);
+
+            const groundMaterial = new BABYLON.PBRMaterial('groundMat', scene);
+            groundMaterial.albedoColor = new BABYLON.Color3(0.1, 0.3, 0.05);
+            groundMaterial.roughness = 0.8;
+            groundMaterial.metallic = 0.1;
+            ground.material = groundMaterial;
+
+            // Baseball diamond
+            const createBase = (name, position) => {
+                const base = BABYLON.MeshBuilder.CreateBox(name, {
+                    width: 2,
+                    height: 0.3,
+                    depth: 2
+                }, scene);
+                base.position = position;
+                const baseMat = new BABYLON.PBRMaterial(name + 'Mat', scene);
+                baseMat.albedoColor = new BABYLON.Color3(1, 1, 1);
+                baseMat.roughness = 0.9;
+                base.material = baseMat;
+                return base;
+            };
+
+            // Create bases
+            createBase('firstBase', new BABYLON.Vector3(20, 0.15, 0));
+            createBase('secondBase', new BABYLON.Vector3(0, 0.15, 20));
+            createBase('thirdBase', new BABYLON.Vector3(-20, 0.15, 0));
+            createBase('homePlate', new BABYLON.Vector3(0, 0.15, -20));
+
+            // Pitcher's mound
+            const mound = BABYLON.MeshBuilder.CreateCylinder('mound', {
+                diameter: 10,
+                height: 1,
+                tessellation: 32
+            }, scene);
+            mound.position.y = 0.5;
+
+            const moundMat = new BABYLON.PBRMaterial('moundMat', scene);
+            moundMat.albedoColor = new BABYLON.Color3(0.4, 0.3, 0.2);
+            moundMat.roughness = 0.9;
+            mound.material = moundMat;
+
+            // Stadium walls
+            const createWall = (name, width, position, rotation) => {
+                const wall = BABYLON.MeshBuilder.CreateBox(name, {
+                    width: width,
+                    height: 40,
+                    depth: 2
+                }, scene);
+                wall.position = position;
+                wall.rotation.y = rotation;
+
+                const wallMat = new BABYLON.PBRMaterial(name + 'Mat', scene);
+                wallMat.albedoColor = new BABYLON.Color3(0.15, 0.15, 0.2);
+                wallMat.metallic = 0.3;
+                wallMat.roughness = 0.7;
+                wall.material = wallMat;
+                return wall;
+            };
+
+            // Create outfield walls
+            createWall('leftField', 80, new BABYLON.Vector3(-60, 20, 60), Math.PI / 4);
+            createWall('centerField', 100, new BABYLON.Vector3(0, 20, 90), 0);
+            createWall('rightField', 80, new BABYLON.Vector3(60, 20, 60), -Math.PI / 4);
+
+            // Add light towers
+            const createLightTower = (position) => {
+                const tower = BABYLON.MeshBuilder.CreateCylinder('tower', {
+                    diameter: 2,
+                    height: 60,
+                    tessellation: 8
+                }, scene);
+                tower.position = position;
+
+                const towerMat = new BABYLON.PBRMaterial('towerMat', scene);
+                towerMat.albedoColor = new BABYLON.Color3(0.3, 0.3, 0.35);
+                towerMat.metallic = 0.8;
+                towerMat.roughness = 0.3;
+                tower.material = towerMat;
+
+                // Light at top
+                const light = new BABYLON.PointLight('stadiumLight',
+                    new BABYLON.Vector3(position.x, position.y + 30, position.z), scene);
+                light.intensity = 20;
+                light.diffuse = new BABYLON.Color3(1, 0.95, 0.8);
+            };
+
+            createLightTower(new BABYLON.Vector3(-80, 0, -30));
+            createLightTower(new BABYLON.Vector3(80, 0, -30));
+            createLightTower(new BABYLON.Vector3(-80, 0, 80));
+            createLightTower(new BABYLON.Vector3(80, 0, 80));
+        };
+
+        const createParticleSystem = () => {
+            const particleSystem = new BABYLON.ParticleSystem('particles', 1000, scene);
+            particleSystem.emitter = BABYLON.Vector3.Zero();
+            particleSystem.minEmitBox = new BABYLON.Vector3(-100, 0, -100);
+            particleSystem.maxEmitBox = new BABYLON.Vector3(100, 100, 100);
+
+            particleSystem.color1 = new BABYLON.Color4(0.75, 0.34, 0, 0.5);
+            particleSystem.color2 = new BABYLON.Color4(1, 0.84, 0, 0.5);
+            particleSystem.colorDead = new BABYLON.Color4(0, 0, 0, 0);
+
+            particleSystem.minSize = 0.5;
+            particleSystem.maxSize = 2;
+            particleSystem.minLifeTime = 2;
+            particleSystem.maxLifeTime = 5;
+            particleSystem.emitRate = 20;
+            particleSystem.gravity = new BABYLON.Vector3(0, -1, 0);
+            particleSystem.direction1 = new BABYLON.Vector3(-0.5, 2, 0.5);
+            particleSystem.direction2 = new BABYLON.Vector3(0.5, 3, -0.5);
+            particleSystem.minEmitPower = 1;
+            particleSystem.maxEmitPower = 3;
+
+            // Create texture
+            const texture = new BABYLON.Texture.CreateFromBase64String(
+                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+                "particle", scene
+            );
+            particleSystem.particleTexture = texture;
+            particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+            particleSystem.start();
+        };
+
+        // Initialize scene
+        scene = createScene();
+
+        // Render loop
+        engine.runRenderLoop(() => {
+            scene.render();
+            updateStats();
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            engine.resize();
+        });
+
+        // Stadium loader
+        function loadStadium(stadium) {
+            console.log('Loading stadium:', stadium);
+            // Update button states
+            document.querySelectorAll('.stadium-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Mode switcher
+        function setMode(mode) {
+            currentMode = mode;
+            console.log('Switching to mode:', mode);
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Stats updater
+        function updateStats() {
+            const fps = Math.round(engine.getFps());
+            document.getElementById('fps').textContent = fps;
+
+            // Simulate other stats
+            if (Math.random() > 0.95) {
+                document.getElementById('triangles').textContent =
+                    Math.floor(Math.random() * 50 + 230) + 'K';
+                document.getElementById('drawCalls').textContent =
+                    Math.floor(Math.random() * 30 + 130);
+            }
+        }
+
+        // Ray tracing toggle
+        document.getElementById('rayTracingToggle').addEventListener('change', (e) => {
+            console.log('Ray tracing:', e.target.checked ? 'enabled' : 'disabled');
+        });
+    </script>
+</body>
+</html>

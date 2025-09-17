@@ -1,0 +1,588 @@
+/**
+ * BLAZE INTELLIGENCE - SportsDataIO Dashboard Styles
+ * Championship-level visual design system
+ *
+ * Design tokens aligned with BML v1.0
+ */
+
+/* ============================================================================
+   ROOT VARIABLES - BML Design Tokens
+   ============================================================================ */
+
+:root {
+  /* Core Colors */
+  --burnt-orange: #BF5700;
+  --cardinal-blue: #9BCBEB;
+  --tennessee-deep: #002244;
+  --vancouver-teal: #00B2A9;
+  --championship-gold: #FFD700;
+
+  /* Backgrounds */
+  --bg-primary: #0B0B0F;
+  --bg-surface: #0F172A;
+  --bg-elevated: #151923;
+
+  /* Text */
+  --text-primary: #E5E7EB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(21, 25, 35, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-blur: 16px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 40px rgba(191, 87, 0, 0.3);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* Animation */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration: 300ms;
+}
+
+/* ============================================================================
+   DASHBOARD CONTAINER
+   ============================================================================ */
+
+.blaze-dashboard {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  padding: 2rem;
+}
+
+/* ============================================================================
+   HEADER SECTION
+   ============================================================================ */
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.gradient-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--burnt-orange), var(--cardinal-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+/* ============================================================================
+   METRICS ROW
+   ============================================================================ */
+
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.metric-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all var(--duration) var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--burnt-orange), var(--cardinal-blue));
+  transform: scaleX(0);
+  transition: transform var(--duration) var(--ease);
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--burnt-orange);
+}
+
+.metric-card:hover::before {
+  transform: scaleX(1);
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cardinal-blue);
+  margin-bottom: 0.5rem;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ============================================================================
+   SPORTS TABS
+   ============================================================================ */
+
+.sports-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  background: var(--bg-surface);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+  position: relative;
+}
+
+.tab-button:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.tab-button.active {
+  background: linear-gradient(135deg, var(--burnt-orange), var(--tennessee-deep));
+  color: white;
+  border-color: var(--burnt-orange);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ============================================================================
+   SPORT SECTIONS
+   ============================================================================ */
+
+.sport-section {
+  display: none;
+  animation: fadeIn var(--duration) var(--ease);
+}
+
+.sport-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.section-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.live-indicator {
+  background: linear-gradient(135deg, #FF4444, #FF6B6B);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ============================================================================
+   SECTION GRID
+   ============================================================================ */
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-radius: 16px;
+  padding: 1.5rem;
+  min-height: 200px;
+  transition: all var(--duration) var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--burnt-orange);
+}
+
+.card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--cardinal-blue);
+}
+
+/* Featured Team Card */
+.featured-team {
+  grid-column: span 2;
+  background: linear-gradient(135deg, var(--glass-bg), rgba(191, 87, 0, 0.1));
+}
+
+.team-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.team-stats .stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.team-stats .label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.team-stats .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--burnt-orange);
+}
+
+/* Standings Table */
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.standings-table th {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 2px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.standings-table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: var(--font-mono);
+}
+
+.standings-table tr.highlighted {
+  background: rgba(191, 87, 0, 0.1);
+  font-weight: 600;
+}
+
+.standings-table tr.highlighted td:first-child {
+  color: var(--burnt-orange);
+}
+
+/* Games List */
+.games-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.game-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--bg-surface);
+  border-radius: 8px;
+  transition: all var(--duration) var(--ease);
+}
+
+.game-item:hover {
+  background: var(--bg-elevated);
+  transform: translateX(4px);
+}
+
+.game-item .teams {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.game-item .score {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--cardinal-blue);
+}
+
+/* Rankings List */
+.rankings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  background: var(--bg-surface);
+  border-radius: 6px;
+  transition: all var(--duration) var(--ease);
+}
+
+.ranking-item:hover {
+  background: var(--bg-elevated);
+}
+
+.ranking-item .rank {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--championship-gold);
+  min-width: 30px;
+}
+
+.ranking-item .team {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.ranking-item .record {
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Teams Grid */
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.team-card {
+  background: var(--bg-surface);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: all var(--duration) var(--ease);
+}
+
+.team-card:hover {
+  background: var(--bg-elevated);
+  transform: scale(1.05);
+}
+
+.team-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.team-record {
+  font-family: var(--font-mono);
+  color: var(--cardinal-blue);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0.25rem 0;
+}
+
+.team-rank {
+  color: var(--championship-gold);
+  font-weight: 600;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.dashboard-footer {
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.texas-grit {
+  margin-top: 0.5rem;
+  color: var(--burnt-orange);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================================
+   ERROR STATES
+   ============================================================================ */
+
+.error-message {
+  background: linear-gradient(135deg, #FF4444, #CC0000);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .blaze-dashboard {
+    padding: 1rem;
+  }
+
+  .metrics-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .section-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-team {
+    grid-column: span 1;
+  }
+
+  .teams-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tab-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* ============================================================================
+   LOADING STATES
+   ============================================================================ */
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.loading::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--glass-border);
+  border-top-color: var(--burnt-orange);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================================
+   CHART CONTAINER
+   ============================================================================ */
+
+.card.stats {
+  position: relative;
+  min-height: 300px;
+}
+
+.card.stats canvas {
+  max-height: 250px;
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+  .blaze-dashboard {
+    background: white;
+    color: black;
+  }
+
+  .card {
+    border: 1px solid #ddd;
+    background: white;
+    box-shadow: none;
+  }
+
+  .tab-button,
+  .live-indicator {
+    display: none;
+  }
+}

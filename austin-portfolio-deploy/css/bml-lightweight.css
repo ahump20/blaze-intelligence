@@ -1,0 +1,393 @@
+/**
+ * BLAZE INTELLIGENCE - BML Lightweight Design System
+ * October 2025 Refresh - Performance-optimized version
+ *
+ * Core design tokens and essential components only
+ */
+
+/* ============================================================================
+   CSS CUSTOM PROPERTIES - BML Design Tokens
+   ============================================================================ */
+
+:root {
+  /* Core Colors - Texas Heritage */
+  --bml-burnt-orange: #BF5700;
+  --bml-cardinal-blue: #9BCBEB;
+  --bml-tennessee-deep: #002244;
+  --bml-vancouver-teal: #00B2A9;
+  --bml-championship-gold: #FFD700;
+
+  /* Neutral Palette */
+  --bml-platinum: #E5E4E2;
+  --bml-graphite: #36454F;
+  --bml-pearl: #FAFAFA;
+
+  /* Backgrounds */
+  --bml-bg-primary: #0B0B0F;
+  --bml-bg-surface: #0F172A;
+  --bml-bg-elevated: #151923;
+
+  /* Text Colors */
+  --bml-text-primary: #E5E7EB;
+  --bml-text-secondary: #9CA3AF;
+  --bml-text-muted: #6B7280;
+
+  /* Glassmorphism */
+  --bml-glass-bg: rgba(21, 25, 35, 0.55);
+  --bml-glass-border: rgba(255, 255, 255, 0.12);
+  --bml-glass-blur: 16px;
+
+  /* Shadows */
+  --bml-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --bml-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --bml-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --bml-shadow-glow: 0 0 40px rgba(191, 87, 0, 0.3);
+
+  /* Typography */
+  --bml-font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --bml-font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* Animation */
+  --bml-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --bml-duration: 300ms;
+
+  /* Spacing Scale */
+  --bml-space-xs: 0.25rem;
+  --bml-space-sm: 0.5rem;
+  --bml-space-md: 1rem;
+  --bml-space-lg: 1.5rem;
+  --bml-space-xl: 2rem;
+  --bml-space-2xl: 3rem;
+  --bml-space-3xl: 4rem;
+
+  /* Border Radius */
+  --bml-radius-sm: 4px;
+  --bml-radius-md: 8px;
+  --bml-radius-lg: 12px;
+  --bml-radius-xl: 16px;
+  --bml-radius-full: 9999px;
+}
+
+/* Dark mode preference (already default, but explicit) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--bml-font-sans);
+  background: var(--bml-bg-primary);
+  color: var(--bml-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--bml-space-md);
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 2rem); }
+h4 { font-size: clamp(1.125rem, 2.5vw, 1.5rem); }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+.bml-text-gradient {
+  background: linear-gradient(135deg, var(--bml-burnt-orange), var(--bml-cardinal-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bml-text-mono {
+  font-family: var(--bml-font-mono);
+}
+
+/* ============================================================================
+   COMPONENTS
+   ============================================================================ */
+
+/* Buttons */
+.bml-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--bml-space-sm) var(--bml-space-lg);
+  border-radius: var(--bml-radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all var(--bml-duration) var(--bml-ease);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.bml-btn-primary {
+  background: linear-gradient(135deg, var(--bml-burnt-orange), var(--bml-tennessee-deep));
+  color: white;
+}
+
+.bml-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--bml-shadow-glow);
+}
+
+.bml-btn-secondary {
+  background: var(--bml-glass-bg);
+  color: var(--bml-cardinal-blue);
+  border: 1px solid var(--bml-glass-border);
+  backdrop-filter: blur(var(--bml-glass-blur));
+}
+
+.bml-btn-secondary:hover {
+  background: var(--bml-bg-elevated);
+  border-color: var(--bml-cardinal-blue);
+}
+
+/* Cards */
+.bml-card {
+  background: var(--bml-glass-bg);
+  border: 1px solid var(--bml-glass-border);
+  border-radius: var(--bml-radius-lg);
+  padding: var(--bml-space-lg);
+  backdrop-filter: blur(var(--bml-glass-blur));
+  -webkit-backdrop-filter: blur(var(--bml-glass-blur));
+  transition: all var(--bml-duration) var(--bml-ease);
+}
+
+.bml-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--bml-shadow-lg);
+  border-color: var(--bml-burnt-orange);
+}
+
+/* Badges */
+.bml-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--bml-space-xs) var(--bml-space-sm);
+  border-radius: var(--bml-radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: var(--bml-glass-bg);
+  border: 1px solid var(--bml-glass-border);
+}
+
+.bml-badge-live {
+  background: linear-gradient(135deg, #FF4444, #FF6B6B);
+  color: white;
+  border: none;
+  animation: bml-pulse 2s infinite;
+}
+
+@keyframes bml-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Input Fields */
+.bml-input {
+  width: 100%;
+  padding: var(--bml-space-sm) var(--bml-space-md);
+  background: var(--bml-bg-surface);
+  border: 1px solid var(--bml-glass-border);
+  border-radius: var(--bml-radius-md);
+  color: var(--bml-text-primary);
+  font-size: 1rem;
+  transition: all var(--bml-duration) var(--bml-ease);
+}
+
+.bml-input:focus {
+  outline: none;
+  border-color: var(--bml-cardinal-blue);
+  box-shadow: 0 0 0 3px rgba(155, 203, 235, 0.2);
+}
+
+/* Grid System */
+.bml-grid {
+  display: grid;
+  gap: var(--bml-space-lg);
+}
+
+.bml-grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.bml-grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.bml-grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+/* Container */
+.bml-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--bml-space-lg);
+}
+
+/* ============================================================================
+   UTILITIES
+   ============================================================================ */
+
+/* Spacing */
+.bml-mt-xs { margin-top: var(--bml-space-xs); }
+.bml-mt-sm { margin-top: var(--bml-space-sm); }
+.bml-mt-md { margin-top: var(--bml-space-md); }
+.bml-mt-lg { margin-top: var(--bml-space-lg); }
+.bml-mt-xl { margin-top: var(--bml-space-xl); }
+
+.bml-mb-xs { margin-bottom: var(--bml-space-xs); }
+.bml-mb-sm { margin-bottom: var(--bml-space-sm); }
+.bml-mb-md { margin-bottom: var(--bml-space-md); }
+.bml-mb-lg { margin-bottom: var(--bml-space-lg); }
+.bml-mb-xl { margin-bottom: var(--bml-space-xl); }
+
+/* Text Alignment */
+.bml-text-center { text-align: center; }
+.bml-text-left { text-align: left; }
+.bml-text-right { text-align: right; }
+
+/* Display */
+.bml-hidden { display: none; }
+.bml-block { display: block; }
+.bml-inline { display: inline; }
+.bml-flex { display: flex; }
+.bml-grid { display: grid; }
+
+/* Flexbox */
+.bml-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bml-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+/* Skip Link */
+.bml-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--bml-burnt-orange);
+  color: white;
+  padding: var(--bml-space-sm) var(--bml-space-md);
+  text-decoration: none;
+  z-index: 100;
+  border-radius: var(--bml-radius-md);
+}
+
+.bml-skip-link:focus {
+  top: var(--bml-space-sm);
+  left: var(--bml-space-sm);
+}
+
+/* Focus Visible */
+:focus-visible {
+  outline: 2px solid var(--bml-cardinal-blue);
+  outline-offset: 2px;
+}
+
+/* Screen Reader Only */
+.bml-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .bml-grid-2,
+  .bml-grid-3,
+  .bml-grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .bml-container {
+    padding: 0 var(--bml-space-md);
+  }
+
+  .bml-hide-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .bml-hide-desktop {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   PRINT
+   ============================================================================ */
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .bml-card {
+    border: 1px solid #ddd;
+    background: white;
+    box-shadow: none;
+  }
+
+  .bml-no-print {
+    display: none;
+  }
+}

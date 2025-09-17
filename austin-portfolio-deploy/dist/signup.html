@@ -1,0 +1,748 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started | Blaze Intelligence</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#BF5700">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Start your free trial of Blaze Intelligence championship sports analytics platform. No credit card required.">
+    <meta name="keywords" content="sports analytics signup, Blaze Intelligence trial, championship intelligence platform">
+
+    <!-- Essential Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --primary-orange: #BF5700;
+            --cardinal-blue: #9BCBEB;
+            --deep-navy: #002244;
+            --grizzly-teal: #00B2A9;
+            --championship-gold: #FFD700;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1a2e;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+            --border-radius: 12px;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            z-index: 10000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 3rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            color: var(--championship-gold);
+            background: rgba(191, 87, 0, 0.15);
+        }
+
+        /* Main Container */
+        .signup-container {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+        }
+
+        /* Left Side - Benefits */
+        .benefits-side {
+            padding: 4rem;
+            background: linear-gradient(135deg, rgba(191, 87, 0, 0.1), rgba(255, 215, 0, 0.05));
+        }
+
+        .benefits-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .benefits-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .benefit-list {
+            list-style: none;
+            margin-bottom: 3rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid var(--grizzly-teal);
+        }
+
+        .benefit-icon {
+            font-size: 1.5rem;
+            background: var(--primary-orange);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .benefit-text {
+            flex: 1;
+        }
+
+        .benefit-title {
+            font-weight: 700;
+            color: var(--championship-gold);
+            margin-bottom: 0.3rem;
+        }
+
+        .benefit-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .trial-highlight {
+            background: rgba(0, 178, 169, 0.1);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--grizzly-teal);
+            text-align: center;
+        }
+
+        .trial-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--grizzly-teal);
+        }
+
+        /* Right Side - Signup Form */
+        .form-side {
+            padding: 4rem;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-size: 1rem;
+        }
+
+        .signup-form {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(155, 203, 235, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--championship-gold);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .plan-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .plan-option {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .plan-option:hover {
+            border-color: var(--championship-gold);
+        }
+
+        .plan-option.selected {
+            border-color: var(--grizzly-teal);
+            background: rgba(0, 178, 169, 0.1);
+        }
+
+        .plan-name {
+            font-weight: 700;
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--championship-gold);
+        }
+
+        .checkbox-group {
+            margin: 1.5rem 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-orange);
+            margin-top: 2px;
+        }
+
+        .checkbox-label {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .checkbox-label a {
+            color: var(--cardinal-blue);
+            text-decoration: none;
+        }
+
+        .checkbox-label a:hover {
+            color: var(--championship-gold);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-orange), var(--championship-gold));
+            color: white;
+            padding: 1.2rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .login-link a {
+            color: var(--cardinal-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            color: var(--championship-gold);
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, var(--grizzly-teal), var(--cardinal-blue));
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .signup-container {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-side {
+                padding: 2rem;
+                order: 2;
+            }
+
+            .form-side {
+                padding: 2rem;
+                order: 1;
+            }
+
+            .benefits-title {
+                font-size: 2rem;
+            }
+
+            .form-title {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .signup-form {
+                padding: 2rem;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">🔥 Blaze Intelligence</div>
+        <div style="margin-left: auto;">
+            <a href="/" class="nav-link">← Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="signup-container">
+        <!-- Benefits Side -->
+        <div class="benefits-side">
+            <h1 class="benefits-title">Start Your Championship Journey</h1>
+            <p class="benefits-subtitle">
+                Join elite sports programs using Blaze Intelligence to gain competitive advantages and win championships.
+            </p>
+
+            <ul class="benefit-list">
+                <li class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Instant Setup</div>
+                        <div class="benefit-description">Get started in under 2 minutes with our streamlined onboarding</div>
+                    </div>
+                </li>
+
+                <li class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Immediate Insights</div>
+                        <div class="benefit-description">Access championship-level analytics from day one</div>
+                    </div>
+                </li>
+
+                <li class="benefit-item">
+                    <div class="benefit-icon">🏆</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Proven Results</div>
+                        <div class="benefit-description">67-80% cost savings vs traditional scouting methods</div>
+                    </div>
+                </li>
+
+                <li class="benefit-item">
+                    <div class="benefit-icon">🛡️</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Enterprise Security</div>
+                        <div class="benefit-description">Bank-level encryption and SOC 2 compliance</div>
+                    </div>
+                </li>
+
+                <li class="benefit-item">
+                    <div class="benefit-icon">📱</div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Mobile Ready</div>
+                        <div class="benefit-description">Full platform access on any device, anywhere</div>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="trial-highlight">
+                <div class="trial-text">
+                    🚀 14-Day Free Trial • No Credit Card Required • Cancel Anytime
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="form-side">
+            <div class="form-container">
+                <h2 class="form-title">Create Your Account</h2>
+                <p class="form-subtitle">Start your free trial today and experience championship-level intelligence</p>
+
+                <form class="signup-form" id="signupForm" onsubmit="submitSignup(event)">
+                    <!-- Personal Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" class="form-input" name="firstName" required="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" class="form-input" name="lastName" required="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" class="form-input" name="email" required="">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password *</label>
+                        <input type="password" class="form-input" name="password" required="" minlength="8">
+                        <small style="color: var(--text-secondary); font-size: 0.8rem;">Minimum 8 characters</small>
+                    </div>
+
+                    <!-- Organization Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Organization *</label>
+                            <input type="text" class="form-input" name="organization" required="">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Your Role *</label>
+                            <select class="form-select" name="role" required="">
+                                <option value="">Select your role</option>
+                                <option value="head-coach">Head Coach</option>
+                                <option value="assistant-coach">Assistant Coach</option>
+                                <option value="athletic-director">Athletic Director</option>
+                                <option value="gm">General Manager</option>
+                                <option value="scout">Scout/Recruiter</option>
+                                <option value="analytics">Analytics Director</option>
+                                <option value="administrator">Administrator</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Plan Selection -->
+                    <div class="form-group">
+                        <label class="form-label">Choose Your Plan *</label>
+                        <div class="plan-selector">
+                            <div class="plan-option" data-plan="scout">
+                                <div class="plan-name">Scout</div>
+                                <div class="plan-price">$99/mo</div>
+                            </div>
+                            <div class="plan-option selected" data-plan="professional">
+                                <div class="plan-name">Professional</div>
+                                <div class="plan-price">$299/mo</div>
+                            </div>
+                            <div class="plan-option" data-plan="championship">
+                                <div class="plan-name">Championship</div>
+                                <div class="plan-price">$599/mo</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="selectedPlan" value="professional">
+                    </div>
+
+                    <!-- Agreement Checkboxes -->
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="terms" name="terms" required="">
+                            <label for="terms" class="checkbox-label">
+                                I agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a> *
+                            </label>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="marketing" name="marketing">
+                            <label for="marketing" class="checkbox-label">
+                                I'd like to receive product updates, training resources, and championship insights via email
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        Start Free Trial
+                    </button>
+
+                    <div class="success-message" id="successMessage">
+                        <h3 style="color: white; margin-bottom: 1rem;">Account Created Successfully!</h3>
+                        <p style="color: white;">
+                            Welcome to Blaze Intelligence! Check your email for verification instructions to activate your account.
+                        </p>
+                    </div>
+
+                    <div class="login-link">
+                        Already have an account? <a href="/login.html">Sign in here</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Plan selection functionality
+        document.querySelectorAll('.plan-option').forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove selected class from all options
+                document.querySelectorAll('.plan-option').forEach(opt => opt.classList.remove('selected'));
+
+                // Add selected class to clicked option
+                option.classList.add('selected');
+
+                // Update hidden input
+                const selectedPlan = option.dataset.plan;
+                document.querySelector('input[name="selectedPlan"]').value = selectedPlan;
+            });
+        });
+
+        function submitSignup(event) {
+            event.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('signupForm');
+            const successMessage = document.getElementById('successMessage');
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating Account...';
+
+            // Collect form data
+            const formData = new FormData(form);
+            const signupData = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                password: formData.get('password'), // Note: This should be hashed on backend
+                organization: formData.get('organization'),
+                role: formData.get('role'),
+                selectedPlan: formData.get('selectedPlan'),
+                termsAccepted: formData.get('terms') ? true : false,
+                marketingOptIn: formData.get('marketing') ? true : false,
+                timestamp: new Date().toISOString(),
+                source: 'signup-form',
+                trialEndDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString() // 14 days from now
+            };
+
+            // Simulate API call (replace with actual API endpoint)
+            setTimeout(() => {
+                console.log('Signup data submitted:', {
+                    ...signupData,
+                    password: '[REDACTED]' // Don't log actual password
+                });
+
+                // Hide form and show success message
+                form.style.display = 'none';
+                successMessage.classList.add('show');
+
+                // Optional: Send to actual backend
+                // fetch('/api/signup', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(signupData)
+                // }).then(response => response.json())
+                //   .then(data => {
+                //       if (data.success) {
+                //           // Redirect to onboarding or dashboard
+                //           window.location.href = '/onboarding.html';
+                //       }
+                //   });
+
+                // For demo purposes, reset after delay
+                setTimeout(() => {
+                    form.style.display = 'block';
+                    successMessage.classList.remove('show');
+                    form.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Start Free Trial';
+
+                    // Reset plan selection
+                    document.querySelectorAll('.plan-option').forEach(opt => opt.classList.remove('selected'));
+                    document.querySelector('.plan-option[data-plan="professional"]').classList.add('selected');
+                    document.querySelector('input[name="selectedPlan"]').value = 'professional';
+                }, 5000);
+
+            }, 2000);
+        }
+
+        // Form validation and enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signupForm');
+            const inputs = form.querySelectorAll('input, select');
+
+            // Add real-time validation
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.hasAttribute('required') && !this.value.trim()) {
+                        this.style.borderColor = '#ff4757';
+                    } else {
+                        this.style.borderColor = 'var(--grizzly-teal)';
+                    }
+                });
+
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = 'var(--championship-gold)';
+                });
+            });
+
+            // Email validation
+            const emailInput = form.querySelector('input[name="email"]');
+            emailInput.addEventListener('blur', function() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (this.value && !emailRegex.test(this.value)) {
+                    this.style.borderColor = '#ff4757';
+                } else if (this.value) {
+                    this.style.borderColor = 'var(--grizzly-teal)';
+                }
+            });
+
+            // Password strength indicator
+            const passwordInput = form.querySelector('input[name="password"]');
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+
+                if (password.length >= 8) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[a-z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+                const colors = ['#ff4757', '#ff6b7a', '#ffa726', '#66bb6a', '#4caf50'];
+                this.style.borderColor = colors[Math.min(strength, 4)];
+            });
+        });
+    </script>
+
+</body></html>

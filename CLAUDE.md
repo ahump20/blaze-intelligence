@@ -22,6 +22,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run test-ai` - Test AI orchestration deployment
 - `npm run generate-reports` - Generate analytics reports pipeline
 
+### GitHub Management
+- `npm run github-analyze` - Analyze GitHub repository structure
+- `npm run github-cleanup` - Preview GitHub repository cleanup operations
+- `npm run github-cleanup-execute` - Execute GitHub repository cleanup
+- `npm run github-plan` - Generate GitHub organization plan
+
 ### MCP Server Commands (via Claude Code)
 ```bash
 # Start MCP server
@@ -43,8 +49,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This codebase implements a comprehensive sports intelligence platform that orchestrates multiple AI models (Claude, ChatGPT, Gemini) for analytics and content generation.
 
 **Core Components:**
-- **Cardinals Analytics MCP Server** (`cardinals-analytics-server.js`) - Model Context Protocol server providing sports analytics functions
-- **Multi-AI Integration** (`scripts/multi_ai_integration.js`) - Orchestrates parallel processing across AI models  
+- **Cardinals Analytics MCP Server** (`BI/cardinals-analytics-server.js`) - Model Context Protocol server providing sports analytics functions
+- **Multi-AI Integration** (`scripts/multi_ai_integration.js`) - Orchestrates parallel processing across AI models
 - **Dynamic Content Updater** (`dynamic-content-updater.js`) - Automated content processing and deployment system
 - **Workflow Triggers** (`workflow-triggers.js`) - Scheduled tasks, webhooks, and automation management
 
@@ -57,24 +63,26 @@ This codebase implements a comprehensive sports intelligence platform that orche
 └── youth-baseball/    # Perfect Game and youth sports integration
 ```
 
-### Automation Framework
-- **Master Controller** (`automation/master-automation-controller.js`) - Central automation orchestration
-- **Health Monitoring** (`automation/health-monitoring.js`) - System health and performance tracking
-- **Data Ingestion** (`automation/sports-data-ingestion.js`) - Automated sports data collection
-- **Report Pipeline** (`automation/report-pipeline-deploy.js`) - Automated report generation
+### Project Directories
+- **austin-portfolio-deploy/** - Production website with 90+ HTML pages, API endpoints, and deployment scripts
+- **BI/** - Business Intelligence platform core with MCP server and automation
+- **blaze-rti-deploy/** - Real-Time Intelligence platform deployment
+- **blaze-worlds-game/** - Interactive gaming platform integration
+- **vision-ai/** - Computer vision and biomechanical analysis components
+- **mobile-app/** - React Native application (if present)
 
 ### Portfolio Integration
 The `austin-portfolio-deploy/` directory contains the live portfolio system with:
-- **API Endpoints** (`api/`) - Lead capture, NIL calculator, Cardinals readiness data
-- **Automated Scripts** - Digital combine autopilot and Cardinals readiness board
-- **Analytics Data** - League-specific performance data and insights
+- **API Endpoints** (`api/`) - Lead capture, NIL calculator, Cardinals readiness, sports data integration
+- **Interactive Dashboards** - Sport-specific dashboards for Cardinals, Titans, Longhorns, Grizzlies
+- **SportsDataIO Integration** - Live NFL, MLB, NBA, NCAA data feeds
+- **Netlify Functions** - Serverless API endpoints for real-time data
 - **Monitoring** - Comprehensive logging and performance tracking
 
 ### Cloudflare Workers Integration
 Multiple Wrangler configurations support different deployment environments:
 - `wrangler.toml` - Youth sports data ingestion with R2 and KV storage
-- `wrangler-production.toml` - Production environment configuration
-- `wrangler-sports-api.toml` - Sports API specific deployments
+- Environment configurations for production/staging deployments
 
 ### Vision AI Platform
 The system includes computer vision capabilities for sports analytics:
@@ -100,10 +108,11 @@ The system automatically processes content updates through:
 
 ### Data Integration
 Sports data flows through multiple pipelines:
-- Real-time APIs for live game data
+- Real-time APIs for live game data (SportsDataIO)
 - Historical data analysis for trend identification
 - Youth/Perfect Game data for recruitment analytics
 - NIL calculations for college athlete valuations
+- Texas high school football integration
 
 ## Key Technologies
 
@@ -116,6 +125,7 @@ Sports data flows through multiple pipelines:
 - **TensorFlow.js** - Machine learning and analytics
 - **Three.js** - 3D visualizations and interfaces
 - **Socket.io** - Real-time data streaming
+- **Netlify** - Primary hosting platform with serverless functions
 
 ## Blaze Intelligence Brand Standards
 
@@ -124,7 +134,8 @@ Sports data flows through multiple pipelines:
 - **Savings Claims**: 67–80% vs named competitor tiers (factual range only)
 - **Performance Claims**: Require "Methods & Definitions" link for benchmarks
 - **Style**: Neutral, factual tone - avoid adversarial "vs competitors" language
-- **Sports Focus**: MLB, NCAA football/basketball, NFL, NBA, high school sports, Perfect Game baseball data
+- **Sports Focus**: MLB, NCAA football/baseball, NFL, NBA, high school sports, Perfect Game baseball data
+- **Regional Focus**: Deep South Sports Authority - Texas, SEC region emphasis
 - **Exclusions**: No soccer/football references in demos or examples
 
 ## Security Considerations
@@ -143,3 +154,22 @@ Sports data flows through multiple pipelines:
 - Error handling with comprehensive logging via Winston
 - Automated deployment verification
 - System status dashboard available via `npm run status`
+
+## Current Active Development
+
+### Live Deployments
+- **Production Site**: https://blaze-intelligence.netlify.app
+- **Status Page**: deployment-status.html with real-time monitoring
+- **Active Dashboards**: Multiple sport-specific analytics dashboards
+
+### Recent Updates (October 2025)
+- Node 22 LTS modernization
+- SportsDataIO proxy implementation for secure API access
+- Perfect Game youth baseball integration
+- Accessibility enhancements with reduced motion support
+- NBA Grizzlies dashboard implementation
+
+### Known Issues & Workarounds
+- Port conflicts: Default server runs on port 8000, use 8001 if occupied
+- ES Module errors: Ensure `"type": "module"` in package.json
+- MCP Server: Restart with `./start-cardinals-server.sh` if connection drops

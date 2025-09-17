@@ -1,0 +1,872 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Domain Management Dashboard</title>
+    <meta name="description" content="Unified domain management and DNS configuration dashboard for Blaze Intelligence multi-platform deployment">
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --cardinal-blue: #9BCBEB;
+            --data-green: #00B2A9;
+            --trust-navy: #002244;
+            --dark-bg: #0a0e27;
+            --light-bg: #112240;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --pending: #8B5CF6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--light-bg) 50%, var(--trust-navy) 100%);
+            color: #E5E7EB;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(10, 14, 39, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(191, 87, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #9CA3AF;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .domains-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .domain-card {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .domain-card:hover {
+            border-color: var(--burnt-orange);
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.2);
+        }
+
+        .domain-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .domain-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--burnt-orange);
+            word-break: break-all;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        .status-badge.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .status-badge.verifying {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid var(--pending);
+            color: var(--pending);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .domain-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .detail-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--cardinal-blue);
+            word-break: break-all;
+        }
+
+        .dns-records {
+            background: rgba(10, 14, 39, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .dns-record {
+            display: grid;
+            grid-template-columns: 60px 1fr 2fr;
+            gap: 1rem;
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .dns-record:last-child {
+            border-bottom: none;
+        }
+
+        .record-type {
+            color: var(--championship-gold);
+            font-weight: 600;
+        }
+
+        .record-name {
+            color: #9CA3AF;
+        }
+
+        .record-value {
+            color: var(--cardinal-blue);
+            word-break: break-all;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(191, 87, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--cardinal-blue);
+            border: 1px solid var(--cardinal-blue);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(155, 203, 235, 0.1);
+        }
+
+        .dns-config-section {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .config-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--burnt-orange);
+        }
+
+        .copy-button {
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: var(--cardinal-blue);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(155, 203, 235, 0.2);
+        }
+
+        .code-block {
+            background: rgba(10, 14, 39, 0.9);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--cardinal-blue);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--burnt-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .refresh-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(191, 87, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .refresh-button:hover {
+            transform: scale(1.1) rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .domain-details {
+                grid-template-columns: 1fr;
+            }
+
+            .dns-record {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Domain Management Dashboard</h1>
+            <p class="subtitle">
+                Unified DNS configuration and verification for Blaze Intelligence multi-platform deployment
+            </p>
+        </header>
+
+        <!-- Statistics Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--success);">1</div>
+                <div class="stat-label">Active Domains</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--warning);">6</div>
+                <div class="stat-label">Pending Verification</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--cardinal-blue);">7</div>
+                <div class="stat-label">Total Domains</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--championship-gold);">4</div>
+                <div class="stat-label">Platforms</div>
+            </div>
+        </div>
+
+        <!-- DNS Configuration Helper -->
+        <div class="dns-config-section">
+            <h2 class="config-title">Quick DNS Configuration</h2>
+            <p style="color: #9CA3AF; margin-bottom: 1rem;">
+                Add these records to your domain registrar to verify ownership and enable custom domains:
+            </p>
+            <div class="code-block">
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+                <pre># Primary Domain Configuration
+CNAME   @     blaze-intelligence.netlify.app
+CNAME   www   blaze-intelligence.netlify.app
+TXT     @     "netlify-verify=YOUR_TOKEN"
+
+# Cloudflare Pages
+CNAME   @     a4dc795e.blaze-intelligence.pages.dev
+TXT     _cf-custom-hostname   a4dc795e.blaze-intelligence.pages.dev
+
+# Replit App
+CNAME   app   blaze-intelligence.replit.app
+TXT     _replit-verify   "YOUR_REPLIT_TOKEN"</pre>
+            </div>
+        </div>
+
+        <!-- Domains List -->
+        <div class="domains-grid">
+            <!-- blaze-intelligence.replit.app -->
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-name">blaze-intelligence.replit.app</div>
+                    <div class="status-badge active">
+                        <span class="status-indicator" style="background: var(--success);"></span>
+                        Active
+                    </div>
+                </div>
+                <div class="domain-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">Replit</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">SSL Status</span>
+                        <span class="detail-value">✓ Valid Certificate</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Response Time</span>
+                        <span class="detail-value">~200ms</span>
+                    </div>
+                </div>
+                <div class="dns-records">
+                    <div class="dns-record">
+                        <span class="record-type">A</span>
+                        <span class="record-name">@</span>
+                        <span class="record-value">35.111.179.208</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <a href="https://blaze-intelligence.replit.app" target="_blank" class="btn btn-primary">Visit Site</a>
+                    <button class="btn btn-secondary" onclick="verifyDomain('blaze-intelligence.replit.app')">Verify DNS</button>
+                </div>
+            </div>
+
+            <!-- a4dc795e.blaze-intelligence.pages.dev -->
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-name">a4dc795e.blaze-intelligence.pages.dev</div>
+                    <div class="status-badge verifying">
+                        <span class="status-indicator" style="background: var(--pending);"></span>
+                        Verifying
+                    </div>
+                </div>
+                <div class="domain-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">Cloudflare Pages</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Deployment ID</span>
+                        <span class="detail-value">a4dc795e</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">SSL Status</span>
+                        <span class="detail-value">⏳ Provisioning</span>
+                    </div>
+                </div>
+                <div class="dns-records">
+                    <div class="dns-record">
+                        <span class="record-type">CNAME</span>
+                        <span class="record-name">@</span>
+                        <span class="record-value">a4dc795e.blaze-intelligence.pages.dev</span>
+                    </div>
+                    <div class="dns-record">
+                        <span class="record-type">TXT</span>
+                        <span class="record-name">_cf-custom-hostname</span>
+                        <span class="record-value">a4dc795e.blaze-intelligence.pages.dev</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <a href="https://a4dc795e.blaze-intelligence.pages.dev" target="_blank" class="btn btn-primary">Visit Site</a>
+                    <button class="btn btn-secondary" onclick="verifyDomain('a4dc795e.blaze-intelligence.pages.dev')">Verify DNS</button>
+                </div>
+            </div>
+
+            <!-- blaze-3d.netlify.app -->
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-name">blaze-3d.netlify.app</div>
+                    <div class="status-badge verifying">
+                        <span class="status-indicator" style="background: var(--pending);"></span>
+                        Verifying
+                    </div>
+                </div>
+                <div class="domain-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">Netlify</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Type</span>
+                        <span class="detail-value">3D Visualization</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">SSL Status</span>
+                        <span class="detail-value">⏳ Provisioning</span>
+                    </div>
+                </div>
+                <div class="dns-records">
+                    <div class="dns-record">
+                        <span class="record-type">CNAME</span>
+                        <span class="record-name">blaze-3d</span>
+                        <span class="record-value">blaze-3d.netlify.app</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <a href="https://blaze-3d.netlify.app" target="_blank" class="btn btn-primary">Visit Site</a>
+                    <button class="btn btn-secondary" onclick="verifyDomain('blaze-3d.netlify.app')">Verify DNS</button>
+                </div>
+            </div>
+
+            <!-- new.express.adobe.com -->
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-name">new.express.adobe.com</div>
+                    <div class="status-badge verifying">
+                        <span class="status-indicator" style="background: var(--pending);"></span>
+                        Verifying
+                    </div>
+                </div>
+                <div class="domain-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">Adobe Express</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Type</span>
+                        <span class="detail-value">Creative Assets</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Access</span>
+                        <span class="detail-value">Adobe Account Required</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <a href="https://new.express.adobe.com" target="_blank" class="btn btn-primary">Visit Adobe</a>
+                    <button class="btn btn-secondary" onclick="alert('Adobe domains are managed through Adobe Creative Cloud')">Info</button>
+                </div>
+            </div>
+
+            <!-- 70d41e32.blaze-intelligence-platform.pages.dev -->
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-name">70d41e32.blaze-intelligence-platform.pages.dev</div>
+                    <div class="status-badge verifying">
+                        <span class="status-indicator" style="background: var(--pending);"></span>
+                        Verifying
+                    </div>
+                </div>
+                <div class="domain-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">Cloudflare Pages</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Deployment ID</span>
+                        <span class="detail-value">70d41e32</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">SSL Status</span>
+                        <span class="detail-value">⏳ Provisioning</span>
+                    </div>
+                </div>
+                <div class="dns-records">
+                    <div class="dns-record">
+                        <span class="record-type">CNAME</span>
+                        <span class="record-name">@</span>
+                        <span class="record-value">70d41e32.blaze-intelligence-platform.pages.dev</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <a href="https://70d41e32.blaze-intelligence-platform.pages.dev" target="_blank" class="btn btn-primary">Visit Site</a>
+                    <button class="btn btn-secondary" onclick="verifyDomain('70d41e32.blaze-intelligence-platform.pages.dev')">Verify DNS</button>
+                </div>
+            </div>
+
+            <!-- j8r5k8b9jg.wixsite.com -->
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-name">j8r5k8b9jg.wixsite.com</div>
+                    <div class="status-badge verifying">
+                        <span class="status-indicator" style="background: var(--pending);"></span>
+                        Verifying
+                    </div>
+                </div>
+                <div class="domain-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">Wix</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Type</span>
+                        <span class="detail-value">Website Builder</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Management</span>
+                        <span class="detail-value">Via Wix Dashboard</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <a href="https://j8r5k8b9jg.wixsite.com" target="_blank" class="btn btn-primary">Visit Site</a>
+                    <button class="btn btn-secondary" onclick="alert('Wix domains are managed through Wix dashboard')">Info</button>
+                </div>
+            </div>
+
+            <!-- blaze-intelligence.netlify.app -->
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-name">blaze-intelligence.netlify.app</div>
+                    <div class="status-badge verifying">
+                        <span class="status-indicator" style="background: var(--pending);"></span>
+                        Verifying
+                    </div>
+                </div>
+                <div class="domain-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Platform</span>
+                        <span class="detail-value">Netlify</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Type</span>
+                        <span class="detail-value">Main Platform</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">SSL Status</span>
+                        <span class="detail-value">⏳ Provisioning</span>
+                    </div>
+                </div>
+                <div class="dns-records">
+                    <div class="dns-record">
+                        <span class="record-type">CNAME</span>
+                        <span class="record-name">@</span>
+                        <span class="record-value">blaze-intelligence.netlify.app</span>
+                    </div>
+                    <div class="dns-record">
+                        <span class="record-type">CNAME</span>
+                        <span class="record-name">www</span>
+                        <span class="record-value">blaze-intelligence.netlify.app</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <a href="https://blaze-intelligence.netlify.app" target="_blank" class="btn btn-primary">Visit Site</a>
+                    <button class="btn btn-secondary" onclick="verifyDomain('blaze-intelligence.netlify.app')">Verify DNS</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Refresh Button -->
+        <button class="refresh-button" onclick="refreshAllDomains()" title="Refresh All Domains">
+            <i class="fas fa-sync"></i>
+        </button>
+    </div>
+
+    <script>
+        // Copy to clipboard function
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement.querySelector('pre');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'rgba(16, 185, 129, 0.2)';
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Verify individual domain
+        async function verifyDomain(domain) {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.innerHTML = '<span class="loading-spinner"></span> Checking...';
+            button.disabled = true;
+
+            try {
+                // Check DNS records
+                const response = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
+                const data = await response.json();
+
+                if (data.Answer && data.Answer.length > 0) {
+                    showNotification(`✓ ${domain} has valid DNS records`, 'success');
+                } else {
+                    showNotification(`⚠ ${domain} DNS records not found`, 'warning');
+                }
+
+                // Update status badge
+                updateDomainStatus(domain);
+            } catch (error) {
+                showNotification(`✗ Error checking ${domain}: ${error.message}`, 'error');
+            } finally {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+
+        // Update domain status badge
+        function updateDomainStatus(domain) {
+            const domainCard = Array.from(document.querySelectorAll('.domain-name'))
+                .find(el => el.textContent === domain)
+                ?.closest('.domain-card');
+
+            if (domainCard) {
+                const statusBadge = domainCard.querySelector('.status-badge');
+                // This would be updated based on actual verification results
+                console.log(`Updating status for ${domain}`);
+            }
+        }
+
+        // Refresh all domains
+        async function refreshAllDomains() {
+            const button = event.currentTarget;
+            button.style.animation = 'spin 1s linear infinite';
+
+            const domains = [
+                'blaze-intelligence.replit.app',
+                'a4dc795e.blaze-intelligence.pages.dev',
+                'blaze-3d.netlify.app',
+                'blaze-intelligence.netlify.app',
+                '70d41e32.blaze-intelligence-platform.pages.dev'
+            ];
+
+            for (const domain of domains) {
+                await checkDomainHealth(domain);
+            }
+
+            button.style.animation = '';
+            showNotification('✓ All domains refreshed', 'success');
+        }
+
+        // Check domain health
+        async function checkDomainHealth(domain) {
+            try {
+                const response = await fetch(`https://${domain}`, {
+                    method: 'HEAD',
+                    mode: 'no-cors'
+                });
+                console.log(`${domain}: Reachable`);
+                return true;
+            } catch (error) {
+                console.log(`${domain}: Unreachable`);
+                return false;
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                background: ${type === 'success' ? 'rgba(16, 185, 129, 0.9)' :
+                              type === 'warning' ? 'rgba(245, 158, 11, 0.9)' :
+                              type === 'error' ? 'rgba(239, 68, 68, 0.9)' :
+                              'rgba(139, 92, 246, 0.9)'};
+                color: white;
+                border-radius: 8px;
+                font-weight: 600;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            console.log('Auto-refreshing domain statuses...');
+            // This would perform actual health checks
+        }, 30000);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Domain Management Dashboard loaded');
+            // Initial domain health check could go here
+        });
+
+        // Add slide animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body></html>

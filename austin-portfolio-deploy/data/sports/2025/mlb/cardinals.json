@@ -1,0 +1,246 @@
+{
+  "team": "St. Louis Cardinals",
+  "season": "2025",
+  "league": "MLB",
+  "division": "NL Central",
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "pct": ".000",
+    "gb": "0"
+  },
+  "standings": {
+    "division": "TBD",
+    "wildcard": "TBD"
+  },
+  "roster": {
+    "starting_lineup": [
+      {
+        "number": "46",
+        "name": "Paul Goldschmidt",
+        "position": "1B",
+        "avg": ".268",
+        "hr": 22,
+        "rbi": 65,
+        "ops": ".821",
+        "war": 2.8
+      },
+      {
+        "number": "28",
+        "name": "Nolan Arenado",
+        "position": "3B",
+        "avg": ".272",
+        "hr": 26,
+        "rbi": 103,
+        "ops": ".789",
+        "war": 3.1
+      },
+      {
+        "number": "3",
+        "name": "Dylan Carlson",
+        "position": "CF",
+        "avg": ".245",
+        "hr": 10,
+        "rbi": 39,
+        "ops": ".694",
+        "war": 1.2
+      },
+      {
+        "number": "24",
+        "name": "Willson Contreras",
+        "position": "C",
+        "avg": ".262",
+        "hr": 20,
+        "rbi": 65,
+        "ops": ".796",
+        "war": 2.5
+      },
+      {
+        "number": "7",
+        "name": "Masyn Winn",
+        "position": "SS",
+        "avg": ".267",
+        "hr": 15,
+        "rbi": 57,
+        "ops": ".724",
+        "war": 3.8
+      },
+      {
+        "number": "15",
+        "name": "Jordan Walker",
+        "position": "RF",
+        "avg": ".257",
+        "hr": 16,
+        "rbi": 51,
+        "ops": ".737",
+        "war": 1.9
+      },
+      {
+        "number": "27",
+        "name": "Lars Nootbaar",
+        "position": "LF",
+        "avg": ".261",
+        "hr": 14,
+        "rbi": 45,
+        "ops": ".761",
+        "war": 2.3
+      },
+      {
+        "number": "25",
+        "name": "Brendan Donovan",
+        "position": "2B",
+        "avg": ".278",
+        "hr": 11,
+        "rbi": 34,
+        "ops": ".765",
+        "war": 2.7
+      },
+      {
+        "number": "21",
+        "name": "Alec Burleson",
+        "position": "DH",
+        "avg": ".269",
+        "hr": 21,
+        "rbi": 71,
+        "ops": ".755",
+        "war": 1.8
+      }
+    ],
+    "starting_rotation": [
+      {
+        "number": "48",
+        "name": "Sonny Gray",
+        "position": "SP",
+        "w": 13,
+        "l": 9,
+        "era": "3.79",
+        "so": 203,
+        "whip": 1.088
+      },
+      {
+        "number": "32",
+        "name": "Miles Mikolas",
+        "position": "SP",
+        "w": 9,
+        "l": 11,
+        "era": "5.35",
+        "so": 127,
+        "whip": 1.291
+      },
+      {
+        "number": "91",
+        "name": "Andre Pallante",
+        "position": "SP",
+        "w": 7,
+        "l": 8,
+        "era": "3.91",
+        "so": 67,
+        "whip": 1.295
+      },
+      {
+        "number": "59",
+        "name": "Kyle Gibson",
+        "position": "SP",
+        "w": 8,
+        "l": 8,
+        "era": "4.00",
+        "so": 151,
+        "whip": 1.337
+      },
+      {
+        "number": "88",
+        "name": "Steven Matz",
+        "position": "SP",
+        "w": 4,
+        "l": 7,
+        "era": "5.08",
+        "so": 58,
+        "whip": 1.465
+      }
+    ],
+    "bullpen": [
+      {
+        "number": "58",
+        "name": "Ryan Helsley",
+        "position": "CL",
+        "saves": 49,
+        "era": "2.04",
+        "so": 79,
+        "whip": 1.1
+      },
+      {
+        "number": "43",
+        "name": "Andrew Kittredge",
+        "position": "RP",
+        "holds": 23,
+        "era": "2.80",
+        "so": 48,
+        "whip": 1.142
+      },
+      {
+        "number": "66",
+        "name": "JoJo Romero",
+        "position": "RP",
+        "holds": 18,
+        "era": "3.58",
+        "so": 59,
+        "whip": 1.232
+      },
+      {
+        "number": "29",
+        "name": "Ryan Fernandez",
+        "position": "RP",
+        "holds": 15,
+        "era": "3.86",
+        "so": 42,
+        "whip": 1.371
+      }
+    ],
+    "prospects": [
+      {
+        "name": "Masyn Winn",
+        "position": "SS",
+        "level": "MLB",
+        "eta": "Current",
+        "ranking": 1
+      },
+      {
+        "name": "Jordan Walker",
+        "position": "OF",
+        "level": "MLB",
+        "eta": "Current",
+        "ranking": 2
+      },
+      {
+        "name": "Tink Hence",
+        "position": "RHP",
+        "level": "AA",
+        "eta": "2026",
+        "ranking": 3
+      },
+      {
+        "name": "Cooper Hjerpe",
+        "position": "LHP",
+        "level": "AA",
+        "eta": "2026",
+        "ranking": 4
+      },
+      {
+        "name": "Thomas Saggese",
+        "position": "2B",
+        "level": "AAA",
+        "eta": "2025",
+        "ranking": 5
+      }
+    ]
+  },
+  "analytics": {
+    "team_ops": ".728",
+    "team_era": "4.23",
+    "run_differential": -37,
+    "pythagorean_wins": 81,
+    "strength_of_schedule": 0.497,
+    "playoff_probability": "18.2%"
+  },
+  "lastUpdated": "2025-09-15T23:47:56.252Z"
+}

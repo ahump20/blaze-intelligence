@@ -1,0 +1,440 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Quantum Neural Visualization Showcase</title>
+    <meta name="description" content="Experience the next generation of sports analytics visualization with quantum neural networks and ray-traced graphics">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Enhanced Visualizations -->
+    <script src="/js/quantum-neural-visuals.js" defer=""></script>
+    <script src="/js/enhanced-three-visualizer.js" defer=""></script>
+
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --cardinal-blue: #9BCBEB;
+            --data-green: #00B2A9;
+            --trust-navy: #002244;
+            --dark-bg: #0a0e27;
+            --light-bg: #112240;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--light-bg) 50%, var(--trust-navy) 100%);
+            color: #E5E7EB;
+            overflow-x: hidden;
+        }
+
+        .showcase-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 2rem;
+            text-align: center;
+            background: rgba(10, 14, 39, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(191, 87, 0, 0.3);
+            position: relative;
+            z-index: 100;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #9CA3AF;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .visualizations-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .visualization-card {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(191, 87, 0, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .visualization-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(191, 87, 0, 0.3);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            background: rgba(10, 14, 39, 0.7);
+            border-bottom: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--burnt-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: #9CA3AF;
+            font-size: 0.95rem;
+        }
+
+        .visualization-canvas {
+            width: 100%;
+            height: 500px;
+            position: relative;
+        }
+
+        #quantum-neural-demo {
+            height: 600px;
+        }
+
+        #enhanced-three-demo {
+            height: 700px;
+        }
+
+        .controls {
+            padding: 1.5rem;
+            background: rgba(10, 14, 39, 0.7);
+            border-top: 1px solid rgba(191, 87, 0, 0.2);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--cardinal-blue);
+            font-weight: 600;
+        }
+
+        select, input[type="range"] {
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            color: #E5E7EB;
+            font-family: inherit;
+        }
+
+        select:focus, input[type="range"]:focus {
+            outline: none;
+            border-color: var(--burnt-orange);
+            box-shadow: 0 0 0 3px rgba(191, 87, 0, 0.1);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #10B981;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #10B981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #9CA3AF;
+        }
+
+        .feature-item::before {
+            content: '✓';
+            color: var(--data-green);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        @media (min-width: 768px) {
+            .visualizations-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            h1 {
+                font-size: 4rem;
+            }
+        }
+
+        .performance-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(10, 14, 39, 0.7);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <div class="showcase-container">
+        <header>
+            <h1>Quantum Neural Visualization Showcase</h1>
+            <p class="subtitle">
+                Experience the future of sports analytics with elegant ray-traced graphics,
+                quantum neural networks, and championship-level data visualization
+            </p>
+            <div style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <span class="status-badge">Production Ready</span>
+                <span class="status-badge" style="background: rgba(191, 87, 0, 0.1); border-color: rgba(191, 87, 0, 0.3); color: var(--burnt-orange);">
+                    <span style="background: var(--burnt-orange);"></span>
+                    High Performance
+                </span>
+                <span class="status-badge" style="background: rgba(155, 203, 235, 0.1); border-color: rgba(155, 203, 235, 0.3); color: var(--cardinal-blue);">
+                    <span style="background: var(--cardinal-blue);"></span>
+                    60 FPS
+                </span>
+            </div>
+        </header>
+
+        <div class="visualizations-grid">
+            <!-- Quantum Neural Network Visualization -->
+            <div class="visualization-card">
+                <div class="card-header">
+                    <h2 class="card-title">Quantum Neural Network</h2>
+                    <p class="card-description">
+                        150+ interconnected neurons with real-time data pulses, elegant curved connections,
+                        and cinematic lighting effects
+                    </p>
+                </div>
+                <canvas id="quantum-neural-demo" class="visualization-canvas" data-quantum-visual="" data-quality="high" data-neurons="150" data-speed="0.001"></canvas>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="quality-select">Quality</label>
+                        <select id="quality-select" onchange="updateQuality(this.value)">
+                            <option value="high" selected="">High (150 neurons)</option>
+                            <option value="medium">Medium (100 neurons)</option>
+                            <option value="low">Low (50 neurons)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="speed-slider">Animation Speed</label>
+                        <input type="range" id="speed-slider" min="0.0001" max="0.01" step="0.0001" value="0.001">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Three.js Championship Visualizer -->
+            <div class="visualization-card">
+                <div class="card-header">
+                    <h2 class="card-title">Championship Data Sphere</h2>
+                    <p class="card-description">
+                        Real-time sports data visualization with team-specific crystals, holographic displays,
+                        and advanced ray-traced materials
+                    </p>
+                </div>
+                <div id="enhanced-three-demo" class="visualization-canvas" data-three-visualizer=""></div>
+                <div class="performance-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Teams</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Neural Nodes</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">1000</div>
+                        <div class="stat-label">Particles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">60</div>
+                        <div class="stat-label">FPS Target</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Comparison -->
+            <div class="visualization-card">
+                <div class="card-header">
+                    <h2 class="card-title">Visual Enhancement Features</h2>
+                    <p class="card-description">
+                        Comparing old particle systems with new quantum neural visualization
+                    </p>
+                </div>
+                <ul class="feature-list">
+                    <li class="feature-item">Ray-traced material appearance</li>
+                    <li class="feature-item">Physical-based rendering (PBR)</li>
+                    <li class="feature-item">Dynamic lighting system</li>
+                    <li class="feature-item">Smooth 60 FPS animations</li>
+                    <li class="feature-item">Team-specific color schemes</li>
+                    <li class="feature-item">Holographic data displays</li>
+                    <li class="feature-item">Neural network visualization</li>
+                    <li class="feature-item">Particle field atmosphere</li>
+                    <li class="feature-item">Cinematic camera movements</li>
+                    <li class="feature-item">Post-processing effects</li>
+                    <li class="feature-item">Responsive design</li>
+                    <li class="feature-item">Performance optimization</li>
+                </ul>
+            </div>
+
+            <!-- Technical Specifications -->
+            <div class="visualization-card">
+                <div class="card-header">
+                    <h2 class="card-title">Technical Specifications</h2>
+                    <p class="card-description">
+                        Advanced rendering techniques and optimization strategies
+                    </p>
+                </div>
+                <ul class="feature-list">
+                    <li class="feature-item">Three.js r128 with WebGL 2.0</li>
+                    <li class="feature-item">MeshPhysicalMaterial for realism</li>
+                    <li class="feature-item">ACES Filmic tone mapping</li>
+                    <li class="feature-item">sRGB color space encoding</li>
+                    <li class="feature-item">4K shadow maps (4096x4096)</li>
+                    <li class="feature-item">PCF soft shadow filtering</li>
+                    <li class="feature-item">Adaptive pixel ratio scaling</li>
+                    <li class="feature-item">Clearcoat for glossy surfaces</li>
+                    <li class="feature-item">Environment map reflections</li>
+                    <li class="feature-item">Emissive material glow</li>
+                    <li class="feature-item">Depth-based fog effects</li>
+                    <li class="feature-item">GPU-optimized geometry</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize enhanced visualizer on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Enhanced Three.js visualizer will auto-initialize via data attribute
+            console.log('Quantum Neural Visualization Showcase loaded');
+
+            // Update animation speed based on slider
+            const speedSlider = document.getElementById('speed-slider');
+            speedSlider.addEventListener('input', (e) => {
+                const canvas = document.getElementById('quantum-neural-demo');
+                if (window.QuantumNeuralVisuals && canvas.visualInstance) {
+                    canvas.visualInstance.config.animationSpeed = parseFloat(e.target.value);
+                }
+            });
+        });
+
+        // Quality update function
+        function updateQuality(quality) {
+            const canvas = document.getElementById('quantum-neural-demo');
+            if (canvas && canvas.visualInstance) {
+                canvas.visualInstance.setQuality(quality);
+            }
+        }
+
+        // Performance monitoring
+        let lastTime = performance.now();
+        let frames = 0;
+
+        function measureFPS() {
+            frames++;
+            const currentTime = performance.now();
+
+            if (currentTime >= lastTime + 1000) {
+                const fps = Math.round((frames * 1000) / (currentTime - lastTime));
+                console.log(`FPS: ${fps}`);
+                frames = 0;
+                lastTime = currentTime;
+            }
+
+            requestAnimationFrame(measureFPS);
+        }
+
+        // Start FPS measurement
+        measureFPS();
+    </script>
+
+</body></html>

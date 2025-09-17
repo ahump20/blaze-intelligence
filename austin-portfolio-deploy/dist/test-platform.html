@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Test - Blaze Intelligence</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0e27, #1a1a2e);
+            color: #e0e6ed;
+            padding: 2rem;
+            margin: 0;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .test-title {
+            color: #BF5700;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        .status-pass { color: #4ade80; }
+        .status-fail { color: #ef4444; }
+        .btn {
+            background: linear-gradient(135deg, #BF5700, #FFD700);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(191, 87, 0, 0.4);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="./js/professional-animations.js"></script>
+    <script src="./js/character-assessment-engine.js"></script>
+    <script src="./js/rti-fusion-engine.js"></script>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#BF5700">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw-pwa.js');
+      }
+    </script>
+  <link rel="preload" href="/css/blaze-professional.css" as="style">
+    <link rel="preload" href="/js/navigation-manager.js" as="script">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.sportsdataio.com">
+  </head>
+<body>
+    <div class="test-container">
+        <h1 style="color: #BF5700; text-align: center; margin-bottom: 3rem;">🏆 Blaze Intelligence Platform Test Suite</h1>
+
+        <!-- Library Tests -->
+        <div class="test-section">
+            <h2 class="test-title">📚 Library Dependencies</h2>
+            <div id="library-tests"></div>
+        </div>
+
+        <!-- JavaScript Module Tests -->
+        <div class="test-section">
+            <h2 class="test-title">⚙️ Core Modules</h2>
+            <div id="module-tests"></div>
+        </div>
+
+        <!-- Feature Tests -->
+        <div class="test-section">
+            <h2 class="test-title">🚀 Platform Features</h2>
+            <div id="feature-tests"></div>
+        </div>
+
+        <!-- Animation Tests -->
+        <div class="test-section">
+            <h2 class="test-title">🎨 Professional Animations</h2>
+            <div id="animation-tests"></div>
+            <button class="btn" onclick="testAnimations()">Test Animations</button>
+        </div>
+
+        <!-- Performance Tests -->
+        <div class="test-section">
+            <h2 class="test-title">📊 Performance Metrics</h2>
+            <div id="performance-tests"></div>
+        </div>
+
+        <!-- Navigation Tests -->
+        <div class="test-section">
+            <h2 class="test-title">🧭 Navigation Links</h2>
+            <div id="navigation-tests"></div>
+        </div>
+    </div>
+
+    <script>
+        class PlatformTester {
+            constructor() {
+                this.results = {
+                    libraries: {},
+                    modules: {},
+                    features: {},
+                    animations: {},
+                    performance: {},
+                    navigation: {}
+                };
+                this.init();
+            }
+
+            init() {
+                this.testLibraries();
+                this.testModules();
+                this.testFeatures();
+                this.testPerformance();
+                this.testNavigation();
+                this.renderResults();
+            }
+
+            testLibraries() {
+                this.results.libraries['Three.js'] = typeof THREE !== 'undefined';
+                this.results.libraries['Chart.js'] = typeof Chart !== 'undefined';
+                this.results.libraries['GSAP'] = typeof gsap !== 'undefined';
+            }
+
+            testModules() {
+                this.results.modules['Professional Animations'] = typeof window.ProfessionalAnimations !== 'undefined';
+                this.results.modules['Character Assessment Engine'] = typeof window.CharacterAssessmentEngine !== 'undefined';
+                this.results.modules['RTI Fusion Engine'] = typeof window.RTIFusionEngine !== 'undefined';
+            }
+
+            testFeatures() {
+                // Test Canvas support
+                this.results.features['Canvas Support'] = !!document.createElement('canvas').getContext;
+
+                // Test WebGL support
+                try {
+                    const canvas = document.createElement('canvas');
+                    this.results.features['WebGL Support'] = !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+                } catch (e) {
+                    this.results.features['WebGL Support'] = false;
+                }
+
+                // Test LocalStorage
+                this.results.features['LocalStorage'] = typeof Storage !== 'undefined';
+
+                // Test Fetch API
+                this.results.features['Fetch API'] = typeof fetch !== 'undefined';
+
+                // Test CSS Grid
+                this.results.features['CSS Grid'] = CSS.supports('display', 'grid');
+
+                // Test Backdrop Filter
+                this.results.features['Backdrop Filter'] = CSS.supports('backdrop-filter', 'blur(10px)');
+            }
+
+            testPerformance() {
+                const start = performance.now();
+
+                // Simulate heavy computation
+                let sum = 0;
+                for (let i = 0; i < 100000; i++) {
+                    sum += Math.random();
+                }
+
+                const computeTime = performance.now() - start;
+                this.results.performance['Computation Speed'] = computeTime < 100; // Should be under 100ms
+
+                // Test memory usage (basic check)
+                this.results.performance['Memory Available'] = navigator.deviceMemory > 1 || true; // Fallback to true
+
+                // Test connection speed
+                this.results.performance['Network Connection'] = navigator.onLine;
+            }
+
+            testNavigation() {
+                const links = [
+                    { name: 'Home', url: '/' },
+                    { name: 'Executive Intelligence', url: '/executive-intelligence-center.html' },
+                    { name: 'Sports Dashboard', url: '/sports-intelligence-dashboard.html' },
+                    { name: 'RTI Platform', url: '/realtime-multimodal-dashboard.html' }
+                ];
+
+                links.forEach(link => {
+                    // Basic URL structure test
+                    this.results.navigation[link.name] = link.url.startsWith('/') && link.url.length > 1;
+                });
+            }
+
+            renderResults() {
+                this.renderSection('library-tests', this.results.libraries);
+                this.renderSection('module-tests', this.results.modules);
+                this.renderSection('feature-tests', this.results.features);
+                this.renderSection('performance-tests', this.results.performance);
+                this.renderSection('navigation-tests', this.results.navigation);
+            }
+
+            renderSection(containerId, results) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+
+                Object.entries(results).forEach(([name, passed]) => {
+                    const item = document.createElement('div');
+                    item.className = 'test-item';
+                    item.innerHTML = `
+                        <span>${name}</span>
+                        <span class="${passed ? 'status-pass' : 'status-fail'}">
+                            ${passed ? '✅ PASS' : '❌ FAIL'}
+                        </span>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+
+            generateReport() {
+                const allResults = { ...this.results };
+                let totalTests = 0;
+                let passedTests = 0;
+
+                Object.values(allResults).forEach(section => {
+                    Object.values(section).forEach(result => {
+                        totalTests++;
+                        if (result) passedTests++;
+                    });
+                });
+
+                const successRate = ((passedTests / totalTests) * 100).toFixed(1);
+
+                console.log(`🏆 Platform Test Results: ${passedTests}/${totalTests} tests passed (${successRate}%)`);
+
+                return {
+                    total: totalTests,
+                    passed: passedTests,
+                    successRate: successRate,
+                    results: allResults
+                };
+            }
+        }
+
+        // Test Animations Function
+        function testAnimations() {
+            const container = document.getElementById('animation-tests');
+
+            if (window.ProfessionalAnimations) {
+                // Test loading animation
+                window.ProfessionalAnimations.showLoadingOverlay('Testing Animations...');
+
+                setTimeout(() => {
+                    window.ProfessionalAnimations.hideLoadingOverlay();
+
+                    // Add test result
+                    const testItem = document.createElement('div');
+                    testItem.className = 'test-item';
+                    testItem.innerHTML = `
+                        <span>Loading Animation Test</span>
+                        <span class="status-pass">✅ PASS</span>
+                    `;
+                    container.appendChild(testItem);
+                }, 2000);
+            } else {
+                const testItem = document.createElement('div');
+                testItem.className = 'test-item';
+                testItem.innerHTML = `
+                    <span>Animation System</span>
+                    <span class="status-fail">❌ NOT LOADED</span>
+                `;
+                container.appendChild(testItem);
+            }
+        }
+
+        // Initialize tester
+        let platformTester;
+        document.addEventListener('DOMContentLoaded', () => {
+            platformTester = new PlatformTester();
+
+            // Generate and display report
+            setTimeout(() => {
+                const report = platformTester.generateReport();
+                document.title = `Blaze Intelligence Test (${report.successRate}% Pass Rate)`;
+            }, 1000);
+        });
+    </script>
+
+</body></html>

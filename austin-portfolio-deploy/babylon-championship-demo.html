@@ -1,0 +1,571 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Championship Ray-Traced Graphics Engine</title>
+    <meta name="description" content="Next-generation WebGPU ray-traced sports visualization with Babylon.js">
+
+    <!-- Babylon.js -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+
+    <!-- PixiJS for 2D overlays -->
+    <script src="https://pixijs.download/release/pixi.js"></script>
+
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <!-- Blaze Babylon Engine -->
+    <script src="./js/blaze-babylon-engine.js"></script>
+
+    <style>
+        :root {
+            --burnt-orange: #BF5700;
+            --championship-gold: #FFD700;
+            --cardinal-blue: #9BCBEB;
+            --data-green: #00B2A9;
+            --dark-bg: #0a0e27;
+            --light-bg: #112240;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--light-bg) 100%);
+            color: #E5E7EB;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        .control-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(17, 34, 64, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--burnt-orange);
+            border-radius: 16px;
+            padding: 2rem;
+            min-width: 350px;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(191, 87, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--championship-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .subtitle {
+            color: #9CA3AF;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .venue-selector {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            color: var(--cardinal-blue);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 87, 0, 0.3);
+            border-radius: 8px;
+            color: #E5E7EB;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--burnt-orange);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--burnt-orange);
+            box-shadow: 0 0 0 3px rgba(191, 87, 0, 0.1);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--dark-bg));
+            border: 1px solid var(--burnt-orange);
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(191, 87, 0, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats-display {
+            padding-top: 1rem;
+            border-top: 1px solid rgba(191, 87, 0, 0.2);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .stat-label {
+            color: #9CA3AF;
+        }
+
+        .stat-value {
+            color: var(--data-green);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .webgpu-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            background: rgba(17, 34, 64, 0.95);
+            border: 1px solid var(--data-green);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--data-green);
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.fallback {
+            background: var(--championship-gold);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-text {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            color: var(--burnt-orange);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(191, 87, 0, 0.2);
+            border-top: 3px solid var(--burnt-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .control-panel {
+                left: 10px;
+                right: 10px;
+                min-width: auto;
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Loading Screen -->
+        <div id="loadingScreen" class="loading-screen">
+            <div class="spinner"></div>
+            <div class="loading-text">Initializing Championship Graphics Engine...</div>
+        </div>
+
+        <!-- Main Canvas -->
+        <canvas id="renderCanvas"></canvas>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <h1>Championship Graphics Engine</h1>
+            <p class="subtitle">WebGPU Ray-Traced Sports Visualization</p>
+
+            <div class="venue-selector">
+                <label for="sportSelect">Select Sport</label>
+                <select id="sportSelect">
+                    <option value="mlb">MLB Baseball</option>
+                    <option value="nfl">NFL Football</option>
+                    <option value="nba">NBA Basketball</option>
+                    <option value="ncaa">NCAA Football</option>
+                </select>
+            </div>
+
+            <div class="venue-selector">
+                <label for="teamSelect">Select Team</label>
+                <select id="teamSelect">
+                    <optgroup label="MLB">
+                        <option value="cardinals">St. Louis Cardinals</option>
+                        <option value="astros">Houston Astros</option>
+                        <option value="dodgers">Los Angeles Dodgers</option>
+                        <option value="yankees">New York Yankees</option>
+                        <option value="redsox">Boston Red Sox</option>
+                    </optgroup>
+                    <optgroup label="NFL">
+                        <option value="titans">Tennessee Titans</option>
+                        <option value="texans">Houston Texans</option>
+                        <option value="cowboys">Dallas Cowboys</option>
+                        <option value="chiefs">Kansas City Chiefs</option>
+                    </optgroup>
+                    <optgroup label="NBA">
+                        <option value="grizzlies">Memphis Grizzlies</option>
+                        <option value="spurs">San Antonio Spurs</option>
+                        <option value="mavericks">Dallas Mavericks</option>
+                        <option value="rockets">Houston Rockets</option>
+                    </optgroup>
+                    <optgroup label="NCAA">
+                        <option value="texas">Texas Longhorns</option>
+                        <option value="alabama">Alabama</option>
+                        <option value="oklahoma">Oklahoma</option>
+                        <option value="lsu">LSU</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button id="generateBtn">Generate Stadium</button>
+                <button id="animateBtn">Animate Camera</button>
+                <button id="simulateBtn">Simulate Play</button>
+                <button id="crowdBtn">Toggle Crowd</button>
+            </div>
+
+            <div class="stats-display">
+                <div class="stat-row">
+                    <span class="stat-label">Render Mode:</span>
+                    <span class="stat-value" id="renderMode">WebGPU</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">FPS:</span>
+                    <span class="stat-value" id="fpsCounter">60</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Triangles:</span>
+                    <span class="stat-value" id="polyCount">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Draw Calls:</span>
+                    <span class="stat-value" id="drawCalls">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Ray Tracing:</span>
+                    <span class="stat-value" id="rtStatus">Enabled</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- WebGPU Status -->
+        <div class="webgpu-status">
+            <div class="status-indicator" id="statusLight"></div>
+            <span id="statusText">WebGPU Active</span>
+        </div>
+    </div>
+
+    <script>
+        let engine = null;
+        let currentSport = 'mlb';
+        let currentTeam = 'cardinals';
+        let crowdVisible = true;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Initialize Babylon.js engine
+            engine = new BlazeGraphicsEngine('renderCanvas');
+
+            try {
+                await engine.initialize();
+
+                // Hide loading screen
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => loadingScreen.style.display = 'none', 500);
+
+                // Update status based on WebGPU support
+                if (engine.rtEngine) {
+                    document.getElementById('renderMode').textContent = 'WebGPU';
+                    document.getElementById('rtStatus').textContent = 'Enabled';
+                    document.getElementById('statusText').textContent = 'WebGPU Active';
+                } else {
+                    document.getElementById('renderMode').textContent = 'WebGL2';
+                    document.getElementById('rtStatus').textContent = 'Disabled';
+                    document.getElementById('statusText').textContent = 'WebGL2 Fallback';
+                    document.getElementById('statusLight').classList.add('fallback');
+                }
+
+                // Generate initial stadium
+                await generateVenue();
+
+                // Setup event listeners
+                setupControls();
+
+                // Start stats update
+                updateStats();
+
+            } catch (error) {
+                console.error('Failed to initialize engine:', error);
+                alert('Failed to initialize graphics engine. Please check browser compatibility.');
+            }
+        });
+
+        async function generateVenue() {
+            const sport = document.getElementById('sportSelect').value;
+            const team = document.getElementById('teamSelect').value;
+
+            // Generate appropriate venue
+            switch (sport) {
+                case 'mlb':
+                    await engine.generateMLBPark(team);
+                    break;
+                case 'nfl':
+                case 'ncaa':
+                    await engine.generateNFLStadium(team);
+                    break;
+                case 'nba':
+                    // NBA arena generation would be implemented
+                    console.log('NBA arena generation coming soon');
+                    break;
+            }
+        }
+
+        function setupControls() {
+            // Generate button
+            document.getElementById('generateBtn').addEventListener('click', generateVenue);
+
+            // Animate camera
+            document.getElementById('animateBtn').addEventListener('click', () => {
+                engine.animateCamera();
+            });
+
+            // Simulate play
+            document.getElementById('simulateBtn').addEventListener('click', simulatePlay);
+
+            // Toggle crowd
+            document.getElementById('crowdBtn').addEventListener('click', () => {
+                if (engine.scene) {
+                    engine.scene.meshes.forEach(mesh => {
+                        if (mesh.name.startsWith('fan')) {
+                            mesh.isVisible = !mesh.isVisible;
+                        }
+                    });
+                    crowdVisible = !crowdVisible;
+                    document.getElementById('crowdBtn').textContent =
+                        crowdVisible ? 'Hide Crowd' : 'Show Crowd';
+                }
+            });
+
+            // Sport selector
+            document.getElementById('sportSelect').addEventListener('change', (e) => {
+                updateTeamOptions(e.target.value);
+            });
+
+            // Team selector
+            document.getElementById('teamSelect').addEventListener('change', generateVenue);
+        }
+
+        function updateTeamOptions(sport) {
+            const teamSelect = document.getElementById('teamSelect');
+            const options = teamSelect.querySelectorAll('optgroup');
+
+            // Hide all optgroups
+            options.forEach(group => group.style.display = 'none');
+
+            // Show relevant optgroup
+            switch (sport) {
+                case 'mlb':
+                    options[0].style.display = 'block';
+                    teamSelect.value = 'cardinals';
+                    break;
+                case 'nfl':
+                    options[1].style.display = 'block';
+                    teamSelect.value = 'titans';
+                    break;
+                case 'nba':
+                    options[2].style.display = 'block';
+                    teamSelect.value = 'grizzlies';
+                    break;
+                case 'ncaa':
+                    options[3].style.display = 'block';
+                    teamSelect.value = 'texas';
+                    break;
+            }
+        }
+
+        async function simulatePlay() {
+            const sport = document.getElementById('sportSelect').value;
+
+            if (engine.ballPhysics) {
+                // Example: Simulate a pitch
+                if (sport === 'mlb') {
+                    const releasePoint = new BABYLON.Vector3(0, 2, 18.44);
+                    const velocity = new BABYLON.Vector3(0, 0, -40); // 90 mph fastball
+                    const spinRate = 2400; // RPM
+                    const spinAxis = new BABYLON.Vector3(1, 0, 0);
+
+                    const trajectory = engine.ballPhysics.tracePitchPath(
+                        releasePoint, velocity, spinRate, spinAxis
+                    );
+
+                    // Visualize trajectory
+                    visualizeTrajectory(trajectory);
+                }
+                // Add other sports simulations
+            }
+        }
+
+        function visualizeTrajectory(trajectory) {
+            // Create line mesh for trajectory
+            const points = trajectory.map(t => t.position);
+            const lines = BABYLON.MeshBuilder.CreateLines("trajectory", {
+                points: points,
+                updatable: false
+            }, engine.scene);
+
+            // Glowing material for trajectory
+            const material = new BABYLON.StandardMaterial("trajectoryMat", engine.scene);
+            material.emissiveColor = new BABYLON.Color3(1, 0.843, 0);
+            lines.material = material;
+
+            // Animate along trajectory
+            let index = 0;
+            const ball = BABYLON.MeshBuilder.CreateSphere("ball", {
+                diameter: 0.075
+            }, engine.scene);
+
+            const ballMat = new BABYLON.StandardMaterial("ballMat", engine.scene);
+            ballMat.diffuseColor = new BABYLON.Color3(1, 1, 1);
+            ball.material = ballMat;
+
+            const animate = () => {
+                if (index < trajectory.length) {
+                    ball.position = trajectory[index].position;
+                    index++;
+                    requestAnimationFrame(animate);
+                } else {
+                    // Clean up
+                    setTimeout(() => {
+                        ball.dispose();
+                        lines.dispose();
+                    }, 2000);
+                }
+            };
+
+            animate();
+        }
+
+        function updateStats() {
+            setInterval(() => {
+                if (engine && engine.engine) {
+                    // FPS
+                    document.getElementById('fpsCounter').textContent =
+                        engine.engine.getFps().toFixed(0);
+
+                    // Polygon count
+                    if (engine.scene) {
+                        const totalVertices = engine.scene.getTotalVertices();
+                        document.getElementById('polyCount').textContent =
+                            (totalVertices / 3).toFixed(0);
+
+                        // Draw calls
+                        document.getElementById('drawCalls').textContent =
+                            engine.scene.getActiveMeshes().length;
+                    }
+                }
+            }, 100);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (engine && engine.engine) {
+                engine.engine.resize();
+            }
+        });
+    </script>
+
+</body></html>

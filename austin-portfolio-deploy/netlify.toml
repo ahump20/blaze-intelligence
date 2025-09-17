@@ -1,20 +1,21 @@
-[build]
-  command = "npm run build:unified || echo 'Unified platform ready'"
-  publish = "."
-  functions = "netlify/functions"
+# Blaze Intelligence - Southern Sports Authority Platform
+# Netlify Configuration for Multi-Site Deployment
 
-[functions]
-  node_bundler = "esbuild"
-  included_files = ["js/*.js", "data/*.json"]
+[build]
+  publish = "dist"
+  command = "npm run build:unified"
 
 [build.environment]
   NODE_VERSION = "22"
-  BLAZE_ENV = "production"
-  MCP_SERVER_URL = "https://blaze-intelligence-mcp.onrender.com"
-  CHAMPIONSHIP_MODE = "true"
-  REAL_TIME_UPDATES = "true"
+  BLAZE_PRIMARY_URL = "https://blaze-intelligence.netlify.app"
+  BLAZE_ANALYTICS_URL = "https://blaze-intelligence-main.netlify.app"
+  BLAZE_3D_URL = "https://blaze-3d.netlify.app"
 
-# Headers for security and caching
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Headers for better performance and security
 [[headers]]
   for = "/*"
   [headers.values]
@@ -22,121 +23,177 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+    Content-Security-Policy = "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com https://www.googletagmanager.com https://cdn.babylonjs.com https://preview.babylonjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://api.sportsdataio.com https://*.netlify.app wss://*.netlify.app https://blaze-intelligence.netlify.app https://blaze-intelligence-main.netlify.app https://blaze-3d.netlify.app; frame-ancestors 'none'; frame-src 'self' https://blaze-intelligence.netlify.app https://blaze-intelligence-main.netlify.app https://blaze-3d.netlify.app;"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "cross-origin"
 
 [[headers]]
-  for = "/*.js"
+  for = "/public/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=31536000"
 
 [[headers]]
-  for = "/*.css"
+  for = "/**/*.js"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=31536000"
 
 [[headers]]
-  for = "/images/*"
+  for = "/**/*.css"
   [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+    Cache-Control = "public, max-age=31536000"
 
-# MCP Server Integration Headers
-[[headers]]
-  for = "/mcp/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, Authorization, mcp-session-id"
-    Access-Control-Expose-Headers = "Mcp-Session-Id"
-    Access-Control-Max-Age = "86400"
-    X-Powered-By = "Blaze-Intelligence-MCP"
-    X-Sports-Analytics = "Championship-Platform"
-
-# API redirects for Hawk-Eye endpoints
+# Main application routes - accessible via clean URLs
 [[redirects]]
-  from = "/api/mcp-proxy"
-  to = "/.netlify/functions/hawkeye-mcp-proxy"
-  status = 200
-  force = true
+from = "/app"
+to = "/app.html"
+status = 200
 
 [[redirects]]
-  from = "/api/hawkeye/track"
-  to = "/.netlify/functions/hawkeye-track"
-  status = 200
-  force = true
+from = "/sports-intelligence"
+to = "/public/sports-intelligence.html"
+status = 200
 
 [[redirects]]
-  from = "/api/hawkeye/predict"
-  to = "/.netlify/functions/hawkeye-predict"
-  status = 200
-  force = true
+from = "/pressure-dashboard"
+to = "/public/pressure-dashboard.html"
+status = 200
 
 [[redirects]]
-  from = "/api/hawkeye/strike-zone"
-  to = "/.netlify/functions/hawkeye-strike-zone"
-  status = 200
-  force = true
-
-# Sports Data API
-[[redirects]]
-  from = "/api/sports/*"
-  to = "/.netlify/functions/sports-data-api"
-  status = 200
-  force = true
-
-# SportsDataIO API
-[[redirects]]
-  from = "/api/sportsdataio/*"
-  to = "/.netlify/functions/sportsdataio-api"
-  status = 200
-  force = true
-
-# SportsDataIO Proxy (new secure endpoint)
-[[redirects]]
-  from = "/api/sdio"
-  to = "/.netlify/functions/sdio"
-  status = 200
-  force = true
-
-# Texas High School Football API
-[[redirects]]
-  from = "/api/texas-hs-football"
-  to = "/.netlify/functions/texas-hs-football"
-  status = 200
-  force = true
-
-# SEC/Texas Baseball API
-[[redirects]]
-  from = "/api/sec-tx-baseball"
-  to = "/.netlify/functions/sec-tx-baseball"
-  status = 200
-  force = true
-
-# MCP Server Proxy
-[[redirects]]
-  from = "/mcp/*"
-  to = "/.netlify/functions/hawkeye-mcp-proxy"
-  status = 200
-
-# General API redirect
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
-# Legacy redirects
-[[redirects]]
-  from = "/blaze-3d-universe.html"
-  to = "/universe.html"
-  status = 301
-  force = true
+from = "/analytics"
+to = "/public/analytics.html"
+status = 200
 
 [[redirects]]
-  from = "/nil-calculator"
-  to = "/sec-nil-analytics.html"
-  status = 301
-  force = true
+from = "/athlete-dashboard"
+to = "/athlete-dashboard.html"
+status = 200
 
-# WebSocket support (Edge function required for production)
-[[edge_functions]]
-  path = "/ws/*"
-  function = "websocket-handler"
+[[redirects]]
+from = "/manifesto"
+to = "/manifesto.html"
+status = 200
+
+[[redirects]]
+from = "/proof"
+to = "/proof.html"
+status = 200
+
+# Additional public pages
+[[redirects]]
+from = "/neural-coach"
+to = "/public/neural-coach.html"
+status = 200
+
+[[redirects]]
+from = "/digital-combine"
+to = "/public/digital-combine.html"
+status = 200
+
+[[redirects]]
+from = "/nil"
+to = "/public/nil.html"
+status = 200
+
+[[redirects]]
+from = "/live-demo"
+to = "/public/live-demo.html"
+status = 200
+
+[[redirects]]
+from = "/enterprise-services"
+to = "/public/enterprise-services.html"
+status = 200
+
+# Legacy redirects for backward compatibility
+[[redirects]]
+from = "/blaze-championship-live"
+to = "/index.html"
+status = 301
+
+[[redirects]]
+from = "/index-championship-ultimate"
+to = "/public/analytics.html"
+status = 301
+
+[[redirects]]
+from = "/championship-3d-universe"
+to = "/public/sports-intelligence.html"
+status = 301
+
+[[redirects]]
+from = "/championship-ai-analytics"
+to = "/public/analytics.html"
+status = 301
+
+# Domain redirects from other Netlify sites
+[[redirects]]
+from = "https://blaze-intelligence-main.netlify.app/*"
+to = "https://blaze-intelligence.netlify.app/unified-platform-hub.html"
+status = 301
+force = true
+
+[[redirects]]
+from = "https://blaze-3d.netlify.app/*"
+to = "https://blaze-intelligence.netlify.app/unified-platform-hub.html"
+status = 301
+force = true
+
+# Unified Platform Hub Access Points
+[[redirects]]
+from = "/hub"
+to = "/unified-platform-hub.html"
+status = 200
+
+[[redirects]]
+from = "/platform"
+to = "/unified-platform-hub.html"
+status = 200
+
+[[redirects]]
+from = "/platforms"
+to = "/unified-platform-hub.html"
+status = 200
+
+# Platform-specific redirects
+[[redirects]]
+from = "/platform/main"
+to = "/index.html"
+status = 200
+
+[[redirects]]
+from = "/platform/rti"
+to = "/rti-multimodal-dashboard.html"
+status = 200
+
+[[redirects]]
+from = "/platform/3d"
+to = "/blaze-3d-universe.html"
+status = 200
+
+# External platform redirects
+[[redirects]]
+from = "/analytics-hub"
+to = "https://blaze-intelligence-main.netlify.app/"
+status = 301
+force = true
+
+[[redirects]]
+from = "/3d-universe"
+to = "https://blaze-3d.netlify.app/"
+status = 301
+force = true
+
+# API routes for server-side functionality
+[[redirects]]
+from = "/api/*"
+to = "/.netlify/functions/:splat"
+status = 200
+
+# Default catch-all - send everything else to index
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
