@@ -10,6 +10,7 @@
   BLAZE_PRIMARY_URL = "https://blaze-intelligence.netlify.app"
   BLAZE_ANALYTICS_URL = "https://blaze-intelligence-main.netlify.app"
   BLAZE_3D_URL = "https://blaze-3d.netlify.app"
+  SPORTSDATAIO_API_KEY = "6ca2adb39404482da5406f0a6cd7aa37"
 
 [functions]
   directory = "netlify/functions"
