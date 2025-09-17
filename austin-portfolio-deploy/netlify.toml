@@ -2,7 +2,7 @@
 # Netlify Configuration for Multi-Site Deployment
 
 [build]
-  publish = "dist"
+  publish = "."
   command = "npm run build:unified"
 
 [build.environment]
@@ -12,7 +12,7 @@
   BLAZE_3D_URL = "https://blaze-3d.netlify.app"
 
 [functions]
-  directory = "api-unified"
+  directory = "netlify/functions"
   node_bundler = "esbuild"
   [functions."*"]
     included_files = ["data/**", "assets/**", "api/**"]
