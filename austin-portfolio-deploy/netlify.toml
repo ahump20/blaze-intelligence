@@ -2,8 +2,8 @@
 # Netlify Configuration for Multi-Site Deployment
 
 [build]
-  publish = "dist"
-  command = "npm run build:unified"
+  publish = "."
+  command = "echo 'Using root directory - no build needed'"
 
 [build.environment]
   NODE_VERSION = "22"
