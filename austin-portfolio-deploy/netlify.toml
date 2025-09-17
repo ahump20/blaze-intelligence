@@ -2,7 +2,7 @@
 # Netlify Configuration for Multi-Site Deployment
 
 [build]
-  publish = "."
+  publish = "dist"
   command = "npm run build:unified"
 
 [build.environment]
