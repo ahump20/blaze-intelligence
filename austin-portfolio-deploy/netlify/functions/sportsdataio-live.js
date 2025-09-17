@@ -10,10 +10,10 @@
 const {
   BlazeIntelligenceDataService,
   SPORTSDATAIO_CONFIG
-} = require('../../api/sportsdataio-connector.js');
+} = require('../../api/sportsdataio-connector.cjs');
 
 // Environment configuration
-const API_KEY = process.env.SPORTSDATAIO_API_KEY || '6ca2adb39404482da5406f0a6cd7aa37';
+const API_KEY = process.env.SPORTSDATAIO_API_KEY || 'demo-key-for-testing';
 
 // CORS headers for browser access
 const headers = {

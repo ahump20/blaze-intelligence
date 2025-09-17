@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" href="/images/brand/blaze-tagline.png">
 
     <!-- Preload Critical Resources -->
-    <link rel="preload" href="https://res.cloudinary.com/418463612899497/image/fetch/f_auto,q_auto/https://blaze-intelligence.netlify.app/images/brand/blaze-hero.png?_a=BBFAAAAA0" as="image">
+    <link rel="preload" href="/images/brand/blaze-hero.png" as="image">
     <link rel="preload" href="/css/blaze-professional.css" as="style">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://api.sportsdataio.com">
@@ -616,7 +616,7 @@
         <div class="hero-content">
             <!-- Brand Images -->
             <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
-                <img src="https://res.cloudinary.com/418463612899497/image/fetch/f_auto,q_auto/https://blaze-intelligence.netlify.app/images/brand/blaze-hero.png?_a=BBFAAAAA0" alt="See the game. Shape the outcome." style="max-width: 600px; width: 100%; height: auto; margin-bottom: 1rem;" loading="lazy">
+                <img src="/images/brand/blaze-hero.png" alt="See the game. Shape the outcome." style="max-width: 600px; width: 100%; height: auto; margin-bottom: 1rem;">
             </div>
             <h1 class="hero-title">Championship Sports Intelligence</h1>
             <p class="hero-subtitle">Real-Time MLB, NFL, NBA &amp; NCAA Analytics Powered by SportsDataIO</p>
@@ -659,7 +659,9 @@
         <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
 
             <!-- Main Intelligence Platform Card -->
-            <div class="platform-card" style="background: rgba(17, 34, 64, 0.8); backdrop-filter: blur(20px); border: 2px solid rgba(191, 87, 0, 0.3); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-10px)'; this.style.borderColor='#BF5700'; this.style.boxShadow='0 20px 40px rgba(191, 87, 0, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(191, 87, 0, 0.3)'; this.style.boxShadow='none'">
+            <div class="platform-card" style="background: rgba(17, 34, 64, 0.8); backdrop-filter: blur(20px); border: 2px solid rgba(191, 87, 0, 0.3); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; cursor: pointer;"
+                 onmouseover="this.style.transform='translateY(-10px)'; this.style.borderColor='#BF5700'; this.style.boxShadow='0 20px 40px rgba(191, 87, 0, 0.4)'"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(191, 87, 0, 0.3)'; this.style.boxShadow='none'">
                 <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
                     <span style="font-size: 2.5rem; margin-right: 1rem;">🏆</span>
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: #FFD700;">Main Intelligence Platform</h3>
@@ -677,7 +679,9 @@
             </div>
 
             <!-- RTI Analytics Hub Card -->
-            <div class="platform-card" style="background: rgba(17, 34, 64, 0.8); backdrop-filter: blur(20px); border: 2px solid rgba(155, 203, 235, 0.3); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-10px)'; this.style.borderColor='#9BCBEB'; this.style.boxShadow='0 20px 40px rgba(155, 203, 235, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(155, 203, 235, 0.3)'; this.style.boxShadow='none'">
+            <div class="platform-card" style="background: rgba(17, 34, 64, 0.8); backdrop-filter: blur(20px); border: 2px solid rgba(155, 203, 235, 0.3); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; cursor: pointer;"
+                 onmouseover="this.style.transform='translateY(-10px)'; this.style.borderColor='#9BCBEB'; this.style.boxShadow='0 20px 40px rgba(155, 203, 235, 0.4)'"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(155, 203, 235, 0.3)'; this.style.boxShadow='none'">
                 <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
                     <span style="font-size: 2.5rem; margin-right: 1rem;">📊</span>
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: #9BCBEB;">RTI Analytics Hub</h3>
@@ -687,7 +691,7 @@
                     <li style="color: #00B2A9; margin-bottom: 0.5rem;">✓ Video intelligence upload</li>
                     <li style="color: #00B2A9; margin-bottom: 0.5rem;">✓ Micro-expression detection</li>
                     <li style="color: #00B2A9; margin-bottom: 0.5rem;">✓ WebRTC streaming</li>
-                    <li style="color: #00B2A9; margin-bottom: 0.5rem;">✓ &lt;100ms latency</li>
+                    <li style="color: #00B2A9; margin-bottom: 0.5rem;">✓ <100ms latency</li>
                 </ul>
                 <a href="https://blaze-intelligence-main.netlify.app/" target="_blank" style="display: block; text-decoration: none;">
                     <button style="background: linear-gradient(135deg, #9BCBEB, #002244); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;">
@@ -697,7 +701,9 @@
             </div>
 
             <!-- 3D Universe Card -->
-            <div class="platform-card" style="background: rgba(17, 34, 64, 0.8); backdrop-filter: blur(20px); border: 2px solid rgba(0, 178, 169, 0.3); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='translateY(-10px)'; this.style.borderColor='#00B2A9'; this.style.boxShadow='0 20px 40px rgba(0, 178, 169, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(0, 178, 169, 0.3)'; this.style.boxShadow='none'">
+            <div class="platform-card" style="background: rgba(17, 34, 64, 0.8); backdrop-filter: blur(20px); border: 2px solid rgba(0, 178, 169, 0.3); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; cursor: pointer;"
+                 onmouseover="this.style.transform='translateY(-10px)'; this.style.borderColor='#00B2A9'; this.style.boxShadow='0 20px 40px rgba(0, 178, 169, 0.4)'"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(0, 178, 169, 0.3)'; this.style.boxShadow='none'">
                 <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
                     <span style="font-size: 2.5rem; margin-right: 1rem;">🌐</span>
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: #00B2A9;">3D Universe</h3>
