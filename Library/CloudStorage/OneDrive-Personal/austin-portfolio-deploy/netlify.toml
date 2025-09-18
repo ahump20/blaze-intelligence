@@ -1,13 +1,12 @@
-# Netlify Production Configuration for Blaze Intelligence Championship Platform
-[build]
-  command = "npm run build"
-  publish = "dist"
-  functions = "netlify/functions"
+# Netlify configuration for Blaze Intelligence
+# Security headers, caching, and redirects. SPA fallback is provided (commented).
 
-[build.environment]
-  NODE_ENV = "production"
-  BLAZE_ENVIRONMENT = "production"
-  CHAMPIONSHIP_MODE = "true"
+# Force HTTPS (domain-level)
+[[redirects]]
+  from = "http://blaze-intelligence.netlify.app/*"
+  to = "https://blaze-intelligence.netlify.app/:splat"
+  status = 301
+  force = true
 
 # API Routes
 [[redirects]]
@@ -16,123 +15,69 @@
   status = 200
   force = true
 
-# Dashboard routes
+# Fix broken navigation links
 [[redirects]]
-  from = "/dashboard"
-  to = "/index.html"
-  status = 200
+  from = "/nil-calculator-advanced"
+  to = "/nil-valuation.html"
+  status = 301
 
 [[redirects]]
-  from = "/dashboard/*"
-  to = "/index.html"
-  status = 200
-
-# Video Intelligence routes
-[[redirects]]
-  from = "/video"
-  to = "/blaze-vision-ai-scouting.html"
-  status = 200
+  from = "/sports-intelligence-dashboard"
+  to = "/sports-intelligence.html"
+  status = 301
 
 [[redirects]]
-  from = "/video/*"
-  to = "/blaze-vision-ai-scouting.html"
-  status = 200
-
-# Demo routes
-[[redirects]]
-  from = "/demo"
-  to = "/live-demo.html"
-  status = 200
+  from = "/ar-coaching-platform"
+  to = "/ar-coaching.html"
+  status = 301
 
 [[redirects]]
-  from = "/demo/*"
-  to = "/live-demo.html"
-  status = 200
+  from = "/character-assessment"
+  to = "/character-assessment.html"
+  status = 301
 
-# Pricing routes
-[[redirects]]
-  from = "/pricing"
-  to = "/pricing.html"
-  status = 200
-
-# Contact routes
 [[redirects]]
   from = "/contact"
-  to = "/contact.html"
+  to = "/resources/contact.html"
   status = 200
 
-# SPA fallback for all other routes
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
-
-[dev]
-  publish = "dist"
-  functions = "netlify/functions"
-
-# Enhanced Security Headers for Staging
+# --- Global Security Headers ---
 [[headers]]
-  for = "/api/*"
+  for = "/*"
   [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, Authorization, X-API-Key, X-Requested-With"
-    Access-Control-Max-Age = "86400"
-    Cache-Control = "no-cache, no-store, must-revalidate"
-    Pragma = "no-cache"
-    Expires = "0"
-    X-Environment = "production"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), midi=(), payment=()"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; font-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; connect-src 'self' https: wss:; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.netlify.app https://*.netlify.com;"
+
+# --- Caching ---
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "/css/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
 
 [[headers]]
   for = "/*.html"
   [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' wss: https: ws:; media-src 'self' data: https:; object-src 'none'; base-uri 'self';"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
-    X-Environment = "production"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-    X-Environment = "production"
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
 
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-    X-Environment = "production"
-
-[[headers]]
-  for = "/data/*"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-    Access-Control-Allow-Origin = "*"
-    X-Environment = "production"
-
-# Error pages
-[[redirects]]
-  from = "/404"
-  to = "/404.html"
-  status = 404
-
-# Health check endpoint
-[[redirects]]
-  from = "/health"
-  to = "/.netlify/functions/health"
-  status = 200
-
-# Status monitoring
-[[redirects]]
-  from = "/status"
-  to = "/.netlify/functions/status"
-  status = 200
+[build.environment]
+  NODE_ENV = "production"
+  BLAZE_ENVIRONMENT = "production"
